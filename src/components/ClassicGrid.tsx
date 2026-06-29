@@ -1,5 +1,5 @@
 import type { Commander } from '../types/commander'
-import { compareCommander } from '../lib/compare'
+import { compareCommander, type ComparedColumn } from '../lib/compare'
 import ManaCost from './ManaSymbols'
 
 interface Props {
@@ -7,88 +7,75 @@ interface Props {
   answer: Commander
 }
 
+const HEADERS = ['Commander', 'Colors', 'Mana Value', 'Power', 'Toughness', 'Rarity', 'Decks', 'Year']
+
 function arrow(direction?: string): string {
   if (direction === 'up') return '▲'
   if (direction === 'down') return '▼'
   return ''
 }
 
-const RARITY_LETTER: Record<string, string> = {
-  common: 'C',
-  uncommon: 'U',
-  rare: 'R',
-  mythic: 'M',
+function Cell({ col, index }: { col: ComparedColumn; index: number }) {
+  return (
+    <div
+      className={`grid-cell match-${col.kind}`}
+      style={{ animationDelay: `${index * 0.12}s` }}
+      title={col.label}
+    >
+      <div className="cell-inner">
+        {col.colors !== undefined ? (
+          <ManaCost colors={col.colors} />
+        ) : (
+          <span className="cell-text">
+            {col.display}
+            {col.direction && col.kind !== 'exact' && <span className="cell-arrow">{arrow(col.direction)}</span>}
+          </span>
+        )}
+      </div>
+    </div>
+  )
 }
 
-/** One guess rendered as an MTG-style card frame with a comparison stats strip. */
-function CastCard({ guess, answer }: { guess: Commander; answer: Commander }) {
+function GuessRow({ guess, answer }: { guess: Commander; answer: Commander }) {
   const cols = compareCommander(guess, answer)
-  // Column order from compareCommander: color, types, mv, power, toughness, rarity, year.
-  const [color, types, mv, power, toughness, rarity, year] = cols
   const solved = guess.name === answer.name
-
-  const tiles = [
-    { key: 'MV', col: mv },
-    { key: 'PWR', col: power },
-    { key: 'TGH', col: toughness },
-    { key: 'RARITY', col: rarity },
-    { key: 'YEAR', col: year },
-  ]
-
   return (
-    <article className={`cast-card${solved ? ' solved' : ''}`}>
-      <header className="cast-titlebar">
-        {guess.artCrop && <img className="cast-thumb" src={guess.artCrop} alt="" draggable={false} />}
-        <span className="cast-name">{guess.name}</span>
-        <ManaCost colors={guess.colorIdentity} kind={color.kind} />
-      </header>
-
-      <div className={`cast-typebar match-${types.kind}`}>
-        <span className="cast-typeline">{guess.typeLine}</span>
+    <div className="grid-row">
+      <div className="grid-cell name-cell" style={{ animationDelay: '0s' }}>
+        <div className="cell-inner name-inner">
+          {guess.artCrop && <img className="name-thumb" src={guess.artCrop} alt="" draggable={false} />}
+          <span className={`name-text${solved ? ' solved' : ''}`}>{guess.name}</span>
+        </div>
       </div>
-
-      <div className="cast-stats">
-        {tiles.map(({ key, col }) => (
-          <div key={key} className={`stat-tile match-${col.kind}`} title={col.label}>
-            <span className="stat-label">{key}</span>
-            <span className="stat-value">
-              {col.display}
-              {col.direction && col.kind !== 'exact' && (
-                <span className="stat-arrow">{arrow(col.direction)}</span>
-              )}
-            </span>
-          </div>
-        ))}
-      </div>
-
-      <footer className="cast-collector">
-        <span>#{guess.rank} · EDHREC</span>
-        <span className="cast-set">
-          {guess.setName} · {RARITY_LETTER[guess.rarity] ?? '?'}
-        </span>
-      </footer>
-    </article>
+      {cols.map((col, i) => (
+        <Cell key={col.label} col={col} index={i + 1} />
+      ))}
+    </div>
   )
 }
 
 export default function ClassicGrid({ guesses, answer }: Props) {
   if (guesses.length === 0) return null
   return (
-    <div className="cast-stack">
-      <div className="cast-legend">
-        <span className="legend-item">
-          <span className="legend-swatch match-exact" /> match
-        </span>
-        <span className="legend-item">
-          <span className="legend-swatch match-partial" /> partial / close
-        </span>
-        <span className="legend-item">
-          <span className="legend-swatch match-none" /> miss · ▲ higher ▼ lower
-        </span>
+    <div className="results-wrap">
+      <div className="results-table">
+        <div className="grid-row grid-head">
+          {HEADERS.map((h) => (
+            <div key={h} className="grid-cell head-cell">
+              {h}
+            </div>
+          ))}
+        </div>
+        {[...guesses].reverse().map((g) => (
+          <GuessRow key={g.name} guess={g} answer={answer} />
+        ))}
       </div>
-      {[...guesses].reverse().map((g) => (
-        <CastCard key={g.name} guess={g} answer={answer} />
-      ))}
+      <div className="grid-legend">
+        <span className="legend-item"><span className="legend-swatch match-exact" /> correct</span>
+        <span className="legend-item"><span className="legend-swatch match-partial" /> close</span>
+        <span className="legend-item"><span className="legend-swatch match-none" /> far</span>
+        <span className="legend-item">▲ answer is higher · ▼ lower</span>
+      </div>
     </div>
   )
 }
