@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import type { Commander } from '../types/commander'
 import CardZoom from './CardZoom'
+import GuessDots from './GuessDots'
 
 interface Props {
   answer: Commander
@@ -9,6 +10,7 @@ interface Props {
   wrongGuesses: number
   maxGuesses: number
   solved: boolean
+  onSkip?: () => void
 }
 
 const MAX_SCALE = 8
@@ -18,7 +20,7 @@ const MAX_SCALE = 8
  * framed by the final allowed guess. A per-answer focal point keeps the starting
  * crop varied (and away from any name text on the card).
  */
-export default function ZoomMode({ answer, guesses, skips, wrongGuesses, maxGuesses, solved }: Props) {
+export default function ZoomMode({ answer, guesses, skips, wrongGuesses, maxGuesses, solved, onSkip }: Props) {
   const src = answer.artCrop ?? answer.normalImage ?? ''
 
   const guessesToClear = Math.max(1, maxGuesses - 1)
@@ -29,7 +31,7 @@ export default function ZoomMode({ answer, guesses, skips, wrongGuesses, maxGues
     let h = 0
     for (let i = 0; i < answer.name.length; i++) h = (h * 31 + answer.name.charCodeAt(i)) >>> 0
     const x = 25 + (h % 50) // 25%–75%
-    const y = 25 + ((h >> 8) % 50)
+    const y = 25 + ((h >>> 8) % 50)
     return `${x}% ${y}%`
   }, [answer.name])
 
@@ -57,15 +59,7 @@ export default function ZoomMode({ answer, guesses, skips, wrongGuesses, maxGues
         {solved && src ? <CardZoom name={answer.name} image={answer.normalImage}>{image}</CardZoom> : image}
       </div>
 
-      <div className="guess-dots" aria-label={`${wrongGuesses} of ${maxGuesses} guesses used`}>
-        {dots.map((d, i) => (
-          <span key={i} className={`guess-dot ${d}`} />
-        ))}
-      </div>
-
-      <p className="hint-line">
-        {solved ? answer.name : `Zooms out with each wrong guess — ${wrongGuesses} so far`}
-      </p>
+      <GuessDots dots={dots} onSkip={onSkip} wrongGuesses={wrongGuesses} maxGuesses={maxGuesses} />
     </div>
   )
 }

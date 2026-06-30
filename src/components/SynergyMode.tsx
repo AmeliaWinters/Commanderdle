@@ -1,20 +1,31 @@
 import type { Commander } from '../types/commander'
 import CardZoom from './CardZoom'
+import GuessDots from './GuessDots'
 
 interface Props {
   answer: Commander
+  guesses: Commander[]
+  skips: number
   wrongGuesses: number
+  maxGuesses: number
   solved: boolean
+  onSkip?: () => void
 }
 
 /**
  * Guess the commander from its most synergistic cards (per EDHREC). One card
  * shows immediately; each wrong guess reveals another, strongest signal first.
  */
-export default function SynergyMode({ answer, wrongGuesses, solved }: Props) {
+export default function SynergyMode({ answer, guesses, skips, wrongGuesses, maxGuesses, solved, onSkip }: Props) {
   const cards = answer.synergyCards
   const revealCount = solved ? cards.length : Math.min(cards.length, wrongGuesses + 1)
-  const more = cards.length - revealCount
+
+  const dots = Array.from({ length: maxGuesses }, (_, i) => {
+    const g = guesses[i]
+    if (g) return g.name === answer.name ? 'correct' : 'wrong'
+    if (i < guesses.length + skips) return 'wrong'
+    return 'empty'
+  })
 
   return (
     <div className="synergy-mode">
@@ -43,11 +54,8 @@ export default function SynergyMode({ answer, wrongGuesses, solved }: Props) {
         })}
       </ol>
 
-      {!solved && more > 0 && (
-        <p className="hint-next">
-          {more} more synergy {more === 1 ? 'card' : 'cards'} hidden — each wrong guess reveals one.
-        </p>
-      )}
+      <GuessDots dots={dots} onSkip={onSkip} wrongGuesses={wrongGuesses} maxGuesses={maxGuesses} />
+
       {solved && (
         <p className="hint-line solved-line">
           <CardZoom name={answer.name} image={answer.normalImage}>

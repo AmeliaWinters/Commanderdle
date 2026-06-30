@@ -1,5 +1,6 @@
 import type { Commander } from '../types/commander'
 import CardZoom from './CardZoom'
+import GuessDots from './GuessDots'
 
 interface Props {
   answer: Commander
@@ -8,11 +9,12 @@ interface Props {
   wrongGuesses: number
   maxGuesses: number
   solved: boolean
+  onSkip?: () => void
 }
 
 const MAX_BLUR = 28
 
-export default function SilhouetteMode({ answer, guesses, skips, wrongGuesses, maxGuesses, solved }: Props) {
+export default function SilhouetteMode({ answer, guesses, skips, wrongGuesses, maxGuesses, solved, onSkip }: Props) {
   // Blur starts heavy and clears as wrong guesses accumulate, reaching 0 in time
   // for the final allowed guess (i.e. after maxGuesses - 1 wrong guesses).
   const guessesToClear = Math.max(1, maxGuesses - 1)
@@ -46,17 +48,7 @@ export default function SilhouetteMode({ answer, guesses, skips, wrongGuesses, m
         <div className="silhouette-overlay" style={{ background: `rgba(0,0,0,${darken})` }} />
       </div>
 
-      <div className="guess-dots" aria-label={`${wrongGuesses} of ${maxGuesses} guesses used`}>
-        {dots.map((d, i) => (
-          <span key={i} className={`guess-dot ${d}`} />
-        ))}
-      </div>
-
-      <p className="hint-line">
-        {solved
-          ? answer.name
-          : `Art clears with each wrong guess — ${wrongGuesses} revealed`}
-      </p>
+      <GuessDots dots={dots} onSkip={onSkip} wrongGuesses={wrongGuesses} maxGuesses={maxGuesses} />
     </div>
   )
 }

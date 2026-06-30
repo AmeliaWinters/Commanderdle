@@ -27,7 +27,7 @@ function Cell({ col, index }: { col: ComparedColumn; index: number }) {
     >
       <div className="cell-inner">
         {col.colors !== undefined ? (
-          <ManaCost colors={col.colors} />
+          <ManaCost colors={col.colors} size="20px" />
         ) : (
           <span className="cell-text">
             {col.display}

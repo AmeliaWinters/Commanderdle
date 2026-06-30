@@ -33,6 +33,10 @@ function normalize(pathname: string): string {
   return pathname.length > 1 ? pathname.replace(/\/$/, '') : pathname
 }
 
+export function isPrivacyPath(pathname: string): boolean {
+  return normalize(pathname) === '/privacy'
+}
+
 export function modeFromPath(pathname: string): Mode {
   return PATH_TO_MODE[normalize(pathname)] ?? 'classic'
 }
@@ -58,7 +62,11 @@ export function useModeRoute(): [Mode, (mode: Mode) => void] {
   const [mode, setMode] = useState<Mode>(() => modeFromPath(window.location.pathname))
 
   useEffect(() => {
-    const onPop = () => setMode(modeFromPath(window.location.pathname))
+    const onPop = () => {
+      if (!isPrivacyPath(window.location.pathname)) {
+        setMode(modeFromPath(window.location.pathname))
+      }
+    }
     window.addEventListener('popstate', onPop)
     return () => window.removeEventListener('popstate', onPop)
   }, [])
