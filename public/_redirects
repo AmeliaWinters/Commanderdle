@@ -1,0 +1,5 @@
+# Cloudflare Pages SPA fallback: every mode is its own URL (/silhouette, /zoom, …) but the
+# app is a single-page bundle, so serve index.html for any unmatched path and let the client
+# router pick the mode from the URL. Real asset requests (with a file extension) still resolve
+# normally because they exist on disk and are matched before this rule.
+/*  /index.html  200

@@ -33,6 +33,11 @@
 import { writeFile, mkdir, readFile, access } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
+import sharp from 'sharp'
+
+// WebP quality for the downloaded card images. 80 is visually ~indistinguishable from the
+// source JPGs while cutting file size by roughly half, which directly lowers bandwidth/CDN cost.
+const WEBP_QUALITY = 80
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const OUT_FILE = join(__dirname, '..', 'src', 'data', 'commanders.json')
@@ -97,6 +102,44 @@ interface EdhrecCardView {
   num_decks?: number
   inclusion?: number
   synergy?: number
+  // Partner-pair entries carry these: `is_partner` flags the pair, `cards` lists the two
+  // individual commanders ({ name, url=slug }) that make it up. (Double-faced/melded cards
+  // also use an "A // B" name but are a single Scryfall card and carry none of these.)
+  is_partner?: boolean
+  cards?: Array<{ name: string; url?: string }>
+}
+
+/**
+ * Expand partner-pair entries into one entry per individual commander.
+ *
+ * EDHREC lists a legal partner pairing (e.g. "Rograkh, Son of Rohgahh // Silas Renn,
+ * Seeker Adept") as a single ranked entry, but the two partners are distinct cards that
+ * should each be guessable. We split each `is_partner` entry into its two members, both
+ * inheriting the pair's rank and deck count, and point each at its own EDHREC page slug so
+ * synergy/enrichment resolve per individual commander. Non-partner entries (including
+ * single-card double-faced commanders) pass through untouched.
+ *
+ * Idempotent: a list with no partner entries (e.g. an already-expanded cache) is returned
+ * unchanged.
+ */
+function expandPartners(list: EdhrecCardView[]): EdhrecCardView[] {
+  const out: EdhrecCardView[] = []
+  for (const v of list) {
+    if (v.is_partner && v.cards?.length) {
+      for (const member of v.cards) {
+        out.push({
+          name: member.name,
+          sanitized: member.url,
+          rank: v.rank,
+          num_decks: v.num_decks,
+          inclusion: v.inclusion,
+        })
+      }
+    } else {
+      out.push(v)
+    }
+  }
+  return out
 }
 
 /** How many top-synergy cards to keep per commander (drives the Synergy game mode). */
@@ -310,16 +353,18 @@ function imageForName(name: string, cards: Map<string, ScryfallCard>): string | 
 
 /**
  * Derive a stable, collision-free local filename from a Scryfall image URL.
- * e.g. https://cards.scryfall.io/normal/front/1/0/<uuid>.jpg?123 -> "normal_<uuid>.jpg"
+ * e.g. https://cards.scryfall.io/normal/front/1/0/<uuid>.jpg?123 -> "normal_<uuid>.webp"
  * The size folder (normal/art_crop) and the per-art uuid together are unique, and dropping
  * the ?<timestamp> query means re-runs reuse the same file instead of re-downloading.
+ * Images are stored as WebP (see WEBP_QUALITY), so the extension is forced to .webp.
  */
 function localFileName(url: string): string {
   const { pathname } = new URL(url)
   const parts = pathname.split('/').filter(Boolean)
   const size = parts[0] ?? 'img'
   const base = parts[parts.length - 1] ?? 'card.jpg'
-  return `${size}_${base}`.replace(/[^a-zA-Z0-9._-]/g, '_')
+  const name = `${size}_${base}`.replace(/[^a-zA-Z0-9._-]/g, '_')
+  return name.replace(/\.[a-z0-9]+$/i, '') + '.webp'
 }
 
 /**
@@ -354,6 +399,8 @@ async function localizeImages(commanders: Commander[]): Promise<void> {
   let failed = 0
   const CONCURRENCY = 8
 
+  const toWebp = (buf: Buffer) => sharp(buf).webp({ quality: WEBP_QUALITY }).toBuffer()
+
   async function handle(url: string) {
     const file = localFileName(url)
     const dest = join(CARDS_DIR, file)
@@ -363,10 +410,23 @@ async function localizeImages(commanders: Commander[]): Promise<void> {
       reused++
       return
     }
+    // Migrate any pre-WebP download: convert the existing .jpg in place rather than
+    // re-fetching it from Scryfall.
+    const legacyJpg = dest.replace(/\.webp$/, '.jpg')
+    if (await fileExists(legacyJpg)) {
+      try {
+        await writeFile(dest, await toWebp(await readFile(legacyJpg)))
+        resolved.set(url, localPath)
+        reused++
+        return
+      } catch (e) {
+        console.warn(`Legacy JPG conversion failed (${(e as Error).message}): ${legacyJpg}`)
+      }
+    }
     try {
       const res = await fetch(url, { headers: { 'User-Agent': SCRYFALL_UA } })
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
-      const buf = Buffer.from(await res.arrayBuffer())
+      const buf = await toWebp(Buffer.from(await res.arrayBuffer()))
       await writeFile(dest, buf)
       resolved.set(url, localPath)
       downloaded++
@@ -399,8 +459,8 @@ async function main() {
   const cache = await loadCache()
 
   console.log('Fetching EDHREC top commanders...')
-  // Over-fetch: some EDHREC entries collapse to the same Scryfall card (partner variants)
-  // or fail enrichment, so we pull a buffer and trim to exactly TARGET_COUNT afterward.
+  // Pull the top TARGET_COUNT ranked entries. Partner pairs later expand into two commanders
+  // each (and some entries fail enrichment), so the final count is trimmed to TARGET_COUNT.
   let edhList: EdhrecCardView[] = []
   try {
     edhList = await fetchEdhrecTop(TARGET_COUNT)
@@ -426,6 +486,14 @@ async function main() {
   console.log(
     `Using ${edhList.length} commanders from ${usingFreshRanking ? 'EDHREC (fresh)' : 'cache'}.`,
   )
+
+  // Split partner pairings into their individual commanders (same rank, separate cards)
+  // before any per-commander fetching, so synergy/enrichment run on each partner.
+  const beforeExpand = edhList.length
+  edhList = expandPartners(edhList)
+  if (edhList.length !== beforeExpand) {
+    console.log(`Expanded partner pairs: ${beforeExpand} -> ${edhList.length} commander entries.`)
+  }
 
   console.log('Fetching synergy cards per commander from EDHREC...')
   const synergyNamesByCommander = new Map<string, string[]>()
@@ -466,24 +534,25 @@ async function main() {
   for (const names of synergyNamesByCommander.values()) for (const n of names) allNames.add(n)
   const cards = await fetchScryfallBatch([...allNames])
 
-  const commanders: Commander[] = []
+  let commanders: Commander[] = []
   const seenNames = new Set<string>()
-  let rank = 0
   for (const edh of edhList) {
-    rank++
-    // Try full name, then the front-face half of partner/DFC names ("A // B").
+    // Try full name, then the front-face half of DFC names ("A // B").
     const card = cards.get(norm(edh.name)) ?? cards.get(norm(edh.name.split(' // ')[0]))
     const synergyCards: SynergyCard[] = (synergyNamesByCommander.get(edh.name) ?? []).map((n) => ({
       name: n,
       image: imageForName(n, cards),
     }))
-    const c = toCommander(rank, edh, card, synergyCards)
+    // Use EDHREC's own popularity rank: the two members of a partner pair share that pair's
+    // rank, so ties are expected here and read as equally popular in the game.
+    const c = toCommander(edh.rank ?? commanders.length + 1, edh, card, synergyCards)
     if (!c) {
       console.warn(`No card for: ${edh.name}`)
       continue
     }
-    // EDHREC can list the same card under two raw names (e.g. partner variants) that
-    // both resolve to one Scryfall card. Keep only the first (highest-ranked).
+    // The same commander can appear in several partner pairs (e.g. Rograkh). edhList is in
+    // ascending-rank order, so keeping the first occurrence keeps each commander at its best
+    // (most popular) rank. This also drops any DFC variants that resolve to one Scryfall card.
     if (seenNames.has(c.name)) {
       console.warn(`Duplicate card dropped: ${c.name} (from "${edh.name}")`)
       continue
@@ -491,10 +560,10 @@ async function main() {
     seenNames.add(c.name)
     commanders.push(c)
   }
-  // Trim the over-fetched buffer down to exactly the target count, then re-rank
-  // sequentially (1..TARGET_COUNT) after dropping any duplicates/failed enrichment.
-  commanders.length = Math.min(commanders.length, TARGET_COUNT)
-  commanders.forEach((c, i) => (c.rank = i + 1))
+  // Keep every commander within the top TARGET_COUNT ranking spots (so e.g. the #500 single
+  // is still included). Partner pairs share a spot — two commanders at one rank — so the
+  // final list can exceed TARGET_COUNT entries even though ranks only span 1..TARGET_COUNT.
+  commanders = commanders.filter((c) => c.rank <= TARGET_COUNT)
 
   // Guard: refuse to overwrite a good dataset with a degenerate one (e.g. Scryfall
   // enrichment mostly failed). Keep the existing committed commanders.json instead.

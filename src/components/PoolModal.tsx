@@ -35,7 +35,7 @@ export default function PoolModal({ pool, onClose }: Props) {
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
     const list = q ? pool.filter((c) => c.name.toLowerCase().includes(q)) : pool
-    return [...list].sort((a, b) => a.name.localeCompare(b.name))
+    return [...list].sort((a, b) => a.rank - b.rank)
   }, [pool, query])
 
   return createPortal(

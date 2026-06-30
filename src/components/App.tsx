@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import type { Mode } from '../types/commander'
 import { useGameState } from '../lib/useGameState'
+import { useModeRoute } from '../lib/router'
 import { poolFor } from '../lib/dailyAnswer'
 import ModeTabs from './ModeTabs'
 import GuessInput from './GuessInput'
@@ -15,12 +15,12 @@ import PoolModal from './PoolModal'
 import CardBackdrop from './CardBackdrop'
 
 export default function App() {
-  const [mode, setMode] = useState<Mode>('classic')
+  const [mode, setMode] = useModeRoute()
   const [poolOpen, setPoolOpen] = useState(false)
-  const { state, guess, startPractice, backToDaily, reset, maxGuesses } = useGameState(mode)
+  const { state, guess, skip, startPractice, backToDaily, reset, maxGuesses } = useGameState(mode)
 
-  const { answer, guesses, status, isDaily } = state
-  const wrongGuesses = guesses.filter((g) => g.name !== answer.name).length
+  const { answer, guesses, skips, status, isDaily } = state
+  const wrongGuesses = guesses.filter((g) => g.name !== answer.name).length + skips
   const solved = status === 'won'
   const done = status !== 'playing'
   const disabledNames = new Set(guesses.map((g) => g.name))
@@ -32,10 +32,10 @@ export default function App() {
         <h1>
           Comman<span className="accent">dle</span>
         </h1>
-        <p className="tagline">Guess the daily Magic: The Gathering commander — top 500 by EDHREC popularity.</p>
+        <p className="tagline">Guess the daily Magic The Gathering commander (top 500 by EDHREC popularity)</p>
       </header>
 
-      <ModeTabs mode={mode} onChange={setMode} />
+      <ModeTabs mode={mode} onNavigate={setMode} />
 
       <div className="mode-bar">
         <span className="mode-status">
@@ -73,6 +73,7 @@ export default function App() {
           <SilhouetteMode
             answer={answer}
             guesses={guesses}
+            skips={skips}
             wrongGuesses={wrongGuesses}
             maxGuesses={maxGuesses}
             solved={solved || done}
@@ -82,6 +83,7 @@ export default function App() {
           <ZoomMode
             answer={answer}
             guesses={guesses}
+            skips={skips}
             wrongGuesses={wrongGuesses}
             maxGuesses={maxGuesses}
             solved={solved || done}
@@ -92,6 +94,7 @@ export default function App() {
         )}
         {mode === 'quote' && <QuoteMode answer={answer} wrongGuesses={wrongGuesses} solved={solved || done} />}
 
+        <div style={{display: 'flex', gap: '1rem',   width: "100%", maxWidth: "480px" }}>
         {!done && (
           <GuessInput
             onGuess={guess}
@@ -100,6 +103,13 @@ export default function App() {
             blurQuote={mode === 'quote'}
           />
         )}
+
+        {!done && mode !== 'classic' && (
+          <button className="skip-btn" onClick={skip}>
+            SKIP
+          </button>
+        )}
+        </div>
 
         {done && (
           <ResultBanner
@@ -120,7 +130,7 @@ export default function App() {
       </main>
 
       <footer className="app-footer">
-        Data from <a href="https://edhrec.com" target="_blank" rel="noreferrer">EDHREC</a> &amp;{' '}
+        Data from <a href="https://edhrec.com/commanders" target="_blank" rel="noreferrer">EDHREC</a> &amp;{' '}
         <a href="https://scryfall.com" target="_blank" rel="noreferrer">Scryfall</a>. Card images ©
         Wizards of the Coast. Unofficial fan project.
       </footer>

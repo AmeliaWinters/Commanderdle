@@ -5,6 +5,7 @@ import CardZoom from './CardZoom'
 interface Props {
   answer: Commander
   guesses: Commander[]
+  skips: number
   wrongGuesses: number
   maxGuesses: number
   solved: boolean
@@ -17,7 +18,7 @@ const MAX_SCALE = 8
  * framed by the final allowed guess. A per-answer focal point keeps the starting
  * crop varied (and away from any name text on the card).
  */
-export default function ZoomMode({ answer, guesses, wrongGuesses, maxGuesses, solved }: Props) {
+export default function ZoomMode({ answer, guesses, skips, wrongGuesses, maxGuesses, solved }: Props) {
   const src = answer.artCrop ?? answer.normalImage ?? ''
 
   const guessesToClear = Math.max(1, maxGuesses - 1)
@@ -34,8 +35,9 @@ export default function ZoomMode({ answer, guesses, wrongGuesses, maxGuesses, so
 
   const dots = Array.from({ length: maxGuesses }, (_, i) => {
     const g = guesses[i]
-    if (!g) return 'empty'
-    return g.name === answer.name ? 'correct' : 'wrong'
+    if (g) return g.name === answer.name ? 'correct' : 'wrong'
+    if (i < guesses.length + skips) return 'wrong'
+    return 'empty'
   })
 
   const image = src ? (

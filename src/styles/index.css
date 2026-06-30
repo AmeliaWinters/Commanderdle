@@ -207,6 +207,7 @@ body::before {
   cursor: pointer;
   transition: all 0.15s ease;
   min-width: 132px;
+  text-decoration: none;
 }
 
 .mode-tab:hover {
@@ -290,6 +291,25 @@ body::before {
   align-items: center;
   gap: 20px;
   width: 100%;
+}
+
+/* ---------- Skip button ---------- */
+.skip-btn {
+  padding: 0px 1rem;
+  margin: auto;
+  height: 42px;
+  background: none;
+  border: 1px solid #555;
+  border-radius: 16px;
+  color: var(--text-dim);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.skip-btn:hover {
+  border-color: var(--flame-2);
+  color: var(--flame-2);
 }
 
 /* ---------- Guess input ---------- */
@@ -574,7 +594,7 @@ span.ded-maybe::before {
 
 .grid-row {
   display: grid;
-  grid-template-columns: 1.8fr 1.2fr 0.9fr 0.7fr 0.7fr 0.95fr 0.7fr;
+  grid-template-columns: 1.8fr 1.2fr 0.7fr 0.7fr 0.7fr 0.95fr 0.7fr;
   gap: 6px;
   margin-bottom: 6px;
   perspective: 700px;
@@ -680,7 +700,7 @@ span.ded-maybe::before {
 .cell-text {
   font-family: 'Cinzel', serif;
   font-weight: 700;
-  font-size: 1rem;
+  font-size: clamp(0.2rem, 100cqw, 0.9rem);
   white-space: normal;
   /* Break at natural hyphenation points (e.g. "Shape-shifter") rather than
      at arbitrary character positions. Requires lang="en" on <html>, which is set. */
@@ -689,16 +709,7 @@ span.ded-maybe::before {
   overflow-wrap: break-word;
   line-height: 1.15;
 }
-
-/* Scale cell text down as the cell narrows so long words like "Shapeshifter"
-   always fit without mid-word breaks. Steps keep number cells crisp. */
-@container (max-width: 95px) {
-  .cell-text { font-size: 0.82rem; }
-}
-@container (max-width: 75px) {
-  .cell-text { font-size: 0.7rem; }
-}
-
+  
 .cell-arrow {
   margin-left: 3px;
   font-size: 0.82rem;
@@ -1199,7 +1210,7 @@ span.ded-maybe::before {
 }
 
 .pool-modal {
-  max-width: 880px;
+  max-width: min(1180px, 94vw);
   max-height: 86vh;
 }
 
@@ -1234,14 +1245,48 @@ span.ded-maybe::before {
   margin: 0;
   overflow-y: auto;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
+  /* Fluid columns: cards stay legible (~190px min) and pack 5-across in the
+     ~1180px modal on a 1920×1080 screen, fewer as the viewport narrows. */
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 16px;
 }
 
 .pool-card {
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
+
+/* Mobile: drop the card-grid for a compact, scannable row list — thumbnail +
+   name + rank, the way mtgsites surface long card lists on small screens. */
+@media (max-width: 560px) {
+  .pool-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .pool-card {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    padding: 6px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.25);
+  }
+
+  .pool-card img,
+  .pool-card-noart {
+    width: 52px;
+    flex: 0 0 52px;
+    aspect-ratio: 488 / 680;
+  }
+
+  .pool-card-name {
+    flex: 1;
+    font-size: 0.9rem;
+  }
 }
 
 .pool-card img {

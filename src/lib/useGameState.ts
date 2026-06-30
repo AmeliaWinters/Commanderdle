@@ -5,10 +5,10 @@ import { dailyAnswer, randomAnswer, todayKey } from './dailyAnswer'
 
 const MAX_GUESSES_BY_MODE: Record<Mode, number> = {
   classic: 8,
-  silhouette: 6,
-  quote: 6,
+  silhouette: 5,
+  quote: 5,
   synergy: 6,
-  zoom: 6,
+  zoom: 5,
 }
 
 const maxGuessesFor = (mode: Mode) => MAX_GUESSES_BY_MODE[mode]
@@ -16,6 +16,7 @@ const maxGuessesFor = (mode: Mode) => MAX_GUESSES_BY_MODE[mode]
 export interface GameState {
   answer: Commander
   guesses: Commander[]
+  skips: number
   status: 'playing' | 'won' | 'lost'
   isDaily: boolean
 }
@@ -24,6 +25,7 @@ interface PersistedDaily {
   date: string
   answerName: string
   guessNames: string[]
+  skips?: number
 }
 
 const storageKey = (mode: Mode) => `commanderdle:${mode}:daily`
@@ -39,18 +41,19 @@ function loadDaily(mode: Mode): GameState {
         const guesses = saved.guessNames
           .map((n) => COMMANDERS_BY_NAME.get(n))
           .filter((c): c is Commander => Boolean(c))
-        return { answer, guesses, isDaily: true, status: deriveStatus(answer, guesses, mode) }
+        const skips = saved.skips ?? 0
+        return { answer, guesses, skips, isDaily: true, status: deriveStatus(answer, guesses, skips, mode) }
       }
     }
   } catch {
     /* ignore corrupt storage */
   }
-  return { answer, guesses: [], isDaily: true, status: 'playing' }
+  return { answer, guesses: [], skips: 0, isDaily: true, status: 'playing' }
 }
 
-function deriveStatus(answer: Commander, guesses: Commander[], mode: Mode): GameState['status'] {
+function deriveStatus(answer: Commander, guesses: Commander[], skips: number, mode: Mode): GameState['status'] {
   if (guesses.some((g) => g.name === answer.name)) return 'won'
-  if (guesses.length >= maxGuessesFor(mode)) return 'lost'
+  if (guesses.length + skips >= maxGuessesFor(mode)) return 'lost'
   return 'playing'
 }
 
@@ -69,6 +72,7 @@ export function useGameState(mode: Mode) {
       date: todayKey(),
       answerName: state.answer.name,
       guessNames: state.guesses.map((g) => g.name),
+      skips: state.skips,
     }
     try {
       localStorage.setItem(storageKey(mode), JSON.stringify(payload))
@@ -82,12 +86,20 @@ export function useGameState(mode: Mode) {
       if (prev.status !== 'playing') return prev
       if (prev.guesses.some((g) => g.name === commander.name)) return prev
       const guesses = [...prev.guesses, commander]
-      return { ...prev, guesses, status: deriveStatus(prev.answer, guesses, mode) }
+      return { ...prev, guesses, status: deriveStatus(prev.answer, guesses, prev.skips, mode) }
+    })
+  }, [mode])
+
+  const skip = useCallback(() => {
+    setState((prev) => {
+      if (prev.status !== 'playing') return prev
+      const skips = prev.skips + 1
+      return { ...prev, skips, status: deriveStatus(prev.answer, prev.guesses, skips, mode) }
     })
   }, [mode])
 
   const startPractice = useCallback(() => {
-    setState({ answer: randomAnswer(mode), guesses: [], isDaily: false, status: 'playing' })
+    setState({ answer: randomAnswer(mode), guesses: [], skips: 0, isDaily: false, status: 'playing' })
   }, [mode])
 
   const backToDaily = useCallback(() => {
@@ -101,8 +113,8 @@ export function useGameState(mode: Mode) {
     } catch {
       /* ignore */
     }
-    setState({ answer: dailyAnswer(mode), guesses: [], isDaily: true, status: 'playing' })
+    setState({ answer: dailyAnswer(mode), guesses: [], skips: 0, isDaily: true, status: 'playing' })
   }, [mode])
 
-  return { state, guess, startPractice, backToDaily, reset, maxGuesses: maxGuessesFor(mode) }
+  return { state, guess, skip, startPractice, backToDaily, reset, maxGuesses: maxGuessesFor(mode) }
 }

@@ -4,6 +4,7 @@ import CardZoom from './CardZoom'
 interface Props {
   answer: Commander
   guesses: Commander[]
+  skips: number
   wrongGuesses: number
   maxGuesses: number
   solved: boolean
@@ -11,7 +12,7 @@ interface Props {
 
 const MAX_BLUR = 28
 
-export default function SilhouetteMode({ answer, guesses, wrongGuesses, maxGuesses, solved }: Props) {
+export default function SilhouetteMode({ answer, guesses, skips, wrongGuesses, maxGuesses, solved }: Props) {
   // Blur starts heavy and clears as wrong guesses accumulate, reaching 0 in time
   // for the final allowed guess (i.e. after maxGuesses - 1 wrong guesses).
   const guessesToClear = Math.max(1, maxGuesses - 1)
@@ -19,11 +20,12 @@ export default function SilhouetteMode({ answer, guesses, wrongGuesses, maxGuess
   const darken = solved ? 0 : Math.max(0, 0.55 - wrongGuesses * (0.55 / guessesToClear))
   const src = answer.artCrop ?? answer.normalImage ?? ''
 
-  // One dot per allowed guess: green = correct, red = wrong, empty = not yet used.
+  // One dot per allowed guess: green = correct, red = wrong/skipped, empty = not yet used.
   const dots = Array.from({ length: maxGuesses }, (_, i) => {
     const g = guesses[i]
-    if (!g) return 'empty'
-    return g.name === answer.name ? 'correct' : 'wrong'
+    if (g) return g.name === answer.name ? 'correct' : 'wrong'
+    if (i < guesses.length + skips) return 'wrong'
+    return 'empty'
   })
 
   const image = src ? (
