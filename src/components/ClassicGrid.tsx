@@ -1,5 +1,5 @@
 import type { Commander } from '../types/commander'
-import { compareCommander, type ComparedColumn, type MatchKind } from '../lib/compare'
+import { compareCommander, sharesNameWord, type ComparedColumn, type MatchKind } from '../lib/compare'
 import { deduce } from '../lib/deduce'
 import ManaCost from './ManaSymbols'
 import CardZoom from './CardZoom'
@@ -22,7 +22,7 @@ function Cell({ col, index }: { col: ComparedColumn; index: number }) {
   return (
     <div
       className={`grid-cell match-${col.kind}`}
-      style={{ animationDelay: `${index * 0.12}s` }}
+      style={{ animationDelay: `${index * 0.5}s` }}
       title={col.label}
     >
       <div className="cell-inner">
@@ -44,9 +44,14 @@ function Cell({ col, index }: { col: ComparedColumn; index: number }) {
 function GuessRow({ guess, answer }: { guess: Commander; answer: Commander }) {
   const cols = compareCommander(guess, answer)
   const solved = guess.name === answer.name
+  // Hidden clue: tint the name amber when it shares a word with the answer.
+  const shareWord = !solved && sharesNameWord(guess.name, answer.name)
   return (
     <div className="grid-row">
-      <div className="grid-cell name-cell" style={{ animationDelay: '0s' }}>
+      <div
+        className={`grid-cell name-cell${shareWord ? ' match-partial' : ''}`}
+        style={{ animationDelay: '0s' }}
+      >
         <CardZoom name={guess.name} image={guess.normalImage} className="name-inner cell-inner">
           {guess.artCrop && <img className="name-thumb" src={guess.artCrop} alt="" draggable={false} />}
           <span className={`name-text${solved ? ' solved' : ''}`}>{guess.name}</span>
@@ -61,8 +66,8 @@ function GuessRow({ guess, answer }: { guess: Commander; answer: Commander }) {
 
 /** Deduction row aligned to the table columns, sitting just above the headers. */
 function DeductionRow({ guesses, answer }: Props) {
-  const { colors, numerics } = deduce(guesses, answer)
-  if (!colors && numerics.length === 0) return null
+  const { colors, types, numerics } = deduce(guesses, answer)
+  if (!colors && !types && numerics.length === 0) return null
   const byLabel = new Map(numerics.map((n) => [n.label, n]))
 
   const colorsCell = () => {
@@ -77,9 +82,32 @@ function DeductionRow({ guesses, answer }: Props) {
     return (
       <div className="deduction-cell match-partial">
         {colors.present.length > 0 && <ManaCost colors={colors.present} />}
+        {colors.maybe.length > 0 && (
+          <span className="ded-maybe" title="at least one of these">
+            <ManaCost colors={colors.maybe} />
+          </span>
+        )}
         {colors.absent.length > 0 && (
           <span className="ded-absent">
             <ManaCost colors={colors.absent} />
+          </span>
+        )}
+      </div>
+    )
+  }
+
+  const typeCell = () => {
+    if (!types) return <div className="deduction-cell empty" />
+    return (
+      <div className={`deduction-cell match-${types.exact ? 'exact' : 'partial'}`}>
+        {types.present.map((t) => (
+          <span key={t} className="ded-type">
+            {t}
+          </span>
+        ))}
+        {types.maybe.length > 0 && (
+          <span className="ded-type ded-maybe" title="at least one of these">
+            {types.maybe.join(' / ')}
           </span>
         )}
       </div>
@@ -96,7 +124,7 @@ function DeductionRow({ guesses, answer }: Props) {
     <div className="grid-row deduction-row" title="What we know so far">
       <div className="deduction-cell deduction-title-cell">Clues</div>
       {colorsCell()}
-      <div className="deduction-cell empty" />
+      {typeCell()}
       {numCell('Mana value')}
       {numCell('Stat total')}
       {numCell('Popularity')}

@@ -30,6 +30,39 @@
 
   --radius: 12px;
   font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
+
+  /* ---------- Background "blurry ball" glows (tweak these) ---------- */
+  /* Extra softness applied to the whole glow layer. Higher = blurrier. */
+  --orb-blur: 60px;
+  /* Master opacity for the glow layer (0–1). Higher = more pronounced. */
+  --orb-opacity: 0.9;
+  /* How far each glow drifts, and how long one cycle takes. */
+  --orb-drift: 6%;
+  --orb-speed: 10s;
+  /* Per-orb tuning: color, alpha, position (x y) and radius (% of layer). */
+  --orb1-color: 236, 90, 28;   /* ember orange */
+  --orb1-alpha: 0.5;
+  --orb1-pos: 25% 30%;
+  --orb1-size: 42%;
+  --orb2-color: 192, 31, 31;   /* deep red */
+  --orb2-alpha: 0.45;
+  --orb2-pos: 78% 70%;
+  --orb2-size: 46%;
+  --orb3-color: 246, 160, 26;  /* gold */
+  --orb3-alpha: 0.32;
+  --orb3-pos: 60% 15%;
+  --orb3-size: 38%;
+
+  /* ---------- Background floating cards (tweak these) ---------- */
+  --card-border: rgba(246, 160, 26, 0.12);
+  --card-grad-1: rgba(236, 90, 28, 0.07);
+  --card-grad-2: rgba(192, 31, 31, 0.03);
+  --card-blur: 0px;          /* set e.g. 2px to soften the cards */
+  --card-opacity: 1;         /* overall card visibility */
+  --card-radius: 14px;
+  --card-float: 32px;        /* vertical travel of the float animation */
+  --card-spin: 6deg;         /* extra rotation added over the float */
+  --card-shadow: 0 20px 60px rgba(0, 0, 0, 0.35), inset 0 0 30px rgba(0, 0, 0, 0.25);
 }
 
 * {
@@ -52,11 +85,13 @@ body::before {
   inset: -20%;
   z-index: -3;
   pointer-events: none;
+  opacity: var(--orb-opacity);
+  filter: blur(var(--orb-blur));
   background:
-    radial-gradient(40% 40% at 25% 30%, rgba(236, 90, 28, 0.22), transparent 70%),
-    radial-gradient(45% 45% at 78% 70%, rgba(192, 31, 31, 0.2), transparent 70%),
-    radial-gradient(35% 35% at 60% 15%, rgba(246, 160, 26, 0.14), transparent 70%);
-  animation: drift 22s ease-in-out infinite alternate;
+    radial-gradient(var(--orb1-size) var(--orb1-size) at var(--orb1-pos), rgba(var(--orb1-color), var(--orb1-alpha)), transparent 70%),
+    radial-gradient(var(--orb2-size) var(--orb2-size) at var(--orb2-pos), rgba(var(--orb2-color), var(--orb2-alpha)), transparent 70%),
+    radial-gradient(var(--orb3-size) var(--orb3-size) at var(--orb3-pos), rgba(var(--orb3-color), var(--orb3-alpha)), transparent 70%);
+  animation: drift var(--orb-speed) ease-in-out infinite alternate;
 }
 
 /* floating MTG-card silhouettes */
@@ -71,10 +106,12 @@ body::before {
 .bg-card {
   position: absolute;
   display: block;
-  border-radius: 14px;
-  border: 1px solid rgba(246, 160, 26, 0.12);
-  background: linear-gradient(150deg, rgba(236, 90, 28, 0.07), rgba(192, 31, 31, 0.03));
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35), inset 0 0 30px rgba(0, 0, 0, 0.25);
+  border-radius: var(--card-radius);
+  border: 1px solid var(--card-border);
+  background: linear-gradient(150deg, var(--card-grad-1), var(--card-grad-2));
+  box-shadow: var(--card-shadow);
+  opacity: var(--card-opacity);
+  filter: blur(var(--card-blur));
   animation-name: float-card;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
@@ -84,13 +121,13 @@ body::before {
 
 @keyframes drift {
   0% {
-    transform: translate(-3%, -2%) scale(1);
+    transform: translate(calc(-1 * var(--orb-drift)), calc(-0.6 * var(--orb-drift))) scale(1);
   }
   50% {
-    transform: translate(3%, 2%) scale(1.08);
+    transform: translate(var(--orb-drift), calc(0.6 * var(--orb-drift))) scale(1.08);
   }
   100% {
-    transform: translate(-2%, 3%) scale(1);
+    transform: translate(calc(-0.6 * var(--orb-drift)), var(--orb-drift)) scale(1);
   }
 }
 
@@ -99,7 +136,7 @@ body::before {
     transform: translateY(0) rotate(var(--rot, 0deg)) scale(1);
   }
   100% {
-    transform: translateY(-32px) rotate(calc(var(--rot, 0deg) + 6deg)) scale(1.05);
+    transform: translateY(calc(-1 * var(--card-float))) rotate(calc(var(--rot, 0deg) + var(--card-spin))) scale(1.05);
   }
 }
 
@@ -379,7 +416,7 @@ body::before {
   left: 0;
   right: 0;
   bottom: 0;
-  height: 20%;
+  height: 18%;
   border-radius: 0 0 16px 16px;
   backdrop-filter: blur(7px);
   -webkit-backdrop-filter: blur(7px);
@@ -461,7 +498,7 @@ body::before {
   border: 1px solid var(--line);
   overflow: hidden;
   font-family: 'Cinzel', serif;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-variant-numeric: tabular-nums;
 }
 
@@ -494,15 +531,50 @@ body::before {
   text-decoration-thickness: 2px;
 }
 
+/* Unresolved candidates ("at least one of these"). */
+.ded-maybe {
+  display: inline-flex;
+  align-items: center;
+  opacity: 0.72;
+  font-style: italic;
+  max-width: 100%;
+}
+
+span.ded-maybe::before {
+  content: '?';
+  margin-right: 2px;
+  font-size: 0.7rem;
+  opacity: 0.8;
+}
+
+.ded-type {
+  line-height: 1.1;
+  white-space: nowrap;
+  /* Allow this flex item to shrink below its min-content width so the parent
+     cell can constrain it; without this, long type lists overflow the box. */
+  min-width: 0;
+}
+
+/* The "maybe" candidates can be several words; let them wrap as a group. */
+.ded-type.ded-maybe {
+  white-space: normal;
+  text-align: center;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  /* Clamp to the cell so a long list like "Human / Wizard / Assassin" never
+     bleeds out of the amber clue box. */
+  max-width: 100%;
+}
+
 .results-table {
   min-width: 640px;
   margin: 0 auto;
-  max-width: 860px;
+  max-width: 960px;
 }
 
 .grid-row {
   display: grid;
-  grid-template-columns: 2.1fr 1.1fr 0.9fr 0.8fr 0.9fr 0.95fr 0.9fr;
+  grid-template-columns: 1.8fr 1.2fr 0.9fr 0.7fr 0.7fr 0.95fr 0.7fr;
   gap: 6px;
   margin-bottom: 6px;
   perspective: 700px;
@@ -543,6 +615,8 @@ body::before {
   font-size: 0.9rem;
   animation: reveal 0.5s cubic-bezier(0.3, 0.7, 0.3, 1.1) both;
   transform-origin: center;
+  /* Enable container queries so .cell-text can scale with the cell's actual width. */
+  container-type: inline-size;
 }
 
 @keyframes reveal {
@@ -607,6 +681,22 @@ body::before {
   font-family: 'Cinzel', serif;
   font-weight: 700;
   font-size: 1rem;
+  white-space: normal;
+  /* Break at natural hyphenation points (e.g. "Shape-shifter") rather than
+     at arbitrary character positions. Requires lang="en" on <html>, which is set. */
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  overflow-wrap: break-word;
+  line-height: 1.15;
+}
+
+/* Scale cell text down as the cell narrows so long words like "Shapeshifter"
+   always fit without mid-word breaks. Steps keep number cells crisp. */
+@container (max-width: 95px) {
+  .cell-text { font-size: 0.82rem; }
+}
+@container (max-width: 75px) {
+  .cell-text { font-size: 0.7rem; }
 }
 
 .cell-arrow {

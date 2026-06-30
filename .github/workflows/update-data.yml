@@ -1,0 +1,39 @@
+name: Update Commander Data
+
+on:
+  schedule:
+    # Run once per day at 06:00 UTC (before peak traffic hours).
+    - cron: '0 6 * * *'
+  workflow_dispatch: # Allow manual trigger from the Actions tab.
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history so git push works correctly.
+          fetch-depth: 1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Fetch EDHREC data & download images
+        run: npm run build:data
+
+      - name: Commit updated data
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/data/commanders.json scripts/.cache/edhrec.json public/cards/
+          # Only commit if there are actual changes.
+          git diff --cached --quiet || git commit -m "chore: daily commander data refresh [skip ci]"
+          git push

@@ -1,29 +1,50 @@
 /**
  * build-data.ts
  *
- * Generates src/data/commanders.json — the static dataset the app ships with.
+ * Generates src/data/commanders.json — the static dataset the app ships with — and
+ * downloads every card image into public/cards/ so the app serves images from its own
+ * host rather than hotlinking Scryfall's CDN (which Scryfall's guidelines discourage,
+ * and whose URLs rotate over time).
  *
  * Pipeline:
- *   1. Pull the EDHREC "top commanders (past 2 years)" ranked list (paginated, 100/page).
- *   2. Take the top 500 names.
- *   3. Enrich each via Scryfall's /cards/collection batch endpoint (75 ids/request) to get
+ *   1. Pull the EDHREC "top commanders (past 2 years)" ranked list (paginated, 100/page),
+ *      plus each commander's high-synergy cards. EDHREC drives popularity/ranking, which
+ *      changes over time, so this is re-run regularly (at least daily).
+ *   2. Enrich each via Scryfall's /cards/collection batch endpoint (75 ids/request) to get
  *      color identity, type, mana value, power/toughness, rarity, release year, flavor text,
  *      and image URIs.
+ *   3. Download all referenced images into public/cards/ (deduped, skipping ones already
+ *      on disk) and rewrite the dataset to point at local "cards/<file>" paths.
  *   4. Write the merged, ranked dataset to src/data/commanders.json.
+ *
+ * Resilience: EDHREC has no official API — json.edhrec.com is undocumented and could be
+ * discontinued or start refusing our requests. So every successful EDHREC fetch is cached
+ * to scripts/.cache/edhrec.json (committed to the repo). On a run where EDHREC fails or
+ * returns too little data, we fall back to that last-good cache and keep building rather
+ * than wiping a good dataset. We only overwrite cached data when EDHREC returns a proper,
+ * non-empty response. Likewise we refuse to overwrite commanders.json with a degenerate
+ * (too-small) result.
  *
  * Run with: npm run build:data
  *
  * Both APIs are free and require no key. Scryfall asks for a descriptive User-Agent and a
  * ~50-100ms delay between requests, which we honor.
  */
-import { writeFile, mkdir } from 'node:fs/promises'
+import { writeFile, mkdir, readFile, access } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const OUT_FILE = join(__dirname, '..', 'src', 'data', 'commanders.json')
+// Vite serves public/ at the deploy root; images land here and ship as static assets.
+const CARDS_DIR = join(__dirname, '..', 'public', 'cards')
+// Last-good EDHREC payload, committed so the build survives json.edhrec.com going away.
+const CACHE_FILE = join(__dirname, '.cache', 'edhrec.json')
 
 const TARGET_COUNT = 500
+// A fresh EDHREC ranking shorter than this is treated as a failed/degraded fetch, and we
+// fall back to the cached list instead of trusting it.
+const MIN_VALID = Math.floor(TARGET_COUNT * 0.8)
 // EDHREC's JSON host sits behind Cloudflare and 403s non-browser User-Agents.
 const EDHREC_UA =
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36'
@@ -32,6 +53,33 @@ const SCRYFALL_UA = 'Commanderdle/0.1 (https://github.com/AmeliaWinters/Commande
 const EDHREC_BASE = 'https://json.edhrec.com/pages/'
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
+const fileExists = (p: string) =>
+  access(p).then(
+    () => true,
+    () => false,
+  )
+
+/** Shape of the committed last-good EDHREC cache (scripts/.cache/edhrec.json). */
+interface EdhrecCache {
+  fetchedAt: string
+  commanders: EdhrecCardView[]
+  synergy: Record<string, string[]>
+}
+
+async function loadCache(): Promise<EdhrecCache | null> {
+  if (!(await fileExists(CACHE_FILE))) return null
+  try {
+    return JSON.parse(await readFile(CACHE_FILE, 'utf-8')) as EdhrecCache
+  } catch (e) {
+    console.warn(`Could not read EDHREC cache: ${(e as Error).message}`)
+    return null
+  }
+}
+
+async function saveCache(cache: EdhrecCache): Promise<void> {
+  await mkdir(dirname(CACHE_FILE), { recursive: true })
+  await writeFile(CACHE_FILE, JSON.stringify(cache, null, 2), 'utf-8')
+}
 
 /** Normalize a card name for matching across EDHREC/Scryfall (diacritics, punctuation, case). */
 const norm = (s: string) =>
@@ -260,12 +308,124 @@ function imageForName(name: string, cards: Map<string, ScryfallCard>): string | 
   return images?.normal ?? null
 }
 
+/**
+ * Derive a stable, collision-free local filename from a Scryfall image URL.
+ * e.g. https://cards.scryfall.io/normal/front/1/0/<uuid>.jpg?123 -> "normal_<uuid>.jpg"
+ * The size folder (normal/art_crop) and the per-art uuid together are unique, and dropping
+ * the ?<timestamp> query means re-runs reuse the same file instead of re-downloading.
+ */
+function localFileName(url: string): string {
+  const { pathname } = new URL(url)
+  const parts = pathname.split('/').filter(Boolean)
+  const size = parts[0] ?? 'img'
+  const base = parts[parts.length - 1] ?? 'card.jpg'
+  return `${size}_${base}`.replace(/[^a-zA-Z0-9._-]/g, '_')
+}
+
+/**
+ * Download every Scryfall image referenced by the dataset into public/cards/ and rewrite
+ * the commanders (in place) to point at local "cards/<file>" paths.
+ *
+ * - Deduplicates: synergy art repeats across commanders, so each URL downloads once.
+ * - Skips files already on disk, making re-runs cheap and surviving an offline Scryfall
+ *   CDN (a previously-downloaded image is reused).
+ * - On a download failure with no existing file, the original remote URL is kept so the
+ *   app still renders something rather than a broken image.
+ */
+async function localizeImages(commanders: Commander[]): Promise<void> {
+  await mkdir(CARDS_DIR, { recursive: true })
+
+  // Collect every distinct remote URL the dataset references.
+  const remoteUrls = new Set<string>()
+  const addUrl = (u: string | null) => {
+    if (u && /^https?:\/\//.test(u)) remoteUrls.add(u)
+  }
+  for (const c of commanders) {
+    addUrl(c.artCrop)
+    addUrl(c.normalImage)
+    for (const s of c.synergyCards) addUrl(s.image)
+  }
+
+  // remote URL -> local "cards/<file>" path (or the remote URL itself if download failed).
+  const resolved = new Map<string, string>()
+  const urls = [...remoteUrls]
+  let downloaded = 0
+  let reused = 0
+  let failed = 0
+  const CONCURRENCY = 8
+
+  async function handle(url: string) {
+    const file = localFileName(url)
+    const dest = join(CARDS_DIR, file)
+    const localPath = `cards/${file}`
+    if (await fileExists(dest)) {
+      resolved.set(url, localPath)
+      reused++
+      return
+    }
+    try {
+      const res = await fetch(url, { headers: { 'User-Agent': SCRYFALL_UA } })
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      const buf = Buffer.from(await res.arrayBuffer())
+      await writeFile(dest, buf)
+      resolved.set(url, localPath)
+      downloaded++
+    } catch (e) {
+      // Keep the remote URL as a last-resort fallback so the image still loads.
+      resolved.set(url, url)
+      failed++
+      console.warn(`Image download failed (${(e as Error).message}): ${url}`)
+    }
+  }
+
+  console.log(`Downloading ${urls.length} unique images into public/cards/ ...`)
+  for (let i = 0; i < urls.length; i += CONCURRENCY) {
+    await Promise.all(urls.slice(i, i + CONCURRENCY).map(handle))
+    // Stay comfortably under Scryfall's 10 req/s ceiling between batches.
+    await sleep(80)
+  }
+  console.log(`  images: ${downloaded} downloaded, ${reused} reused, ${failed} failed`)
+
+  // Rewrite the dataset to local paths.
+  const map = (u: string | null) => (u ? resolved.get(u) ?? u : null)
+  for (const c of commanders) {
+    c.artCrop = map(c.artCrop)
+    c.normalImage = map(c.normalImage)
+    for (const s of c.synergyCards) s.image = map(s.image)
+  }
+}
+
 async function main() {
+  const cache = await loadCache()
+
   console.log('Fetching EDHREC top commanders...')
   // Over-fetch: some EDHREC entries collapse to the same Scryfall card (partner variants)
   // or fail enrichment, so we pull a buffer and trim to exactly TARGET_COUNT afterward.
-  const edhList = await fetchEdhrecTop(TARGET_COUNT + 30)
-  console.log(`Got ${edhList.length} commanders from EDHREC.`)
+  let edhList: EdhrecCardView[] = []
+  try {
+    edhList = await fetchEdhrecTop(TARGET_COUNT)
+  } catch (e) {
+    console.warn(`EDHREC ranking fetch threw: ${(e as Error).message}`)
+  }
+
+  // Only trust a fresh ranking that looks complete; otherwise fall back to the last-good
+  // cache so we never rebuild on top of a degraded/empty EDHREC response.
+  let usingFreshRanking = edhList.length >= MIN_VALID
+  if (!usingFreshRanking) {
+    if (cache?.commanders?.length) {
+      console.warn(
+        `EDHREC returned ${edhList.length} (< ${MIN_VALID}); using cached ranking from ${cache.fetchedAt}.`,
+      )
+      edhList = cache.commanders
+    } else {
+      throw new Error(
+        `EDHREC returned ${edhList.length} commanders and no cache exists — aborting to avoid a bad build.`,
+      )
+    }
+  }
+  console.log(
+    `Using ${edhList.length} commanders from ${usingFreshRanking ? 'EDHREC (fresh)' : 'cache'}.`,
+  )
 
   console.log('Fetching synergy cards per commander from EDHREC...')
   const synergyNamesByCommander = new Map<string, string[]>()
@@ -273,11 +433,31 @@ async function main() {
     const edh = edhList[i]
     const slug = edh.sanitized
     if (!slug) continue
-    const names = await fetchSynergyNames(slug)
+    let names: string[] = []
+    try {
+      names = await fetchSynergyNames(slug)
+    } catch (e) {
+      console.warn(`EDHREC synergy ${slug} threw: ${(e as Error).message}`)
+    }
+    // Per-commander fallback: if this fetch came back empty/failed but we have cached
+    // synergy for the card, reuse it rather than dropping the commander's Synergy mode.
+    if (names.length === 0 && cache?.synergy?.[edh.name]?.length) {
+      names = cache.synergy[edh.name]
+    }
     synergyNamesByCommander.set(edh.name, names)
     if ((i + 1) % 50 === 0) console.log(`  synergy: ${i + 1}/${edhList.length}`)
     await sleep(120)
   }
+
+  // Persist the best data we now hold as the new last-good cache. Only overwrite the
+  // ranking when EDHREC actually gave us a proper fresh one; always fold in whatever
+  // synergy we resolved (fresh or cache-backed).
+  const newCache: EdhrecCache = {
+    fetchedAt: new Date().toISOString(),
+    commanders: usingFreshRanking ? edhList : cache?.commanders ?? edhList,
+    synergy: Object.fromEntries(synergyNamesByCommander),
+  }
+  await saveCache(newCache)
 
   console.log('Enriching via Scryfall (commanders + synergy cards)...')
   // One batch over the union of commander names and every synergy-card name.
@@ -315,6 +495,17 @@ async function main() {
   // sequentially (1..TARGET_COUNT) after dropping any duplicates/failed enrichment.
   commanders.length = Math.min(commanders.length, TARGET_COUNT)
   commanders.forEach((c, i) => (c.rank = i + 1))
+
+  // Guard: refuse to overwrite a good dataset with a degenerate one (e.g. Scryfall
+  // enrichment mostly failed). Keep the existing committed commanders.json instead.
+  if (commanders.length < MIN_VALID) {
+    throw new Error(
+      `Only built ${commanders.length} commanders (< ${MIN_VALID}); refusing to overwrite commanders.json.`,
+    )
+  }
+
+  // Pull all images onto our own host and rewrite the dataset to local paths.
+  await localizeImages(commanders)
 
   await mkdir(dirname(OUT_FILE), { recursive: true })
   await writeFile(OUT_FILE, JSON.stringify(commanders, null, 2), 'utf-8')

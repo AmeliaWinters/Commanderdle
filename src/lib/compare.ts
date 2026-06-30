@@ -51,6 +51,24 @@ export function statDisplay(c: Commander): string {
   return '—'
 }
 
+/** Short connective words ignored when matching shared words between names. */
+const NAME_STOPWORDS = new Set(['the', 'of', 'and', 'a', 'an'])
+
+/**
+ * Hidden clue: do the two commander names share a significant word? Used to tint
+ * the guessed name cell amber (e.g. "Queen Marchesa" vs "Marchesa, the Black
+ * Rose" share "Marchesa"). Punctuation is stripped and connectives ignored.
+ */
+export function sharesNameWord(a: string, b: string): boolean {
+  const words = (s: string) =>
+    s
+      .toLowerCase()
+      .split(/[^a-z0-9]+/)
+      .filter((w) => w.length > 0 && !NAME_STOPWORDS.has(w))
+  const first = new Set(words(a))
+  return words(b).some((w) => first.has(w))
+}
+
 /** Creature races / other subtypes (the part after the "—" in the type line). */
 export function subtypes(c: Commander): string[] {
   const dash = c.typeLine.split('—')[1]
@@ -106,7 +124,11 @@ export function compareCommander(guess: Commander, answer: Commander): ComparedC
   const mv = compareNumeric(guess.manaValue, answer.manaValue, 2)
   const stat = compareStat(statTotal(guess), statTotal(answer), 2)
   // Popularity is compared by EDHREC rank; "close" = within POPULARITY_TOL ranks.
+  // Rank direction is inverted for display: a higher rank number is *less* popular,
+  // so the arrow reflects popularity (down = less popular) rather than raw rank.
   const popularity = compareNumeric(guess.rank, answer.rank, POPULARITY_TOL)
+  const popDirection: Direction =
+    popularity.direction === 'up' ? 'down' : popularity.direction === 'down' ? 'up' : 'equal'
   const year = compareNumeric(guess.year, answer.year, 2)
 
   return [
@@ -114,7 +136,7 @@ export function compareCommander(guess: Commander, answer: Commander): ComparedC
     { label: 'Type', display: subtypes(guess).join(' ') || '—', kind: type },
     { label: 'Mana Value', display: String(guess.manaValue), kind: mv.kind, direction: mv.direction },
     { label: 'Stat Total', display: statDisplay(guess), kind: stat.kind, direction: stat.direction },
-    { label: 'Popularity', display: `#${guess.rank}`, kind: popularity.kind, direction: popularity.direction },
+    { label: 'Popularity', display: `#${guess.rank}`, kind: popularity.kind, direction: popDirection },
     { label: 'Year', display: String(guess.year), kind: year.kind, direction: year.direction },
   ]
 }

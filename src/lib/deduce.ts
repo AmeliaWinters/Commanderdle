@@ -1,142 +1,196 @@
 import type { Commander } from '../types/commander'
-import { compareNumeric, compareSets, statTotal, POPULARITY_TOL } from './compare'
+import { compareSets, statTotal, subtypes, type MatchKind } from './compare'
 import { sortColors } from '../components/ManaSymbols'
 
 export interface NumericClue {
   label: string
-  /** 'exact' = pinned value (green); 'partial' = narrowed range (amber). */
+  /** 'exact' = pinned value (green); 'partial' = bounded by guesses (amber). */
   tone: 'exact' | 'partial'
   value: string
 }
 
 export interface ColorClue {
   exact: boolean
+  /** Colors known to be in the identity. */
   present: string[]
+  /** Colors known to be absent (greyed/struck). */
   absent: string[]
+  /** Unresolved candidates: at least one of these is present. */
+  maybe: string[]
+}
+
+export interface TypeClue {
+  exact: boolean
+  present: string[]
+  maybe: string[]
 }
 
 export interface Deductions {
   colors: ColorClue | null
+  types: TypeClue | null
   numerics: NumericClue[]
 }
 
 interface NumericSpec {
   label: string
   get: (c: Commander) => number | null
-  tol: number
-  /** Whether the tolerance is a fixed, player-knowable constant (so it can tighten bounds). */
-  useTol: boolean
-  /** Natural lower bound for this stat (e.g. mana value can't be below 0). */
-  min?: number
   fmt: (n: number) => string
 }
 
 const id = (n: number) => String(n)
 
 const NUMERIC_SPECS: NumericSpec[] = [
-  { label: 'Mana value', get: (c) => c.manaValue, tol: 2, useTol: true, min: 0, fmt: id },
-  { label: 'Stat total', get: (c) => statTotal(c), tol: 2, useTol: true, min: 0, fmt: id },
+  { label: 'Mana value', get: (c) => c.manaValue, fmt: id },
+  { label: 'Stat total', get: (c) => statTotal(c), fmt: id },
   // Popularity is keyed on EDHREC rank (lower = more popular), shown as "#42".
-  { label: 'Popularity', get: (c) => c.rank, tol: POPULARITY_TOL, useTol: true, min: 1, fmt: (n) => `#${n}` },
-  { label: 'Year', get: (c) => c.year, tol: 2, useTol: true, fmt: id },
+  { label: 'Popularity', get: (c) => c.rank, fmt: (n) => `#${n}` },
+  { label: 'Year', get: (c) => c.year, fmt: id },
 ]
 
 const WUBRG = ['W', 'U', 'B', 'R', 'G']
 
+/**
+ * Numeric clue derived purely from the guessed values — never the close/far
+ * tolerance. A guess the answer sits above contributes a strict lower bound,
+ * a guess it sits below a strict upper bound. We deliberately do NOT use the
+ * comparison tolerance to tighten these: that would leak the tolerance and
+ * hand the player a range they didn't actually earn (e.g. "≥ 11" off a guess
+ * of 8). Instead the player only ever sees the bare ">8" / "<62" they can read
+ * straight off their own guesses.
+ */
 function numericClue(spec: NumericSpec, guesses: Commander[], answer: Commander): NumericClue | null {
   const a = spec.get(answer)
   if (a == null) return null
 
   let exact: number | undefined
-  const floor = spec.min ?? -Infinity
-  let lo = floor
-  let hi = Infinity
+  let gt = -Infinity // answer is strictly greater than this guessed value
+  let lt = Infinity // answer is strictly less than this guessed value
 
   for (const guess of guesses) {
     const g = spec.get(guess)
     if (g == null) continue
-    const res = compareNumeric(g, a, spec.useTol ? spec.tol : 0)
-    if (res.kind === 'exact') {
-      exact = g
-      lo = hi = g
-    } else if (res.direction === 'up') {
-      // answer is higher than the guess.
-      if (res.kind === 'partial' && spec.useTol) {
-        // "close" → within tolerance: answer ∈ [g+1, g+tol].
-        lo = Math.max(lo, g + 1)
-        hi = Math.min(hi, g + spec.tol)
-      } else {
-        // "far" → beyond tolerance, so the close band above the guess is excluded too.
-        lo = Math.max(lo, spec.useTol ? g + spec.tol + 1 : g + 1)
-      }
-    } else if (res.direction === 'down') {
-      // answer is lower than the guess.
-      if (res.kind === 'partial' && spec.useTol) {
-        hi = Math.min(hi, g - 1)
-        lo = Math.max(lo, g - spec.tol)
-      } else {
-        hi = Math.min(hi, spec.useTol ? g - spec.tol - 1 : g - 1)
+    if (g === a) exact = g
+    else if (a > g) gt = Math.max(gt, g)
+    else lt = Math.min(lt, g)
+  }
+
+  if (exact != null) return { label: spec.label, tone: 'exact', value: spec.fmt(exact) }
+
+  const hasGt = gt > -Infinity
+  const hasLt = lt < Infinity
+  if (!hasGt && !hasLt) return null
+
+  let value: string
+  if (hasGt && hasLt) value = `${spec.fmt(gt)}-${lt}`
+  else if (hasGt) value = `>${spec.fmt(gt)}`
+  else value = `<${spec.fmt(lt)}`
+
+  return { label: spec.label, tone: 'partial', value }
+}
+
+interface SetClue {
+  present: Set<string>
+  absent: Set<string>
+  maybe: Set<string>
+}
+
+/**
+ * Generic membership deduction over a finite set of tokens (colors, subtypes).
+ * Each observation pairs a guess's tokens with how that guess's set compared to
+ * the answer's:
+ *  - 'none'    → no overlap, so every token in the guess is definitely absent.
+ *  - 'partial' → at least one token overlaps. A single-token partial pins that
+ *                token as present; multi-token partials become "at least one of
+ *                these" constraints that we resolve against what's known absent.
+ * We run the constraints to a fixpoint so cross-guess logic falls out (e.g. a
+ * {B,R} partial plus R proven absent ⇒ B present). Anything still unresolved is
+ * surfaced as `maybe` candidates rather than hidden.
+ */
+function deduceSet(observations: { items: string[]; kind: MatchKind }[]): SetClue {
+  const absent = new Set<string>()
+  const present = new Set<string>()
+  const constraints: string[][] = []
+
+  for (const o of observations) {
+    if (o.items.length === 0) continue
+    if (o.kind === 'none') {
+      o.items.forEach((x) => absent.add(x))
+    } else if (o.kind === 'partial') {
+      if (o.items.length === 1) present.add(o.items[0])
+      else constraints.push(o.items)
+    }
+  }
+  for (const p of present) absent.delete(p)
+
+  let changed = true
+  while (changed) {
+    changed = false
+    for (const c of constraints) {
+      if (c.some((x) => present.has(x))) continue // already satisfied
+      const rem = c.filter((x) => !absent.has(x))
+      if (rem.length === 1) {
+        present.add(rem[0])
+        absent.delete(rem[0])
+        changed = true
       }
     }
   }
 
-  // Green is reserved for values the player actually guessed exactly — deduced
-  // bounds (even when they collapse to one value) stay amber so the player can
-  // still claim that last bit of insight themselves.
-  if (exact != null) return { label: spec.label, tone: 'exact', value: spec.fmt(exact) }
-  if (lo > hi) return null
-
-  const hasLo = lo > -Infinity
-  const hasHi = hi < Infinity
-  if (!hasLo && !hasHi) return null
-  if (hasLo && hasHi) {
-    // Never collapse an amber clue to a single value: that hands the player the
-    // exact answer they haven't earned with a green guess and cheapens the
-    // deduction. Widen any pinned bound out by the tolerance into a range.
-    const displayHi = lo === hi ? lo + Math.max(spec.tol, 1) : hi
-    return { label: spec.label, tone: 'partial', value: `${spec.fmt(lo)}–${spec.fmt(displayHi)}` }
+  const maybe = new Set<string>()
+  for (const c of constraints) {
+    if (c.some((x) => present.has(x))) continue
+    c.filter((x) => !absent.has(x) && !present.has(x)).forEach((x) => maybe.add(x))
   }
-  if (hasLo) return { label: spec.label, tone: 'partial', value: `≥ ${spec.fmt(lo)}` }
-  return { label: spec.label, tone: 'partial', value: `≤ ${spec.fmt(hi)}` }
+
+  return { present, absent, maybe }
 }
 
 function colorClue(guesses: Commander[], answer: Commander): ColorClue | null {
-  let known = false
-  const present = new Set<string>()
-  const absent = new Set<string>()
+  const obs = guesses.map((g) => ({
+    items: g.colorIdentity,
+    kind: compareSets(g.colorIdentity, answer.colorIdentity),
+  }))
 
-  for (const guess of guesses) {
-    const res = compareSets(guess.colorIdentity, answer.colorIdentity)
-    if (res === 'exact') {
-      known = true
-    } else if (res === 'none') {
-      // No overlap → every guessed color is absent from the identity.
-      guess.colorIdentity.forEach((c) => absent.add(c))
-    } else if (res === 'partial' && guess.colorIdentity.length === 1) {
-      // A single-color guess that overlaps must be a color in the identity.
-      present.add(guess.colorIdentity[0])
-    }
-    // Multi-color "partial" is ambiguous about which color overlaps — skip it.
-  }
-
-  if (known) {
+  if (obs.some((o) => o.kind === 'exact')) {
     const identity = new Set(answer.colorIdentity)
     return {
       exact: true,
       present: sortColors([...identity]),
       absent: WUBRG.filter((c) => !identity.has(c)),
+      maybe: [],
     }
   }
 
-  for (const c of present) absent.delete(c)
-  if (present.size === 0 && absent.size === 0) return null
-  return { exact: false, present: sortColors([...present]), absent: sortColors([...absent]) }
+  const d = deduceSet(obs)
+  const present = sortColors([...d.present])
+  const maybe = sortColors([...d.maybe].filter((c) => !d.present.has(c)))
+  const absent = sortColors([...d.absent].filter((c) => !d.present.has(c)))
+  if (!present.length && !maybe.length && !absent.length) return null
+  return { exact: false, present, absent, maybe }
+}
+
+function typeClue(guesses: Commander[], answer: Commander): TypeClue | null {
+  const answerSubs = subtypes(answer)
+  const obs = guesses
+    .map((g) => ({ items: subtypes(g), kind: compareSets(subtypes(g), answerSubs) }))
+    .filter((o) => o.items.length > 0)
+
+  if (obs.some((o) => o.kind === 'exact')) {
+    return { exact: true, present: answerSubs, maybe: [] }
+  }
+
+  const d = deduceSet(obs)
+  const present = [...d.present]
+  const maybe = [...d.maybe].filter((c) => !d.present.has(c))
+  if (!present.length && !maybe.length) return null
+  return { exact: false, present, maybe }
 }
 
 /** Aggregate everything the player can logically deduce so far from their guesses. */
 export function deduce(guesses: Commander[], answer: Commander): Deductions {
   return {
     colors: colorClue(guesses, answer),
+    types: typeClue(guesses, answer),
     numerics: NUMERIC_SPECS.map((s) => numericClue(s, guesses, answer)).filter(
       (c): c is NumericClue => c !== null,
     ),
