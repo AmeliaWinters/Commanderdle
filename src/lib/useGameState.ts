@@ -4,10 +4,10 @@ import { COMMANDERS_BY_NAME } from './commanders'
 import { dailyAnswer, randomAnswer, todayKey } from './dailyAnswer'
 
 const MAX_GUESSES_BY_MODE: Record<Mode, number> = {
-  classic: 8,
+  classic: 6,
   silhouette: 5,
   quote: 5,
-  synergy: 6,
+  synergy: 5,
   zoom: 5,
 }
 

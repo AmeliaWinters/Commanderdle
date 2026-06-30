@@ -1,6 +1,51 @@
 import type { Commander } from '../types/commander'
-import { compareSets, statTotal, subtypes, type MatchKind } from './compare'
+import { compareNumeric, compareSets, POPULARITY_TOL, statTotal, subtypes, type MatchKind } from './compare'
 import { sortColors } from '../components/ManaSymbols'
+
+/**
+ * Commanders still consistent with the player's guesses, judged ONLY on the
+ * popularity (EDHREC rank) clue. We deliberately ignore colors/type/stats here:
+ * filtering on every column narrows the pool so hard it gives the answer away,
+ * so the peek leans on the single weakest axis. A candidate survives if, for
+ * each guess, its rank would read the same (kind + direction, within the
+ * popularity tolerance) as the real answer's rank does.
+ */
+export function possiblePool(pool: Commander[], guesses: Commander[], answer: Commander): Commander[] {
+  if (guesses.length === 0) return pool
+  const fb = (guess: Commander, target: Commander) => {
+    const r = compareNumeric(guess.rank, target.rank, POPULARITY_TOL)
+    return `${r.kind}:${r.direction}`
+  }
+  const keys = guesses.map((g) => fb(g, answer))
+  return pool.filter((c) => guesses.every((g, i) => fb(g, c) === keys[i]))
+}
+
+/**
+ * Synergy mode peek: commanders still consistent with the colors of the synergy
+ * cards revealed so far. Every card in a deck sits within its commander's color
+ * identity, so the union of revealed cards' colors is a lower bound — a candidate
+ * survives only if its identity contains all of those colors.
+ */
+export function synergyPool(pool: Commander[], revealed: { colorIdentity: string[] }[]): Commander[] {
+  const needed = new Set<string>()
+  for (const c of revealed) for (const col of c.colorIdentity) needed.add(col)
+  if (needed.size === 0) return pool
+  return pool.filter((c) => {
+    const id = new Set(c.colorIdentity)
+    return [...needed].every((col) => id.has(col))
+  })
+}
+
+/**
+ * Quote mode peek: commanders whose color identity exactly matches the answer's.
+ * Color identity is the first hint revealed in quote mode, so filtering the pool
+ * on it leaks nothing the player hasn't already earned. The pool itself is already
+ * restricted to commanders that have a quote (flavor text).
+ */
+export function quotePool(pool: Commander[], answer: Commander): Commander[] {
+  const a = [...answer.colorIdentity].sort().join('')
+  return pool.filter((c) => [...c.colorIdentity].sort().join('') === a)
+}
 
 export interface NumericClue {
   label: string
@@ -70,10 +115,10 @@ function numericClue(spec: NumericSpec, guesses: Commander[], answer: Commander)
     const g = spec.get(guess)
     if (g == null) continue
     if (g === a) exact = g
-    else if (a > g) gt = Math.max(gt, g)
-    else lt = Math.min(lt, g)
+    else if (a > g) gt = Math.max(gt, g+1)
+    else lt = Math.min(lt, g-1)
   }
-
+  
   if (exact != null) return { label: spec.label, tone: 'exact', value: spec.fmt(exact) }
 
   const hasGt = gt > -Infinity
@@ -81,7 +126,8 @@ function numericClue(spec: NumericSpec, guesses: Commander[], answer: Commander)
   if (!hasGt && !hasLt) return null
 
   let value: string
-  if (hasGt && hasLt) value = `${spec.fmt(gt)}-${lt}`
+  if (hasGt && gt == lt) value = `${spec.fmt(gt)}`
+  else if (hasGt && hasLt) value = `${spec.fmt(gt)}-${lt}`
   else if (hasGt) value = `>${spec.fmt(gt)}`
   else value = `<${spec.fmt(lt)}`
 
@@ -176,14 +222,14 @@ function typeClue(guesses: Commander[], answer: Commander): TypeClue | null {
     .filter((o) => o.items.length > 0)
 
   if (obs.some((o) => o.kind === 'exact')) {
-    return { exact: true, present: answerSubs, maybe: [] }
+    return { exact: true, present: answerSubs.sort(), maybe: [] }
   }
 
   const d = deduceSet(obs)
   const present = [...d.present]
   const maybe = [...d.maybe].filter((c) => !d.present.has(c))
   if (!present.length && !maybe.length) return null
-  return { exact: false, present, maybe }
+  return { exact: false, present: present.sort(), maybe: maybe.sort() }
 }
 
 /** Aggregate everything the player can logically deduce so far from their guesses. */

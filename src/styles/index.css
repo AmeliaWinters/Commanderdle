@@ -38,7 +38,7 @@
   --orb-opacity: 0.9;
   /* How far each glow drifts, and how long one cycle takes. */
   --orb-drift: 6%;
-  --orb-speed: 10s;
+  --orb-speed: 14s;
   /* Per-orb tuning: color, alpha, position (x y) and radius (% of layer). */
   --orb1-color: 236, 90, 28;   /* ember orange */
   --orb1-alpha: 0.5;
@@ -101,6 +101,7 @@ body::before {
   z-index: -2;
   pointer-events: none;
   overflow: hidden;
+  opacity: 0.3;
 }
 
 .bg-card {
@@ -117,6 +118,15 @@ body::before {
   animation-iteration-count: infinite;
   animation-direction: alternate;
   will-change: transform;
+}
+
+/* Real-card variant (USE_REAL_CARDS in CardBackdrop.tsx): show the actual card
+   art instead of the abstract gradient silhouette. */
+.bg-card-real {
+  background: none;
+  object-fit: cover;
+  filter: none;
+  opacity: calc(var(--card-opacity) * 1);
 }
 
 @keyframes drift {
@@ -321,8 +331,54 @@ body::before {
 }
 
 /* ---------- Guess input ---------- */
+/* Row that keeps the input centered while letting the pool-peek button sit to its left. */
+.input-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.input-side {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+}
+
+.input-side-left {
+  justify-content: flex-end;
+}
+
+.pool-peek-btn {
+  white-space: nowrap;
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 13px 16px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, opacity 0.15s;
+}
+
+.pool-peek-btn:not(:disabled):hover {
+  border-color: var(--flame-2);
+  color: var(--flame-1);
+}
+
+.pool-peek-btn:disabled {
+  cursor: default;
+  opacity: 0.55;
+  color: var(--text-dim);
+}
+
 .guess-input {
   position: relative;
+  flex: 0 1 480px;
   width: 100%;
   max-width: 480px;
 }
@@ -540,9 +596,31 @@ body::before {
 
 .ded-absent {
   display: inline-flex;
-  opacity: 0.6;
-  text-decoration: line-through;
-  text-decoration-thickness: 2px;
+  opacity: 0.3;
+}
+
+/* Ruled-out colors: drain the pip to grey so it reads as "not in the identity"
+   at a glance. line-through has no effect on the <img> pips, so we desaturate
+   instead and strike each pip individually with a pseudo-element. */
+.ded-absent .mana-pip {
+  filter: grayscale(1) brightness(1.1);
+}
+
+.ded-absent .mana-cost {
+  position: relative;
+}
+
+.ded-absent .mana-cost::after {
+  content: '';
+  position: absolute;
+  left: -1px;
+  right: -1px;
+  top: 50%;
+  height: 2px;
+  background: black;
+  opacity: 1;
+  transform: rotate(-12deg);
+  pointer-events: none;
 }
 
 /* Unresolved candidates ("at least one of these"). */
@@ -726,32 +804,6 @@ span.ded-maybe::before {
   background: var(--far-bg);
   border-color: var(--far-bd);
   color: #ffe9ec;
-}
-
-/* legend */
-.grid-legend {
-  display: flex;
-  gap: 16px;
-  justify-content: center;
-  flex-wrap: wrap;
-  color: var(--text-dim);
-  font-size: 0.85rem;
-  font-style: italic;
-  margin-top: 12px;
-}
-
-.legend-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.legend-swatch {
-  width: 14px;
-  height: 14px;
-  border-radius: 4px;
-  display: inline-block;
-  border: 1px solid rgba(0, 0, 0, 0.5);
 }
 
 /* ---------- Silhouette mode ---------- */
@@ -1096,13 +1148,16 @@ span.ded-maybe::before {
   list-style: none;
   padding: 0;
   margin: 0;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-wrap:wrap;
+  align-content:center;
+  justify-content: center;
   gap: 12px;
   width: 100%;
 }
 
 .synergy-card {
+  flex-basis: 30%;
   aspect-ratio: 488 / 680;
   border-radius: 10px;
   overflow: hidden;
@@ -1293,6 +1348,15 @@ span.ded-maybe::before {
     flex: 1;
     font-size: 0.9rem;
   }
+}
+
+.pool-card-art {
+  position: relative;
+  display: block;
+}
+
+.pool-card-art .quote-blur-overlay {
+  border-radius: 0 0 8px 8px;
 }
 
 .pool-card img {

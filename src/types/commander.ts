@@ -3,6 +3,9 @@ export interface SynergyCard {
   name: string
   /** Scryfall normal-size image URL, when available. */
   image: string | null
+  /** WUBRG color-identity of this card. Every synergy card sits within the
+   * commander's identity, so revealed cards bound the answer's colors. */
+  colorIdentity: string[]
 }
 
 export interface Commander {

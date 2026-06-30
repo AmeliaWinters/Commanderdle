@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useGameState } from '../lib/useGameState'
 import { useModeRoute, isPrivacyPath } from '../lib/router'
 import { poolFor } from '../lib/dailyAnswer'
+import { possiblePool, synergyPool, quotePool } from '../lib/deduce'
 import ModeTabs from './ModeTabs'
 import GuessInput from './GuessInput'
 import ClassicGrid from './ClassicGrid'
@@ -47,6 +48,35 @@ export default function App() {
   const done = status !== 'playing'
   const disabledNames = new Set(guesses.map((g) => g.name))
 
+  // Classic mode: the card-pool peek unlocks after 4 wrong guesses and is filtered
+  // down to the commanders still consistent with every clue earned so far.
+  const classicPool = useMemo(
+    () => (mode === 'classic' ? possiblePool(poolFor('classic'), guesses, answer) : null),
+    [mode, guesses, answer],
+  )
+  const poolUnlocked = mode === 'classic' && wrongGuesses >= 4
+
+  // Synergy mode: peek unlocks after 3 wrong guesses and is filtered to commanders
+  // whose color identity covers the colors of every synergy card revealed so far.
+  const revealedSynergy = useMemo(() => {
+    if (mode !== 'synergy') return []
+    const count = Math.min(answer.synergyCards.length, wrongGuesses + 1)
+    return answer.synergyCards.slice(0, count)
+  }, [mode, answer, wrongGuesses])
+  const synergyPeekPool = useMemo(
+    () => (mode === 'synergy' ? synergyPool(poolFor('synergy'), revealedSynergy) : null),
+    [mode, revealedSynergy],
+  )
+  const synergyUnlocked = mode === 'synergy' && wrongGuesses >= 3
+
+  // Quote mode: peek unlocks after 2 wrong guesses and is filtered to commanders
+  // that share the answer's (already-revealed) color identity and have a quote.
+  const quotePeekPool = useMemo(
+    () => (mode === 'quote' ? quotePool(poolFor('quote'), answer) : null),
+    [mode, answer],
+  )
+  const quoteUnlocked = mode === 'quote' && wrongGuesses >= 2
+
   function navPrivacy(e: React.MouseEvent) {
     e.preventDefault()
     window.history.pushState(null, '', '/privacy')
@@ -85,16 +115,33 @@ export default function App() {
               </button>
             </>
           )}
-          <button className="link-btn" onClick={() => setPoolOpen(true)}>
-            View card pool
-          </button>
+          {mode !== 'classic' && mode !== 'synergy' && mode !== 'quote' && (
+            <button className="link-btn" onClick={() => setPoolOpen(true)}>
+              View card pool
+            </button>
+          )}
           <button className="link-btn reset-btn" onClick={reset} title="Clear saved progress (debug)">
             Reset
           </button>
         </div>
       </div>
 
-      {poolOpen && <PoolModal pool={poolFor(mode)} onClose={() => setPoolOpen(false)} />}
+      {poolOpen && (
+        <PoolModal
+          pool={
+            mode === 'classic' && classicPool
+              ? classicPool
+              : mode === 'synergy' && synergyPeekPool
+                ? synergyPeekPool
+                : mode === 'quote' && quotePeekPool
+                  ? quotePeekPool
+                  : poolFor(mode)
+          }
+          onClose={() => setPoolOpen(false)}
+          blurQuote={mode === 'quote'}
+          heading={mode === 'classic' || mode === 'synergy' || mode === 'quote' ? 'Possible commanders' : undefined}
+        />
+      )}
 
       <main className="play-area">
         {mode === 'silhouette' && (
@@ -143,12 +190,53 @@ export default function App() {
         )}
 
         {!done && (
-          <GuessInput
-            onGuess={guess}
-            disabledNames={disabledNames}
-            disabled={done}
-            blurQuote={mode === 'quote'}
-          />
+          <div className="input-row">
+            <div className="input-side input-side-left">
+              {mode === 'classic' && classicPool && (
+                <button
+                  className="pool-peek-btn"
+                  onClick={() => poolUnlocked && setPoolOpen(true)}
+                  disabled={!poolUnlocked}
+                  title={poolUnlocked ? 'See the commanders still possible by popularity' : undefined}
+                >
+                  {poolUnlocked
+                    ? `Card pool (${classicPool.length})`
+                    : `View cards in ${4 - wrongGuesses}`}
+                </button>
+              )}
+              {mode === 'synergy' && synergyPeekPool && (
+                <button
+                  className="pool-peek-btn"
+                  onClick={() => synergyUnlocked && setPoolOpen(true)}
+                  disabled={!synergyUnlocked}
+                  title={synergyUnlocked ? 'See the commanders still possible by the revealed cards’ colors' : undefined}
+                >
+                  {synergyUnlocked
+                    ? `Card pool (${synergyPeekPool.length})`
+                    : `View cards in ${3 - wrongGuesses}`}
+                </button>
+              )}
+              {mode === 'quote' && quotePeekPool && (
+                <button
+                  className="pool-peek-btn"
+                  onClick={() => quoteUnlocked && setPoolOpen(true)}
+                  disabled={!quoteUnlocked}
+                  title={quoteUnlocked ? 'See the commanders that share this color identity' : undefined}
+                >
+                  {quoteUnlocked
+                    ? `Card pool (${quotePeekPool.length})`
+                    : `View cards in ${2 - wrongGuesses}`}
+                </button>
+              )}
+            </div>
+            <GuessInput
+              onGuess={guess}
+              disabledNames={disabledNames}
+              disabled={done}
+              blurQuote={mode === 'quote'}
+            />
+            <div className="input-side" />
+          </div>
         )}
 
         {!done && guesses.length === 0 && mode === 'silhouette' && (

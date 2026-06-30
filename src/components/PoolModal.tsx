@@ -5,6 +5,10 @@ import type { Commander } from '../types/commander'
 interface Props {
   pool: Commander[]
   onClose: () => void
+  /** In quote mode, blur the bottom of each card so its printed flavor text can't be read. */
+  blurQuote?: boolean
+  /** Override the leading noun in the modal title (e.g. "Possible commanders" for a filtered pool). */
+  heading?: string
 }
 
 // Module-level so the user's place (filter text + scroll offset) survives the modal
@@ -12,7 +16,7 @@ interface Props {
 const persisted = { query: '', scrollTop: 0 }
 
 /** Searchable list of every commander that can be the answer in the current mode. */
-export default function PoolModal({ pool, onClose }: Props) {
+export default function PoolModal({ pool, onClose, blurQuote, heading }: Props) {
   const [query, setQuery] = useState(persisted.query)
   const gridRef = useRef<HTMLUListElement>(null)
 
@@ -42,7 +46,7 @@ export default function PoolModal({ pool, onClose }: Props) {
     <div className="modal-backdrop" onMouseDown={onClose}>
       <div className="modal pool-modal" onMouseDown={(e) => e.stopPropagation()}>
         <div className="modal-head">
-          <h2>Card pool · {pool.length} commanders (Includes partner cards)</h2>
+          <h2>{heading ?? 'Card pool'} · {pool.length} commanders (Includes partner cards)</h2>
           <button className="link-btn" onClick={onClose} aria-label="Close">
             ✕
           </button>
@@ -69,7 +73,10 @@ export default function PoolModal({ pool, onClose }: Props) {
               return (
                 <li key={c.name} className="pool-card">
                   {src ? (
-                    <img src={src} alt={c.name} loading="lazy" draggable={false} />
+                    <div className="pool-card-art">
+                      <img src={src} alt={c.name} loading="lazy" draggable={false} />
+                      {blurQuote && <div className="quote-blur-overlay" aria-hidden="true" />}
+                    </div>
                   ) : (
                     <div className="pool-card-noart">{c.name}</div>
                   )}

@@ -172,6 +172,7 @@ interface ScryfallCard {
 export interface SynergyCard {
   name: string
   image: string | null
+  colorIdentity: string[]
 }
 
 export interface Commander {
@@ -539,10 +540,14 @@ async function main() {
   for (const edh of edhList) {
     // Try full name, then the front-face half of DFC names ("A // B").
     const card = cards.get(norm(edh.name)) ?? cards.get(norm(edh.name.split(' // ')[0]))
-    const synergyCards: SynergyCard[] = (synergyNamesByCommander.get(edh.name) ?? []).map((n) => ({
-      name: n,
-      image: imageForName(n, cards),
-    }))
+    const synergyCards: SynergyCard[] = (synergyNamesByCommander.get(edh.name) ?? []).map((n) => {
+      const sc = cards.get(norm(n)) ?? cards.get(norm(n.split(' // ')[0]))
+      return {
+        name: n,
+        image: imageForName(n, cards),
+        colorIdentity: sc?.color_identity ?? [],
+      }
+    })
     // Use EDHREC's own popularity rank: the two members of a partner pair share that pair's
     // rank, so ties are expected here and read as equally popular in the game.
     const c = toCommander(edh.rank ?? commanders.length + 1, edh, card, synergyCards)

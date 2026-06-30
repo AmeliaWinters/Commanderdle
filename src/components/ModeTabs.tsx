@@ -6,12 +6,12 @@ interface Props {
   onNavigate: (m: Mode) => void
 }
 
-const MODES: { id: Mode; label: string; blurb: string }[] = [
-  { id: 'classic', label: 'Classic', blurb: 'Attribute grid' },
-  { id: 'silhouette', label: 'Silhouette', blurb: 'Reveal the art' },
-  { id: 'zoom', label: 'Zoom', blurb: 'Zoom out the art' },
-  { id: 'synergy', label: 'Synergy', blurb: 'Top EDHREC cards' },
-  { id: 'quote', label: 'Quote', blurb: 'Guess from flavor text' },
+const MODES: { id: Mode; label: string; }[] = [
+  { id: 'classic', label: 'Classic' },
+  { id: 'silhouette', label: 'Silhouette'},
+  { id: 'zoom', label: 'Zoom' },
+  { id: 'synergy', label: 'Synergy' },
+  { id: 'quote', label: 'Quote' },
 ]
 
 export default function ModeTabs({ mode, onNavigate }: Props) {
@@ -33,7 +33,6 @@ export default function ModeTabs({ mode, onNavigate }: Props) {
           }}
         >
           <span className="mode-label">{m.label}</span>
-          <span className="mode-blurb">{m.blurb}</span>
         </a>
       ))}
     </nav>

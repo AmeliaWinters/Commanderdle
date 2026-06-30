@@ -1,3 +1,4 @@
+import { statDisplay } from '../lib/compare'
 import type { Commander } from '../types/commander'
 import CardZoom from './CardZoom'
 import GuessDots from './GuessDots'
@@ -17,10 +18,9 @@ interface Props {
 function hints(answer: Commander): { label: string; value: string }[] {
   return [
     { label: 'Color identity', value: answer.colorIdentity.length ? answer.colorIdentity.join('') : 'Colorless' },
-    { label: 'Card type', value: answer.typeLine },
-    { label: 'Mana value', value: String(answer.manaValue) },
+    { label: 'Stat Total', value: statDisplay(answer) },
     { label: 'Year', value: String(answer.year) },
-    { label: 'Set', value: answer.setName },
+    {label: 'Set', value: String(answer.setName)}
   ]
 }
 

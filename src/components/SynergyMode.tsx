@@ -34,15 +34,13 @@ export default function SynergyMode({ answer, guesses, skips, wrongGuesses, maxG
       </p>
 
       <ol className="synergy-cards">
-        {cards.map((c, i) => {
+        {cards.slice(0,5).map((c, i) => {
           const shown = i < revealCount
           return (
             <li key={c.name} className={`synergy-card${shown ? '' : ' hidden'}`}>
               {shown ? (
-                c.image ? (
+                c.image && (
                   <CardZoomCard name={c.name} image={c.image} />
-                ) : (
-                  <div className="synergy-card-text">{c.name}</div>
                 )
               ) : (
                 <div className="synergy-card-back" aria-hidden="true">
@@ -73,7 +71,6 @@ function CardZoomCard({ name, image }: { name: string; image: string }) {
     <CardZoom name={name} image={image} className="synergy-card-zoom">
       <figure className="synergy-card-img">
         <img src={image} alt={name} loading="eager" draggable={false} />
-        <figcaption>{name}</figcaption>
       </figure>
     </CardZoom>
   )

@@ -150,12 +150,6 @@ export default function ClassicGrid({ guesses, answer }: Props) {
           <GuessRow key={g.name} guess={g} answer={answer} />
         ))}
       </div>
-      <div className="grid-legend">
-        <span className="legend-item"><span className="legend-swatch match-exact" /> correct</span>
-        <span className="legend-item"><span className="legend-swatch match-partial" /> close</span>
-        <span className="legend-item"><span className="legend-swatch match-none" /> far</span>
-        <span className="legend-item">↑ / ↓ close · ⇑ / ⇓ far</span>
-      </div>
     </div>
   )
 }
