@@ -5,4 +5,8 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   base: './',
+  server: {
+    // Honor a port injected via env (e.g. the preview harness) when present.
+    port: process.env.PORT ? Number(process.env.PORT) : undefined,
+  },
 })

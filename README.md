@@ -1,4 +1,4 @@
-# Commanderdle
+# Commandle
 
 A front-end only React.js project.
 

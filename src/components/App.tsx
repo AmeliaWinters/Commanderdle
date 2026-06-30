@@ -1,16 +1,23 @@
 import { useState } from 'react'
 import type { Mode } from '../types/commander'
 import { useGameState } from '../lib/useGameState'
+import { poolFor } from '../lib/dailyAnswer'
 import ModeTabs from './ModeTabs'
 import GuessInput from './GuessInput'
 import ClassicGrid from './ClassicGrid'
 import SilhouetteMode from './SilhouetteMode'
+import ZoomMode from './ZoomMode'
+import SynergyMode from './SynergyMode'
 import QuoteMode from './QuoteMode'
 import ResultBanner from './ResultBanner'
+import GuessList from './GuessList'
+import PoolModal from './PoolModal'
+import CardBackdrop from './CardBackdrop'
 
 export default function App() {
   const [mode, setMode] = useState<Mode>('classic')
-  const { state, guess, startPractice, backToDaily, maxGuesses } = useGameState(mode)
+  const [poolOpen, setPoolOpen] = useState(false)
+  const { state, guess, startPractice, backToDaily, reset, maxGuesses } = useGameState(mode)
 
   const { answer, guesses, status, isDaily } = state
   const wrongGuesses = guesses.filter((g) => g.name !== answer.name).length
@@ -20,9 +27,10 @@ export default function App() {
 
   return (
     <div className="app">
+      <CardBackdrop />
       <header className="app-header">
         <h1>
-          Commander<span className="accent">dle</span>
+          Comman<span className="accent">dle</span>
         </h1>
         <p className="tagline">Guess the daily Magic: The Gathering commander — top 500 by EDHREC popularity.</p>
       </header>
@@ -49,17 +57,48 @@ export default function App() {
               </button>
             </>
           )}
+          <button className="link-btn" onClick={() => setPoolOpen(true)}>
+            View card pool
+          </button>
+          <button className="link-btn reset-btn" onClick={reset} title="Clear saved progress (debug)">
+            Reset
+          </button>
         </div>
       </div>
 
+      {poolOpen && <PoolModal pool={poolFor(mode)} onClose={() => setPoolOpen(false)} />}
+
       <main className="play-area">
         {mode === 'silhouette' && (
-          <SilhouetteMode answer={answer} wrongGuesses={wrongGuesses} solved={solved || done} />
+          <SilhouetteMode
+            answer={answer}
+            guesses={guesses}
+            wrongGuesses={wrongGuesses}
+            maxGuesses={maxGuesses}
+            solved={solved || done}
+          />
+        )}
+        {mode === 'zoom' && (
+          <ZoomMode
+            answer={answer}
+            guesses={guesses}
+            wrongGuesses={wrongGuesses}
+            maxGuesses={maxGuesses}
+            solved={solved || done}
+          />
+        )}
+        {mode === 'synergy' && (
+          <SynergyMode answer={answer} wrongGuesses={wrongGuesses} solved={solved || done} />
         )}
         {mode === 'quote' && <QuoteMode answer={answer} wrongGuesses={wrongGuesses} solved={solved || done} />}
 
         {!done && (
-          <GuessInput onGuess={guess} disabledNames={disabledNames} disabled={done} />
+          <GuessInput
+            onGuess={guess}
+            disabledNames={disabledNames}
+            disabled={done}
+            blurQuote={mode === 'quote'}
+          />
         )}
 
         {done && (
@@ -68,6 +107,7 @@ export default function App() {
             answer={answer}
             guessCount={guesses.length}
             mode={mode}
+            maxGuesses={maxGuesses}
             isDaily={isDaily}
           />
         )}
@@ -75,13 +115,7 @@ export default function App() {
         {mode === 'classic' ? (
           <ClassicGrid guesses={guesses} answer={answer} />
         ) : (
-          <ul className="guess-list">
-            {[...guesses].reverse().map((g) => (
-              <li key={g.name} className={g.name === answer.name ? 'correct' : 'wrong'}>
-                {g.name}
-              </li>
-            ))}
-          </ul>
+          <GuessList guesses={guesses} answer={answer} />
         )}
       </main>
 

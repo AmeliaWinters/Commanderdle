@@ -6,15 +6,18 @@ interface Props {
   onGuess: (c: Commander) => void
   disabledNames: Set<string>
   disabled?: boolean
+  /** In quote mode, blur the bottom of the preview so its flavor text can't be read. */
+  blurQuote?: boolean
 }
 
-export default function GuessInput({ onGuess, disabledNames, disabled }: Props) {
+export default function GuessInput({ onGuess, disabledNames, disabled, blurQuote }: Props) {
   const [query, setQuery] = useState('')
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState(0)
   const wrapRef = useRef<HTMLDivElement>(null)
 
   const results = query ? searchCommanders(query, 8) : []
+  const preview = open ? results[active] : undefined
 
   useEffect(() => {
     setActive(0)
@@ -87,6 +90,12 @@ export default function GuessInput({ onGuess, disabledNames, disabled }: Props) 
             )
           })}
         </ul>
+      )}
+      {preview?.normalImage && (
+        <div className="card-zoom place-right standalone" role="img" aria-label={preview.name}>
+          <img src={preview.normalImage} alt={preview.name} loading="eager" />
+          {blurQuote && <div className="quote-blur-overlay" aria-hidden="true" />}
+        </div>
       )}
     </div>
   )

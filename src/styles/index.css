@@ -45,17 +45,13 @@ body {
 }
 
 /* ---------- Animated background ---------- */
-body::before,
-body::after {
+/* drifting flame glows */
+body::before {
   content: '';
   position: fixed;
   inset: -20%;
-  z-index: -2;
+  z-index: -3;
   pointer-events: none;
-}
-
-/* drifting flame glows */
-body::before {
   background:
     radial-gradient(40% 40% at 25% 30%, rgba(236, 90, 28, 0.22), transparent 70%),
     radial-gradient(45% 45% at 78% 70%, rgba(192, 31, 31, 0.2), transparent 70%),
@@ -63,18 +59,27 @@ body::before {
   animation: drift 22s ease-in-out infinite alternate;
 }
 
-/* slow rotating ember haze */
-body::after {
-  background: conic-gradient(
-    from 0deg at 50% 50%,
-    rgba(236, 90, 28, 0.05),
-    rgba(0, 0, 0, 0) 25%,
-    rgba(192, 31, 31, 0.05) 50%,
-    rgba(0, 0, 0, 0) 75%,
-    rgba(236, 90, 28, 0.05)
-  );
-  animation: spin 60s linear infinite;
-  z-index: -3;
+/* floating MTG-card silhouettes */
+.card-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.bg-card {
+  position: absolute;
+  display: block;
+  border-radius: 14px;
+  border: 1px solid rgba(246, 160, 26, 0.12);
+  background: linear-gradient(150deg, rgba(236, 90, 28, 0.07), rgba(192, 31, 31, 0.03));
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35), inset 0 0 30px rgba(0, 0, 0, 0.25);
+  animation-name: float-card;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  will-change: transform;
 }
 
 @keyframes drift {
@@ -89,15 +94,18 @@ body::after {
   }
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
+@keyframes float-card {
+  0% {
+    transform: translateY(0) rotate(var(--rot, 0deg)) scale(1);
+  }
+  100% {
+    transform: translateY(-32px) rotate(calc(var(--rot, 0deg) + 6deg)) scale(1.05);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   body::before,
-  body::after {
+  .bg-card {
     animation: none;
   }
 }
@@ -233,6 +241,11 @@ body::after {
   text-decoration: underline;
 }
 
+.reset-btn {
+  color: var(--text-dim);
+  opacity: 0.7;
+}
+
 /* ---------- Play area ---------- */
 .play-area {
   display: flex;
@@ -311,9 +324,86 @@ body::after {
   font-size: 1.02rem;
 }
 
+.ac-stats {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
 .ac-rank {
   color: var(--text-dim);
   font-size: 0.82rem;
+}
+
+/* ---------- Card zoom popover ---------- */
+.card-zoom-anchor {
+  position: relative;
+}
+
+.card-zoom {
+  z-index: 40;
+  width: 300px;
+  max-width: 70vw;
+  pointer-events: none;
+  filter: drop-shadow(0 18px 40px rgba(0, 0, 0, 0.7));
+  animation: zoom-in 0.12s ease-out;
+}
+
+/* Table popover: fixed so it escapes the scrollable results container. */
+.card-zoom.fixed {
+  position: fixed;
+}
+
+/* Search-dropdown popover: anchored to the input wrapper. */
+.card-zoom.place-right {
+  position: absolute;
+  top: 0;
+  left: calc(100% + 14px);
+}
+
+.card-zoom.place-right.standalone {
+  top: calc(100% + 6px);
+}
+
+.card-zoom img {
+  width: 100%;
+  display: block;
+  border-radius: 16px;
+}
+
+/* Quote mode: blur the bottom 20% of the search preview so its printed flavor
+   text (the very quote being guessed) can't be read off the card. */
+.quote-blur-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 20%;
+  border-radius: 0 0 16px 16px;
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  background: rgba(10, 8, 6, 0.25);
+  pointer-events: none;
+}
+
+@keyframes zoom-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 900px) {
+  .card-zoom.place-right {
+    left: auto;
+    right: 0;
+    top: calc(100% + 6px);
+  }
 }
 
 /* ---------- Mana pips ---------- */
@@ -321,6 +411,7 @@ body::after {
   display: inline-flex;
   gap: 3px;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .mana-pip {
@@ -352,15 +443,66 @@ body::after {
   padding-bottom: 4px;
 }
 
+/* ---------- Deductions row (aligned above the headers) ---------- */
+.deduction-row {
+  margin-bottom: 10px;
+}
+
+.deduction-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-width: 0;
+  min-height: 40px;
+  padding: 4px 6px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  overflow: hidden;
+  font-family: 'Cinzel', serif;
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.deduction-cell.empty {
+  background: transparent;
+  border-style: dashed;
+  opacity: 0.22;
+}
+
+.deduction-title-cell {
+  background: transparent;
+  border: none;
+  justify-content: flex-start;
+  color: var(--text-dim);
+  font-size: 0.64rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.deduction-cell .mana-pip {
+  width: 18px;
+  height: 18px;
+  font-size: 0.6rem;
+}
+
+.ded-absent {
+  display: inline-flex;
+  opacity: 0.6;
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+}
+
 .results-table {
-  min-width: 720px;
+  min-width: 640px;
   margin: 0 auto;
-  max-width: 920px;
+  max-width: 860px;
 }
 
 .grid-row {
   display: grid;
-  grid-template-columns: 2.1fr 1.1fr 0.9fr 0.8fr 0.9fr 1fr 0.95fr 0.9fr;
+  grid-template-columns: 2.1fr 1.1fr 0.9fr 0.8fr 0.9fr 0.95fr 0.9fr;
   gap: 6px;
   margin-bottom: 6px;
   perspective: 700px;
@@ -390,6 +532,10 @@ body::after {
   border: 1px solid var(--line);
   border-radius: 9px;
   min-height: 60px;
+  /* Allow grid tracks to keep their fr width; content shrinks/wraps instead of
+     forcing the column wider (which would misalign cells with the headers). */
+  min-width: 0;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -559,11 +705,60 @@ body::after {
   color: var(--text-dim);
 }
 
+/* Let the hover-zoom anchor fill the silhouette frame. */
+.silhouette-frame .card-zoom-anchor {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: zoom-in;
+}
+
+.guess-dots {
+  display: flex;
+  gap: 10px;
+}
+
+.guess-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--line);
+  background: transparent;
+  transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.guess-dot.wrong {
+  background: #c0392b;
+  border-color: #e05546;
+  box-shadow: 0 0 8px rgba(192, 57, 43, 0.6);
+}
+
+.guess-dot.correct {
+  background: #2f9e44;
+  border-color: #51cf66;
+  box-shadow: 0 0 8px rgba(47, 158, 68, 0.6);
+}
+
 .hint-line {
   color: var(--text-dim);
   font-size: 0.95rem;
   font-style: italic;
   margin: 0;
+}
+
+/* Revealed card in quote mode (hover to zoom). */
+.quote-reveal {
+  display: inline-block;
+  margin: 0 auto 16px;
+  cursor: zoom-in;
+}
+
+.quote-reveal img {
+  width: 200px;
+  max-width: 60vw;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  display: block;
 }
 
 /* ---------- Quote mode (card text box) ---------- */
@@ -635,11 +830,10 @@ body::after {
 }
 
 .guess-list li {
-  padding: 11px 14px;
+  padding: 8px 12px;
   border-radius: 8px;
   background: var(--panel);
   border: 1px solid var(--line);
-  text-align: center;
   font-size: 1.02rem;
 }
 
@@ -647,6 +841,29 @@ body::after {
   background: var(--exact-bg);
   border-color: var(--exact-bd);
   color: #eafff0;
+}
+
+.guess-list-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+}
+
+.guess-list .guess-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid var(--line);
+  flex-shrink: 0;
+}
+
+.guess-list .guess-name {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-align: left;
 }
 
 /* ---------- Result banner ---------- */
@@ -673,11 +890,18 @@ body::after {
   box-shadow: 0 0 26px rgba(236, 90, 28, 0.35);
 }
 
+.result-art-zoom {
+  flex-shrink: 0;
+  display: block;
+  cursor: zoom-in;
+}
+
 .result-art {
   width: 150px;
   border-radius: 9px;
   flex-shrink: 0;
   border: 1px solid var(--line);
+  display: block;
 }
 
 .result-info h2 {
@@ -740,4 +964,234 @@ body::after {
   .result-art {
     width: 130px;
   }
+}
+
+/* ---------- Zoom mode ---------- */
+/* Reuses .silhouette / .silhouette-frame; swap the blur transition for a scale one. */
+.zoom-frame img {
+  filter: none;
+  transition: transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+  will-change: transform;
+}
+
+/* ---------- Synergy mode ---------- */
+.synergy-mode {
+  width: 100%;
+  max-width: 620px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.synergy-cards {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  width: 100%;
+}
+
+.synergy-card {
+  aspect-ratio: 488 / 680;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+}
+
+.synergy-card.hidden {
+  border-style: dashed;
+  box-shadow: none;
+}
+
+.synergy-card-zoom {
+  display: block;
+  height: 100%;
+}
+
+.synergy-card-img,
+.synergy-card-img figure {
+  margin: 0;
+  height: 100%;
+}
+
+.synergy-card-img {
+  position: relative;
+  display: block;
+  height: 100%;
+}
+
+.synergy-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.synergy-card-img figcaption {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 4px 6px;
+  font-size: 0.7rem;
+  color: var(--text);
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.synergy-card-img:hover figcaption {
+  opacity: 1;
+}
+
+.synergy-card-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 8px;
+  font-size: 0.85rem;
+  color: var(--text);
+}
+
+.synergy-card-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-family: 'Cinzel', serif;
+  font-size: 2rem;
+  color: var(--text-dim);
+  opacity: 0.5;
+}
+
+.synergy-mode .solved-name {
+  font-style: normal;
+  font-family: 'Cinzel', serif;
+  color: var(--flame-1);
+  cursor: zoom-in;
+}
+
+@media (max-width: 560px) {
+  .synergy-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ---------- Card pool modal ---------- */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 1000;
+}
+
+.modal {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.7);
+  width: 100%;
+  max-width: 460px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  padding: 18px;
+}
+
+.pool-modal {
+  max-width: 880px;
+  max-height: 86vh;
+}
+
+.modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.modal-head h2 {
+  margin: 0;
+  font-family: 'Cinzel', serif;
+  font-size: 1.05rem;
+  color: var(--flame-1);
+}
+
+.pool-search {
+  width: 100%;
+  padding: 8px 10px;
+  margin-bottom: 10px;
+  background: #000;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+.pool-grid {
+  list-style: none;
+  padding: 4px;
+  margin: 0;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.pool-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pool-card img {
+  width: 100%;
+  aspect-ratio: 488 / 680;
+  object-fit: cover;
+  object-position: top;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+  display: block;
+  background: #000;
+}
+
+.pool-card-noart {
+  width: 100%;
+  aspect-ratio: 488 / 680;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px dashed var(--line);
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.pool-card-name {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 0.8rem;
+  line-height: 1.2;
+  color: var(--text);
+}
+
+.pool-empty {
+  color: var(--text-dim);
+  font-style: italic;
+  margin: 8px 0 0;
 }

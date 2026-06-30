@@ -1,5 +1,5 @@
 import type { Commander, Mode } from '../types/commander'
-import { COMMANDERS, QUOTE_POOL } from './commanders'
+import { COMMANDERS, QUOTE_POOL, SYNERGY_POOL, ZOOM_POOL } from './commanders'
 
 /** Local calendar date as YYYY-MM-DD (puzzle rolls over at the player's local midnight). */
 export function todayKey(d = new Date()): string {
@@ -21,8 +21,17 @@ function hashString(str: string): number {
   return (h ^ (h >>> 16)) >>> 0
 }
 
-function poolFor(mode: Mode): Commander[] {
-  return mode === 'quote' ? QUOTE_POOL : COMMANDERS
+export function poolFor(mode: Mode): Commander[] {
+  switch (mode) {
+    case 'quote':
+      return QUOTE_POOL
+    case 'synergy':
+      return SYNERGY_POOL
+    case 'zoom':
+      return ZOOM_POOL
+    default:
+      return COMMANDERS
+  }
 }
 
 /** The shared daily answer for a given mode + date. Same for every player on that day. */

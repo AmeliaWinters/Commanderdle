@@ -48,7 +48,11 @@ interface EdhrecCardView {
   rank?: number
   num_decks?: number
   inclusion?: number
+  synergy?: number
 }
+
+/** How many top-synergy cards to keep per commander (drives the Synergy game mode). */
+const SYNERGY_COUNT = 6
 
 interface ScryfallCard {
   name: string
@@ -58,6 +62,7 @@ interface ScryfallCard {
   cmc?: number
   power?: string
   toughness?: string
+  loyalty?: string
   rarity?: string
   released_at?: string
   set_name?: string
@@ -66,10 +71,16 @@ interface ScryfallCard {
     type_line?: string
     power?: string
     toughness?: string
+    loyalty?: string
     flavor_text?: string
     image_uris?: { art_crop?: string; normal?: string }
   }>
   image_uris?: { art_crop?: string; normal?: string }
+}
+
+export interface SynergyCard {
+  name: string
+  image: string | null
 }
 
 export interface Commander {
@@ -81,12 +92,14 @@ export interface Commander {
   manaValue: number
   power: string | null
   toughness: string | null
+  loyalty: string | null
   rarity: string
   year: number
   setName: string
   flavorText: string | null
   artCrop: string | null
   normalImage: string | null
+  synergyCards: SynergyCard[]
 }
 
 async function fetchEdhrecTop(count: number): Promise<EdhrecCardView[]> {
@@ -96,7 +109,7 @@ async function fetchEdhrecTop(count: number): Promise<EdhrecCardView[]> {
   // field pointing at the next 100-entry page (e.g. commanders/year-past2years-1.json).
   let path: string | undefined = 'commanders/year.json'
   let page = 0
-  while (path && collected.length < count && page < 12) {
+  while (path && collected.length < count && page < 14) {
     const res = await fetch(EDHREC_BASE + path, { headers: { 'User-Agent': EDHREC_UA } })
     if (!res.ok) {
       console.warn(`EDHREC ${path} returned ${res.status}; stopping pagination.`)
@@ -120,6 +133,33 @@ async function fetchEdhrecTop(count: number): Promise<EdhrecCardView[]> {
     await sleep(120)
   }
   return collected.slice(0, count)
+}
+
+/**
+ * Fetch a commander's EDHREC page and return the top synergy-card names (most
+ * synergistic first). Reads the "High Synergy Cards" list, falling back to the
+ * highest-`synergy` cardviews across the page if that list is absent.
+ */
+async function fetchSynergyNames(sanitized: string): Promise<string[]> {
+  const res = await fetch(`${EDHREC_BASE}commanders/${sanitized}.json`, {
+    headers: { 'User-Agent': EDHREC_UA },
+  })
+  if (!res.ok) {
+    console.warn(`EDHREC synergy ${sanitized} returned ${res.status}`)
+    return []
+  }
+  const json: any = await res.json()
+  const lists: any[] = json?.container?.json_dict?.cardlists ?? []
+  let views: EdhrecCardView[] =
+    lists.find((l) => /synerg/i.test(l?.header ?? ''))?.cardviews ?? []
+  if (views.length === 0) {
+    // Fall back: flatten every list and rank by synergy score.
+    views = lists
+      .flatMap((l) => l?.cardviews ?? [])
+      .filter((v: EdhrecCardView) => typeof v?.synergy === 'number')
+      .sort((a: EdhrecCardView, b: EdhrecCardView) => (b.synergy ?? 0) - (a.synergy ?? 0))
+  }
+  return views.slice(0, SYNERGY_COUNT).map((v) => v.name)
 }
 
 async function fetchScryfallBatch(names: string[]): Promise<Map<string, ScryfallCard>> {
@@ -178,12 +218,18 @@ function pickFace<T>(card: ScryfallCard, get: (f: NonNullable<ScryfallCard['card
   return (val ?? get(card)) as T
 }
 
-function toCommander(rank: number, edh: EdhrecCardView, card: ScryfallCard | undefined): Commander | null {
+function toCommander(
+  rank: number,
+  edh: EdhrecCardView,
+  card: ScryfallCard | undefined,
+  synergyCards: SynergyCard[],
+): Commander | null {
   if (!card) return null
   const images = card.image_uris ?? card.card_faces?.[0]?.image_uris
   const typeLine = card.type_line ?? pickFace(card, (f) => f.type_line) ?? ''
   const power = card.power ?? pickFace(card, (f) => (f as any).power) ?? null
   const toughness = card.toughness ?? pickFace(card, (f) => (f as any).toughness) ?? null
+  const loyalty = card.loyalty ?? pickFace(card, (f) => (f as any).loyalty) ?? null
   const flavor = card.flavor_text ?? pickFace(card, (f) => (f as any).flavor_text) ?? null
   const year = card.released_at ? new Date(card.released_at).getUTCFullYear() : 0
   return {
@@ -195,34 +241,79 @@ function toCommander(rank: number, edh: EdhrecCardView, card: ScryfallCard | und
     manaValue: card.cmc ?? 0,
     power: power ?? null,
     toughness: toughness ?? null,
+    loyalty: loyalty ?? null,
     rarity: card.rarity ?? 'unknown',
     year,
     setName: card.set_name ?? '',
     flavorText: flavor ?? null,
     artCrop: images?.art_crop ?? null,
     normalImage: images?.normal ?? null,
+    synergyCards,
   }
+}
+
+/** Resolve a Scryfall normal image for a card name (front face for DFCs). */
+function imageForName(name: string, cards: Map<string, ScryfallCard>): string | null {
+  const card = cards.get(norm(name)) ?? cards.get(norm(name.split(' // ')[0]))
+  if (!card) return null
+  const images = card.image_uris ?? card.card_faces?.[0]?.image_uris
+  return images?.normal ?? null
 }
 
 async function main() {
   console.log('Fetching EDHREC top commanders...')
-  const edhList = await fetchEdhrecTop(TARGET_COUNT)
+  // Over-fetch: some EDHREC entries collapse to the same Scryfall card (partner variants)
+  // or fail enrichment, so we pull a buffer and trim to exactly TARGET_COUNT afterward.
+  const edhList = await fetchEdhrecTop(TARGET_COUNT + 30)
   console.log(`Got ${edhList.length} commanders from EDHREC.`)
 
-  console.log('Enriching via Scryfall...')
-  const cards = await fetchScryfallBatch(edhList.map((e) => e.name))
+  console.log('Fetching synergy cards per commander from EDHREC...')
+  const synergyNamesByCommander = new Map<string, string[]>()
+  for (let i = 0; i < edhList.length; i++) {
+    const edh = edhList[i]
+    const slug = edh.sanitized
+    if (!slug) continue
+    const names = await fetchSynergyNames(slug)
+    synergyNamesByCommander.set(edh.name, names)
+    if ((i + 1) % 50 === 0) console.log(`  synergy: ${i + 1}/${edhList.length}`)
+    await sleep(120)
+  }
+
+  console.log('Enriching via Scryfall (commanders + synergy cards)...')
+  // One batch over the union of commander names and every synergy-card name.
+  const allNames = new Set<string>()
+  for (const e of edhList) allNames.add(e.name)
+  for (const names of synergyNamesByCommander.values()) for (const n of names) allNames.add(n)
+  const cards = await fetchScryfallBatch([...allNames])
 
   const commanders: Commander[] = []
+  const seenNames = new Set<string>()
   let rank = 0
   for (const edh of edhList) {
     rank++
     // Try full name, then the front-face half of partner/DFC names ("A // B").
     const card = cards.get(norm(edh.name)) ?? cards.get(norm(edh.name.split(' // ')[0]))
-    const c = toCommander(rank, edh, card)
-    if (c) commanders.push(c)
-    else console.warn(`No card for: ${edh.name}`)
+    const synergyCards: SynergyCard[] = (synergyNamesByCommander.get(edh.name) ?? []).map((n) => ({
+      name: n,
+      image: imageForName(n, cards),
+    }))
+    const c = toCommander(rank, edh, card, synergyCards)
+    if (!c) {
+      console.warn(`No card for: ${edh.name}`)
+      continue
+    }
+    // EDHREC can list the same card under two raw names (e.g. partner variants) that
+    // both resolve to one Scryfall card. Keep only the first (highest-ranked).
+    if (seenNames.has(c.name)) {
+      console.warn(`Duplicate card dropped: ${c.name} (from "${edh.name}")`)
+      continue
+    }
+    seenNames.add(c.name)
+    commanders.push(c)
   }
-  // Re-rank sequentially after dropping any that failed enrichment.
+  // Trim the over-fetched buffer down to exactly the target count, then re-rank
+  // sequentially (1..TARGET_COUNT) after dropping any duplicates/failed enrichment.
+  commanders.length = Math.min(commanders.length, TARGET_COUNT)
   commanders.forEach((c, i) => (c.rank = i + 1))
 
   await mkdir(dirname(OUT_FILE), { recursive: true })
@@ -230,8 +321,10 @@ async function main() {
   console.log(`Wrote ${commanders.length} commanders to ${OUT_FILE}`)
   const withFlavor = commanders.filter((c) => c.flavorText).length
   const withArt = commanders.filter((c) => c.artCrop).length
+  const withSynergy = commanders.filter((c) => c.synergyCards.length >= 4).length
   console.log(`  with flavor text: ${withFlavor}`)
   console.log(`  with art: ${withArt}`)
+  console.log(`  with >=4 synergy cards: ${withSynergy}`)
 }
 
 main().catch((e) => {

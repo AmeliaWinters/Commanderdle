@@ -1,18 +1,21 @@
 import type { Commander } from '../types/commander'
-import { compareCommander, type ComparedColumn } from '../lib/compare'
+import { compareCommander, type ComparedColumn, type MatchKind } from '../lib/compare'
+import { deduce } from '../lib/deduce'
 import ManaCost from './ManaSymbols'
+import CardZoom from './CardZoom'
 
 interface Props {
   guesses: Commander[]
   answer: Commander
 }
 
-const HEADERS = ['Commander', 'Colors', 'Mana Value', 'Power', 'Toughness', 'Rarity', 'Decks', 'Year']
+const HEADERS = ['Commander', 'Colors', 'Type', 'Mana Value', 'Stat Total', 'Popularity', 'Year']
 
-function arrow(direction?: string): string {
-  if (direction === 'up') return '▲'
-  if (direction === 'down') return '▼'
-  return ''
+/** Thin arrow = close (just off); heavy double-line arrow = far. */
+function arrow(kind: MatchKind, direction?: string): string {
+  if (direction !== 'up' && direction !== 'down') return ''
+  if (kind === 'none') return direction === 'up' ? '⇑' : '⇓'
+  return direction === 'up' ? '↑' : '↓'
 }
 
 function Cell({ col, index }: { col: ComparedColumn; index: number }) {
@@ -28,7 +31,9 @@ function Cell({ col, index }: { col: ComparedColumn; index: number }) {
         ) : (
           <span className="cell-text">
             {col.display}
-            {col.direction && col.kind !== 'exact' && <span className="cell-arrow">{arrow(col.direction)}</span>}
+            {col.direction && col.kind !== 'exact' && (
+              <span className="cell-arrow">{arrow(col.kind, col.direction)}</span>
+            )}
           </span>
         )}
       </div>
@@ -42,14 +47,60 @@ function GuessRow({ guess, answer }: { guess: Commander; answer: Commander }) {
   return (
     <div className="grid-row">
       <div className="grid-cell name-cell" style={{ animationDelay: '0s' }}>
-        <div className="cell-inner name-inner">
+        <CardZoom name={guess.name} image={guess.normalImage} className="name-inner cell-inner">
           {guess.artCrop && <img className="name-thumb" src={guess.artCrop} alt="" draggable={false} />}
           <span className={`name-text${solved ? ' solved' : ''}`}>{guess.name}</span>
-        </div>
+        </CardZoom>
       </div>
       {cols.map((col, i) => (
         <Cell key={col.label} col={col} index={i + 1} />
       ))}
+    </div>
+  )
+}
+
+/** Deduction row aligned to the table columns, sitting just above the headers. */
+function DeductionRow({ guesses, answer }: Props) {
+  const { colors, numerics } = deduce(guesses, answer)
+  if (!colors && numerics.length === 0) return null
+  const byLabel = new Map(numerics.map((n) => [n.label, n]))
+
+  const colorsCell = () => {
+    if (!colors) return <div className="deduction-cell empty" />
+    if (colors.exact) {
+      return (
+        <div className="deduction-cell match-exact">
+          {colors.present.length ? <ManaCost colors={colors.present} /> : 'Colorless'}
+        </div>
+      )
+    }
+    return (
+      <div className="deduction-cell match-partial">
+        {colors.present.length > 0 && <ManaCost colors={colors.present} />}
+        {colors.absent.length > 0 && (
+          <span className="ded-absent">
+            <ManaCost colors={colors.absent} />
+          </span>
+        )}
+      </div>
+    )
+  }
+
+  const numCell = (label: string) => {
+    const n = byLabel.get(label)
+    if (!n) return <div className="deduction-cell empty" />
+    return <div className={`deduction-cell match-${n.tone}`}>{n.value}</div>
+  }
+
+  return (
+    <div className="grid-row deduction-row" title="What we know so far">
+      <div className="deduction-cell deduction-title-cell">Clues</div>
+      {colorsCell()}
+      <div className="deduction-cell empty" />
+      {numCell('Mana value')}
+      {numCell('Stat total')}
+      {numCell('Popularity')}
+      {numCell('Year')}
     </div>
   )
 }
@@ -59,6 +110,7 @@ export default function ClassicGrid({ guesses, answer }: Props) {
   return (
     <div className="results-wrap">
       <div className="results-table">
+        <DeductionRow guesses={guesses} answer={answer} />
         <div className="grid-row grid-head">
           {HEADERS.map((h) => (
             <div key={h} className="grid-cell head-cell">
@@ -74,7 +126,7 @@ export default function ClassicGrid({ guesses, answer }: Props) {
         <span className="legend-item"><span className="legend-swatch match-exact" /> correct</span>
         <span className="legend-item"><span className="legend-swatch match-partial" /> close</span>
         <span className="legend-item"><span className="legend-swatch match-none" /> far</span>
-        <span className="legend-item">▲ answer is higher · ▼ lower</span>
+        <span className="legend-item">↑ / ↓ close · ⇑ / ⇓ far</span>
       </div>
     </div>
   )

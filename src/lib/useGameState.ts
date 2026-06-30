@@ -3,7 +3,15 @@ import type { Commander, Mode } from '../types/commander'
 import { COMMANDERS_BY_NAME } from './commanders'
 import { dailyAnswer, randomAnswer, todayKey } from './dailyAnswer'
 
-const MAX_GUESSES = 8
+const MAX_GUESSES_BY_MODE: Record<Mode, number> = {
+  classic: 8,
+  silhouette: 6,
+  quote: 6,
+  synergy: 6,
+  zoom: 6,
+}
+
+const maxGuessesFor = (mode: Mode) => MAX_GUESSES_BY_MODE[mode]
 
 export interface GameState {
   answer: Commander
@@ -31,7 +39,7 @@ function loadDaily(mode: Mode): GameState {
         const guesses = saved.guessNames
           .map((n) => COMMANDERS_BY_NAME.get(n))
           .filter((c): c is Commander => Boolean(c))
-        return { answer, guesses, isDaily: true, status: deriveStatus(answer, guesses) }
+        return { answer, guesses, isDaily: true, status: deriveStatus(answer, guesses, mode) }
       }
     }
   } catch {
@@ -40,9 +48,9 @@ function loadDaily(mode: Mode): GameState {
   return { answer, guesses: [], isDaily: true, status: 'playing' }
 }
 
-function deriveStatus(answer: Commander, guesses: Commander[]): GameState['status'] {
+function deriveStatus(answer: Commander, guesses: Commander[], mode: Mode): GameState['status'] {
   if (guesses.some((g) => g.name === answer.name)) return 'won'
-  if (guesses.length >= MAX_GUESSES) return 'lost'
+  if (guesses.length >= maxGuessesFor(mode)) return 'lost'
   return 'playing'
 }
 
@@ -74,9 +82,9 @@ export function useGameState(mode: Mode) {
       if (prev.status !== 'playing') return prev
       if (prev.guesses.some((g) => g.name === commander.name)) return prev
       const guesses = [...prev.guesses, commander]
-      return { ...prev, guesses, status: deriveStatus(prev.answer, guesses) }
+      return { ...prev, guesses, status: deriveStatus(prev.answer, guesses, mode) }
     })
-  }, [])
+  }, [mode])
 
   const startPractice = useCallback(() => {
     setState({ answer: randomAnswer(mode), guesses: [], isDaily: false, status: 'playing' })
@@ -86,5 +94,15 @@ export function useGameState(mode: Mode) {
     setState(loadDaily(mode))
   }, [mode])
 
-  return { state, guess, startPractice, backToDaily, maxGuesses: MAX_GUESSES }
+  // Debugging helper: wipe persisted progress for this mode and start fresh.
+  const reset = useCallback(() => {
+    try {
+      localStorage.removeItem(storageKey(mode))
+    } catch {
+      /* ignore */
+    }
+    setState({ answer: dailyAnswer(mode), guesses: [], isDaily: true, status: 'playing' })
+  }, [mode])
+
+  return { state, guess, startPractice, backToDaily, reset, maxGuesses: maxGuessesFor(mode) }
 }
