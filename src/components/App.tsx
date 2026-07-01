@@ -1,4 +1,5 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
+import { prefersReducedMotion } from "../lib/reducedMotion";
 import { useGameState } from "../lib/useGameState";
 import {
   useModeRoute,
@@ -166,6 +167,39 @@ export default function App() {
 
   const { answer, guesses, skips, status, isDaily, isArchive } = state;
   const archiveDate = archivePlay?.date;
+
+  // Win choreography. A "fresh" win is one that happened during this session
+  // (playing → won), as opposed to remounting an already-solved puzzle from
+  // storage — only fresh wins get the cast-the-commander celebration. In
+  // classic mode the result banner is additionally held back until the winning
+  // row's stagger-flip + ignite has played out.
+  const [freshWin, setFreshWin] = useState(false);
+  const [revealHeld, setRevealHeld] = useState(false);
+  const prevGame = useRef<{ key: string; status: typeof status }>({
+    key: `${mode}:${archivePlay?.date ?? "daily"}`,
+    status,
+  });
+  useEffect(() => {
+    const key = `${mode}:${archivePlay?.date ?? "daily"}`;
+    const prev = prevGame.current;
+    prevGame.current = { key, status };
+    if (prev.key !== key) {
+      // Switched puzzle/mode: whatever status we see now was loaded, not earned.
+      setFreshWin(false);
+      setRevealHeld(false);
+      return;
+    }
+    if (prev.status === "playing" && status === "won") {
+      setFreshWin(true);
+      if (mode === "classic" && !prefersReducedMotion()) {
+        // Last cell starts flipping at 3.0s and its ignite flare peaks ~4.2s;
+        // let the banner crash the party just before the final flare settles.
+        setRevealHeld(true);
+        const t = setTimeout(() => setRevealHeld(false), 3800);
+        return () => clearTimeout(t);
+      }
+    }
+  }, [status, mode, archivePlay?.date]);
   const wrongGuesses =
     guesses.filter((g) => g.name !== answer.name).length + skips;
   const solved = status === "won";
@@ -380,7 +414,7 @@ export default function App() {
             ? (m) => navigateToPath(archivePlayPath(m, archiveDate))
             : setMode
         }
-        completedSignal={`${mode}:${isDaily}:${isArchive}:${status}`}
+        completedSignal={`${mode}:${isDaily}:${isArchive}:${done && !revealHeld ? status : 'playing'}`}
         isCompleted={
           isArchive && archiveDate
             ? (m) => isArchiveCompleted(m, archiveDate)
@@ -537,7 +571,7 @@ export default function App() {
           <p className="hint-line">Zooms out with each wrong guess</p>
         )}
 
-        {done && (
+        {done && !revealHeld && (
           <ResultBanner
             status={status as "won" | "lost"}
             answer={answer}
@@ -546,10 +580,11 @@ export default function App() {
             maxGuesses={maxGuesses}
             isDaily={isDaily}
             skips={skips}
+            celebrate={freshWin}
           />
         )}
 
-        {mode === "classic" && !done && (
+        {mode === "classic" && (!done || revealHeld) && (
           <GuessDots
             dots={Array.from({ length: maxGuesses }, (_, i) => {
               const g = guesses[i];

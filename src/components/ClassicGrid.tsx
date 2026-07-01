@@ -7,6 +7,7 @@ import {
   type MatchKind,
 } from "../lib/compare";
 import { deduce, type Deductions, type NumericClue } from "../lib/deduce";
+import { prefersReducedMotion } from "../lib/reducedMotion";
 import ManaCost from "./ManaSymbols";
 import CardZoom from "./CardZoom";
 
@@ -62,11 +63,22 @@ function cellAria(col: ComparedColumn): string {
   return `${col.label}: ${value}, ${kind}${dir}`;
 }
 
-function Cell({ col, index }: { col: ComparedColumn; index: number }) {
+function Cell({ col, index, win }: { col: ComparedColumn; index: number; win?: boolean }) {
   return (
     <div
       className={`grid-cell match-${col.kind}`}
-      style={{ animationDelay: `${index * 0.5}s` }}
+      // Winning rows run a second "ignite" animation per cell; it needs its own
+      // delay so the flare lands just as the tile finishes flipping open.
+      style={
+        {
+          animationDelay: win
+            ? `${index * 0.5}s, ${index * 0.5 + 0.9}s`
+            : `${index * 0.5}s`,
+          // The inner scale pop can't inherit the cell's animation-delay list,
+          // so it reads its stagger from this custom property instead.
+          "--ignite-delay": win ? `${index * 0.5 + 0.9}s` : undefined,
+        } as React.CSSProperties
+      }
       role="cell"
       aria-label={cellAria(col)}
     >
@@ -99,10 +111,10 @@ function GuessRow({ guess, answer }: { guess: Commander; answer: Commander }) {
       ? `${guess.name}, shares a word with the answer`
       : guess.name;
   return (
-    <div className="grid-row" role="row">
+    <div className={`grid-row${solved ? " win-row" : ""}`} role="row">
       <div
         className={`grid-cell name-cell${shareWord ? " match-partial" : ""}`}
-        style={{ animationDelay: "0s" }}
+        style={{ animationDelay: solved ? "0s, 0.9s" : "0s" }}
         role="cell"
         aria-label={nameAria}
       >
@@ -125,7 +137,7 @@ function GuessRow({ guess, answer }: { guess: Commander; answer: Commander }) {
         </CardZoom>
       </div>
       {cols.map((col, i) => (
-        <Cell key={col.label} col={col} index={i + 1} />
+        <Cell key={col.label} col={col} index={i + 1} win={solved} />
       ))}
     </div>
   );
@@ -135,10 +147,6 @@ function GuessRow({ guess, answer }: { guess: Commander; answer: Commander }) {
 // indices line up with the guess row's cells so each clue waits for its matching
 // cell to flip open.
 const DED_COL_COUNT = 6;
-
-const prefersReducedMotion = () =>
-  typeof window !== "undefined" &&
-  window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 
 /** Deduction row aligned to the table columns, sitting just above the headers. */
 function DeductionRow({ guesses, answer }: Props) {

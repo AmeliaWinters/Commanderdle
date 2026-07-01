@@ -17,6 +17,7 @@ import {
 } from "../lib/dailyAnswer";
 import { navigateToPath, MODE_PATHS, HIGHER_LOWER_PATH } from "../lib/router";
 import { shareOrCopy } from "../lib/share";
+import { prefersReducedMotion } from "../lib/reducedMotion";
 import CardBackdrop from "./CardBackdrop";
 import { playSound } from "../lib/sounds";
 
@@ -87,9 +88,10 @@ function useCountdown(): string {
  * reveal lands with a little drama. When inactive, snaps straight to `target`.
  */
 function useCountUp(target: number, active: boolean, duration = 900): number {
-  const [val, setVal] = useState(active ? 0 : target);
+  const animate = active && !prefersReducedMotion();
+  const [val, setVal] = useState(animate ? 0 : target);
   useEffect(() => {
-    if (!active) {
+    if (!animate) {
       setVal(target);
       return;
     }
@@ -103,7 +105,7 @@ function useCountUp(target: number, active: boolean, duration = 900): number {
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [target, active, duration]);
+  }, [target, animate, duration]);
   return val;
 }
 

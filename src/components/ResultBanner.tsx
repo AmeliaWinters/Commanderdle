@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { prefersReducedMotion } from "../lib/reducedMotion";
 import type { Commander, Mode } from "../types/commander";
 import { compareCommander, type MatchKind } from "../lib/compare";
 import {
@@ -8,15 +9,17 @@ import {
 } from "../lib/dailyAnswer";
 import { navigateToPath, HIGHER_LOWER_PATH } from "../lib/router";
 import { shareOrCopy } from "../lib/share";
-import {
-  buildShareUrl,
-  encodeGrid,
-  type CellCode,
-} from "../lib/shareCode";
+import { buildShareUrl, encodeGrid, type CellCode } from "../lib/shareCode";
 import { buildDailyRecap } from "../lib/dailyRecap";
+import {
+  renderShareCard,
+  shareCardImage,
+  type ImageShareOutcome,
+} from "../lib/shareImage";
 import CardZoom from "./CardZoom";
 import StatsPanel from "./StatsPanel";
 import GuessDots from "./GuessDots";
+import ShareMenu, { type ShareOption } from "./ShareMenu";
 
 interface Props {
   status: "won" | "lost";
@@ -26,6 +29,9 @@ interface Props {
   maxGuesses: number;
   isDaily: boolean;
   skips: number;
+  /** True when the game was just won this session — plays the "casting the
+   * commander" reveal (card flip-in + ember burst) instead of a static mount. */
+  celebrate?: boolean;
 }
 
 const KIND_SQUARE: Record<MatchKind, string> = {
@@ -56,14 +62,18 @@ function buildGrid(
       )
       .join("\n");
   }
-  return guesses
-    .map((g) => (g.name === answer.name ? "🟩" : "🟥"))
-    .join("")
+  return (
+    guesses.map((g) => (g.name === answer.name ? "🟩" : "🟥")).join("") ||
     // A loss in a visual mode has no winning square; keep it all red.
-    || (status === "lost" ? "🟥" : "");
+    (status === "lost" ? "🟥" : "")
+  );
 }
 
-const KIND_CODE: Record<MatchKind, CellCode> = { exact: 2, partial: 1, none: 0 };
+const KIND_CODE: Record<MatchKind, CellCode> = {
+  exact: 2,
+  partial: 1,
+  none: 0,
+};
 
 /**
  * The same feedback grid as {@link buildGrid}, but as numeric colour codes for the
@@ -88,8 +98,7 @@ function buildGridCodes(
 /** Canonical origin for share links (env-configured, falling back to the current origin). */
 function shareOrigin(): string {
   return (
-    import.meta.env.VITE_SITE_URL?.replace(/\/$/, "") ||
-    window.location.origin
+    import.meta.env.VITE_SITE_URL?.replace(/\/$/, "") || window.location.origin
   );
 }
 
@@ -103,6 +112,57 @@ function useCountdown(active: boolean): string {
     return () => clearInterval(id);
   }, [active]);
   return formatCountdown(ms);
+}
+
+/** One-shot burst of ember particles that fly out from behind the result card.
+ * Pure CSS animation; each ember gets a random direction/size/timing via custom
+ * properties. The layer is pointer-transparent and removes itself when done. */
+function EmberBurst() {
+  const embers = useMemo(
+    () =>
+      Array.from({ length: 26 }, (_, i) => {
+        const angle = Math.random() * Math.PI * 2;
+        const dist = 90 + Math.random() * 190;
+        return {
+          id: i,
+          dx: `${Math.cos(angle) * dist}px`,
+          // Bias upward — embers rise.
+          dy: `${Math.sin(angle) * dist * 0.6 - 70 - Math.random() * 90}px`,
+          size: `${3 + Math.random() * 6}px`,
+          dur: `${1.1 + Math.random() * 1.1}s`,
+          delay: `${Math.random() * 0.45}s`,
+          color: ["var(--flame-1)", "var(--flame-2)", "var(--flame-3)"][i % 3],
+        };
+      }),
+    [],
+  );
+  const [gone, setGone] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setGone(true), 3200);
+    return () => clearTimeout(t);
+  }, []);
+  if (gone) return null;
+  return (
+    <div className="ember-burst" aria-hidden="true">
+      {embers.map((e) => (
+        <span
+          key={e.id}
+          className="ember"
+          style={
+            {
+              "--dx": e.dx,
+              "--dy": e.dy,
+              "--dur": e.dur,
+              "--delay": e.delay,
+              width: e.size,
+              height: e.size,
+              background: e.color,
+            } as React.CSSProperties
+          }
+        />
+      ))}
+    </div>
+  );
 }
 
 const MODE_LABEL: Record<Mode, string> = {
@@ -121,10 +181,15 @@ export default function ResultBanner({
   maxGuesses,
   isDaily,
   skips,
+  celebrate = false,
 }: Props) {
+  const cast = celebrate && status === "won" && !prefersReducedMotion();
   const [copied, setCopied] = useState(false);
   const [challenged, setChallenged] = useState(false);
   const [recapCopied, setRecapCopied] = useState(false);
+  const [imgBlob, setImgBlob] = useState<Blob | null>(null);
+  const [imgUrl, setImgUrl] = useState<string | null>(null);
+  const [imgSent, setImgSent] = useState<ImageShareOutcome | null>(null);
   const countdown = useCountdown(isDaily);
   const guessCount = guesses.length;
   const wrongGuesses =
@@ -133,11 +198,14 @@ export default function ResultBanner({
   // One pip per attempt: correct (the winning guess), wrong (a miss or skip),
   // or empty (an attempt never spent). Mirrors the in-play row so the result
   // screen shows how the game actually went at a glance.
-  const dots = Array.from({ length: maxGuesses }, (_, i): "correct" | "wrong" | "empty" => {
-    const g = guesses[i];
-    if (g) return g.name === answer.name ? "correct" : "wrong";
-    return i < guesses.length + skips ? "wrong" : "empty";
-  });
+  const dots = Array.from(
+    { length: maxGuesses },
+    (_, i): "correct" | "wrong" | "empty" => {
+      const g = guesses[i];
+      if (g) return g.name === answer.name ? "correct" : "wrong";
+      return i < guesses.length + skips ? "wrong" : "empty";
+    },
+  );
 
   const flash = (set: (v: boolean) => void) => {
     set(true);
@@ -158,6 +226,51 @@ export default function ResultBanner({
       )
     : null;
 
+  // Render the branded share card once per result. The object URL doubles as
+  // an inline preview so players can see what they'd be posting.
+  useEffect(() => {
+    let alive = true;
+    let url: string | null = null;
+    renderShareCard({
+      modeLabel: MODE_LABEL[mode],
+      puzzle: isDaily ? puzzleNumber() : null,
+      score,
+      grid: buildGridCodes(mode, guesses, answer),
+      site: shareOrigin().replace(/^https?:\/\//, ""),
+    }).then(
+      (blob) => {
+        if (!alive) return;
+        url = URL.createObjectURL(blob);
+        setImgBlob(blob);
+        setImgUrl(url);
+      },
+      () => {},
+    );
+    return () => {
+      alive = false;
+      if (url) URL.revokeObjectURL(url);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mode, guesses.length, status]);
+
+  const shareImage = () => {
+    if (!imgBlob) return;
+    const heading = isDaily
+      ? `Commandle ${MODE_LABEL[mode]} #${puzzleNumber()} ${score}`
+      : `Commandle ${MODE_LABEL[mode]} (practice) ${score}`;
+    const text = resultUrl ? `${heading}\n${resultUrl}` : heading;
+    const filename = isDaily
+      ? `commandle-${mode}-${puzzleNumber()}.png`
+      : `commandle-${mode}-practice.png`;
+    shareCardImage(imgBlob, text, filename).then(
+      (outcome) => {
+        setImgSent(outcome);
+        setTimeout(() => setImgSent(null), 2000);
+      },
+      () => {},
+    );
+  };
+
   const share = () => {
     const grid = buildGrid(mode, guesses, answer, status);
     const heading = isDaily
@@ -166,7 +279,10 @@ export default function ResultBanner({
     // Daily results nudge a return visit with the countdown + a playable link.
     const footer = resultUrl ? `\n${resultUrl}` : "";
     const text = `${heading}\n${grid}${footer}`;
-    shareOrCopy(text).then(() => flash(setCopied), () => {});
+    shareOrCopy(text).then(
+      () => flash(setCopied),
+      () => {},
+    );
   };
 
   // Head-to-head variant: same playable link, framed as a dare.
@@ -174,7 +290,10 @@ export default function ResultBanner({
     if (!resultUrl) return;
     const verb = status === "won" ? `in ${score}` : "and it beat me";
     const text = `I played today's Commandle ${MODE_LABEL[mode]} ${verb} — think you can beat me?\n${resultUrl}`;
-    shareOrCopy(text).then(() => flash(setChallenged), () => {});
+    shareOrCopy(text).then(
+      () => flash(setChallenged),
+      () => {},
+    );
   };
 
   // Aggregated recap of every mode finished today (daily only).
@@ -182,12 +301,63 @@ export default function ResultBanner({
   const shareRecap = () => {
     if (!recap) return;
     const text = `${recap}\nNext commander in ${countdown}\n${shareOrigin()}`;
-    shareOrCopy(text).then(() => flash(setRecapCopied), () => {});
+    shareOrCopy(text).then(
+      () => flash(setRecapCopied),
+      () => {},
+    );
   };
 
+  const imageDone =
+    imgSent === "shared"
+      ? "Shared!"
+      : imgSent === "copied-image"
+        ? "Image copied!"
+        : imgSent === "downloaded"
+          ? "Saved!"
+          : null;
+
+  const shareOptions: ShareOption[] = [
+    {
+      key: "text",
+      label: "Share as text",
+      hint: "Emoji grid + link",
+      icon: "🔤",
+      done: copied ? "Copied!" : null,
+      onSelect: share,
+    },
+  ];
+  if (imgBlob)
+    shareOptions.push({
+      key: "image",
+      label: "Share as image",
+      hint: "Branded result card",
+      icon: "🖼️",
+      done: imageDone,
+      onSelect: shareImage,
+    });
+  if (resultUrl)
+    shareOptions.push({
+      key: "challenge",
+      label: "Challenge a friend",
+      hint: "Dare them to beat you",
+      icon: "⚔️",
+      done: challenged ? "Copied!" : null,
+      onSelect: challenge,
+    });
+  if (recap)
+    shareOptions.push({
+      key: "recap",
+      label: "Share today's recap",
+      hint: "Every mode you played",
+      icon: "📋",
+      done: recapCopied ? "Copied!" : null,
+      onSelect: shareRecap,
+    });
+
   return (
-    <div className={`result-banner ${status}`}>
+    <div className={`result-banner ${status}${cast ? " cast" : ""}`}>
       <div className="result-card">
+        {cast && <EmberBurst />}
         {answer.normalImage && (
           <CardZoom
             name={answer.name}
@@ -210,25 +380,16 @@ export default function ResultBanner({
             #{answer.rank} on EDHREC. In {answer.numDecks.toLocaleString()}{" "}
             decks
           </p>
-          <GuessDots
-            dots={dots}
-            wrongGuesses={wrongGuesses}
-            maxGuesses={maxGuesses}
-          />
+          <div className="result-scoreline">
+            <span className="result-score">{score}</span>
+            <GuessDots
+              dots={dots}
+              wrongGuesses={wrongGuesses}
+              maxGuesses={maxGuesses}
+            />
+          </div>
           <div className="share-row">
-            <button className="share-btn" onClick={share}>
-              {copied ? "Copied!" : "Share result"}
-            </button>
-            {resultUrl && (
-              <button className="share-btn share-challenge" onClick={challenge}>
-                {challenged ? "Copied!" : "Challenge a friend"}
-              </button>
-            )}
-            {recap && (
-              <button className="share-btn share-recap" onClick={shareRecap}>
-                {recapCopied ? "Copied!" : "Share today's recap"}
-              </button>
-            )}
+            <ShareMenu options={shareOptions} />
           </div>
           {isDaily && (
             <p className="result-countdown">
