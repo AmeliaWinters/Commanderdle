@@ -29,6 +29,21 @@
   --mC: #c7c0b6;
 
   --radius: 12px;
+
+  /* ---------- Spacing scale (4px base) ---------- */
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 16px;
+  --s4: 24px;
+  --s5: 40px;
+  --s6: 64px;
+
+  /* Max width of the focused content column. Sized to fit the 7-column classic
+     grid (~640px) plus the input row's centered guess box and side peek button.
+     Narrower modes (quote, synergy, guess list) self-constrain below this, so
+     they still read as a tight, focused column. */
+  --col: 880px;
+
   font-family: "EB Garamond", Georgia, "Times New Roman", serif;
 
   /* ---------- Background "blurry ball" glows (tweak these) ---------- */
@@ -68,6 +83,25 @@
 
 * {
   box-sizing: border-box;
+}
+
+/* ---------- Accessible focus ring ---------- */
+/* One consistent, visible ring for keyboard users across every interactive
+   control. Mouse clicks don't trigger :focus-visible, so it stays clean. */
+:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--bg),
+    0 0 0 4px var(--flame-2);
+  border-radius: 8px;
+}
+/* Inputs already carry an inset shadow; keep it and stack the ring on top. */
+.guess-input input:focus-visible,
+.pool-search:focus-visible {
+  box-shadow:
+    inset 0 2px 6px rgba(0, 0, 0, 0.5),
+    0 0 0 2px var(--bg),
+    0 0 0 4px var(--flame-2);
 }
 
 body {
@@ -178,9 +212,9 @@ body::before {
 }
 
 .app {
-  max-width: 1000px;
+  max-width: var(--col);
   margin: 0 auto;
-  padding: 26px 16px 0;
+  padding: var(--s5) var(--s3) 0;
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
@@ -189,7 +223,7 @@ body::before {
 /* ---------- Header / logo ---------- */
 .app-header {
   text-align: center;
-  margin-bottom: 22px;
+  margin-bottom: var(--s4);
   position: relative;
 }
 
@@ -229,6 +263,7 @@ body::before {
 }
 
 .mode-tab {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -268,11 +303,21 @@ body::before {
 
 .mode-tab.active {
   color: var(--flame-1);
-  text-shadow: 1px 1px var(--flame-2)
+  text-shadow: 1px 1px var(--flame-2);
 }
 
 .mode-tab.active .mode-icon {
   filter: drop-shadow(0 0 7px rgba(236, 90, 28, 0.55));
+}
+
+/* Little tick marking a mode whose daily puzzle is done today. */
+.mode-complete {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  display: flex;
+  font-size: 0.75rem;
+  color: var(--flame-1);
 }
 
 .mode-label {
@@ -409,7 +454,7 @@ body::before {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: var(--s4);
   width: 100%;
 }
 
@@ -446,6 +491,9 @@ body::before {
   justify-content: center;
   gap: 16px;
   width: 100%;
+  /* Safety net: if the column is ever too narrow for the centered input plus its
+     side peek button, wrap instead of letting the button spill outside. */
+  flex-wrap: wrap;
 }
 
 .input-side {
@@ -468,17 +516,25 @@ body::before {
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: 10px;
+  min-height: 44px;
   padding: 13px 16px;
   cursor: pointer;
   transition:
     border-color 0.15s,
     color 0.15s,
+    background 0.15s,
+    transform 0.08s ease,
     opacity 0.15s;
 }
 
 .pool-peek-btn:not(:disabled):hover {
   border-color: var(--flame-2);
   color: var(--flame-1);
+  background: var(--panel-2);
+}
+
+.pool-peek-btn:not(:disabled):active {
+  transform: translateY(1px);
 }
 
 .pool-peek-btn:disabled {
@@ -494,8 +550,36 @@ body::before {
   max-width: 480px;
 }
 
+/* Mobile: stack the row and let each control fill the full column as a big,
+   tappable target. */
+@media (max-width: 560px) {
+  .input-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .input-side {
+    width: 100%;
+    flex: none;
+  }
+  .input-side-left {
+    justify-content: stretch;
+  }
+  /* An empty right-hand spacer would add a phantom gap; collapse it. */
+  .input-side:empty {
+    display: none;
+  }
+  .pool-peek-btn {
+    width: 100%;
+  }
+  .guess-input {
+    flex: none;
+    max-width: none;
+  }
+}
+
 .guess-input input {
   width: 100%;
+  min-height: 44px;
   padding: 14px 16px;
   font-size: 1.05rem;
   font-family: inherit;
@@ -505,6 +589,9 @@ body::before {
   color: var(--text);
   outline: none;
   box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.5);
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
 }
 
 .guess-input input::placeholder {
@@ -661,6 +748,9 @@ body::before {
 .results-wrap {
   width: 100%;
   overflow-x: auto;
+  /* The reveal animation tilts cells with rotateX, briefly extending them past
+     the row height. Clip the vertical axis so no scrollbar ever flashes. */
+  overflow-y: hidden;
   padding-bottom: 4px;
 }
 
@@ -788,6 +878,15 @@ span.ded-maybe::before {
   margin-bottom: 8px;
 }
 
+/* Reserved empty slots so the board height is stable from the first render
+   and adding a guess never shifts the page down. */
+.grid-cell.placeholder {
+  background: transparent;
+  border-style: dashed;
+  opacity: 0.18;
+  animation: none;
+}
+
 .head-cell {
   background: transparent !important;
   color: var(--text-dim);
@@ -817,7 +916,13 @@ span.ded-maybe::before {
   justify-content: center;
   text-align: center;
   font-size: 0.9rem;
-  animation: reveal 1.5s cubic-bezier(0.3, 0.7, 0.3, 1.1) both;
+  /* Short, Poeltl-style tile flip on reveal (~240ms), plus smooth color
+     transitions so feedback tints ease in rather than snap. */
+  animation: reveal 1.25s cubic-bezier(0.3, 0.7, 0.3, 1.05) both;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
   transform-origin: center;
   /* Enable container queries so .cell-text can scale with the cell's actual width. */
   container-type: inline-size;
@@ -840,6 +945,7 @@ span.ded-maybe::before {
 @media (prefers-reduced-motion: reduce) {
   .grid-cell {
     animation: none;
+    transition: none;
   }
 }
 
@@ -1333,7 +1439,7 @@ span.ded-maybe::before {
 /* ---------- Footer ---------- */
 .app-footer {
   text-align: center;
-  margin-top: 44px;
+  margin-top: var(--s5);
   color: var(--text-dim);
   font-size: 0.84rem;
   font-style: italic;
@@ -1341,6 +1447,21 @@ span.ded-maybe::before {
 
 .app-footer a {
   color: var(--flame-1);
+}
+
+.footer-meta {
+  margin: 0 0 var(--s3);
+  font-style: normal;
+  font-family: "Cinzel", serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+  color: var(--text-dim);
+}
+
+.footer-meta strong {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
 }
 
 @media (max-width: 560px) {
@@ -1515,6 +1636,39 @@ span.ded-maybe::before {
   font-family: "Cinzel", serif;
   font-size: 1.05rem;
   color: var(--flame-1);
+}
+
+/* Single, consistent close affordance for every modal: a 36px round tap target
+   with a clear hover/active state. */
+.modal-close {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--text-dim);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    color 0.15s,
+    background 0.15s,
+    transform 0.08s ease;
+}
+
+.modal-close:hover {
+  border-color: var(--flame-2);
+  color: var(--flame-1);
+  background: var(--panel);
+}
+
+.modal-close:active {
+  transform: scale(0.94);
 }
 
 .pool-search {
@@ -1778,7 +1932,9 @@ span.ded-maybe::before {
   font-family: inherit;
   font-size: 1rem;
   cursor: pointer;
-  transition: transform 0.08s ease, border-color 0.15s ease;
+  transition:
+    transform 0.08s ease,
+    border-color 0.15s ease;
 }
 .hl-btn:hover {
   transform: translateY(-1px);

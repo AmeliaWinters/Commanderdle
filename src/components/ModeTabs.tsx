@@ -3,13 +3,17 @@ import { TbLayoutGrid } from 'react-icons/tb'
 import { BsPersonFill } from 'react-icons/bs'
 import { FiZoomIn } from 'react-icons/fi'
 import { LuNetwork } from 'react-icons/lu'
-import { FaQuoteRight } from 'react-icons/fa6'
+import { FaQuoteRight, FaCheck } from 'react-icons/fa6'
 import type { Mode } from '../types/commander'
 import { MODE_PATHS } from '../lib/router'
+import { isModeCompletedToday } from '../lib/stats'
+import { todayKey } from '../lib/dailyAnswer'
 
 interface Props {
   mode: Mode
   onNavigate: (m: Mode) => void
+  /** Bumps whenever a game finishes, so completion badges recompute. */
+  completedSignal?: unknown
 }
 
 // Each mode carries a small glyph that previews the kind of puzzle it is, so the
@@ -22,10 +26,14 @@ const MODES: { id: Mode; label: string; Icon: ComponentType }[] = [
   { id: 'quote', label: 'Quote', Icon: FaQuoteRight },
 ]
 
-export default function ModeTabs({ mode, onNavigate }: Props) {
+export default function ModeTabs({ mode, onNavigate, completedSignal }: Props) {
+  const today = todayKey()
   return (
     <nav className="mode-tabs">
-      {MODES.map((m) => (
+      {MODES.map((m) => {
+        void completedSignal // recompute when a game finishes
+        const completed = isModeCompletedToday(m.id, today)
+        return (
         // Real anchors (each mode is its own URL) so links are crawlable and middle-click /
         // open-in-new-tab work; the click handler keeps same-tab nav client-side.
         <a
@@ -44,8 +52,18 @@ export default function ModeTabs({ mode, onNavigate }: Props) {
             <m.Icon />
           </span>
           <span className="mode-label">{m.label}</span>
+          {completed && (
+            <span
+              className="mode-complete"
+              title="You completed today’s puzzle"
+              aria-label="Completed today"
+            >
+              <FaCheck />
+            </span>
+          )}
         </a>
-      ))}
+        )
+      })}
     </nav>
   )
 }

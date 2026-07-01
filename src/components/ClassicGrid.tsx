@@ -11,6 +11,17 @@ interface Props {
 
 const HEADERS = ['Commander', 'Colors', 'Type', 'Mana Value', 'Stat Total', 'Popularity', 'Year']
 
+/** A reserved, empty row so the board keeps a stable height before it's filled. */
+function PlaceholderRow() {
+  return (
+    <div className="grid-row" aria-hidden="true">
+      {HEADERS.map((h) => (
+        <div key={h} className="grid-cell placeholder" />
+      ))}
+    </div>
+  )
+}
+
 /** Thin arrow = close (just off); heavy double-line arrow = far. */
 function arrow(kind: MatchKind, direction?: string): string {
   if (direction !== 'up' && direction !== 'down') return ''
@@ -133,8 +144,8 @@ function DeductionRow({ guesses, answer }: Props) {
   )
 }
 
-export default function ClassicGrid({ guesses, answer }: Props) {
-  if (guesses.length === 0) return null
+export default function ClassicGrid({ guesses, answer, maxGuesses }: Props & { maxGuesses: number }) {
+  const remaining = Math.max(0, maxGuesses - guesses.length)
   return (
     <div className="results-wrap">
       <div className="results-table">
@@ -148,6 +159,9 @@ export default function ClassicGrid({ guesses, answer }: Props) {
         </div>
         {[...guesses].reverse().map((g) => (
           <GuessRow key={g.name} guess={g} answer={answer} />
+        ))}
+        {Array.from({ length: remaining }, (_, i) => (
+          <PlaceholderRow key={`ph-${i}`} />
         ))}
       </div>
     </div>

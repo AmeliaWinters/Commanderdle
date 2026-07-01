@@ -44,10 +44,16 @@ export default function PoolModal({ pool, onClose, blurQuote, heading }: Props) 
 
   return createPortal(
     <div className="modal-backdrop" onMouseDown={onClose}>
-      <div className="modal pool-modal" onMouseDown={(e) => e.stopPropagation()}>
+      <div
+        className="modal pool-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-label={heading ?? "Card pool"}
+        onMouseDown={(e) => e.stopPropagation()}
+      >
         <div className="modal-head">
           <h2>{heading ?? 'Card pool'} · {pool.length} commanders (Includes partner cards)</h2>
-          <button className="link-btn" onClick={onClose} aria-label="Close">
+          <button className="modal-close" onClick={onClose} aria-label="Close">
             ✕
           </button>
         </div>

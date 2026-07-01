@@ -13,6 +13,11 @@ export interface ModeStats {
 
 const statsKey = (mode: Mode) => `commanderdle:stats:${mode}`
 
+/** Has today's daily for `mode` been finished (won or lost)? */
+export function isModeCompletedToday(mode: Mode, today: string): boolean {
+  return loadStats(mode).lastPlayedDate === today
+}
+
 export function emptyStats(): ModeStats {
   return {
     played: 0,

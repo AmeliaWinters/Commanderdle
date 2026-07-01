@@ -7,7 +7,12 @@ import {
   navigateToPath,
   HIGHER_LOWER_PATH,
 } from "../lib/router";
-import { poolFor } from "../lib/dailyAnswer";
+import {
+  poolFor,
+  puzzleNumber,
+  msUntilNextPuzzle,
+  formatCountdown,
+} from "../lib/dailyAnswer";
 import { possiblePool, synergyPool, quotePool } from "../lib/deduce";
 import ModeTabs from "./ModeTabs";
 import GuessInput from "./GuessInput";
@@ -43,6 +48,18 @@ export default function App() {
   const [poolOpen, setPoolOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [adTest, setAdTest] = useState(isAdTestMode);
+  const [countdown, setCountdown] = useState(() =>
+    formatCountdown(msUntilNextPuzzle()),
+  );
+
+  // Tick the "next puzzle in" countdown once a second.
+  useEffect(() => {
+    const id = setInterval(
+      () => setCountdown(formatCountdown(msUntilNextPuzzle())),
+      1000,
+    );
+    return () => clearInterval(id);
+  }, []);
 
   // Close the header overflow menu on any outside click or Escape.
   useEffect(() => {
@@ -205,7 +222,11 @@ export default function App() {
         </p>
       </header>
 
-      <ModeTabs mode={mode} onNavigate={setMode} />
+      <ModeTabs
+        mode={mode}
+        onNavigate={setMode}
+        completedSignal={`${mode}:${isDaily}:${status}`}
+      />
 
       {poolOpen && (
         <PoolModal
@@ -367,7 +388,7 @@ export default function App() {
         )}
 
         {mode === "classic" ? (
-          <ClassicGrid guesses={guesses} answer={answer} />
+          <ClassicGrid guesses={guesses} answer={answer} maxGuesses={maxGuesses} />
         ) : (
           <GuessList guesses={guesses} answer={answer} />
         )}
@@ -376,6 +397,10 @@ export default function App() {
       <div className="bottom-bar">
         <AdBanner />
         <footer className="app-footer">
+          <p className="footer-meta">
+            Commanderdle No. {puzzleNumber()} · Next commander in{" "}
+            <strong>{countdown}</strong>
+          </p>
           Data from{" "}
           <a
             href="https://edhrec.com/commanders"
