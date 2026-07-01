@@ -250,7 +250,7 @@ export default function App() {
       )}
 
       <main className="play-area">
-        {mode === "silhouette" && (
+        {!done && mode === "silhouette" && (
           <SilhouetteMode
             answer={answer}
             guesses={guesses}
@@ -261,7 +261,7 @@ export default function App() {
             onSkip={done ? undefined : skip}
           />
         )}
-        {mode === "zoom" && (
+        {!done && mode === "zoom" && (
           <ZoomMode
             answer={answer}
             guesses={guesses}
@@ -272,7 +272,7 @@ export default function App() {
             onSkip={done ? undefined : skip}
           />
         )}
-        {mode === "synergy" && (
+        {!done && mode === "synergy" && (
           <SynergyMode
             answer={answer}
             guesses={guesses}
@@ -283,7 +283,7 @@ export default function App() {
             onSkip={done ? undefined : skip}
           />
         )}
-        {mode === "quote" && (
+        {!done && mode === "quote" && (
           <QuoteMode
             answer={answer}
             guesses={guesses}
@@ -365,14 +365,25 @@ export default function App() {
         )}
 
         {done && (
-          <ResultBanner
-            status={status as "won" | "lost"}
-            answer={answer}
-            guesses={guesses}
-            mode={mode}
-            maxGuesses={maxGuesses}
-            isDaily={isDaily}
-          />
+          <>
+            <ResultBanner
+              status={status as "won" | "lost"}
+              answer={answer}
+              guesses={guesses}
+              mode={mode}
+              maxGuesses={maxGuesses}
+              isDaily={isDaily}
+            />
+            <GuessDots
+              dots={Array.from({ length: maxGuesses }, (_, i) => {
+                const g = guesses[i];
+                if (g) return g.name === answer.name ? "correct" : "wrong";
+                return i < guesses.length + skips ? "wrong" : "empty";
+              })}
+              wrongGuesses={wrongGuesses}
+              maxGuesses={maxGuesses}
+            />
+          </>
         )}
 
         {mode === "classic" && !done && (

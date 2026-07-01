@@ -64,11 +64,25 @@ const fileExists = (p: string) =>
     () => false,
   )
 
+/** A top synergy card name paired with its EDHREC synergy score (decimal fraction). */
+interface SynergyRef {
+  name: string
+  synergy: number
+}
+
 /** Shape of the committed last-good EDHREC cache (scripts/.cache/edhrec.json). */
 interface EdhrecCache {
   fetchedAt: string
   commanders: EdhrecCardView[]
-  synergy: Record<string, string[]>
+  synergy: Record<string, SynergyRef[]>
+}
+
+/** Coerce a cached synergy list (old string[] or new SynergyRef[]) into SynergyRef[]. */
+function normalizeSynergyRefs(raw: unknown): SynergyRef[] {
+  if (!Array.isArray(raw)) return []
+  return raw.map((r) =>
+    typeof r === 'string' ? { name: r, synergy: 0 } : (r as SynergyRef),
+  )
 }
 
 async function loadCache(): Promise<EdhrecCache | null> {
@@ -173,6 +187,8 @@ export interface SynergyCard {
   name: string
   image: string | null
   colorIdentity: string[]
+  /** EDHREC synergy score as a decimal fraction (e.g. 0.34 → 34%). */
+  synergy: number
 }
 
 export interface Commander {
@@ -228,11 +244,12 @@ async function fetchEdhrecTop(count: number): Promise<EdhrecCardView[]> {
 }
 
 /**
- * Fetch a commander's EDHREC page and return the top synergy-card names (most
- * synergistic first). Reads the "High Synergy Cards" list, falling back to the
- * highest-`synergy` cardviews across the page if that list is absent.
+ * Fetch a commander's EDHREC page and return the top synergy cards (most
+ * synergistic first) with their synergy scores. Reads the "High Synergy Cards"
+ * list, falling back to the highest-`synergy` cardviews across the page if that
+ * list is absent.
  */
-async function fetchSynergyNames(sanitized: string): Promise<string[]> {
+async function fetchSynergyNames(sanitized: string): Promise<SynergyRef[]> {
   const res = await fetch(`${EDHREC_BASE}commanders/${sanitized}.json`, {
     headers: { 'User-Agent': EDHREC_UA },
   })
@@ -251,7 +268,7 @@ async function fetchSynergyNames(sanitized: string): Promise<string[]> {
       .filter((v: EdhrecCardView) => typeof v?.synergy === 'number')
       .sort((a: EdhrecCardView, b: EdhrecCardView) => (b.synergy ?? 0) - (a.synergy ?? 0))
   }
-  return views.slice(0, SYNERGY_COUNT).map((v) => v.name)
+  return views.slice(0, SYNERGY_COUNT).map((v) => ({ name: v.name, synergy: v.synergy ?? 0 }))
 }
 
 async function fetchScryfallBatch(names: string[]): Promise<Map<string, ScryfallCard>> {
@@ -497,12 +514,12 @@ async function main() {
   }
 
   console.log('Fetching synergy cards per commander from EDHREC...')
-  const synergyNamesByCommander = new Map<string, string[]>()
+  const synergyNamesByCommander = new Map<string, SynergyRef[]>()
   for (let i = 0; i < edhList.length; i++) {
     const edh = edhList[i]
     const slug = edh.sanitized
     if (!slug) continue
-    let names: string[] = []
+    let names: SynergyRef[] = []
     try {
       names = await fetchSynergyNames(slug)
     } catch (e) {
@@ -511,7 +528,7 @@ async function main() {
     // Per-commander fallback: if this fetch came back empty/failed but we have cached
     // synergy for the card, reuse it rather than dropping the commander's Synergy mode.
     if (names.length === 0 && cache?.synergy?.[edh.name]?.length) {
-      names = cache.synergy[edh.name]
+      names = normalizeSynergyRefs(cache.synergy[edh.name])
     }
     synergyNamesByCommander.set(edh.name, names)
     if ((i + 1) % 50 === 0) console.log(`  synergy: ${i + 1}/${edhList.length}`)
@@ -532,7 +549,7 @@ async function main() {
   // One batch over the union of commander names and every synergy-card name.
   const allNames = new Set<string>()
   for (const e of edhList) allNames.add(e.name)
-  for (const names of synergyNamesByCommander.values()) for (const n of names) allNames.add(n)
+  for (const refs of synergyNamesByCommander.values()) for (const r of refs) allNames.add(r.name)
   const cards = await fetchScryfallBatch([...allNames])
 
   let commanders: Commander[] = []
@@ -540,12 +557,13 @@ async function main() {
   for (const edh of edhList) {
     // Try full name, then the front-face half of DFC names ("A // B").
     const card = cards.get(norm(edh.name)) ?? cards.get(norm(edh.name.split(' // ')[0]))
-    const synergyCards: SynergyCard[] = (synergyNamesByCommander.get(edh.name) ?? []).map((n) => {
-      const sc = cards.get(norm(n)) ?? cards.get(norm(n.split(' // ')[0]))
+    const synergyCards: SynergyCard[] = (synergyNamesByCommander.get(edh.name) ?? []).map((r) => {
+      const sc = cards.get(norm(r.name)) ?? cards.get(norm(r.name.split(' // ')[0]))
       return {
-        name: n,
-        image: imageForName(n, cards),
+        name: r.name,
+        image: imageForName(r.name, cards),
         colorIdentity: sc?.color_identity ?? [],
+        synergy: r.synergy,
       }
     })
     // Use EDHREC's own popularity rank: the two members of a partner pair share that pair's

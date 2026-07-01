@@ -39,10 +39,10 @@ export default function SynergyMode({
 
   return (
     <div className="synergy-mode">
-      <p className="hint-line">
-        These are a mystery commander&rsquo;s top synergy cards on EDHREC. Name
-        the commander.
-      </p>
+      <header className="synergy-intro">
+        <h2>Top synergy cards</h2>
+        <p>Name the commander from EDHREC&rsquo;s most synergistic cards</p>
+      </header>
 
       <ol className="synergy-cards">
         {cards.slice(0, 5).map((c, i) => {
@@ -70,14 +70,6 @@ export default function SynergyMode({
         wrongGuesses={wrongGuesses}
         maxGuesses={maxGuesses}
       />
-
-      {solved && (
-        <p className="hint-line solved-line">
-          <CardZoom name={answer.name} image={answer.normalImage}>
-            <span className="solved-name">{answer.name}</span>
-          </CardZoom>
-        </p>
-      )}
     </div>
   );
 }

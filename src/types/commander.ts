@@ -6,6 +6,8 @@ export interface SynergyCard {
   /** WUBRG color-identity of this card. Every synergy card sits within the
    * commander's identity, so revealed cards bound the answer's colors. */
   colorIdentity: string[]
+  /** EDHREC synergy score as a decimal fraction (e.g. 0.34 → 34%). */
+  synergy: number
 }
 
 export interface Commander {

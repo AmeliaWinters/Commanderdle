@@ -146,6 +146,33 @@ export default function ResultBanner({
           </p>
         </div>
       </div>
+      {mode === "synergy" && answer.synergyCards.length > 0 && (
+        <div className="result-synergy">
+          <p className="result-synergy-label">Top synergy cards</p>
+          <ul className="result-synergy-cards">
+            {answer.synergyCards.slice(0, 5).map((c) => (
+              <li key={c.name} className="result-synergy-card">
+                {c.image ? (
+                  <CardZoom
+                    name={c.name}
+                    image={c.image}
+                    className="result-synergy-zoom"
+                  >
+                    <img src={c.image} alt={c.name} draggable={false} />
+                  </CardZoom>
+                ) : (
+                  <div className="result-synergy-noimg">{c.name}</div>
+                )}
+                {c.synergy > 0 && (
+                  <span className="result-synergy-pct">
+                    +{Math.round(c.synergy * 100)}%
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
       {isDaily && (
         <StatsPanel
           mode={mode}
