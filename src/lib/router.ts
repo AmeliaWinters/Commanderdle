@@ -95,6 +95,29 @@ export function isHigherLowerPath(pathname: string): boolean {
   return normalize(pathname) === HIGHER_LOWER_PATH
 }
 
+/** Puzzle archive — browse past days. */
+export const ARCHIVE_PATH = '/archive'
+
+export function isArchiveBrowsePath(pathname: string): boolean {
+  return normalize(pathname) === ARCHIVE_PATH
+}
+
+/** URL for playing one archived puzzle: /archive/{mode}/{YYYY-MM-DD}. */
+export function archivePlayPath(mode: Mode, date: string): string {
+  return `${ARCHIVE_PATH}/${mode}/${date}`
+}
+
+/** Parse an /archive/{mode}/{date} path into a target, or null if it isn't one. */
+export function parseArchivePlay(pathname: string): { mode: Mode; date: string } | null {
+  const parts = normalize(pathname).split('/') // ['', 'archive', mode, date]
+  if (parts.length !== 4 || parts[1] !== 'archive') return null
+  const mode = parts[2]
+  const date = parts[3]
+  if (!(mode in MODE_PATHS)) return null
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return null
+  return { mode: mode as Mode, date }
+}
+
 /** Client-side navigation to a bare path (used for pages outside the mode system). */
 export function navigateToPath(path: string): void {
   window.history.pushState(null, '', path)

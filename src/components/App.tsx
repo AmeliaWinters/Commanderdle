@@ -4,8 +4,12 @@ import {
   useModeRoute,
   isPrivacyPath,
   isHigherLowerPath,
+  isArchiveBrowsePath,
+  parseArchivePlay,
+  archivePlayPath,
   navigateToPath,
   HIGHER_LOWER_PATH,
+  ARCHIVE_PATH,
 } from "../lib/router";
 import {
   poolFor,
@@ -13,6 +17,13 @@ import {
   msUntilNextPuzzle,
   formatCountdown,
 } from "../lib/dailyAnswer";
+import { isArchiveCompleted } from "../lib/archive";
+import {
+  isReminderEnabled,
+  toggleReminder,
+  scheduleReminder,
+  notificationsSupported,
+} from "../lib/reminder";
 import { possiblePool, synergyPool, quotePool } from "../lib/deduce";
 import ModeTabs from "./ModeTabs";
 import GuessInput from "./GuessInput";
@@ -29,6 +40,7 @@ import CardBackdrop from "./CardBackdrop";
 import AdBanner, { toggleAdTestMode, isAdTestMode } from "./AdBanner";
 import PrivacyPolicy from "./PrivacyPolicy";
 import HigherLowerMode from "./HigherLowerMode";
+import Archive from "./Archive";
 import HowToPlay, { hasSeenHowTo } from "./HowToPlay";
 import {
   preloadSounds,
@@ -49,10 +61,27 @@ function usePathMatch(match: (pathname: string) => boolean) {
   return hit;
 }
 
+/** Reactive archive-play target parsed from /archive/{mode}/{date}, or null. */
+function useArchivePlay() {
+  const [target, setTarget] = useState(() =>
+    parseArchivePlay(window.location.pathname),
+  );
+  useEffect(() => {
+    const onPop = () => setTarget(parseArchivePlay(window.location.pathname));
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
+  return target;
+}
+
 export default function App() {
   const isPrivacy = usePathMatch(isPrivacyPath);
   const isHigherLower = usePathMatch(isHigherLowerPath);
-  const [mode, setMode] = useModeRoute();
+  const isArchiveBrowse = usePathMatch(isArchiveBrowsePath);
+  const archivePlay = useArchivePlay();
+  const [routeMode, setMode] = useModeRoute();
+  const mode = archivePlay ? archivePlay.mode : routeMode;
+  const [reminderOn, setReminderOn] = useState(isReminderEnabled);
   const [poolOpen, setPoolOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [howToOpen, setHowToOpen] = useState(false);
@@ -77,10 +106,21 @@ export default function App() {
     return () => clearInterval(id);
   }, []);
 
-  // Show the how-to-play once per mode the first time it's opened.
+  // Show the how-to-play once per mode the first time it's opened (live daily only).
   useEffect(() => {
-    if (!hasSeenHowTo(mode)) setHowToOpen(true);
-  }, [mode]);
+    if (!archivePlay && !hasSeenHowTo(mode)) setHowToOpen(true);
+  }, [mode, archivePlay]);
+
+  // Arm the daily reminder timer on load if the player opted in.
+  useEffect(() => {
+    scheduleReminder();
+  }, []);
+
+  async function handleReminderToggle() {
+    const on = await toggleReminder();
+    setReminderOn(on);
+    setMenuOpen(false);
+  }
 
   // Close the header overflow menu on any outside click or Escape.
   useEffect(() => {
@@ -90,7 +130,7 @@ export default function App() {
     return () => window.removeEventListener("click", close);
   }, [menuOpen]);
   const { state, guess, skip, startPractice, backToDaily, reset, maxGuesses } =
-    useGameState(mode);
+    useGameState(mode, archivePlay?.date);
 
   useEffect(() => {
     const onToggle = (e: Event) =>
@@ -100,10 +140,8 @@ export default function App() {
       window.removeEventListener("commanderdle:ad-test-toggle", onToggle);
   }, []);
 
-  if (isPrivacy) return <PrivacyPolicy />;
-  if (isHigherLower) return <HigherLowerMode />;
-
-  const { answer, guesses, skips, status, isDaily } = state;
+  const { answer, guesses, skips, status, isDaily, isArchive } = state;
+  const archiveDate = archivePlay?.date;
   const wrongGuesses =
     guesses.filter((g) => g.name !== answer.name).length + skips;
   const solved = status === "won";
@@ -147,6 +185,12 @@ export default function App() {
   const quoteUnlockedPool =
     mode === "quote" && wrongGuesses >= quoteUnlockPoolNumber;
 
+  // Standalone pages: return only after every hook above has run, so the hook order
+  // stays constant across client-side navigation (React requires this).
+  if (isPrivacy) return <PrivacyPolicy />;
+  if (isHigherLower) return <HigherLowerMode />;
+  if (isArchiveBrowse) return <Archive />;
+
   function navPrivacy(e: React.MouseEvent) {
     e.preventDefault();
     window.history.pushState(null, "", "/privacy");
@@ -169,19 +213,24 @@ export default function App() {
           >
             <FiSettings className="menu-cog" />
           </button>
-          <button
-            className="menu-btn help-btn"
-            aria-label="How to play"
-            title="How to play"
-            onClick={(e) => {
-              e.stopPropagation();
-              setHowToOpen(true);
-            }}
-          >
-            ?
-          </button>
           {menuOpen && (
             <div className="menu-pop" onClick={(e) => e.stopPropagation()}>
+              <button
+                onClick={() => {
+                  setHowToOpen(true);
+                  setMenuOpen(false);
+                }}
+              >
+                How to play
+              </button>
+              <button
+                onClick={() => {
+                  navigateToPath(ARCHIVE_PATH);
+                  setMenuOpen(false);
+                }}
+              >
+                Archive ↗
+              </button>
               {isDaily ? (
                 <button
                   onClick={() => {
@@ -211,18 +260,16 @@ export default function App() {
                   </button>
                 </>
               )}
-              {mode !== "classic" &&
-                mode !== "synergy" &&
-                mode !== "quote" && (
-                  <button
-                    onClick={() => {
-                      setPoolOpen(true);
-                      setMenuOpen(false);
-                    }}
-                  >
-                    View card pool
-                  </button>
-                )}
+              {mode !== "classic" && mode !== "synergy" && mode !== "quote" && (
+                <button
+                  onClick={() => {
+                    setPoolOpen(true);
+                    setMenuOpen(false);
+                  }}
+                >
+                  View card pool
+                </button>
+              )}
               <button
                 onClick={() => {
                   navigateToPath(HIGHER_LOWER_PATH);
@@ -231,12 +278,18 @@ export default function App() {
               >
                 Higher / Lower ↗
               </button>
-              <button
-                aria-pressed={!muted}
-                onClick={() => toggleMuted()}
-              >
+              <button aria-pressed={!muted} onClick={() => toggleMuted()}>
                 Sound effects: {muted ? "Off 🔇" : "On 🔊"}
               </button>
+              {notificationsSupported() && (
+                <button
+                  aria-pressed={reminderOn}
+                  onClick={handleReminderToggle}
+                  title="Get a browser notification when the next puzzle unlocks (while a tab is open)"
+                >
+                  Daily reminder: {reminderOn ? "On 🔔" : "Off 🔕"}
+                </button>
+              )}
               <button
                 className="menu-reset"
                 onClick={() => {
@@ -252,7 +305,14 @@ export default function App() {
         </div>
         <h1>
           Comman<span className="accent">dle</span>
-          {!isDaily && <span className="practice-badge">Practice</span>}
+          {isArchive && (
+            <span className="practice-badge">
+              Archive #{puzzleNumber(archiveDate)}
+            </span>
+          )}
+          {!isDaily && !isArchive && (
+            <span className="practice-badge">Practice</span>
+          )}
         </h1>
         <p className="tagline">
           Guess the daily Magic The Gathering commander (top 500 by EDHREC
@@ -260,10 +320,38 @@ export default function App() {
         </p>
       </header>
 
+      {isArchive && archiveDate && (
+        <div className="archive-bar">
+          <button
+            className="archive-back"
+            onClick={() => navigateToPath(ARCHIVE_PATH)}
+          >
+            ← Archive
+          </button>
+          <span className="archive-bar-label">
+            Playing puzzle #{puzzleNumber(archiveDate)} · {archiveDate}
+          </span>
+        </div>
+      )}
+
       <ModeTabs
         mode={mode}
-        onNavigate={setMode}
-        completedSignal={`${mode}:${isDaily}:${status}`}
+        onNavigate={
+          isArchive && archiveDate
+            ? (m) => navigateToPath(archivePlayPath(m, archiveDate))
+            : setMode
+        }
+        completedSignal={`${mode}:${isDaily}:${isArchive}:${status}`}
+        isCompleted={
+          isArchive && archiveDate
+            ? (m) => isArchiveCompleted(m, archiveDate)
+            : undefined
+        }
+        hrefFor={
+          isArchive && archiveDate
+            ? (m) => archivePlayPath(m, archiveDate)
+            : undefined
+        }
       />
 
       {howToOpen && (
@@ -441,7 +529,11 @@ export default function App() {
         )}
 
         {mode === "classic" ? (
-          <ClassicGrid guesses={guesses} answer={answer} maxGuesses={maxGuesses} />
+          <ClassicGrid
+            guesses={guesses}
+            answer={answer}
+            maxGuesses={maxGuesses}
+          />
         ) : (
           <GuessList guesses={guesses} answer={answer} />
         )}
@@ -451,8 +543,27 @@ export default function App() {
         <AdBanner />
         <footer className="app-footer">
           <p className="footer-meta">
-            Commandle No. {puzzleNumber()} · Next commander in{" "}
-            <strong>{countdown}</strong>
+            Commandle No. {puzzleNumber(archiveDate)}
+            {isArchive ? (
+              <>
+                {" "}
+                ·{" "}
+                <a
+                  href={ARCHIVE_PATH}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigateToPath(ARCHIVE_PATH);
+                  }}
+                >
+                  Back to archive
+                </a>
+              </>
+            ) : (
+              <>
+                {" "}
+                · Next commander in <strong>{countdown}</strong>
+              </>
+            )}
           </p>
           Data from{" "}
           <a

@@ -14,6 +14,10 @@ interface Props {
   onNavigate: (m: Mode) => void
   /** Bumps whenever a game finishes, so completion badges recompute. */
   completedSignal?: unknown
+  /** Override the completion check (e.g. for archive plays). Defaults to today's daily. */
+  isCompleted?: (mode: Mode) => boolean
+  /** Real-anchor href for a mode (defaults to the mode's daily path). */
+  hrefFor?: (mode: Mode) => string
 }
 
 // Each mode carries a small glyph that previews the kind of puzzle it is, so the
@@ -26,19 +30,19 @@ const MODES: { id: Mode; label: string; Icon: ComponentType }[] = [
   { id: 'quote', label: 'Quote', Icon: FaQuoteRight },
 ]
 
-export default function ModeTabs({ mode, onNavigate, completedSignal }: Props) {
+export default function ModeTabs({ mode, onNavigate, completedSignal, isCompleted, hrefFor }: Props) {
   const today = todayKey()
   return (
     <nav className="mode-tabs">
       {MODES.map((m) => {
         void completedSignal // recompute when a game finishes
-        const completed = isModeCompletedToday(m.id, today)
+        const completed = isCompleted ? isCompleted(m.id) : isModeCompletedToday(m.id, today)
         return (
         // Real anchors (each mode is its own URL) so links are crawlable and middle-click /
         // open-in-new-tab work; the click handler keeps same-tab nav client-side.
         <a
           key={m.id}
-          href={MODE_PATHS[m.id]}
+          href={hrefFor ? hrefFor(m.id) : MODE_PATHS[m.id]}
           className={`mode-tab${mode === m.id ? ' active' : ''}`}
           aria-current={mode === m.id ? 'page' : undefined}
           onClick={(e) => {

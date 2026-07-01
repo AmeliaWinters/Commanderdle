@@ -3,6 +3,7 @@ import type { Commander, Mode } from '../types/commander'
 import { COMMANDERS_BY_NAME } from './commanders'
 import { dailyAnswer, randomAnswer, todayKey } from './dailyAnswer'
 import { recordDailyResult } from './stats'
+import { recordArchiveResult } from './archive'
 import { playSound } from './sounds'
 
 const MAX_GUESSES_BY_MODE: Record<Mode, number> = {
@@ -20,7 +21,10 @@ export interface GameState {
   guesses: Commander[]
   skips: number
   status: 'playing' | 'won' | 'lost'
+  /** The live daily puzzle (feeds streak stats). */
   isDaily: boolean
+  /** A past puzzle replayed from the archive (kept out of streak stats). */
+  isArchive: boolean
 }
 
 interface PersistedDaily {
@@ -30,27 +34,36 @@ interface PersistedDaily {
   skips?: number
 }
 
-const storageKey = (mode: Mode) => `commanderdle:${mode}:daily`
+/** Persistence key: the live daily uses a stable `:daily` slot; archives key by date. */
+const storageKey = (mode: Mode, dateKey: string, isArchive: boolean) =>
+  isArchive ? `commanderdle:${mode}:${dateKey}` : `commanderdle:${mode}:daily`
 
-function loadDaily(mode: Mode): GameState {
-  const answer = dailyAnswer(mode)
-  const today = todayKey()
+function loadGame(mode: Mode, dateKey: string, isArchive: boolean): GameState {
+  const answer = dailyAnswer(mode, dateKey)
+  const base: GameState = {
+    answer,
+    guesses: [],
+    skips: 0,
+    isDaily: !isArchive,
+    isArchive,
+    status: 'playing',
+  }
   try {
-    const raw = localStorage.getItem(storageKey(mode))
+    const raw = localStorage.getItem(storageKey(mode, dateKey, isArchive))
     if (raw) {
       const saved = JSON.parse(raw) as PersistedDaily
-      if (saved.date === today && saved.answerName === answer.name) {
+      if (saved.date === dateKey && saved.answerName === answer.name) {
         const guesses = saved.guessNames
           .map((n) => COMMANDERS_BY_NAME.get(n))
           .filter((c): c is Commander => Boolean(c))
         const skips = saved.skips ?? 0
-        return { answer, guesses, skips, isDaily: true, status: deriveStatus(answer, guesses, skips, mode) }
+        return { ...base, guesses, skips, status: deriveStatus(answer, guesses, skips, mode) }
       }
     }
   } catch {
     /* ignore corrupt storage */
   }
-  return { answer, guesses: [], skips: 0, isDaily: true, status: 'playing' }
+  return base
 }
 
 function deriveStatus(answer: Commander, guesses: Commander[], skips: number, mode: Mode): GameState['status'] {
@@ -59,35 +72,50 @@ function deriveStatus(answer: Commander, guesses: Commander[], skips: number, mo
   return 'playing'
 }
 
-export function useGameState(mode: Mode) {
-  const [state, setState] = useState<GameState>(() => loadDaily(mode))
+/** Record a finished game into the right ledger: daily streak stats, or the archive map. */
+function recordResult(state: GameState, mode: Mode, dateKey: string, won: boolean, guessCount: number) {
+  if (state.isArchive) recordArchiveResult(mode, dateKey, won, guessCount)
+  else if (state.isDaily) recordDailyResult(mode, won, guessCount, dateKey)
+}
 
-  // Reload persisted/daily state when switching modes.
-  useEffect(() => {
-    setState(loadDaily(mode))
-  }, [mode])
+/**
+ * Game state for a mode. With no `archiveDate`, this drives the live daily puzzle.
+ * Pass a past `archiveDate` (YYYY-MM-DD) to replay that day's puzzle from the archive —
+ * such plays persist under a date-scoped key and never touch daily streak stats.
+ */
+export function useGameState(mode: Mode, archiveDate?: string) {
+  const today = todayKey()
+  const isArchive = Boolean(archiveDate && archiveDate !== today)
+  const dateKey = archiveDate ?? today
 
-  // Record a finished daily result into lifetime stats (idempotent per date+mode).
-  useEffect(() => {
-    if (!state.isDaily || state.status === 'playing') return
-    recordDailyResult(mode, state.status === 'won', state.guesses.length, todayKey())
-  }, [mode, state.isDaily, state.status, state.guesses.length])
+  const [state, setState] = useState<GameState>(() => loadGame(mode, dateKey, isArchive))
 
-  // Persist daily progress.
+  // Reload persisted state when switching modes or archive target.
   useEffect(() => {
-    if (!state.isDaily) return
+    setState(loadGame(mode, dateKey, isArchive))
+  }, [mode, dateKey, isArchive])
+
+  // Record a finished result (idempotent per date+mode / archive cell).
+  useEffect(() => {
+    if (state.status === 'playing') return
+    recordResult(state, mode, dateKey, state.status === 'won', state.guesses.length)
+  }, [mode, dateKey, state.isDaily, state.isArchive, state.status, state.guesses.length])
+
+  // Persist progress (both live daily and archive plays; not practice).
+  useEffect(() => {
+    if (!state.isDaily && !state.isArchive) return
     const payload: PersistedDaily = {
-      date: todayKey(),
+      date: dateKey,
       answerName: state.answer.name,
       guessNames: state.guesses.map((g) => g.name),
       skips: state.skips,
     }
     try {
-      localStorage.setItem(storageKey(mode), JSON.stringify(payload))
+      localStorage.setItem(storageKey(mode, dateKey, state.isArchive), JSON.stringify(payload))
     } catch {
       /* ignore */
     }
-  }, [mode, state])
+  }, [mode, dateKey, state])
 
   const guess = useCallback((commander: Commander) => {
     setState((prev) => {
@@ -96,12 +124,10 @@ export function useGameState(mode: Mode) {
       const guesses = [...prev.guesses, commander]
       const status = deriveStatus(prev.answer, guesses, prev.skips, mode)
       playSound(status === 'won' ? 'win' : status === 'lost' ? 'lose' : 'guess')
-      if (prev.isDaily && status !== 'playing') {
-        recordDailyResult(mode, status === 'won', guesses.length, todayKey())
-      }
+      if (status !== 'playing') recordResult(prev, mode, dateKey, status === 'won', guesses.length)
       return { ...prev, guesses, status }
     })
-  }, [mode])
+  }, [mode, dateKey])
 
   const skip = useCallback(() => {
     setState((prev) => {
@@ -109,30 +135,28 @@ export function useGameState(mode: Mode) {
       const skips = prev.skips + 1
       const status = deriveStatus(prev.answer, prev.guesses, skips, mode)
       playSound(status === 'lost' ? 'lose' : 'guess')
-      if (prev.isDaily && status !== 'playing') {
-        recordDailyResult(mode, status === 'won', prev.guesses.length, todayKey())
-      }
+      if (status !== 'playing') recordResult(prev, mode, dateKey, status === 'won', prev.guesses.length)
       return { ...prev, skips, status }
     })
-  }, [mode])
+  }, [mode, dateKey])
 
   const startPractice = useCallback(() => {
-    setState({ answer: randomAnswer(mode), guesses: [], skips: 0, isDaily: false, status: 'playing' })
+    setState({ answer: randomAnswer(mode), guesses: [], skips: 0, isDaily: false, isArchive: false, status: 'playing' })
   }, [mode])
 
   const backToDaily = useCallback(() => {
-    setState(loadDaily(mode))
-  }, [mode])
+    setState(loadGame(mode, today, false))
+  }, [mode, today])
 
-  // Debugging helper: wipe persisted progress for this mode and start fresh.
+  // Debugging helper: wipe persisted progress for this mode/date and start fresh.
   const reset = useCallback(() => {
     try {
-      localStorage.removeItem(storageKey(mode))
+      localStorage.removeItem(storageKey(mode, dateKey, isArchive))
     } catch {
       /* ignore */
     }
-    setState({ answer: dailyAnswer(mode), guesses: [], skips: 0, isDaily: true, status: 'playing' })
-  }, [mode])
+    setState(loadGame(mode, dateKey, isArchive))
+  }, [mode, dateKey, isArchive])
 
   return { state, guess, skip, startPractice, backToDaily, reset, maxGuesses: maxGuessesFor(mode) }
 }
