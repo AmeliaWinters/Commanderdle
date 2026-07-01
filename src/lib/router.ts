@@ -37,6 +37,19 @@ export function isPrivacyPath(pathname: string): boolean {
   return normalize(pathname) === '/privacy'
 }
 
+/** Bonus "Higher / Lower" game — its own page, deliberately outside the mode tabs. */
+export const HIGHER_LOWER_PATH = '/higher-lower'
+
+export function isHigherLowerPath(pathname: string): boolean {
+  return normalize(pathname) === HIGHER_LOWER_PATH
+}
+
+/** Client-side navigation to a bare path (used for pages outside the mode system). */
+export function navigateToPath(path: string): void {
+  window.history.pushState(null, '', path)
+  window.dispatchEvent(new PopStateEvent('popstate'))
+}
+
 export function modeFromPath(pathname: string): Mode {
   return PATH_TO_MODE[normalize(pathname)] ?? 'classic'
 }
@@ -63,8 +76,9 @@ export function useModeRoute(): [Mode, (mode: Mode) => void] {
 
   useEffect(() => {
     const onPop = () => {
-      if (!isPrivacyPath(window.location.pathname)) {
-        setMode(modeFromPath(window.location.pathname))
+      const path = window.location.pathname
+      if (!isPrivacyPath(path) && !isHigherLowerPath(path)) {
+        setMode(modeFromPath(path))
       }
     }
     window.addEventListener('popstate', onPop)

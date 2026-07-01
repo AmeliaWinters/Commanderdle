@@ -1,3 +1,9 @@
+import type { ComponentType } from 'react'
+import { TbLayoutGrid } from 'react-icons/tb'
+import { BsPersonFill } from 'react-icons/bs'
+import { FiZoomIn } from 'react-icons/fi'
+import { LuNetwork } from 'react-icons/lu'
+import { FaQuoteRight } from 'react-icons/fa6'
 import type { Mode } from '../types/commander'
 import { MODE_PATHS } from '../lib/router'
 
@@ -6,12 +12,14 @@ interface Props {
   onNavigate: (m: Mode) => void
 }
 
-const MODES: { id: Mode; label: string; }[] = [
-  { id: 'classic', label: 'Classic' },
-  { id: 'silhouette', label: 'Silhouette'},
-  { id: 'zoom', label: 'Zoom' },
-  { id: 'synergy', label: 'Synergy' },
-  { id: 'quote', label: 'Quote' },
+// Each mode carries a small glyph that previews the kind of puzzle it is, so the
+// nav reads as the personality of the site rather than a row of identical boxes.
+const MODES: { id: Mode; label: string; Icon: ComponentType }[] = [
+  { id: 'classic', label: 'Classic', Icon: TbLayoutGrid },
+  { id: 'silhouette', label: 'Silhouette', Icon: BsPersonFill },
+  { id: 'zoom', label: 'Zoom', Icon: FiZoomIn },
+  { id: 'synergy', label: 'Synergy', Icon: LuNetwork },
+  { id: 'quote', label: 'Quote', Icon: FaQuoteRight },
 ]
 
 export default function ModeTabs({ mode, onNavigate }: Props) {
@@ -32,6 +40,9 @@ export default function ModeTabs({ mode, onNavigate }: Props) {
             onNavigate(m.id)
           }}
         >
+          <span className="mode-icon">
+            <m.Icon />
+          </span>
           <span className="mode-label">{m.label}</span>
         </a>
       ))}

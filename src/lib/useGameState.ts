@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import type { Commander, Mode } from '../types/commander'
 import { COMMANDERS_BY_NAME } from './commanders'
 import { dailyAnswer, randomAnswer, todayKey } from './dailyAnswer'
+import { recordDailyResult } from './stats'
 
 const MAX_GUESSES_BY_MODE: Record<Mode, number> = {
   classic: 6,
@@ -65,6 +66,12 @@ export function useGameState(mode: Mode) {
     setState(loadDaily(mode))
   }, [mode])
 
+  // Record a finished daily result into lifetime stats (idempotent per date+mode).
+  useEffect(() => {
+    if (!state.isDaily || state.status === 'playing') return
+    recordDailyResult(mode, state.status === 'won', state.guesses.length, todayKey())
+  }, [mode, state.isDaily, state.status, state.guesses.length])
+
   // Persist daily progress.
   useEffect(() => {
     if (!state.isDaily) return
@@ -86,7 +93,11 @@ export function useGameState(mode: Mode) {
       if (prev.status !== 'playing') return prev
       if (prev.guesses.some((g) => g.name === commander.name)) return prev
       const guesses = [...prev.guesses, commander]
-      return { ...prev, guesses, status: deriveStatus(prev.answer, guesses, prev.skips, mode) }
+      const status = deriveStatus(prev.answer, guesses, prev.skips, mode)
+      if (prev.isDaily && status !== 'playing') {
+        recordDailyResult(mode, status === 'won', guesses.length, todayKey())
+      }
+      return { ...prev, guesses, status }
     })
   }, [mode])
 
@@ -94,7 +105,11 @@ export function useGameState(mode: Mode) {
     setState((prev) => {
       if (prev.status !== 'playing') return prev
       const skips = prev.skips + 1
-      return { ...prev, skips, status: deriveStatus(prev.answer, prev.guesses, skips, mode) }
+      const status = deriveStatus(prev.answer, prev.guesses, skips, mode)
+      if (prev.isDaily && status !== 'playing') {
+        recordDailyResult(mode, status === 'won', prev.guesses.length, todayKey())
+      }
+      return { ...prev, skips, status }
     })
   }, [mode])
 
