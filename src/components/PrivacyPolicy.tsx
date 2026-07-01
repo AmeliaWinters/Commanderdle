@@ -14,7 +14,7 @@ export default function PrivacyPolicy() {
         <section>
           <h3>Who we are</h3>
           <p>
-            Commanderdle is a free, unofficial fan game for Magic: The Gathering. It is not affiliated with or endorsed
+            Commandle is a free, unofficial fan game for Magic: The Gathering. It is not affiliated with or endorsed
             by Wizards of the Coast.
           </p>
         </section>

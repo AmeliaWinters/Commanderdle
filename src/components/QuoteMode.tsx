@@ -33,7 +33,6 @@ export default function QuoteMode({
   skips,
   wrongGuesses,
   maxGuesses,
-  solved,
   onSkip,
 }: Props) {
   const all = hints(answer);

@@ -62,6 +62,9 @@ export default function GuessInput({ onGuess, disabledNames, disabled, blurQuote
         placeholder="Type a commander name…"
         disabled={disabled}
         autoComplete="off"
+        autoCapitalize="off"
+        autoCorrect="off"
+        enterKeyHint="go"
         spellCheck={false}
         onChange={(e) => {
           setQuery(e.target.value)

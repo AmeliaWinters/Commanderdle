@@ -20,11 +20,62 @@ const PATH_TO_MODE: Record<string, Mode> = Object.fromEntries(
 ) as Record<string, Mode>
 
 const MODE_TITLES: Record<Mode, string> = {
-  classic: 'Commanderdle — Classic',
-  silhouette: 'Commanderdle — Silhouette',
-  zoom: 'Commanderdle — Zoom',
-  synergy: 'Commanderdle — Synergy',
-  quote: 'Commanderdle — Quote',
+  classic: 'Commandle — Classic',
+  silhouette: 'Commandle — Silhouette',
+  zoom: 'Commandle — Zoom',
+  synergy: 'Commandle — Synergy',
+  quote: 'Commandle — Quote',
+}
+
+const MODE_DESCRIPTIONS: Record<Mode, string> = {
+  classic:
+    'Guess the daily Magic: The Gathering commander from clues about its colors, type, and stats. A fresh puzzle every day.',
+  silhouette:
+    'Name the daily MTG commander from its card-art silhouette alone. A new outline to identify every day.',
+  zoom: 'Identify the daily MTG commander from a zoomed-in crop of its card art. The view widens with each guess.',
+  synergy:
+    'Guess the daily MTG commander from the cards it synergizes with most. A new synergy puzzle every day.',
+  quote: 'Name the daily MTG commander from its flavor text and quotes. A new quote to place every day.',
+}
+
+/** Canonical site origin (no trailing slash), configurable per deploy. */
+const SITE_URL = (import.meta.env.VITE_SITE_URL ?? 'https://commandle.com').replace(/\/$/, '')
+
+/** Set (or create) a <meta name=…> or <meta property=…> tag's content. */
+function setMeta(attr: 'name' | 'property', key: string, content: string) {
+  let el = document.head.querySelector<HTMLMetaElement>(`meta[${attr}="${key}"]`)
+  if (!el) {
+    el = document.createElement('meta')
+    el.setAttribute(attr, key)
+    document.head.appendChild(el)
+  }
+  el.setAttribute('content', content)
+}
+
+/** Point the canonical <link> at the given absolute URL. */
+function setCanonical(url: string) {
+  let el = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]')
+  if (!el) {
+    el = document.createElement('link')
+    el.rel = 'canonical'
+    document.head.appendChild(el)
+  }
+  el.href = url
+}
+
+/** Keep the document's SEO/social meta in sync with the active mode. */
+function applyModeMeta(mode: Mode) {
+  const url = SITE_URL + MODE_PATHS[mode]
+  const title = MODE_TITLES[mode]
+  const desc = MODE_DESCRIPTIONS[mode]
+  document.title = title
+  setMeta('name', 'description', desc)
+  setCanonical(url)
+  setMeta('property', 'og:title', title)
+  setMeta('property', 'og:description', desc)
+  setMeta('property', 'og:url', url)
+  setMeta('name', 'twitter:title', title)
+  setMeta('name', 'twitter:description', desc)
 }
 
 function normalize(pathname: string): string {
@@ -87,7 +138,7 @@ export function useModeRoute(): [Mode, (mode: Mode) => void] {
 
   // Keep the document title and pageview tracking in step with the active mode.
   useEffect(() => {
-    document.title = MODE_TITLES[mode]
+    applyModeMeta(mode)
     trackPageview(mode)
   }, [mode])
 

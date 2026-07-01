@@ -29,6 +29,14 @@ import CardBackdrop from "./CardBackdrop";
 import AdBanner, { toggleAdTestMode, isAdTestMode } from "./AdBanner";
 import PrivacyPolicy from "./PrivacyPolicy";
 import HigherLowerMode from "./HigherLowerMode";
+import HowToPlay, { hasSeenHowTo } from "./HowToPlay";
+import {
+  preloadSounds,
+  isMuted,
+  toggleMuted,
+  onMuteChange,
+} from "../lib/sounds";
+import { FiSettings } from "react-icons/fi";
 
 /** Tracks whether the URL matches one of the standalone (non-mode) pages. */
 function usePathMatch(match: (pathname: string) => boolean) {
@@ -47,10 +55,18 @@ export default function App() {
   const [mode, setMode] = useModeRoute();
   const [poolOpen, setPoolOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [howToOpen, setHowToOpen] = useState(false);
   const [adTest, setAdTest] = useState(isAdTestMode);
   const [countdown, setCountdown] = useState(() =>
     formatCountdown(msUntilNextPuzzle()),
   );
+  const [muted, setMuted] = useState(isMuted);
+
+  // Warm the audio cache on first mount and keep the mute button in sync.
+  useEffect(() => {
+    preloadSounds();
+    return onMuteChange(setMuted);
+  }, []);
 
   // Tick the "next puzzle in" countdown once a second.
   useEffect(() => {
@@ -60,6 +76,11 @@ export default function App() {
     );
     return () => clearInterval(id);
   }, []);
+
+  // Show the how-to-play once per mode the first time it's opened.
+  useEffect(() => {
+    if (!hasSeenHowTo(mode)) setHowToOpen(true);
+  }, [mode]);
 
   // Close the header overflow menu on any outside click or Escape.
   useEffect(() => {
@@ -139,14 +160,25 @@ export default function App() {
         <div className="menu-wrap">
           <button
             className="menu-btn"
-            aria-label="Menu"
+            aria-label="Settings"
             aria-expanded={menuOpen}
             onClick={(e) => {
               e.stopPropagation();
               setMenuOpen((o) => !o);
             }}
           >
-            <span className="menu-dots">⋯</span>
+            <FiSettings className="menu-cog" />
+          </button>
+          <button
+            className="menu-btn help-btn"
+            aria-label="How to play"
+            title="How to play"
+            onClick={(e) => {
+              e.stopPropagation();
+              setHowToOpen(true);
+            }}
+          >
+            ?
           </button>
           {menuOpen && (
             <div className="menu-pop" onClick={(e) => e.stopPropagation()}>
@@ -200,6 +232,12 @@ export default function App() {
                 Higher / Lower ↗
               </button>
               <button
+                aria-pressed={!muted}
+                onClick={() => toggleMuted()}
+              >
+                Sound effects: {muted ? "Off 🔇" : "On 🔊"}
+              </button>
+              <button
                 className="menu-reset"
                 onClick={() => {
                   reset();
@@ -227,6 +265,10 @@ export default function App() {
         onNavigate={setMode}
         completedSignal={`${mode}:${isDaily}:${status}`}
       />
+
+      {howToOpen && (
+        <HowToPlay mode={mode} onClose={() => setHowToOpen(false)} />
+      )}
 
       {poolOpen && (
         <PoolModal
@@ -409,7 +451,7 @@ export default function App() {
         <AdBanner />
         <footer className="app-footer">
           <p className="footer-meta">
-            Commanderdle No. {puzzleNumber()} · Next commander in{" "}
+            Commandle No. {puzzleNumber()} · Next commander in{" "}
             <strong>{countdown}</strong>
           </p>
           Data from{" "}

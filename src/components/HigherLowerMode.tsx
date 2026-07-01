@@ -13,7 +13,9 @@ import {
   todayKey,
 } from "../lib/dailyAnswer";
 import { navigateToPath, MODE_PATHS } from "../lib/router";
+import { shareOrCopy } from "../lib/share";
 import CardBackdrop from "./CardBackdrop";
+import { playSound } from "../lib/sounds";
 
 type Status = "playing" | "over";
 type Guess = "higher" | "lower";
@@ -135,11 +137,14 @@ export default function HigherLowerMode() {
     // Hold on the reveal, then either advance the chain or end the run.
     setTimeout(() => {
       setReveal(null);
-      setState((prev) =>
-        correct
-          ? { ...prev, score: prev.score + 1 }
-          : { ...prev, status: "over" },
-      );
+      setState((prev) => {
+        if (correct) {
+          playSound(prev.score + 1 >= HL_MAX_SCORE ? "win" : "guess");
+          return { ...prev, score: prev.score + 1 };
+        }
+        playSound("lose");
+        return { ...prev, status: "over" };
+      });
     }, 1300);
   }
 
@@ -150,9 +155,8 @@ export default function HigherLowerMode() {
     const scoreText = `${score}/${HL_MAX_SCORE}`;
     const text =
       `Commandle Higher/Lower #${puzzleNumber()} ${scoreText}\n` +
-      `${squares}${miss}\n` +
-      `https://github.com/AmeliaWinters/Commanderdle`;
-    navigator.clipboard?.writeText(text).then(
+      `${squares}${miss}`;
+    shareOrCopy(text).then(
       () => {
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
@@ -169,7 +173,7 @@ export default function HigherLowerMode() {
           className="hl-back"
           onClick={() => navigateToPath(MODE_PATHS.classic)}
         >
-          ← Back to Commanderdle
+          ← Back to Commandle
         </button>
         <h1>
           Higher <span className="accent">/</span> Lower

@@ -344,6 +344,11 @@ body::before {
   z-index: 20;
 }
 
+.menu-cog {
+  width: 20px;
+  height: 20px;
+}
+
 .menu-btn {
   background: var(--panel);
   border: 1px solid var(--line);
@@ -575,6 +580,18 @@ body::before {
     flex: none;
     max-width: none;
   }
+  /* Comfortable tap targets on touch screens (min ~44px). */
+  .menu-btn {
+    width: 44px;
+    height: 44px;
+  }
+  .skip-btn {
+    width: 36px;
+    height: 36px;
+  }
+  .pool-peek-btn {
+    min-height: 44px;
+  }
 }
 
 .guess-input input {
@@ -776,10 +793,23 @@ body::before {
   font-variant-numeric: tabular-nums;
 }
 
+/* Clue cells flip in with the same tile reveal as the guess cells whenever the
+   deduction they show updates (a fresh remount via a changing React key). */
+.deduction-cell:not(.empty):not(.deduction-title-cell) {
+  animation: reveal 1.25s cubic-bezier(0.3, 0.7, 0.3, 1.05) both;
+  transform-origin: center;
+}
+
 .deduction-cell.empty {
   background: transparent;
   border-style: dashed;
   opacity: 0.22;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .deduction-cell {
+    animation: none;
+  }
 }
 
 .deduction-title-cell {
@@ -1004,6 +1034,45 @@ span.ded-maybe::before {
   margin-left: 3px;
   font-size: 0.82rem;
   opacity: 0.9;
+}
+
+/* Mobile-first: let the Classic board fit the viewport instead of forcing a
+   640px horizontal scroll. Cells and gaps compress; the name thumbnail is
+   dropped to buy width for the name text. */
+@media (max-width: 560px) {
+  .results-table {
+    min-width: 0;
+    width: 100%;
+  }
+  .grid-row {
+    grid-template-columns: 1.7fr 1.1fr 0.7fr 0.7fr 0.7fr 0.9fr 0.7fr;
+    gap: 4px;
+    margin-bottom: 4px;
+  }
+  .grid-cell {
+    min-height: 46px;
+    border-radius: 7px;
+  }
+  .cell-inner {
+    padding: 3px;
+    gap: 3px;
+  }
+  .name-thumb {
+    display: none;
+  }
+  .name-text {
+    font-size: 0.7rem;
+  }
+  .head-cell {
+    font-size: 0.5rem;
+    letter-spacing: 0.02em;
+    padding: 2px 1px;
+  }
+  .deduction-cell {
+    min-height: 34px;
+    font-size: 0.68rem;
+    padding: 3px;
+  }
 }
 
 /* feedback colors */
@@ -1308,6 +1377,14 @@ span.ded-maybe::before {
   margin: 0 0 14px;
 }
 
+.share-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+}
+
 .share-btn {
   background: var(--flame);
   color: #1a0d02;
@@ -1318,10 +1395,23 @@ span.ded-maybe::before {
   padding: 10px 20px;
   border-radius: 8px;
   cursor: pointer;
+  min-height: 44px;
 }
 
 .share-btn:hover {
   filter: brightness(1.08);
+}
+
+/* Secondary "recap" action reads as a companion to the primary share. */
+.share-recap {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--flame);
+}
+
+.share-recap:hover {
+  filter: none;
+  background: rgba(227, 171, 38, 0.12);
 }
 
 .result-countdown {
@@ -1759,6 +1849,37 @@ span.ded-maybe::before {
 
 .modal-close:active {
   transform: scale(0.94);
+}
+
+/* ---------- How to play ---------- */
+.howto-modal {
+  max-width: 420px;
+}
+
+.howto-intro {
+  margin: 0 0 12px;
+  color: var(--text);
+  line-height: 1.45;
+}
+
+.howto-list {
+  margin: 0 0 16px;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+
+.howto-got-it {
+  align-self: center;
+  width: 100%;
+  max-width: 200px;
+}
+
+.help-btn {
+  font-weight: 700;
 }
 
 .pool-search {

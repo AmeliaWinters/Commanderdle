@@ -20,8 +20,8 @@ const CARD_W = 300
 export default function CardZoom({ name, image, children, className }: Props) {
   const [pos, setPos] = useState<{ top: number; left: number } | null>(null)
 
-  const show = (e: React.MouseEvent<HTMLSpanElement>) => {
-    const r = e.currentTarget.getBoundingClientRect()
+  const placeFrom = (el: HTMLElement) => {
+    const r = el.getBoundingClientRect()
     const vw = Math.max(window.innerWidth, document.documentElement.clientWidth, 320)
     const vh = Math.max(window.innerHeight, document.documentElement.clientHeight, 320)
     const w = Math.min(CARD_W, vw * 0.7)
@@ -33,11 +33,21 @@ export default function CardZoom({ name, image, children, className }: Props) {
     setPos({ top, left })
   }
 
+  const show = (e: React.MouseEvent<HTMLSpanElement>) => placeFrom(e.currentTarget)
+
+  // Touch has no hover, so tapping toggles the preview; a second tap (or a tap
+  // on the portaled image) dismisses it.
+  const toggle = (e: React.MouseEvent<HTMLSpanElement>) => {
+    if (pos) setPos(null)
+    else placeFrom(e.currentTarget)
+  }
+
   return (
     <span
       className={`card-zoom-anchor${className ? ` ${className}` : ''}`}
       onMouseEnter={show}
       onMouseLeave={() => setPos(null)}
+      onClick={toggle}
     >
       {children}
       {pos &&
@@ -48,6 +58,7 @@ export default function CardZoom({ name, image, children, className }: Props) {
             role="img"
             aria-label={name}
             style={{ top: pos.top, left: pos.left }}
+            onClick={() => setPos(null)}
           >
             <img src={image} alt={name} loading="eager" />
           </span>,

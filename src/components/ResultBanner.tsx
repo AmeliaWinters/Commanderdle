@@ -7,6 +7,8 @@ import {
   formatCountdown,
 } from "../lib/dailyAnswer";
 import { navigateToPath, HIGHER_LOWER_PATH } from "../lib/router";
+import { shareOrCopy } from "../lib/share";
+import { buildDailyRecap } from "../lib/dailyRecap";
 import CardZoom from "./CardZoom";
 import StatsPanel from "./StatsPanel";
 
@@ -83,8 +85,14 @@ export default function ResultBanner({
   isDaily,
 }: Props) {
   const [copied, setCopied] = useState(false);
+  const [recapCopied, setRecapCopied] = useState(false);
   const countdown = useCountdown(isDaily);
   const guessCount = guesses.length;
+
+  const flash = (set: (v: boolean) => void) => {
+    set(true);
+    setTimeout(() => set(false), 2000);
+  };
 
   const share = () => {
     const grid = buildGrid(mode, guesses, answer, status);
@@ -92,14 +100,18 @@ export default function ResultBanner({
     const heading = isDaily
       ? `Commandle ${MODE_LABEL[mode]} #${puzzleNumber()} ${score}`
       : `Commandle ${MODE_LABEL[mode]} (practice) ${score}`;
-    const text = `${heading}\n${grid}\nhttps://github.com/AmeliaWinters/Commanderdle`;
-    navigator.clipboard?.writeText(text).then(
-      () => {
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-      },
-      () => {},
-    );
+    // Daily results nudge a return visit with the countdown; practice has no countdown.
+    const footer = isDaily ? `\nNext commander in ${countdown}` : "";
+    const text = `${heading}\n${grid}${footer}`;
+    shareOrCopy(text).then(() => flash(setCopied), () => {});
+  };
+
+  // Aggregated recap of every mode finished today (daily only).
+  const recap = isDaily ? buildDailyRecap() : null;
+  const shareRecap = () => {
+    if (!recap) return;
+    const text = `${recap}\nNext commander in ${countdown}`;
+    shareOrCopy(text).then(() => flash(setRecapCopied), () => {});
   };
 
   return (
@@ -127,9 +139,16 @@ export default function ResultBanner({
             #{answer.rank} on EDHREC. In {answer.numDecks.toLocaleString()}{" "}
             decks
           </p>
-          <button className="share-btn" onClick={share}>
-            {copied ? "Copied!" : "Share result"}
-          </button>
+          <div className="share-row">
+            <button className="share-btn" onClick={share}>
+              {copied ? "Copied!" : "Share result"}
+            </button>
+            {recap && (
+              <button className="share-btn share-recap" onClick={shareRecap}>
+                {recapCopied ? "Copied!" : "Share today's recap"}
+              </button>
+            )}
+          </div>
           {isDaily && (
             <p className="result-countdown">
               Next commander in <strong>{countdown}</strong>

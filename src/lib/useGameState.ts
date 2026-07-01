@@ -3,6 +3,7 @@ import type { Commander, Mode } from '../types/commander'
 import { COMMANDERS_BY_NAME } from './commanders'
 import { dailyAnswer, randomAnswer, todayKey } from './dailyAnswer'
 import { recordDailyResult } from './stats'
+import { playSound } from './sounds'
 
 const MAX_GUESSES_BY_MODE: Record<Mode, number> = {
   classic: 6,
@@ -94,6 +95,7 @@ export function useGameState(mode: Mode) {
       if (prev.guesses.some((g) => g.name === commander.name)) return prev
       const guesses = [...prev.guesses, commander]
       const status = deriveStatus(prev.answer, guesses, prev.skips, mode)
+      playSound(status === 'won' ? 'win' : status === 'lost' ? 'lose' : 'guess')
       if (prev.isDaily && status !== 'playing') {
         recordDailyResult(mode, status === 'won', guesses.length, todayKey())
       }
@@ -106,6 +108,7 @@ export function useGameState(mode: Mode) {
       if (prev.status !== 'playing') return prev
       const skips = prev.skips + 1
       const status = deriveStatus(prev.answer, prev.guesses, skips, mode)
+      playSound(status === 'lost' ? 'lose' : 'guess')
       if (prev.isDaily && status !== 'playing') {
         recordDailyResult(mode, status === 'won', prev.guesses.length, todayKey())
       }
