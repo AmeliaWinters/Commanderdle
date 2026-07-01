@@ -53,7 +53,9 @@ export default function SynergyMode({
               className={`synergy-card${shown ? "" : " hidden"}`}
             >
               {shown ? (
-                c.image && <CardZoomCard name={c.name} image={c.image} />
+                c.image && (
+                  <CardZoomCard name={c.name} image={c.image} synergy={c.synergy} />
+                )
               ) : (
                 <div className="synergy-card-back" aria-hidden="true">
                   ?
@@ -74,12 +76,28 @@ export default function SynergyMode({
   );
 }
 
-/** A revealed synergy card with the shared hover-zoom popover. */
-function CardZoomCard({ name, image }: { name: string; image: string }) {
+/** A revealed synergy card with the shared hover-zoom popover and its EDHREC synergy score. */
+function CardZoomCard({
+  name,
+  image,
+  synergy,
+}: {
+  name: string;
+  image: string;
+  synergy: number;
+}) {
   return (
     <CardZoom name={name} image={image} className="synergy-card-zoom">
       <figure className="synergy-card-img">
         <img src={image} alt={name} loading="eager" draggable={false} />
+        {synergy > 0 && (
+          <span
+            className="synergy-card-pct"
+            title="EDHREC synergy score — how much more this card appears in this commander's decks than average"
+          >
+            +{Math.round(synergy * 100)}%
+          </span>
+        )}
       </figure>
     </CardZoom>
   );

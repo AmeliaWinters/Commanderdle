@@ -17,6 +17,7 @@ import {
   msUntilNextPuzzle,
   formatCountdown,
 } from "../lib/dailyAnswer";
+import { syncServerTime, clockAheadPuzzles } from "../lib/serverTime";
 import { isArchiveCompleted } from "../lib/archive";
 import {
   isReminderEnabled,
@@ -82,6 +83,10 @@ export default function App() {
   const [routeMode, setMode] = useModeRoute();
   const mode = archivePlay ? archivePlay.mode : routeMode;
   const [reminderOn, setReminderOn] = useState(isReminderEnabled);
+  // First-visit-from-a-shared-link nudge (?from=share). Shown once, dismissible.
+  const [fromShare, setFromShare] = useState(
+    () => new URLSearchParams(window.location.search).get("from") === "share",
+  );
   const [poolOpen, setPoolOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [howToOpen, setHowToOpen] = useState(false);
@@ -90,6 +95,25 @@ export default function App() {
     formatCountdown(msUntilNextPuzzle()),
   );
   const [muted, setMuted] = useState(isMuted);
+  // Anti-time-travel: 'ahead' means the device clock is set forward into a future
+  // puzzle, verified against authoritative server time. 'unknown' = not yet checked
+  // or offline (we trust the local clock in that case).
+  const [clockState, setClockState] = useState<"unknown" | "ok" | "ahead">(
+    "unknown",
+  );
+
+  // Verify the device clock against server time once on mount.
+  useEffect(() => {
+    let alive = true;
+    void syncServerTime().then(() => {
+      if (!alive) return;
+      const ahead = clockAheadPuzzles();
+      setClockState(ahead != null && ahead >= 1 ? "ahead" : "ok");
+    });
+    return () => {
+      alive = false;
+    };
+  }, []);
 
   // Warm the audio cache on first mount and keep the mute button in sync.
   useEffect(() => {
@@ -146,6 +170,8 @@ export default function App() {
     guesses.filter((g) => g.name !== answer.name).length + skips;
   const solved = status === "won";
   const done = status !== "playing";
+  // Block only the live daily when the clock is ahead; archive/practice are exempt.
+  const clockBlocked = clockState === "ahead" && isDaily && !isArchive;
   const disabledNames = new Set(guesses.map((g) => g.name));
 
   // Classic mode: the card-pool peek unlocks after 4 wrong guesses and is filtered
@@ -334,6 +360,19 @@ export default function App() {
         </div>
       )}
 
+      {fromShare && !isArchive && (
+        <div className="challenge-banner">
+          <span>🔥 You’ve been challenged — solve today’s puzzle!</span>
+          <button
+            className="challenge-dismiss"
+            aria-label="Dismiss"
+            onClick={() => setFromShare(false)}
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
       <ModeTabs
         mode={mode}
         onNavigate={
@@ -380,6 +419,10 @@ export default function App() {
       )}
 
       <main className="play-area">
+        {clockBlocked ? (
+          <ClockAheadNotice />
+        ) : (
+          <>
         {!done && mode === "silhouette" && (
           <SilhouetteMode
             answer={answer}
@@ -495,25 +538,15 @@ export default function App() {
         )}
 
         {done && (
-          <>
-            <ResultBanner
-              status={status as "won" | "lost"}
-              answer={answer}
-              guesses={guesses}
-              mode={mode}
-              maxGuesses={maxGuesses}
-              isDaily={isDaily}
-            />
-            <GuessDots
-              dots={Array.from({ length: maxGuesses }, (_, i) => {
-                const g = guesses[i];
-                if (g) return g.name === answer.name ? "correct" : "wrong";
-                return i < guesses.length + skips ? "wrong" : "empty";
-              })}
-              wrongGuesses={wrongGuesses}
-              maxGuesses={maxGuesses}
-            />
-          </>
+          <ResultBanner
+            status={status as "won" | "lost"}
+            answer={answer}
+            guesses={guesses}
+            mode={mode}
+            maxGuesses={maxGuesses}
+            isDaily={isDaily}
+            skips={skips}
+          />
         )}
 
         {mode === "classic" && !done && (
@@ -536,6 +569,8 @@ export default function App() {
           />
         ) : (
           <GuessList guesses={guesses} answer={answer} />
+        )}
+          </>
         )}
       </main>
 
@@ -592,6 +627,26 @@ export default function App() {
           )}
         </footer>
       </div>
+    </div>
+  );
+}
+
+/** Shown in place of the live daily when the device clock is set ahead of real time. */
+function ClockAheadNotice() {
+  return (
+    <div className="clock-notice" role="alert">
+      <div className="clock-notice-icon" aria-hidden="true">
+        🕰️
+      </div>
+      <h2>Your clock is running ahead</h2>
+      <p>
+        Your device&rsquo;s date looks set into the future, so today&rsquo;s
+        puzzle isn&rsquo;t available yet. Everyone plays the same commander on
+        the same day — set your clock back to the correct date to play.
+      </p>
+      <p className="clock-notice-sub">
+        The Archive is still open if you&rsquo;d like to replay past puzzles.
+      </p>
     </div>
   );
 }

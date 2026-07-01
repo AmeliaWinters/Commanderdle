@@ -1,0 +1,21 @@
+# Cloudflare Pages config. The static bundle in `dist/` plus the edge Functions in
+# `functions/` deploy together as one Pages project — no separate Worker, no new vendor.
+#
+# Only the `functions/api/*` routes need a binding: the D1 database that backs global
+# solve statistics (Phase 3). Everything else (share/og Functions, the SPA) is stateless.
+#
+# The binding is optional at runtime: `functions/api/stats` degrades to 503 when `STATS_DB`
+# is absent, and the client treats any failure as "no community data", so the game still
+# works 100% offline/static if the database is unconfigured or down.
+
+name = "commandle"
+pages_build_output_dir = "dist"
+compatibility_date = "2024-11-01"
+
+# Create once with:  npx wrangler d1 create commandle-stats
+# then paste the printed database_id below (and mirror this binding in the Pages
+# dashboard → Settings → Functions → D1 bindings for the production deploy).
+[[d1_databases]]
+binding = "STATS_DB"
+database_name = "commandle-stats"
+database_id = "REPLACE_WITH_D1_DATABASE_ID"

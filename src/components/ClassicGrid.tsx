@@ -43,12 +43,32 @@ function arrow(kind: MatchKind, direction?: string): string {
   return direction === "up" ? "↑" : "↓";
 }
 
+/** Spoken description of a cell for screen readers — conveys the colour-coded clue
+ * (match / close / no match) and arrow direction that sighted players read visually. */
+function cellAria(col: ComparedColumn): string {
+  const value = col.colors
+    ? col.colors.length
+      ? col.colors.join(" ")
+      : "colorless"
+    : col.display;
+  const kind =
+    col.kind === "exact" ? "match" : col.kind === "partial" ? "close" : "no match";
+  const dir =
+    col.kind !== "exact" && col.direction === "up"
+      ? ", answer is higher"
+      : col.kind !== "exact" && col.direction === "down"
+        ? ", answer is lower"
+        : "";
+  return `${col.label}: ${value}, ${kind}${dir}`;
+}
+
 function Cell({ col, index }: { col: ComparedColumn; index: number }) {
   return (
     <div
       className={`grid-cell match-${col.kind}`}
       style={{ animationDelay: `${index * 0.5}s` }}
-      title={col.label}
+      role="cell"
+      aria-label={cellAria(col)}
     >
       <div className="cell-inner">
         {col.colors !== undefined ? (
@@ -73,11 +93,18 @@ function GuessRow({ guess, answer }: { guess: Commander; answer: Commander }) {
   const solved = guess.name === answer.name;
   // Hidden clue: tint the name amber when it shares a word with the answer.
   const shareWord = !solved && sharesNameWord(guess.name, answer.name);
+  const nameAria = solved
+    ? `${guess.name}, correct`
+    : shareWord
+      ? `${guess.name}, shares a word with the answer`
+      : guess.name;
   return (
-    <div className="grid-row">
+    <div className="grid-row" role="row">
       <div
         className={`grid-cell name-cell${shareWord ? " match-partial" : ""}`}
         style={{ animationDelay: "0s" }}
+        role="cell"
+        aria-label={nameAria}
       >
         <CardZoom
           name={guess.name}
@@ -232,10 +259,16 @@ function DeductionRow({ guesses, answer }: Props) {
   ];
 
   return (
-    <div className="grid-row deduction-row" title="What we know so far">
-      <div className="deduction-cell deduction-title-cell">Clues</div>
+    <div
+      className="grid-row deduction-row"
+      role="row"
+      aria-label="Clues deduced so far"
+    >
+      <div className="deduction-cell deduction-title-cell" role="cell">
+        Clues
+      </div>
       {cells.map((cell, i) =>
-        cloneElement(cell, { key: `${i}:${reflectCount(i)}` }),
+        cloneElement(cell, { key: `${i}:${reflectCount(i)}`, role: "cell" }),
       )}
     </div>
   );
@@ -249,11 +282,15 @@ export default function ClassicGrid({
   const remaining = Math.max(0, maxGuesses - guesses.length);
   return (
     <div className="results-wrap">
-      <div className="results-table">
+      <div
+        className="results-table"
+        role="table"
+        aria-label="Guess comparison grid"
+      >
         <DeductionRow guesses={guesses} answer={answer} />
-        <div className="grid-row grid-head">
+        <div className="grid-row grid-head" role="row">
           {HEADERS.map((h) => (
-            <div key={h} className="grid-cell head-cell">
+            <div key={h} className="grid-cell head-cell" role="columnheader">
               {h}
             </div>
           ))}

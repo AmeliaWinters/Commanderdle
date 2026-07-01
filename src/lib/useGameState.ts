@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
 import type { Commander, Mode } from '../types/commander'
 import { COMMANDERS_BY_NAME } from './commanders'
-import { dailyAnswer, randomAnswer, todayKey } from './dailyAnswer'
+import { dailyAnswer, randomAnswer, todayKey, puzzleNumber } from './dailyAnswer'
 import { recordDailyResult } from './stats'
 import { recordArchiveResult } from './archive'
+import { submitGlobalResult } from './api'
+import type { ShareMode } from './shareCode'
 import { playSound } from './sounds'
 
 const MAX_GUESSES_BY_MODE: Record<Mode, number> = {
@@ -98,7 +100,14 @@ export function useGameState(mode: Mode, archiveDate?: string) {
   // Record a finished result (idempotent per date+mode / archive cell).
   useEffect(() => {
     if (state.status === 'playing') return
-    recordResult(state, mode, dateKey, state.status === 'won', state.guesses.length)
+    const won = state.status === 'won'
+    recordResult(state, mode, dateKey, won, state.guesses.length)
+    // Contribute to the anonymous community aggregate (live daily only; best-effort,
+    // deduped server-side). A loss records the guess cap as guesses-used.
+    if (state.isDaily && !state.isArchive) {
+      const guesses = won ? state.guesses.length : maxGuessesFor(mode)
+      void submitGlobalResult(mode as ShareMode, puzzleNumber(dateKey), won, guesses)
+    }
   }, [mode, dateKey, state.isDaily, state.isArchive, state.status, state.guesses.length])
 
   // Persist progress (both live daily and archive plays; not practice).

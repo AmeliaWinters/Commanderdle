@@ -1,6 +1,9 @@
 import { useMemo } from "react";
 import type { Mode } from "../types/commander";
 import { loadStats } from "../lib/stats";
+import { puzzleNumber } from "../lib/dailyAnswer";
+import type { ShareMode } from "../lib/shareCode";
+import GlobalStats from "./GlobalStats";
 
 interface Props {
   mode: Mode;
@@ -60,6 +63,12 @@ export default function StatsPanel({ mode, maxGuesses, highlight }: Props) {
           })
         )}
       </div>
+      <GlobalStats
+        mode={mode as ShareMode}
+        puzzle={puzzleNumber()}
+        maxGuesses={maxGuesses}
+        highlight={highlight}
+      />
     </div>
   );
 }

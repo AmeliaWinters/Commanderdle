@@ -693,6 +693,13 @@ body::before {
   position: fixed;
 }
 
+/* Narrow-screen popover: centered, explicitly sized, and tappable to dismiss
+   (touch has no hover, so the enlarged card itself is the close target). */
+.card-zoom.fixed.narrow {
+  max-width: none;
+  pointer-events: auto;
+}
+
 /* Search-dropdown popover: anchored to the input wrapper. */
 .card-zoom.place-right {
   position: absolute;
@@ -1600,6 +1607,38 @@ span.ded-maybe::before {
   color: #1a0d02;
 }
 
+/* ---------- Community (global) stats ---------- */
+.global-stats {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.global-stats-title {
+  font-family: "Cinzel", serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin: 0 0 8px;
+}
+
+.global-stats-lead {
+  font-size: 0.9rem;
+  color: var(--text);
+  margin: 0 0 12px;
+  line-height: 1.4;
+}
+
+/* Community bars read as a quieter, cooler counterpart to the personal histogram. */
+.dist-bar.global {
+  background: rgba(120, 170, 255, 0.22);
+}
+
+.dist-bar.global.current {
+  background: var(--flame);
+}
+
 /* ---------- Footer ---------- */
 .app-footer {
   text-align: center;
@@ -1722,6 +1761,22 @@ span.ded-maybe::before {
 
 .synergy-card-img:hover figcaption {
   opacity: 1;
+}
+
+/* In-play synergy score badge (mirrors .result-synergy-pct on the result screen). */
+.synergy-card-pct {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  padding: 1px 5px;
+  border-radius: 6px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: #1a0d02;
+  background: var(--flame);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
 }
 
 .synergy-card-text {
@@ -2064,35 +2119,94 @@ span.ded-maybe::before {
   font-size: 1.15rem;
 }
 
-.hl-board {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 18px;
-  flex-wrap: wrap;
+.hl-prompt {
+  color: var(--text);
+  font-size: 1.05rem;
+  margin: 0 auto 18px;
+  max-width: 32ch;
+  line-height: 1.4;
+}
+.hl-prompt strong {
+  color: var(--flame-1);
 }
 
-.hl-slot {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  width: 240px;
+/* ── Daily / Endless mode toggle ────────────────────────────────────── */
+.hl-mode-tabs {
+  display: inline-flex;
+  gap: 4px;
+  margin: 14px auto 0;
+  padding: 4px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 999px;
 }
-.hl-slot-label {
+.hl-mode-tab {
+  border: none;
+  background: none;
   color: var(--text-dim);
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  font-family: inherit;
+  font-size: 0.9rem;
+  padding: 6px 18px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+.hl-mode-tab.active {
+  background: var(--flame-1);
+  color: #1a0f08;
+  font-weight: 600;
+}
+
+/* ── Carousel stage ─────────────────────────────────────────────────── */
+/* Two full cards are visible at rest; on a correct guess the whole track
+   slides left by one card so the guessed card glides into the "known" slot
+   and a fresh card slides in from the right. */
+.hl-stage {
+  --hl-card-w: 240px;
+  --hl-gap: 24px;
+  position: relative;
+  width: calc(2 * var(--hl-card-w) + var(--hl-gap));
+  max-width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+}
+.hl-track {
+  display: flex;
+  gap: var(--hl-gap);
+  transform: translateX(
+    calc(-1 * var(--hl-pos, 0) * (var(--hl-card-w) + var(--hl-gap)))
+  );
+  transition: transform 650ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.hl-slot {
+  flex: 0 0 var(--hl-card-w);
+  width: var(--hl-card-w);
 }
 
 .hl-vs {
-  color: var(--text-dim);
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  color: var(--text);
   font-style: italic;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
 }
 
 .hl-card {
+  position: relative;
   width: 100%;
   background: var(--panel);
   border: 1px solid var(--line);
@@ -2102,12 +2216,90 @@ span.ded-maybe::before {
 .hl-card-art {
   width: 100%;
   display: block;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  object-position: center top;
+  /* Full Magic card, shown whole — never crop the frame, text, or P/T. */
+  aspect-ratio: 63 / 88;
+  object-fit: contain;
+  background: var(--panel-2);
+}
+/* Tap/click the card to open the zoom lightbox. */
+.hl-card-art-btn {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: zoom-in;
+}
+.hl-zoom-hint {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 0.95rem;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  pointer-events: none;
+}
+.hl-card-art-btn:hover .hl-zoom-hint,
+.hl-card-art-btn:focus-visible .hl-zoom-hint {
+  opacity: 1;
+}
+
+/* Centered card lightbox. */
+.hl-zoom-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.82);
+  cursor: zoom-out;
+  animation: hl-fade 0.15s ease;
+}
+.hl-zoom-img {
+  max-width: min(92vw, 460px);
+  max-height: 90vh;
+  border-radius: 14px;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6);
+  animation: hl-zoom-in 0.2s cubic-bezier(0.22, 1.2, 0.4, 1);
+}
+@keyframes hl-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes hl-zoom-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+/* On touch there's no hover, so always show the zoom affordance. */
+@media (hover: none) {
+  .hl-zoom-hint {
+    opacity: 1;
+  }
 }
 .hl-card-info {
   padding: 10px 12px 14px;
+  text-align: center;
 }
 .hl-card-name {
   font-size: 1.05rem;
@@ -2121,45 +2313,30 @@ span.ded-maybe::before {
   color: var(--flame-1);
   font-size: 1.3rem;
 }
+.hl-card-value.counting strong {
+  color: var(--text);
+}
 .hl-card-value-hidden {
   color: var(--text-dim);
   letter-spacing: 0.12em;
 }
 
-.hl-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  width: 100%;
-}
-.hl-btn {
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid var(--line);
-  background: var(--panel-2);
-  color: var(--text);
-  font-family: inherit;
-  font-size: 1rem;
-  cursor: pointer;
-  transition:
-    transform 0.08s ease,
-    border-color 0.15s ease;
-}
-.hl-btn:hover {
-  transform: translateY(-1px);
-}
-.hl-higher:hover {
-  border-color: var(--exact-bd);
-}
-.hl-lower:hover {
-  border-color: var(--far-bd);
-}
-
+/* Correct / Nope badge stamped over the card being revealed. */
 .hl-verdict {
-  font-size: 1.2rem;
-  font-weight: 700;
-  padding: 8px 0;
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-8deg);
+  z-index: 3;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  border-radius: 8px;
+  border: 2px solid currentColor;
+  background: rgba(0, 0, 0, 0.55);
+  animation: hl-stamp 0.25s cubic-bezier(0.22, 1.4, 0.4, 1);
 }
 .hl-verdict.ok {
   color: var(--exact-bd);
@@ -2167,14 +2344,128 @@ span.ded-maybe::before {
 .hl-verdict.bad {
   color: var(--far-bd);
 }
+@keyframes hl-stamp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) rotate(-8deg) scale(1.6);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) rotate(-8deg) scale(1);
+  }
+}
+
+/* Streak-milestone flash. */
+.hl-milestone {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+  font-weight: 700;
+  color: var(--flame-1);
+  background: var(--bg);
+  border: 1px solid var(--flame-1);
+  border-radius: 999px;
+  padding: 6px 16px;
+  animation: hl-pop 1.4s ease forwards;
+}
+@keyframes hl-pop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 6px) scale(0.9);
+  }
+  15% {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -6px) scale(1);
+  }
+}
+
+/* ── Guess buttons ──────────────────────────────────────────────────── */
+.hl-buttons {
+  margin-top: 18px;
+}
+.hl-flavour {
+  color: var(--text-dim);
+  font-style: italic;
+  margin-bottom: 10px;
+  min-height: 1.2em;
+}
+.hl-btn-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.hl-btn {
+  min-width: 170px;
+  padding: 14px 20px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--panel-2);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition:
+    transform 0.08s ease,
+    border-color 0.15s ease,
+    opacity 0.15s ease;
+}
+.hl-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+.hl-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.hl-higher:hover:not(:disabled) {
+  border-color: var(--exact-bd);
+}
+.hl-lower:hover:not(:disabled) {
+  border-color: var(--far-bd);
+}
 
 .hl-result-info {
   text-align: center;
 }
+.hl-secondary {
+  display: block;
+  margin: 12px auto 0;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-family: inherit;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+.hl-secondary:hover {
+  color: var(--text);
+}
 
-@media (max-width: 520px) {
-  .hl-slot {
-    width: 44vw;
+@media (max-width: 560px) {
+  /* Shrink the two-card stage to fit narrow screens while keeping the slide. */
+  .hl-stage {
+    --hl-card-w: min(44vw, 220px);
+    --hl-gap: 12px;
+  }
+  .hl-card-info {
+    padding: 8px 8px 12px;
+    font-size: 0.9rem;
+  }
+  .hl-card-value strong {
+    font-size: 1.15rem;
+  }
+  .hl-btn {
+    min-width: 0;
+    flex: 1 1 46%;
   }
 }
 
@@ -2347,4 +2638,74 @@ span.ded-maybe::before {
   .archive-mode-label {
     display: none;
   }
+}
+
+/* ── Share: challenge variant + referral banner ─────────────────────── */
+.share-btn.share-challenge {
+  background: var(--panel-2);
+  border: 1px solid var(--flame-2);
+  color: var(--flame-1);
+}
+.share-btn.share-challenge:hover {
+  background: var(--flame);
+  color: #1a1207;
+}
+.challenge-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  max-width: 620px;
+  margin: 0 auto var(--s4);
+  padding: 10px 16px;
+  border: 1px solid var(--flame-2);
+  border-radius: 10px;
+  background: rgba(236, 90, 28, 0.1);
+  color: var(--text);
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 0.92rem;
+}
+.challenge-dismiss {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 2px 6px;
+}
+.challenge-dismiss:hover {
+  color: var(--flame-1);
+}
+
+/* ---------- Clock-ahead notice (anti time-travel) ---------- */
+.clock-notice {
+  max-width: 32rem;
+  margin: 2rem auto;
+  padding: 1.75rem 1.5rem;
+  text-align: center;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+.clock-notice-icon {
+  font-size: 2.75rem;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.clock-notice h2 {
+  margin: 0 0 0.6rem;
+  color: var(--flame-1);
+}
+
+.clock-notice p {
+  margin: 0.5rem 0 0;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.clock-notice-sub {
+  color: var(--text-dim);
+  font-size: 0.9rem;
 }

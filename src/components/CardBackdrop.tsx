@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { ZOOM_POOL } from '../lib/commanders'
 
 const USE_REAL_CARDS = true
@@ -25,6 +25,34 @@ const HARDCODED_CARDS: CardSpec[] = [
   { left: '90%', top: '72%', size: 230, delay: -8, dur: 22, rot: 11 },
   { left: '0%', top: '70%', size: 250, delay: -10, dur: 30, rot: -16 },
 ]
+
+/**
+ * Phone layout: a handful of small cards tucked into the corners so they peek in
+ * from the edges without crowding the content column. Sizes are deliberately small
+ * and positions hug the top/bottom corners where the UI leaves breathing room.
+ */
+const HARDCODED_CARDS_MOBILE: CardSpec[] = [
+  { left: '-10%', top: '2%', size: 110, delay: 0, dur: 26, rot: -13 },
+  { left: '80%', top: '5%', size: 120, delay: -6, dur: 32, rot: 10 },
+  { left: '-12%', top: '78%', size: 130, delay: -12, dur: 28, rot: -8 },
+  { left: '82%', top: '80%', size: 120, delay: -8, dur: 30, rot: 12 },
+]
+
+/** Matches the mobile breakpoint used elsewhere in the layout. */
+const MOBILE_QUERY = '(max-width: 640px)'
+
+function useIsMobile(): boolean {
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia(MOBILE_QUERY).matches,
+  )
+  useEffect(() => {
+    const mql = window.matchMedia(MOBILE_QUERY)
+    const onChange = () => setIsMobile(mql.matches)
+    mql.addEventListener('change', onChange)
+    return () => mql.removeEventListener('change', onChange)
+  }, [])
+  return isMobile
+}
 
 /**
  * A grid of cards hugging the left and right edges: `cols` columns marching inward
@@ -81,10 +109,16 @@ function pickRealImages(count: number): string[] {
 }
 
 export default function CardBackdrop() {
+  const isMobile = useIsMobile()
   // useMemo so random positions/picks stay stable across re-renders.
   const cards = useMemo(
-    () => (RANDOMIZE ? edgeCards(CARDS_PER_SIDE, COLUMNS_PER_SIDE) : HARDCODED_CARDS),
-    [],
+    () =>
+      RANDOMIZE
+        ? edgeCards(CARDS_PER_SIDE, COLUMNS_PER_SIDE)
+        : isMobile
+          ? HARDCODED_CARDS_MOBILE
+          : HARDCODED_CARDS,
+    [isMobile],
   )
   const images = useMemo(
     () => (USE_REAL_CARDS ? pickRealImages(cards.length) : []),

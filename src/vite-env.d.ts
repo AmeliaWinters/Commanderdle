@@ -9,6 +9,8 @@ interface ImportMetaEnv {
   readonly VITE_ADSENSE_SLOT_ID?: string
   /** Analytics measurement id (GA4 "G-…") — analytics is disabled when unset. */
   readonly VITE_ANALYTICS_ID?: string
+  /** Community-stats API origin. Same-origin in prod; set for local `wrangler pages dev`. */
+  readonly VITE_API_URL?: string
 }
 
 interface ImportMeta {

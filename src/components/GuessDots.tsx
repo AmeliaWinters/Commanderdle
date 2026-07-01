@@ -1,7 +1,7 @@
 const GuessDots = ({ dots, onSkip, wrongGuesses, maxGuesses }: { dots: ("correct" | "wrong" | "empty")[], onSkip?: () => void, wrongGuesses: number, maxGuesses: number }) => {
     return (
       <div className="guess-dots-row">
-        <div className="guess-dots" aria-label={`${wrongGuesses} of ${maxGuesses} guesses used`}>
+        <div className="guess-dots" role="img" aria-label={`${wrongGuesses} of ${maxGuesses} guesses used`}>
           {dots.map((d, i) => (
             <span key={i} className={`guess-dot ${d}`} />
           ))}

@@ -54,6 +54,8 @@ export default function GuessInput({ onGuess, disabledNames, disabled, blurQuote
     }
   }
 
+  const listboxOpen = open && results.length > 0
+
   return (
     <div className="guess-input" ref={wrapRef}>
       <input
@@ -66,6 +68,14 @@ export default function GuessInput({ onGuess, disabledNames, disabled, blurQuote
         autoCorrect="off"
         enterKeyHint="go"
         spellCheck={false}
+        role="combobox"
+        aria-label="Guess a commander"
+        aria-autocomplete="list"
+        aria-expanded={listboxOpen}
+        aria-controls="guess-listbox"
+        aria-activedescendant={
+          listboxOpen ? `guess-option-${active}` : undefined
+        }
         onChange={(e) => {
           setQuery(e.target.value)
           setOpen(true)
@@ -73,13 +83,17 @@ export default function GuessInput({ onGuess, disabledNames, disabled, blurQuote
         onFocus={() => setOpen(true)}
         onKeyDown={onKeyDown}
       />
-      {open && results.length > 0 && (
-        <ul className="autocomplete">
+      {listboxOpen && (
+        <ul className="autocomplete" id="guess-listbox" role="listbox">
           {results.map((c, i) => {
             const used = disabledNames.has(c.name)
             return (
               <li
                 key={c.name}
+                id={`guess-option-${i}`}
+                role="option"
+                aria-selected={i === active}
+                aria-disabled={used || undefined}
                 className={`autocomplete-item${i === active ? ' active' : ''}${used ? ' used' : ''}`}
                 onMouseEnter={() => setActive(i)}
                 onMouseDown={(e) => {

@@ -8,9 +8,15 @@ import {
 } from "../lib/dailyAnswer";
 import { navigateToPath, HIGHER_LOWER_PATH } from "../lib/router";
 import { shareOrCopy } from "../lib/share";
+import {
+  buildShareUrl,
+  encodeGrid,
+  type CellCode,
+} from "../lib/shareCode";
 import { buildDailyRecap } from "../lib/dailyRecap";
 import CardZoom from "./CardZoom";
 import StatsPanel from "./StatsPanel";
+import GuessDots from "./GuessDots";
 
 interface Props {
   status: "won" | "lost";
@@ -19,6 +25,7 @@ interface Props {
   mode: Mode;
   maxGuesses: number;
   isDaily: boolean;
+  skips: number;
 }
 
 const KIND_SQUARE: Record<MatchKind, string> = {
@@ -56,6 +63,36 @@ function buildGrid(
     || (status === "lost" ? "🟥" : "");
 }
 
+const KIND_CODE: Record<MatchKind, CellCode> = { exact: 2, partial: 1, none: 0 };
+
+/**
+ * The same feedback grid as {@link buildGrid}, but as numeric colour codes for the
+ * share-image URL (see shareCode.ts): classic rows come from per-column feedback; visual
+ * modes get one green (win) / red (wrong) cell per guess.
+ */
+function buildGridCodes(
+  mode: Mode,
+  guesses: Commander[],
+  answer: Commander,
+): CellCode[][] {
+  if (mode === "classic") {
+    return guesses.map((g) =>
+      g.name === answer.name
+        ? ([2, 2, 2, 2, 2, 2] as CellCode[])
+        : compareCommander(g, answer).map((col) => KIND_CODE[col.kind]),
+    );
+  }
+  return guesses.map((g) => [g.name === answer.name ? 2 : 3] as CellCode[]);
+}
+
+/** Canonical origin for share links (env-configured, falling back to the current origin). */
+function shareOrigin(): string {
+  return (
+    import.meta.env.VITE_SITE_URL?.replace(/\/$/, "") ||
+    window.location.origin
+  );
+}
+
 /** Live "Next commander in HH:MM:SS" countdown to the next local midnight. */
 function useCountdown(active: boolean): string {
   const [ms, setMs] = useState(() => msUntilNextPuzzle());
@@ -83,34 +120,68 @@ export default function ResultBanner({
   mode,
   maxGuesses,
   isDaily,
+  skips,
 }: Props) {
   const [copied, setCopied] = useState(false);
+  const [challenged, setChallenged] = useState(false);
   const [recapCopied, setRecapCopied] = useState(false);
   const countdown = useCountdown(isDaily);
   const guessCount = guesses.length;
+  const wrongGuesses =
+    guesses.filter((g) => g.name !== answer.name).length + skips;
+
+  // One pip per attempt: correct (the winning guess), wrong (a miss or skip),
+  // or empty (an attempt never spent). Mirrors the in-play row so the result
+  // screen shows how the game actually went at a glance.
+  const dots = Array.from({ length: maxGuesses }, (_, i): "correct" | "wrong" | "empty" => {
+    const g = guesses[i];
+    if (g) return g.name === answer.name ? "correct" : "wrong";
+    return i < guesses.length + skips ? "wrong" : "empty";
+  });
 
   const flash = (set: (v: boolean) => void) => {
     set(true);
     setTimeout(() => set(false), 2000);
   };
 
+  const score =
+    status === "won" ? `${guessCount}/${maxGuesses}` : `X/${maxGuesses}`;
+
+  // A shareable link that unfurls into a per-result preview card and drops the
+  // recipient onto today's exact puzzle. Daily only — practice/archive have no shared day.
+  const resultUrl = isDaily
+    ? buildShareUrl(
+        shareOrigin(),
+        mode,
+        puzzleNumber(),
+        encodeGrid(buildGridCodes(mode, guesses, answer)),
+      )
+    : null;
+
   const share = () => {
     const grid = buildGrid(mode, guesses, answer, status);
-    const score = status === "won" ? `${guessCount}/${maxGuesses}` : `X/${maxGuesses}`;
     const heading = isDaily
       ? `Commandle ${MODE_LABEL[mode]} #${puzzleNumber()} ${score}`
       : `Commandle ${MODE_LABEL[mode]} (practice) ${score}`;
-    // Daily results nudge a return visit with the countdown; practice has no countdown.
-    const footer = isDaily ? `\nNext commander in ${countdown}` : "";
+    // Daily results nudge a return visit with the countdown + a playable link.
+    const footer = resultUrl ? `\n${resultUrl}` : "";
     const text = `${heading}\n${grid}${footer}`;
     shareOrCopy(text).then(() => flash(setCopied), () => {});
+  };
+
+  // Head-to-head variant: same playable link, framed as a dare.
+  const challenge = () => {
+    if (!resultUrl) return;
+    const verb = status === "won" ? `in ${score}` : "and it beat me";
+    const text = `I played today's Commandle ${MODE_LABEL[mode]} ${verb} — think you can beat me?\n${resultUrl}`;
+    shareOrCopy(text).then(() => flash(setChallenged), () => {});
   };
 
   // Aggregated recap of every mode finished today (daily only).
   const recap = isDaily ? buildDailyRecap() : null;
   const shareRecap = () => {
     if (!recap) return;
-    const text = `${recap}\nNext commander in ${countdown}`;
+    const text = `${recap}\nNext commander in ${countdown}\n${shareOrigin()}`;
     shareOrCopy(text).then(() => flash(setRecapCopied), () => {});
   };
 
@@ -139,10 +210,20 @@ export default function ResultBanner({
             #{answer.rank} on EDHREC. In {answer.numDecks.toLocaleString()}{" "}
             decks
           </p>
+          <GuessDots
+            dots={dots}
+            wrongGuesses={wrongGuesses}
+            maxGuesses={maxGuesses}
+          />
           <div className="share-row">
             <button className="share-btn" onClick={share}>
               {copied ? "Copied!" : "Share result"}
             </button>
+            {resultUrl && (
+              <button className="share-btn share-challenge" onClick={challenge}>
+                {challenged ? "Copied!" : "Challenge a friend"}
+              </button>
+            )}
             {recap && (
               <button className="share-btn share-recap" onClick={shareRecap}>
                 {recapCopied ? "Copied!" : "Share today's recap"}
