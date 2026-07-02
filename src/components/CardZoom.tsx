@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 
 interface Props {
@@ -12,16 +12,16 @@ interface Props {
 
 const CARD_W = 300
 
-/**
- * Wraps an element so the full card image pops up while hovered. The popover is
- * portaled to <body> so transformed/overflow-hidden ancestors (e.g. the animated
- * results table cells) can't clip it, and its fixed coords resolve to the viewport.
- */
 /** Below this viewport width there's no room beside a full-width row, so we center. */
 const NARROW_VW = 560
 /** Magic-card aspect ratio (h / w) used to size the popover vertically. */
 const CARD_ASPECT = 1.4
 
+/**
+ * Wraps an element so the full card image pops up while hovered. The popover is
+ * portaled to <body> so transformed/overflow-hidden ancestors (e.g. the animated
+ * results table cells) can't clip it, and its fixed coords resolve to the viewport.
+ */
 export default function CardZoom({ name, image, children, className }: Props) {
   const [pos, setPos] = useState<
     { top: number; left: number; narrow: boolean; width?: number } | null
@@ -55,7 +55,13 @@ export default function CardZoom({ name, image, children, className }: Props) {
     setPos({ top, left, narrow: false })
   }
 
-  const show = (e: React.MouseEvent<HTMLSpanElement>) => placeFrom(e.currentTarget)
+  const handleMouseOver = (e: React.MouseEvent<HTMLSpanElement>) => {
+    if ((e.target as Element).closest('.synergy-card-pct, .result-synergy-pct')) {
+      setPos(null)
+    } else {
+      placeFrom(e.currentTarget)
+    }
+  }
 
   // Touch has no hover, so tapping toggles the preview; a second tap (or a tap
   // on the portaled image) dismisses it.
@@ -64,10 +70,20 @@ export default function CardZoom({ name, image, children, className }: Props) {
     else placeFrom(e.currentTarget)
   }
 
+  // While the popover is open, the next pointer down anywhere dismisses it — the
+  // anchor's own onClick can't fire for taps landing outside it. Attached after
+  // the opening tap has already resolved, so it only catches subsequent touches.
+  useEffect(() => {
+    if (!pos) return
+    const dismiss = () => setPos(null)
+    document.addEventListener('pointerdown', dismiss)
+    return () => document.removeEventListener('pointerdown', dismiss)
+  }, [pos])
+
   return (
     <span
       className={`card-zoom-anchor${className ? ` ${className}` : ''}`}
-      onMouseEnter={show}
+      onMouseOver={handleMouseOver}
       onMouseLeave={() => setPos(null)}
       onClick={toggle}
     >

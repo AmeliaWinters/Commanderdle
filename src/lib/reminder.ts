@@ -46,7 +46,7 @@ export function scheduleReminder(): void {
   // Fire a moment after rollover so the new puzzle is definitely live.
   timer = setTimeout(() => {
     try {
-      new Notification('New Commandle is live 🔥', {
+      new Notification('New Commandle is live', {
         body: "Today's commander puzzles are ready — keep your streak going!",
         icon: '/icon-192.png',
         badge: '/favicon-32.png',

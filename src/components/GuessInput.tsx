@@ -101,6 +101,15 @@ export default function GuessInput({ onGuess, disabledNames, disabled, blurQuote
                   submit(c)
                 }}
               >
+                {c.artCrop && (
+                  <img
+                    className="ac-thumb"
+                    src={c.artCrop}
+                    alt=""
+                    loading="lazy"
+                    draggable={false}
+                  />
+                )}
                 <span className="ac-name">{c.name}</span>
                 <span className="ac-rank">#{c.rank}</span>
               </li>

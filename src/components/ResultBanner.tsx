@@ -20,9 +20,11 @@ import {
   type ImageShareOutcome,
 } from "../lib/shareImage";
 import CardZoom from "./CardZoom";
+import SynergyPct from "./SynergyPct";
 import StatsPanel from "./StatsPanel";
 import GuessDots from "./GuessDots";
 import ShareMenu, { type ShareOption } from "./ShareMenu";
+import { FiType, FiImage, FiZap, FiList } from "react-icons/fi";
 
 interface Props {
   status: "won" | "lost";
@@ -44,9 +46,9 @@ const KIND_SQUARE: Record<MatchKind, string> = {
 };
 
 /**
- * Spoiler-free emoji grid. Classic mode renders each guess as a row of
- * 🟩🟨⬛ from its real per-column feedback; the visual modes get one
- * 🟩/🟥 square per guess (right on the final row, wrong before it).
+ * Spoiler-free share grid. Classic mode renders each guess as a row of
+ * per-column feedback squares; the visual modes get one square per guess
+ * (right on the final row, wrong before it).
  */
 function buildGrid(
   mode: Mode,
@@ -282,7 +284,7 @@ export default function ResultBanner({
       key: "text",
       label: "Share as text",
       hint: "Emoji grid + link",
-      icon: "🔤",
+      icon: <FiType aria-hidden="true" />,
       done: copied ? "Copied!" : null,
       onSelect: share,
     },
@@ -292,7 +294,7 @@ export default function ResultBanner({
       key: "image",
       label: "Share as image",
       hint: "Branded result card",
-      icon: "🖼️",
+      icon: <FiImage aria-hidden="true" />,
       done: imageDone,
       onSelect: shareImage,
     });
@@ -301,7 +303,7 @@ export default function ResultBanner({
       key: "challenge",
       label: "Challenge a friend",
       hint: "Dare them to beat you",
-      icon: "⚔️",
+      icon: <FiZap aria-hidden="true" />,
       done: challenged ? "Copied!" : null,
       onSelect: challenge,
     });
@@ -310,7 +312,7 @@ export default function ResultBanner({
       key: "recap",
       label: "Share today's recap",
       hint: "Every mode you played",
-      icon: "📋",
+      icon: <FiList aria-hidden="true" />,
       done: recapCopied ? "Copied!" : null,
       onSelect: shareRecap,
     });
@@ -385,11 +387,7 @@ export default function ResultBanner({
                 ) : (
                   <div className="result-synergy-noimg">{c.name}</div>
                 )}
-                {c.synergy > 0 && (
-                  <span className="result-synergy-pct">
-                    +{Math.round(c.synergy * 100)}%
-                  </span>
-                )}
+                <SynergyPct synergy={c.synergy} className="result-synergy-pct" />
               </li>
             ))}
           </ul>

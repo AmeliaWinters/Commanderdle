@@ -56,6 +56,12 @@ export default function ZoomMode({ answer, guesses, skips, wrongGuesses, maxGues
       </div>
 
       <GuessDots dots={dots} onSkip={onSkip} wrongGuesses={wrongGuesses} maxGuesses={maxGuesses} />
+
+      {!solved && wrongGuesses >= maxGuesses - 1 && (
+        <p className="hint-line letter-hint">
+          Last guess — the name starts with “{answer.name[0]}…”
+        </p>
+      )}
     </div>
   )
 }

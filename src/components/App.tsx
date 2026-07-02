@@ -48,7 +48,13 @@ import {
   toggleMuted,
   onMuteChange,
 } from "../lib/sounds";
-import { FiSettings } from "react-icons/fi";
+import {
+  FiSettings,
+  FiVolume2,
+  FiVolumeX,
+  FiBell,
+  FiBellOff,
+} from "react-icons/fi";
 
 // The non-classic modes share one props contract; the active view is picked from
 // this map instead of four near-identical conditional blocks.
@@ -101,9 +107,7 @@ export default function App() {
   const [adTest, setAdTest] = useState(isAdTestMode);
   const countdown = useCountdown();
   const [muted, setMuted] = useState(isMuted);
-  // Anti-time-travel: 'ahead' means the device clock is set forward into a future
-  // puzzle, verified against authoritative server time. 'unknown' = not yet checked
-  // or offline (we trust the local clock in that case).
+  // Anti-time-travel: 'ahead' means the device clock is set forward 'unknown' = not yet checked or offline (we trust the local clock in that case).
   const [clockState, setClockState] = useState<"unknown" | "ok" | "ahead">(
     "unknown",
   );
@@ -223,7 +227,7 @@ export default function App() {
         return {
           pool: synergyPool(poolFor("synergy"), revealed),
           unlockAt: 3,
-          hint: "See the commanders still possible by the revealed cards’ colors",
+          hint: "See the commanders still possible by the revealed cards' colors",
         };
       }
       case "quote":
@@ -316,16 +320,6 @@ export default function App() {
                   </button>
                 </>
               )}
-              {!peek && (
-                <button
-                  onClick={() => {
-                    setPoolOpen(true);
-                    setMenuOpen(false);
-                  }}
-                >
-                  View card pool
-                </button>
-              )}
               <button
                 onClick={() => {
                   navigateToPath(HIGHER_LOWER_PATH);
@@ -335,7 +329,12 @@ export default function App() {
                 Higher / Lower ↗
               </button>
               <button aria-pressed={!muted} onClick={() => toggleMuted()}>
-                Sound effects: {muted ? "Off 🔇" : "On 🔊"}
+                {muted ? (
+                  <FiVolumeX className="menu-icon" aria-hidden="true" />
+                ) : (
+                  <FiVolume2 className="menu-icon" aria-hidden="true" />
+                )}
+                Sound effects: {muted ? "Off" : "On"}
               </button>
               {notificationsSupported() && (
                 <button
@@ -343,7 +342,12 @@ export default function App() {
                   onClick={handleReminderToggle}
                   title="Get a browser notification when the next puzzle unlocks (while a tab is open)"
                 >
-                  Daily reminder: {reminderOn ? "On 🔔" : "Off 🔕"}
+                  {reminderOn ? (
+                    <FiBell className="menu-icon" aria-hidden="true" />
+                  ) : (
+                    <FiBellOff className="menu-icon" aria-hidden="true" />
+                  )}
+                  Daily reminder: {reminderOn ? "On" : "Off"}
                 </button>
               )}
               <button
@@ -392,7 +396,7 @@ export default function App() {
 
       {fromShare && !isArchive && (
         <div className="challenge-banner">
-          <span>🔥 You’ve been challenged — solve today’s puzzle!</span>
+          <span>You’ve been challenged — solve today’s puzzle!</span>
           <button
             className="challenge-dismiss"
             aria-label="Dismiss"
@@ -410,7 +414,7 @@ export default function App() {
             ? (m) => navigateToPath(archivePlayPath(m, archiveDate))
             : setMode
         }
-        completedSignal={`${mode}:${isDaily}:${isArchive}:${done && !revealHeld ? status : 'playing'}`}
+        completedSignal={`${mode}:${isDaily}:${isArchive}:${done && !revealHeld ? status : "playing"}`}
         isCompleted={
           isArchive && archiveDate
             ? (m) => isArchiveCompleted(m, archiveDate)
@@ -441,81 +445,81 @@ export default function App() {
           <ClockAheadNotice />
         ) : (
           <>
-        {!done && ModeView && (
-          <ModeView
-            answer={answer}
-            guesses={guesses}
-            skips={skips}
-            wrongGuesses={wrongGuesses}
-            maxGuesses={maxGuesses}
-            solved={solved}
-            onSkip={skip}
-          />
-        )}
+            {!done && ModeView && (
+              <ModeView
+                answer={answer}
+                guesses={guesses}
+                skips={skips}
+                wrongGuesses={wrongGuesses}
+                maxGuesses={maxGuesses}
+                solved={solved}
+                onSkip={skip}
+              />
+            )}
 
-        {!done && (
-          <div className="input-row">
-            <div className="input-side input-side-left">
-              {peek && (
-                <button
-                  className="pool-peek-btn"
-                  onClick={() => peekUnlocked && setPoolOpen(true)}
-                  disabled={!peekUnlocked}
-                  title={peekUnlocked ? peek.hint : undefined}
-                >
-                  {peekUnlocked
-                    ? `Card pool (${peek.pool.length})`
-                    : `View cards in ${peek.unlockAt - wrongGuesses}`}
-                </button>
-              )}
-            </div>
-            <GuessInput
-              onGuess={guess}
-              disabledNames={disabledNames}
-              disabled={done}
-              blurQuote={mode === "quote"}
-            />
-            <div className="input-side" />
-          </div>
-        )}
+            {!done && (
+              <div className="input-row">
+                <div className="input-side input-side-left">
+                  {peek && (
+                    <button
+                      className="pool-peek-btn"
+                      onClick={() => peekUnlocked && setPoolOpen(true)}
+                      disabled={!peekUnlocked}
+                      title={peekUnlocked ? peek.hint : undefined}
+                    >
+                      {peekUnlocked
+                        ? `Card pool (${peek.pool.length})`
+                        : `View cards in ${peek.unlockAt - wrongGuesses}`}
+                    </button>
+                  )}
+                </div>
+                <GuessInput
+                  onGuess={guess}
+                  disabledNames={disabledNames}
+                  disabled={done}
+                  blurQuote={mode === "quote"}
+                />
+                <div className="input-side" />
+              </div>
+            )}
 
-        {!done && guesses.length === 0 && mode === "silhouette" && (
-          <p className="hint-line">Art clears with each wrong guess</p>
-        )}
-        {!done && guesses.length === 0 && mode === "zoom" && (
-          <p className="hint-line">Zooms out with each wrong guess</p>
-        )}
+            {!done && guesses.length === 0 && mode === "silhouette" && (
+              <p className="hint-line">Art clears with each wrong guess</p>
+            )}
+            {!done && guesses.length === 0 && mode === "zoom" && (
+              <p className="hint-line">Zooms out with each wrong guess</p>
+            )}
 
-        {done && !revealHeld && (
-          <ResultBanner
-            status={status as "won" | "lost"}
-            answer={answer}
-            guesses={guesses}
-            mode={mode}
-            maxGuesses={maxGuesses}
-            isDaily={isDaily}
-            skips={skips}
-            celebrate={freshWin}
-          />
-        )}
+            {done && !revealHeld && (
+              <ResultBanner
+                status={status as "won" | "lost"}
+                answer={answer}
+                guesses={guesses}
+                mode={mode}
+                maxGuesses={maxGuesses}
+                isDaily={isDaily}
+                skips={skips}
+                celebrate={freshWin}
+              />
+            )}
 
-        {mode === "classic" && (!done || revealHeld) && (
-          <GuessDots
-            dots={buildDots(guesses, answer, skips, maxGuesses)}
-            wrongGuesses={wrongGuesses}
-            maxGuesses={maxGuesses}
-          />
-        )}
+            {mode === "classic" && (!done || revealHeld) && (
+              <GuessDots
+                dots={buildDots(guesses, answer, skips, maxGuesses)}
+                wrongGuesses={wrongGuesses}
+                maxGuesses={maxGuesses}
+              />
+            )}
 
-        {mode === "classic" ? (
-          <ClassicGrid
-            guesses={guesses}
-            answer={answer}
-            maxGuesses={maxGuesses}
-          />
-        ) : (
-          <GuessList guesses={guesses} answer={answer} />
-        )}
+            {mode === "classic" ? (
+              <ClassicGrid
+                guesses={guesses}
+                answer={answer}
+                maxGuesses={maxGuesses}
+              />
+            ) : (
+              <GuessList guesses={guesses} answer={answer} />
+            )}
           </>
         )}
       </main>
@@ -581,9 +585,7 @@ export default function App() {
 function ClockAheadNotice() {
   return (
     <div className="clock-notice" role="alert">
-      <div className="clock-notice-icon" aria-hidden="true">
-        🕰️
-      </div>
+      <div className="clock-notice-icon" aria-hidden="true"></div>
       <h2>Your clock is running ahead</h2>
       <p>
         Your device&rsquo;s date looks set into the future, so today&rsquo;s

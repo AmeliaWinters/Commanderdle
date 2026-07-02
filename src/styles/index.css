@@ -402,6 +402,9 @@ body::before {
 }
 
 .menu-pop button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   background: none;
   border: none;
   color: var(--text);
@@ -412,6 +415,11 @@ body::before {
   border-radius: 7px;
   cursor: pointer;
   white-space: nowrap;
+}
+
+.menu-icon {
+  flex-shrink: 0;
+  font-size: 1rem;
 }
 
 .menu-pop button:hover {
@@ -649,6 +657,7 @@ body::before {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 10px;
   padding: 10px 12px;
   border-radius: 7px;
   cursor: pointer;
@@ -670,6 +679,25 @@ body::before {
 .ac-rank {
   color: var(--text-dim);
   font-size: 0.82rem;
+  margin-left: auto;
+}
+
+/* Small card art beside each suggestion — the mobile stand-in for the big
+   hover preview, which would cover the whole screen there. */
+.ac-thumb {
+  width: 34px;
+  height: 34px;
+  border-radius: 5px;
+  object-fit: cover;
+  border: 1px solid var(--line);
+  flex-shrink: 0;
+}
+
+/* Desktop keeps the full card preview beside the input instead. */
+@media (min-width: 901px) {
+  .ac-thumb {
+    display: none;
+  }
 }
 
 /* ---------- Card zoom popover ---------- */
@@ -746,6 +774,11 @@ body::before {
     left: auto;
     right: 0;
     top: calc(100% + 6px);
+  }
+  /* On small screens the search preview would blanket the page; the dropdown
+     shows per-suggestion art thumbnails (.ac-thumb) instead. */
+  .card-zoom.place-right.standalone {
+    display: none;
   }
 }
 
@@ -889,15 +922,31 @@ span.ded-maybe::before {
 }
 
 .results-table {
-  min-width: 640px;
+  /* min-width is the sum of the column pixel floors (+ gaps), so the box can't
+     shrink below the width where every cell's content fits on one line — on a
+     narrow phone it holds that width and .results-wrap scrolls it. On wider
+     containers width: 100% fills the space and the fr shares expand up to
+     max-width. */
+  width: 100%;
+  min-width: 754px;
   margin: 0 auto;
   max-width: 960px;
-  overflow-x: hidden;
 }
 
 .grid-row {
   display: grid;
-  grid-template-columns: 1.8fr 1.2fr 0.7fr 0.7fr 0.7fr 0.95fr 0.7fr;
+  /* Each column has a pixel floor so its content fits on one line — a full set
+     of mana pips in Colours, a word like "Shapeshifter" in Type — and only
+     grows (via the fr share) when there's spare width. This makes the table as
+     wide as it needs to be rather than cramming into a fixed width. */
+  grid-template-columns:
+    minmax(160px, 1.8fr) /* Commander */
+    minmax(132px, 1.1fr) /* Colours */
+    minmax(140px, 1.1fr) /* Type */
+    minmax(72px, 0.7fr) /* Mana Value */
+    minmax(72px, 0.7fr) /* Stat Total */
+    minmax(76px, 0.7fr) /* Rank */
+    minmax(66px, 0.7fr); /* Year */
   gap: 6px;
   margin-bottom: 6px;
 }
@@ -928,6 +977,42 @@ span.ded-maybe::before {
   align-items: center;
   justify-content: center;
   animation: none !important;
+}
+
+/* The Rank header is a real button that toggles an explainer note. */
+button.head-help {
+  cursor: pointer;
+  font: inherit;
+  font-family: "Cinzel", serif;
+  gap: 3px;
+}
+
+button.head-help:hover {
+  color: var(--text);
+}
+
+.help-mark {
+  width: 13px;
+  height: 13px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.55rem;
+  opacity: 0.75;
+  flex-shrink: 0;
+}
+
+.head-tip {
+  margin: 0 0 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel-2);
+  color: var(--text-dim);
+  font-size: 0.82rem;
+  text-align: center;
 }
 
 .grid-cell {
@@ -1067,7 +1152,9 @@ span.ded-maybe::before {
      at arbitrary character positions. Requires lang="en" on <html>, which is set. */
   hyphens: auto;
   -webkit-hyphens: auto;
-  overflow-wrap: break-word;
+  /* Fallback where hyphenation isn't available: break anywhere rather than
+     letting a long word ("Shapeshifter") get clipped by the cell. */
+  overflow-wrap: anywhere;
   line-height: 1.15;
 }
 
@@ -1077,42 +1164,15 @@ span.ded-maybe::before {
   opacity: 0.9;
 }
 
-/* Mobile-first: let the Classic board fit the viewport instead of forcing a
-   640px horizontal scroll. Cells and gaps compress; the name thumbnail is
-   dropped to buy width for the name text. */
+/* Mobile: keep the full desktop table (thumbnails, colors, readable type) and
+   let it scroll horizontally instead of compressing columns (jojodle-style). */
 @media (max-width: 560px) {
+  .results-wrap {
+    -webkit-overflow-scrolling: touch;
+  }
   .results-table {
-    min-width: 0;
-    width: 100%;
-  }
-  .grid-row {
-    grid-template-columns: 1.7fr 1.1fr 0.7fr 0.7fr 0.7fr 0.9fr 0.7fr;
-    gap: 4px;
-    margin-bottom: 4px;
-  }
-  .grid-cell {
-    min-height: 46px;
-    border-radius: 7px;
-  }
-  .cell-inner {
-    padding: 3px;
-    gap: 3px;
-  }
-  .name-thumb {
-    display: none;
-  }
-  .name-text {
-    font-size: 0.7rem;
-  }
-  .head-cell {
-    font-size: 0.5rem;
-    letter-spacing: 0.02em;
-    padding: 2px 1px;
-  }
-  .deduction-cell {
-    min-height: 34px;
-    font-size: 0.68rem;
-    padding: 3px;
+    /* Left-align so the name column is on-screen at rest; scroll for the rest. */
+    margin: 0;
   }
 }
 
@@ -1129,10 +1189,11 @@ span.ded-maybe::before {
   color: #fff7e0;
 }
 
+/* Wrong = quiet empty gray, so the green/amber hits carry the signal. */
 .match-none {
-  background: var(--far-bg);
-  border-color: var(--far-bd);
-  color: #ffe9ec;
+  background: var(--panel);
+  border-color: var(--line);
+  color: var(--text-dim);
 }
 
 /* ---------- Silhouette mode ---------- */
@@ -1723,6 +1784,7 @@ span.ded-maybe::before {
   color: #1a0d02;
   background: var(--flame);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  cursor: help;
 }
 
 /* ---------- Stats panel ---------- */
@@ -1988,13 +2050,29 @@ span.ded-maybe::before {
   right: 4px;
   padding: 1px 5px;
   border-radius: 6px;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   color: var(--text);
   background: var(--flame);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  cursor: help;
+}
+
+.synergy-pct-tooltip {
+  position: fixed;
+  width: 220px;
+  transform: translateY(-100%);
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 0.84rem;
+  line-height: 1.4;
+  color: var(--text);
+  background: var(--surface, #1e1e2e);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   pointer-events: none;
+  z-index: 9999;
 }
 
 .synergy-card-back {

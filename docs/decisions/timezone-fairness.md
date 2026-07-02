@@ -33,10 +33,10 @@ wants "today's" puzzle to flip at 4pm), but the puzzle's *identity* is a global 
 
 - **Storage / API** key on `(mode, puzzle)`, not date. See
   [`functions/api/schema.sql`](../../functions/api/schema.sql) (`PRIMARY KEY (mode, puzzle,
-  client_id)`) and `functions/api/stats/[mode]/[puzzle].ts`. ✅ Correct as-is.
+  client_id)`) and `functions/api/stats/[mode]/[puzzle].ts`. Correct as-is.
 - **Client submissions** derive `puzzle` from `puzzleNumber()` and validate
   `1 ≤ puzzle ≤ 100_000` (`validateSubmission` in
-  [`src/lib/globalStats.ts`](../../src/lib/globalStats.ts)). ✅ Correct as-is.
+  [`src/lib/globalStats.ts`](../../src/lib/globalStats.ts)). Correct as-is.
 - **Leaderboards** must aggregate over a `puzzle#` (or a contiguous range of them for
   "this week"), **never** `WHERE created_at BETWEEN <wall-clock>`. A wall-clock window
   would mix two puzzles at the day boundary and double-serve the timezone edges.

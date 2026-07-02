@@ -312,11 +312,11 @@ export default function HigherLowerMode() {
     const squares = Array.from({ length: score }, () => "🟩").join("");
     const miss = wonDaily ? "" : "🟥";
     const headline = wonDaily
-      ? `Perfect chain! ${score}/${HL_MAX_SCORE} 🏆`
+      ? `Perfect chain! ${score}/${HL_MAX_SCORE}`
       : `Chain: ${score}/${HL_MAX_SCORE}`;
     const url = shareOrigin() + HIGHER_LOWER_PATH;
     const text =
-      `🃏 Commandle Higher/Lower #${puzzleNumber()}\n` +
+      `Commandle Higher/Lower #${puzzleNumber()}\n` +
       `${headline}\n` +
       `${squares}${miss}\n` +
       url;
@@ -444,7 +444,7 @@ export default function HigherLowerMode() {
 
             <div className="hl-stage">
               {milestone && (
-                <div className="hl-milestone">🔥 {milestone} streak!</div>
+                <div className="hl-milestone">{milestone} streak!</div>
               )}
               <div className="hl-vs">vs</div>
               <div className="hl-track" style={trackStyle}>

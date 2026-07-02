@@ -18,11 +18,11 @@ interface Props {
 
 const HEADERS = [
   "Commander",
-  "Colors",
+  "Colours",
   "Type",
   "Mana Value",
   "Stat Total",
-  "Popularity",
+  "Rank",
   "Year",
 ];
 
@@ -288,6 +288,7 @@ export default function ClassicGrid({
   maxGuesses,
 }: Props & { maxGuesses: number }) {
   const remaining = Math.max(0, maxGuesses - guesses.length);
+  const [rankTipOpen, setRankTipOpen] = useState(false);
   return (
     <div className="results-wrap">
       <div
@@ -297,12 +298,35 @@ export default function ClassicGrid({
       >
         <DeductionRow guesses={guesses} answer={answer} />
         <div className="grid-row grid-head" role="row">
-          {HEADERS.map((h) => (
-            <div key={h} className="grid-cell head-cell" role="columnheader">
-              {h}
-            </div>
-          ))}
+          {HEADERS.map((h) =>
+            h === "Rank" ? (
+              <button
+                key={h}
+                type="button"
+                className="grid-cell head-cell head-help"
+                role="columnheader"
+                aria-expanded={rankTipOpen}
+                title="What does Rank mean?"
+                onClick={() => setRankTipOpen((o) => !o)}
+              >
+                {h}
+                <span className="help-mark" aria-hidden="true">
+                  ?
+                </span>
+              </button>
+            ) : (
+              <div key={h} className="grid-cell head-cell" role="columnheader">
+                {h}
+              </div>
+            ),
+          )}
         </div>
+        {rankTipOpen && (
+          <div className="head-tip" role="note">
+            Rank is the commander&rsquo;s popularity on EDHREC — #1 is the
+            most-built commander.
+          </div>
+        )}
         {[...guesses].reverse().map((g) => (
           <GuessRow key={g.name} guess={g} answer={answer} />
         ))}

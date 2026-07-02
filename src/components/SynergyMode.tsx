@@ -1,5 +1,6 @@
 import type { Commander } from "../types/commander";
 import CardZoom from "./CardZoom";
+import SynergyPct from "./SynergyPct";
 import GuessDots from "./GuessDots";
 import { buildDots } from "../lib/guessDots";
 
@@ -86,14 +87,7 @@ function CardZoomCard({
     <CardZoom name={name} image={image} className="synergy-card-zoom">
       <figure className="synergy-card-img">
         <img src={image} alt={name} loading="eager" draggable={false} />
-        {synergy > 0 && (
-          <span
-            className="synergy-card-pct"
-            title="EDHREC synergy score — how much more this card appears in this commander's decks than average"
-          >
-            +{Math.round(synergy * 100)}%
-          </span>
-        )}
+        <SynergyPct synergy={synergy} />
       </figure>
     </CardZoom>
   );

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 export interface ShareOption {
   key: string;
@@ -6,8 +6,8 @@ export interface ShareOption {
   label: string;
   /** Short helper line under the label. */
   hint: string;
-  /** Emoji/glyph shown in the leading badge. */
-  icon: string;
+  /** Icon shown in the leading badge. */
+  icon: ReactNode;
   /** Transient label shown after the action fires (e.g. "Copied!"). */
   done?: string | null;
   onSelect: () => void;
