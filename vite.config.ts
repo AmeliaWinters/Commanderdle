@@ -5,7 +5,9 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: './',
+  // Must be absolute: the SPA fallback serves index.html at nested routes like
+  // /archive/classic/2026-07-01, where relative './assets/…' URLs would 404.
+  base: '/',
   server: {
     // Honor a port injected via env (e.g. the preview harness) when present.
     port: process.env.PORT ? Number(process.env.PORT) : undefined,

@@ -8,7 +8,7 @@
  * or via `wrangler pages dev`, not the plain Vite dev server.
  */
 import { ImageResponse } from 'workers-og'
-import { decodeGrid, deriveResult, isShareMode, MODE_LABEL, type CellCode } from '../../../../src/lib/shareCode'
+import { decodeGrid, deriveResult, isShareMode, isValidGridCode, MODE_LABEL, type CellCode } from '../../../../src/lib/shareCode'
 
 interface Params {
   mode: string
@@ -68,6 +68,7 @@ function gridMarkup(rows: CellCode[][]): string {
 export const onRequest = async (context: { params: Params }): Promise<Response> => {
   const { mode, puzzle, grid } = context.params
   if (!isShareMode(mode)) return new Response('Bad mode', { status: 400 })
+  if (!isValidGridCode(grid)) return new Response('Bad grid', { status: 400 })
 
   const rows = decodeGrid(grid)
   const { won, score } = deriveResult(mode, grid)

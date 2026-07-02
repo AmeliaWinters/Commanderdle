@@ -5,40 +5,39 @@ import { dailyAnswer, randomAnswer, todayKey, puzzleNumber } from './dailyAnswer
 import { recordDailyResult } from './stats'
 import { recordArchiveResult } from './archive'
 import { submitGlobalResult } from './api'
-import type { ShareMode } from './shareCode'
+import { MAX_GUESSES, type ShareMode } from './shareCode'
 import { playSound } from './sounds'
 
-const MAX_GUESSES_BY_MODE: Record<Mode, number> = {
-  classic: 6,
-  silhouette: 5,
-  quote: 5,
-  synergy: 5,
-  zoom: 5,
-}
-
-const maxGuessesFor = (mode: Mode) => MAX_GUESSES_BY_MODE[mode]
+const maxGuessesFor = (mode: Mode) => MAX_GUESSES[mode]
 
 export interface GameState {
   answer: Commander
   guesses: Commander[]
   skips: number
   status: 'playing' | 'won' | 'lost'
+  /** The date this game belongs to. Kept on the state itself so the persist/record
+   * effects can never pair a stale game with the date of the puzzle being switched to. */
+  dateKey: string
   /** The live daily puzzle (feeds streak stats). */
   isDaily: boolean
   /** A past puzzle replayed from the archive (kept out of streak stats). */
   isArchive: boolean
 }
 
-interface PersistedDaily {
+/** Shape of a persisted game (live daily or archive play). Also read by dailyRecap. */
+export interface PersistedDaily {
   date: string
   answerName: string
   guessNames: string[]
   skips?: number
 }
 
+/** localStorage slot for a mode's live daily game. */
+export const dailyStorageKey = (mode: Mode) => `commanderdle:${mode}:daily`
+
 /** Persistence key: the live daily uses a stable `:daily` slot; archives key by date. */
 const storageKey = (mode: Mode, dateKey: string, isArchive: boolean) =>
-  isArchive ? `commanderdle:${mode}:${dateKey}` : `commanderdle:${mode}:daily`
+  isArchive ? `commanderdle:${mode}:${dateKey}` : dailyStorageKey(mode)
 
 function loadGame(mode: Mode, dateKey: string, isArchive: boolean): GameState {
   const answer = dailyAnswer(mode, dateKey)
@@ -46,6 +45,7 @@ function loadGame(mode: Mode, dateKey: string, isArchive: boolean): GameState {
     answer,
     guesses: [],
     skips: 0,
+    dateKey,
     isDaily: !isArchive,
     isArchive,
     status: 'playing',
@@ -75,9 +75,9 @@ function deriveStatus(answer: Commander, guesses: Commander[], skips: number, mo
 }
 
 /** Record a finished game into the right ledger: daily streak stats, or the archive map. */
-function recordResult(state: GameState, mode: Mode, dateKey: string, won: boolean, guessCount: number) {
-  if (state.isArchive) recordArchiveResult(mode, dateKey, won, guessCount)
-  else if (state.isDaily) recordDailyResult(mode, won, guessCount, dateKey)
+function recordResult(state: GameState, mode: Mode, won: boolean, guessCount: number) {
+  if (state.isArchive) recordArchiveResult(mode, state.dateKey, won, guessCount)
+  else if (state.isDaily) recordDailyResult(mode, won, guessCount, state.dateKey)
 }
 
 /**
@@ -101,39 +101,41 @@ export function useGameState(mode: Mode, archiveDate?: string) {
   useEffect(() => {
     if (state.status === 'playing') return
     const won = state.status === 'won'
-    recordResult(state, mode, dateKey, won, state.guesses.length)
+    recordResult(state, mode, won, state.guesses.length)
     // Contribute to the anonymous community aggregate (live daily only; best-effort,
     // deduped server-side). A loss records the guess cap as guesses-used.
     if (state.isDaily && !state.isArchive) {
       const guesses = won ? state.guesses.length : maxGuessesFor(mode)
-      void submitGlobalResult(mode as ShareMode, puzzleNumber(dateKey), won, guesses)
+      void submitGlobalResult(mode as ShareMode, puzzleNumber(state.dateKey), won, guesses)
     }
-  }, [mode, dateKey, state.isDaily, state.isArchive, state.status, state.guesses.length])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mode, state.dateKey, state.isDaily, state.isArchive, state.status, state.guesses.length])
 
   // Persist progress (both live daily and archive plays; not practice).
   useEffect(() => {
     if (!state.isDaily && !state.isArchive) return
     const payload: PersistedDaily = {
-      date: dateKey,
+      date: state.dateKey,
       answerName: state.answer.name,
       guessNames: state.guesses.map((g) => g.name),
       skips: state.skips,
     }
     try {
-      localStorage.setItem(storageKey(mode, dateKey, state.isArchive), JSON.stringify(payload))
+      localStorage.setItem(storageKey(mode, state.dateKey, state.isArchive), JSON.stringify(payload))
     } catch {
       /* ignore */
     }
-  }, [mode, dateKey, state])
+  }, [mode, state])
 
   const guess = useCallback((commander: Commander) => {
     setState((prev) => {
       if (prev.status !== 'playing') return prev
       if (prev.guesses.some((g) => g.name === commander.name)) return prev
       const guesses = [...prev.guesses, commander]
+      // Recording the finished result is handled by the status effect above
+      // (idempotently), keeping this updater free of storage side effects.
       const status = deriveStatus(prev.answer, guesses, prev.skips, mode)
       playSound(status === 'won' ? 'win' : status === 'lost' ? 'lose' : 'guess')
-      if (status !== 'playing') recordResult(prev, mode, dateKey, status === 'won', guesses.length)
       return { ...prev, guesses, status }
     })
   }, [mode, dateKey])
@@ -144,13 +146,12 @@ export function useGameState(mode: Mode, archiveDate?: string) {
       const skips = prev.skips + 1
       const status = deriveStatus(prev.answer, prev.guesses, skips, mode)
       playSound(status === 'lost' ? 'lose' : 'guess')
-      if (status !== 'playing') recordResult(prev, mode, dateKey, status === 'won', prev.guesses.length)
       return { ...prev, skips, status }
     })
   }, [mode, dateKey])
 
   const startPractice = useCallback(() => {
-    setState({ answer: randomAnswer(mode), guesses: [], skips: 0, isDaily: false, isArchive: false, status: 'playing' })
+    setState({ answer: randomAnswer(mode), guesses: [], skips: 0, dateKey: todayKey(), isDaily: false, isArchive: false, status: 'playing' })
   }, [mode])
 
   const backToDaily = useCallback(() => {

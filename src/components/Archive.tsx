@@ -1,21 +1,9 @@
-import type { ComponentType } from 'react'
-import { TbLayoutGrid } from 'react-icons/tb'
-import { BsPersonFill } from 'react-icons/bs'
-import { FiZoomIn } from 'react-icons/fi'
-import { LuNetwork } from 'react-icons/lu'
-import { FaQuoteRight, FaCheck } from 'react-icons/fa6'
-import type { Mode } from '../types/commander'
+import { useEffect } from 'react'
+import { FaCheck } from 'react-icons/fa6'
 import { todayKey, puzzleNumber } from '../lib/dailyAnswer'
 import { archivePlayPath, navigateToPath } from '../lib/router'
 import { archiveResult } from '../lib/archive'
-
-const MODES: { id: Mode; label: string; Icon: ComponentType }[] = [
-  { id: 'classic', label: 'Classic', Icon: TbLayoutGrid },
-  { id: 'silhouette', label: 'Silhouette', Icon: BsPersonFill },
-  { id: 'zoom', label: 'Zoom', Icon: FiZoomIn },
-  { id: 'synergy', label: 'Synergy', Icon: LuNetwork },
-  { id: 'quote', label: 'Quote', Icon: FaQuoteRight },
-]
+import { MODE_LIST } from './modeList'
 
 /** Every past puzzle date, most recent first (today is live, so it's excluded). */
 function pastDates(): string[] {
@@ -42,6 +30,9 @@ function prettyDate(key: string): string {
 }
 
 export default function Archive() {
+  useEffect(() => {
+    document.title = 'Commandle — Archive'
+  }, [])
   const dates = pastDates()
 
   return (
@@ -67,7 +58,7 @@ export default function Archive() {
                 <span className="archive-date">{prettyDate(date)}</span>
               </div>
               <div className="archive-modes">
-                {MODES.map((m) => {
+                {MODE_LIST.map((m) => {
                   const result = archiveResult(m.id, date)
                   const cls = result ? (result.won ? ' won' : ' lost') : ''
                   return (

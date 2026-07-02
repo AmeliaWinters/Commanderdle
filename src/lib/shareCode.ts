@@ -45,6 +45,11 @@ export function encodeGrid(rows: CellCode[][]): string {
   return rows.map((r) => r.join('')).join('-')
 }
 
+/** True when `code` is a well-formed grid: 1-6 rows of 1-6 cells, digits 0-3 only. */
+export function isValidGridCode(code: string): boolean {
+  return /^[0-3]{1,6}(-[0-3]{1,6}){0,5}$/.test(code)
+}
+
 export function decodeGrid(code: string): CellCode[][] {
   return code
     .split('-')

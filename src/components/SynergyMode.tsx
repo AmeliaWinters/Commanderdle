@@ -1,6 +1,7 @@
 import type { Commander } from "../types/commander";
 import CardZoom from "./CardZoom";
 import GuessDots from "./GuessDots";
+import { buildDots } from "../lib/guessDots";
 
 interface Props {
   answer: Commander;
@@ -30,12 +31,7 @@ export default function SynergyMode({
     ? cards.length
     : Math.min(cards.length, wrongGuesses + 1);
 
-  const dots = Array.from({ length: maxGuesses }, (_, i) => {
-    const g = guesses[i];
-    if (g) return g.name === answer.name ? "correct" : "wrong";
-    if (i < guesses.length + skips) return "wrong";
-    return "empty";
-  });
+  const dots = buildDots(guesses, answer, skips, maxGuesses);
 
   return (
     <div className="synergy-mode">

@@ -350,12 +350,6 @@ body::before {
   color: var(--flame-1);
 }
 
-.mode-blurb {
-  font-size: 0.8rem;
-  color: var(--text-dim);
-  font-style: italic;
-}
-
 /* ---------- Header overflow menu ---------- */
 .menu-wrap {
   position: absolute;
@@ -389,10 +383,6 @@ body::before {
 .menu-btn[aria-expanded="true"] {
   border-color: var(--flame-2);
   color: var(--flame-1);
-}
-
-.menu-dots {
-  transform: translateY(-2px);
 }
 
 .menu-pop {
@@ -466,11 +456,6 @@ body::before {
 
 .link-btn:hover {
   text-decoration: underline;
-}
-
-.reset-btn {
-  color: var(--text-dim);
-  opacity: 0.7;
 }
 
 /* ---------- Play area ---------- */
@@ -680,13 +665,6 @@ body::before {
 
 .ac-name {
   font-size: 1.02rem;
-}
-
-.ac-stats {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-shrink: 0;
 }
 
 .ac-rank {
@@ -1253,21 +1231,6 @@ span.ded-maybe::before {
   margin: 0;
 }
 
-/* Revealed card in quote mode (hover to zoom). */
-.quote-reveal {
-  display: inline-block;
-  margin: 0 auto 16px;
-  cursor: zoom-in;
-}
-
-.quote-reveal img {
-  width: 200px;
-  max-width: 60vw;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
-  display: block;
-}
-
 /* ---------- Quote mode (card text box) ---------- */
 .quote-mode {
   max-width: 560px;
@@ -1322,11 +1285,6 @@ span.ded-maybe::before {
   font-family: "Cinzel", serif;
   font-size: 0.82rem;
   letter-spacing: 0.03em;
-}
-
-.hint-next {
-  font-style: italic;
-  opacity: 0.7;
 }
 
 /* ---------- Guess list (non-classic modes) ---------- */
@@ -1529,31 +1487,6 @@ span.ded-maybe::before {
   margin: 0 0 14px;
 }
 
-/* Inline preview of the branded share-image card. Kept small — it's a teaser
-   that doubles as a share button. */
-.share-preview {
-  display: block;
-  padding: 0;
-  margin: 0 0 12px;
-  background: none;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  overflow: hidden;
-  cursor: pointer;
-  width: 132px;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
-}
-
-.share-preview:hover {
-  border-color: var(--flame-1);
-  box-shadow: 0 0 14px rgba(246, 160, 26, 0.35);
-}
-
-.share-preview img {
-  display: block;
-  width: 100%;
-}
-
 /* Secondary image-share action, styled like the recap companion button. */
 .share-image {
   background: transparent;
@@ -1703,18 +1636,6 @@ span.ded-maybe::before {
 
 .share-btn:hover {
   filter: brightness(1.08);
-}
-
-/* Secondary "recap" action reads as a companion to the primary share. */
-.share-recap {
-  background: transparent;
-  color: var(--text);
-  border: 1px solid var(--flame);
-}
-
-.share-recap:hover {
-  filter: none;
-  background: rgba(227, 171, 38, 0.12);
 }
 
 .result-countdown {
@@ -2067,23 +1988,13 @@ span.ded-maybe::before {
   right: 4px;
   padding: 1px 5px;
   border-radius: 6px;
-  font-size: 0.68rem;
+  font-size: 0.8rem;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
-  color: #1a0d02;
+  color: var(--text);
   background: var(--flame);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
   pointer-events: none;
-}
-
-.synergy-card-text {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  padding: 8px;
-  font-size: 0.85rem;
-  color: var(--text);
 }
 
 .synergy-card-back {
@@ -2227,10 +2138,6 @@ span.ded-maybe::before {
   align-self: center;
   width: 100%;
   max-width: 200px;
-}
-
-.help-btn {
-  font-weight: 700;
 }
 
 .pool-search {
@@ -2764,54 +2671,6 @@ span.ded-maybe::before {
     min-width: 0;
     flex: 1 1 46%;
   }
-}
-
-/* ── Daily "play all 5 modes" progress pips ─────────────────────────── */
-.daily-progress {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin: 12px auto 0;
-  flex-wrap: wrap;
-}
-.daily-progress-pips {
-  display: flex;
-  gap: 6px;
-}
-.daily-pip {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  border-radius: 8px;
-  border: 1px solid var(--line);
-  background: var(--panel);
-  color: var(--text-dim);
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition:
-    transform 0.1s ease,
-    border-color 0.15s ease,
-    color 0.15s ease;
-}
-.daily-pip:hover {
-  transform: translateY(-1px);
-  color: var(--text);
-  border-color: var(--flame-2);
-}
-.daily-pip.done {
-  background: var(--flame);
-  border-color: var(--flame-2);
-  color: #1a1207;
-  box-shadow: 0 2px 10px rgba(236, 90, 28, 0.35);
-}
-.daily-progress-count {
-  font-family: "Inter", system-ui, sans-serif;
-  font-size: 0.78rem;
-  letter-spacing: 0.04em;
-  color: var(--text-dim);
 }
 
 /* ── Archive ────────────────────────────────────────────────────────── */

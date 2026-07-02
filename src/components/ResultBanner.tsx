@@ -2,14 +2,17 @@ import { useState, useEffect, useMemo } from "react";
 import { prefersReducedMotion } from "../lib/reducedMotion";
 import type { Commander, Mode } from "../types/commander";
 import { compareCommander, type MatchKind } from "../lib/compare";
-import {
-  puzzleNumber,
-  msUntilNextPuzzle,
-  formatCountdown,
-} from "../lib/dailyAnswer";
+import { puzzleNumber } from "../lib/dailyAnswer";
 import { navigateToPath, HIGHER_LOWER_PATH } from "../lib/router";
-import { shareOrCopy } from "../lib/share";
-import { buildShareUrl, encodeGrid, type CellCode } from "../lib/shareCode";
+import { shareOrCopy, shareOrigin } from "../lib/share";
+import { useCountdown } from "../lib/useCountdown";
+import { buildDots } from "../lib/guessDots";
+import {
+  buildShareUrl,
+  encodeGrid,
+  MODE_LABEL,
+  type CellCode,
+} from "../lib/shareCode";
 import { buildDailyRecap } from "../lib/dailyRecap";
 import {
   renderShareCard,
@@ -95,25 +98,6 @@ function buildGridCodes(
   return guesses.map((g) => [g.name === answer.name ? 2 : 3] as CellCode[]);
 }
 
-/** Canonical origin for share links (env-configured, falling back to the current origin). */
-function shareOrigin(): string {
-  return (
-    import.meta.env.VITE_SITE_URL?.replace(/\/$/, "") || window.location.origin
-  );
-}
-
-/** Live "Next commander in HH:MM:SS" countdown to the next local midnight. */
-function useCountdown(active: boolean): string {
-  const [ms, setMs] = useState(() => msUntilNextPuzzle());
-  useEffect(() => {
-    if (!active) return;
-    setMs(msUntilNextPuzzle());
-    const id = setInterval(() => setMs(msUntilNextPuzzle()), 1000);
-    return () => clearInterval(id);
-  }, [active]);
-  return formatCountdown(ms);
-}
-
 /** One-shot burst of ember particles that fly out from behind the result card.
  * Pure CSS animation; each ember gets a random direction/size/timing via custom
  * properties. The layer is pointer-transparent and removes itself when done. */
@@ -165,14 +149,6 @@ function EmberBurst() {
   );
 }
 
-const MODE_LABEL: Record<Mode, string> = {
-  classic: "Classic",
-  silhouette: "Silhouette",
-  zoom: "Zoom",
-  synergy: "Synergy",
-  quote: "Quote",
-};
-
 export default function ResultBanner({
   status,
   answer,
@@ -188,24 +164,14 @@ export default function ResultBanner({
   const [challenged, setChallenged] = useState(false);
   const [recapCopied, setRecapCopied] = useState(false);
   const [imgBlob, setImgBlob] = useState<Blob | null>(null);
-  const [imgUrl, setImgUrl] = useState<string | null>(null);
   const [imgSent, setImgSent] = useState<ImageShareOutcome | null>(null);
   const countdown = useCountdown(isDaily);
   const guessCount = guesses.length;
   const wrongGuesses =
     guesses.filter((g) => g.name !== answer.name).length + skips;
 
-  // One pip per attempt: correct (the winning guess), wrong (a miss or skip),
-  // or empty (an attempt never spent). Mirrors the in-play row so the result
-  // screen shows how the game actually went at a glance.
-  const dots = Array.from(
-    { length: maxGuesses },
-    (_, i): "correct" | "wrong" | "empty" => {
-      const g = guesses[i];
-      if (g) return g.name === answer.name ? "correct" : "wrong";
-      return i < guesses.length + skips ? "wrong" : "empty";
-    },
-  );
+  // Mirrors the in-play pip row so the result screen shows how the game went.
+  const dots = buildDots(guesses, answer, skips, maxGuesses);
 
   const flash = (set: (v: boolean) => void) => {
     set(true);
@@ -230,7 +196,6 @@ export default function ResultBanner({
   // an inline preview so players can see what they'd be posting.
   useEffect(() => {
     let alive = true;
-    let url: string | null = null;
     renderShareCard({
       modeLabel: MODE_LABEL[mode],
       puzzle: isDaily ? puzzleNumber() : null,
@@ -239,16 +204,12 @@ export default function ResultBanner({
       site: shareOrigin().replace(/^https?:\/\//, ""),
     }).then(
       (blob) => {
-        if (!alive) return;
-        url = URL.createObjectURL(blob);
-        setImgBlob(blob);
-        setImgUrl(url);
+        if (alive) setImgBlob(blob);
       },
       () => {},
     );
     return () => {
       alive = false;
-      if (url) URL.revokeObjectURL(url);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode, guesses.length, status]);

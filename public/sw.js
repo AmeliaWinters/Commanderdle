@@ -3,7 +3,7 @@
  * keeps working offline and installs as a PWA. Deliberately simple and cache-busting:
  * bump CACHE_VERSION to retire old caches on deploy.
  */
-const CACHE_VERSION = 'commandle-v1'
+const CACHE_VERSION = 'commandle-v2'
 const CORE_ASSETS = [
   '/',
   '/index.html',
@@ -36,6 +36,8 @@ self.addEventListener('fetch', (event) => {
   if (req.method !== 'GET') return
   const url = new URL(req.url)
   if (url.origin !== self.location.origin) return
+  // Never cache API responses (community stats must stay live) or share/og pages.
+  if (url.pathname.startsWith('/api/') || url.pathname.startsWith('/share/') || url.pathname.startsWith('/og/')) return
 
   // Navigations: network-first, fall back to the cached app shell when offline.
   if (req.mode === 'navigate') {

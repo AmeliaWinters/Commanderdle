@@ -11,13 +11,11 @@ import {
   navigateToPath,
   HIGHER_LOWER_PATH,
   ARCHIVE_PATH,
+  MODE_PATHS,
 } from "../lib/router";
-import {
-  poolFor,
-  puzzleNumber,
-  msUntilNextPuzzle,
-  formatCountdown,
-} from "../lib/dailyAnswer";
+import { poolFor, puzzleNumber } from "../lib/dailyAnswer";
+import { useCountdown } from "../lib/useCountdown";
+import { buildDots } from "../lib/guessDots";
 import { syncServerTime, clockAheadPuzzles } from "../lib/serverTime";
 import { isArchiveCompleted } from "../lib/archive";
 import {
@@ -51,6 +49,15 @@ import {
   onMuteChange,
 } from "../lib/sounds";
 import { FiSettings } from "react-icons/fi";
+
+// The non-classic modes share one props contract; the active view is picked from
+// this map instead of four near-identical conditional blocks.
+const MODE_VIEWS = {
+  silhouette: SilhouetteMode,
+  zoom: ZoomMode,
+  synergy: SynergyMode,
+  quote: QuoteMode,
+} as const;
 
 /** Tracks whether the URL matches one of the standalone (non-mode) pages. */
 function usePathMatch(match: (pathname: string) => boolean) {
@@ -92,9 +99,7 @@ export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [howToOpen, setHowToOpen] = useState(false);
   const [adTest, setAdTest] = useState(isAdTestMode);
-  const [countdown, setCountdown] = useState(() =>
-    formatCountdown(msUntilNextPuzzle()),
-  );
+  const countdown = useCountdown();
   const [muted, setMuted] = useState(isMuted);
   // Anti-time-travel: 'ahead' means the device clock is set forward into a future
   // puzzle, verified against authoritative server time. 'unknown' = not yet checked
@@ -120,15 +125,6 @@ export default function App() {
   useEffect(() => {
     preloadSounds();
     return onMuteChange(setMuted);
-  }, []);
-
-  // Tick the "next puzzle in" countdown once a second.
-  useEffect(() => {
-    const id = setInterval(
-      () => setCountdown(formatCountdown(msUntilNextPuzzle())),
-      1000,
-    );
-    return () => clearInterval(id);
   }, []);
 
   // Show the how-to-play once per mode the first time it's opened (live daily only).
@@ -208,42 +204,40 @@ export default function App() {
   const clockBlocked = clockState === "ahead" && isDaily && !isArchive;
   const disabledNames = new Set(guesses.map((g) => g.name));
 
-  // Classic mode: the card-pool peek unlocks after 4 wrong guesses and is filtered
-  // down to the commanders still consistent with every clue earned so far.
-  const classicPool = useMemo(
-    () =>
-      mode === "classic"
-        ? possiblePool(poolFor("classic"), guesses, answer)
-        : null,
-    [mode, guesses, answer],
-  );
-  const poolUnlocked = mode === "classic" && wrongGuesses >= 4;
-
-  // Synergy mode: peek unlocks after 3 wrong guesses and is filtered to commanders
-  // whose color identity covers the colors of every synergy card revealed so far.
-  const revealedSynergy = useMemo(() => {
-    if (mode !== "synergy") return [];
-    const count = Math.min(answer.synergyCards.length, wrongGuesses + 1);
-    return answer.synergyCards.slice(0, count);
-  }, [mode, answer, wrongGuesses]);
-  const synergyPeekPool = useMemo(
-    () =>
-      mode === "synergy"
-        ? synergyPool(poolFor("synergy"), revealedSynergy)
-        : null,
-    [mode, revealedSynergy],
-  );
-  const synergyUnlocked = mode === "synergy" && wrongGuesses >= 3;
-
-  // Quote mode: peek unlocks after 2 wrong guesses and is filtered to commanders
-  // that share the answer's (already-revealed) color identity and have a quote.
-  const quotePeekPool = useMemo(
-    () => (mode === "quote" ? quotePool(poolFor("quote"), answer) : null),
-    [mode, answer],
-  );
-  const quoteUnlockPoolNumber = 3;
-  const quoteUnlockedPool =
-    mode === "quote" && wrongGuesses >= quoteUnlockPoolNumber;
+  // "Possible commanders" peek. The deduction modes expose a pool filtered to the
+  // commanders still consistent with the clues revealed so far, unlocked after a
+  // few wrong guesses so it helps late-game without trivializing the start.
+  const peek = useMemo(() => {
+    switch (mode) {
+      case "classic":
+        return {
+          pool: possiblePool(poolFor("classic"), guesses, answer),
+          unlockAt: 4,
+          hint: "See the commanders still possible by popularity",
+        };
+      case "synergy": {
+        const revealed = answer.synergyCards.slice(
+          0,
+          Math.min(answer.synergyCards.length, wrongGuesses + 1),
+        );
+        return {
+          pool: synergyPool(poolFor("synergy"), revealed),
+          unlockAt: 3,
+          hint: "See the commanders still possible by the revealed cards’ colors",
+        };
+      }
+      case "quote":
+        return {
+          pool: quotePool(poolFor("quote"), answer),
+          unlockAt: 3,
+          hint: "See the commanders that share this color identity",
+        };
+      default:
+        return null;
+    }
+  }, [mode, guesses, answer, wrongGuesses]);
+  const peekUnlocked = peek !== null && wrongGuesses >= peek.unlockAt;
+  const ModeView = mode === "classic" ? null : MODE_VIEWS[mode];
 
   // Standalone pages: return only after every hook above has run, so the hook order
   // stays constant across client-side navigation (React requires this).
@@ -253,8 +247,7 @@ export default function App() {
 
   function navPrivacy(e: React.MouseEvent) {
     e.preventDefault();
-    window.history.pushState(null, "", "/privacy");
-    window.dispatchEvent(new PopStateEvent("popstate"));
+    navigateToPath("/privacy");
   }
 
   return (
@@ -312,7 +305,10 @@ export default function App() {
                   </button>
                   <button
                     onClick={() => {
-                      backToDaily();
+                      // From an archive play the URL must change too, or the game
+                      // would keep recording under the archived date.
+                      if (archivePlay) navigateToPath(MODE_PATHS[mode]);
+                      else backToDaily();
                       setMenuOpen(false);
                     }}
                   >
@@ -320,7 +316,7 @@ export default function App() {
                   </button>
                 </>
               )}
-              {mode !== "classic" && mode !== "synergy" && mode !== "quote" && (
+              {!peek && (
                 <button
                   onClick={() => {
                     setPoolOpen(true);
@@ -433,22 +429,10 @@ export default function App() {
 
       {poolOpen && (
         <PoolModal
-          pool={
-            mode === "classic" && classicPool
-              ? classicPool
-              : mode === "synergy" && synergyPeekPool
-                ? synergyPeekPool
-                : mode === "quote" && quotePeekPool
-                  ? quotePeekPool
-                  : poolFor(mode)
-          }
+          pool={peek ? peek.pool : poolFor(mode)}
           onClose={() => setPoolOpen(false)}
           blurQuote={mode === "quote"}
-          heading={
-            mode === "classic" || mode === "synergy" || mode === "quote"
-              ? "Possible commanders"
-              : undefined
-          }
+          heading={peek ? "Possible commanders" : undefined}
         />
       )}
 
@@ -457,100 +441,31 @@ export default function App() {
           <ClockAheadNotice />
         ) : (
           <>
-        {!done && mode === "silhouette" && (
-          <SilhouetteMode
+        {!done && ModeView && (
+          <ModeView
             answer={answer}
             guesses={guesses}
             skips={skips}
             wrongGuesses={wrongGuesses}
             maxGuesses={maxGuesses}
-            solved={solved || done}
-            onSkip={done ? undefined : skip}
-          />
-        )}
-        {!done && mode === "zoom" && (
-          <ZoomMode
-            answer={answer}
-            guesses={guesses}
-            skips={skips}
-            wrongGuesses={wrongGuesses}
-            maxGuesses={maxGuesses}
-            solved={solved || done}
-            onSkip={done ? undefined : skip}
-          />
-        )}
-        {!done && mode === "synergy" && (
-          <SynergyMode
-            answer={answer}
-            guesses={guesses}
-            skips={skips}
-            wrongGuesses={wrongGuesses}
-            maxGuesses={maxGuesses}
-            solved={solved || done}
-            onSkip={done ? undefined : skip}
-          />
-        )}
-        {!done && mode === "quote" && (
-          <QuoteMode
-            answer={answer}
-            guesses={guesses}
-            skips={skips}
-            wrongGuesses={wrongGuesses}
-            maxGuesses={maxGuesses}
-            solved={solved || done}
-            onSkip={done ? undefined : skip}
+            solved={solved}
+            onSkip={skip}
           />
         )}
 
         {!done && (
           <div className="input-row">
             <div className="input-side input-side-left">
-              {mode === "classic" && classicPool && (
+              {peek && (
                 <button
                   className="pool-peek-btn"
-                  onClick={() => poolUnlocked && setPoolOpen(true)}
-                  disabled={!poolUnlocked}
-                  title={
-                    poolUnlocked
-                      ? "See the commanders still possible by popularity"
-                      : undefined
-                  }
+                  onClick={() => peekUnlocked && setPoolOpen(true)}
+                  disabled={!peekUnlocked}
+                  title={peekUnlocked ? peek.hint : undefined}
                 >
-                  {poolUnlocked
-                    ? `Card pool (${classicPool.length})`
-                    : `View cards in ${4 - wrongGuesses}`}
-                </button>
-              )}
-              {mode === "synergy" && synergyPeekPool && (
-                <button
-                  className="pool-peek-btn"
-                  onClick={() => synergyUnlocked && setPoolOpen(true)}
-                  disabled={!synergyUnlocked}
-                  title={
-                    synergyUnlocked
-                      ? "See the commanders still possible by the revealed cards’ colors"
-                      : undefined
-                  }
-                >
-                  {synergyUnlocked
-                    ? `Card pool (${synergyPeekPool.length})`
-                    : `View cards in ${3 - wrongGuesses}`}
-                </button>
-              )}
-              {mode === "quote" && quotePeekPool && (
-                <button
-                  className="pool-peek-btn"
-                  onClick={() => quoteUnlockedPool && setPoolOpen(true)}
-                  disabled={!quoteUnlockedPool}
-                  title={
-                    quoteUnlockedPool
-                      ? "See the commanders that share this color identity"
-                      : undefined
-                  }
-                >
-                  {quoteUnlockedPool
-                    ? `Card pool (${quotePeekPool.length})`
-                    : `View cards in ${quoteUnlockPoolNumber - wrongGuesses}`}
+                  {peekUnlocked
+                    ? `Card pool (${peek.pool.length})`
+                    : `View cards in ${peek.unlockAt - wrongGuesses}`}
                 </button>
               )}
             </div>
@@ -586,11 +501,7 @@ export default function App() {
 
         {mode === "classic" && (!done || revealHeld) && (
           <GuessDots
-            dots={Array.from({ length: maxGuesses }, (_, i) => {
-              const g = guesses[i];
-              if (g) return g.name === answer.name ? "correct" : "wrong";
-              return i < guesses.length + skips ? "wrong" : "empty";
-            })}
+            dots={buildDots(guesses, answer, skips, maxGuesses)}
             wrongGuesses={wrongGuesses}
             maxGuesses={maxGuesses}
           />

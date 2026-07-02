@@ -1,13 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { ZOOM_POOL } from '../lib/commanders'
 
-const USE_REAL_CARDS = true
-const RANDOMIZE = false
-/** When RANDOMIZE is true: how many rows of cards to stack down each side. */
-const CARDS_PER_SIDE = 4
-/** When RANDOMIZE is true: how many columns of cards each side gets (inward from edge). */
-const COLUMNS_PER_SIDE = 3
-
 interface CardSpec {
   left: string
   top: string
@@ -17,7 +10,8 @@ interface CardSpec {
   rot: number
 }
 
-const HARDCODED_CARDS: CardSpec[] = [
+/** Desktop layout: a handful of large cards drifting around the page edges. */
+const CARDS: CardSpec[] = [
   { left: '8%', top: '12%', size: 150, delay: 0, dur: 26, rot: -13 },
   { left: '78%', top: '18%', size: 190, delay: -6, dur: 32, rot: 9 },
   { left: '72%', top: '64%', size: 170, delay: -12, dur: 28, rot: 3 },
@@ -31,7 +25,7 @@ const HARDCODED_CARDS: CardSpec[] = [
  * from the edges without crowding the content column. Sizes are deliberately small
  * and positions hug the top/bottom corners where the UI leaves breathing room.
  */
-const HARDCODED_CARDS_MOBILE: CardSpec[] = [
+const CARDS_MOBILE: CardSpec[] = [
   { left: '-10%', top: '2%', size: 110, delay: 0, dur: 26, rot: -13 },
   { left: '80%', top: '5%', size: 120, delay: -6, dur: 32, rot: 10 },
   { left: '-12%', top: '78%', size: 130, delay: -12, dur: 28, rot: -8 },
@@ -54,45 +48,6 @@ function useIsMobile(): boolean {
   return isMobile
 }
 
-/**
- * A grid of cards hugging the left and right edges: `cols` columns marching inward
- * from each edge, each `rows` cards tall, tiled so each side is solidly covered.
- * Sizes/positions are deterministic (no muddy overlap); only rotation gets jitter.
- */
-function edgeCards(rows: number, cols: number): CardSpec[] {
-  const rnd = (min: number, max: number) => min + Math.random() * (max - min)
-  const vh = typeof window !== 'undefined' ? window.innerHeight : 800
-  const vw = typeof window !== 'undefined' ? window.innerWidth : 1200
-
-  const slot = vh / rows // each card owns one vertical slot
-  const height = slot * 1.18 // slight overlap so floating never opens a gap
-  const width = height / 1.4 // MTG aspect ratio (height = size * 1.4)
-  const colStep = width * 0.86 // columns overlap a touch so there are no seams
-
-  const cards: CardSpec[] = []
-  for (const side of ['left', 'right'] as const) {
-    for (let col = 0; col < cols; col++) {
-      // First column hangs slightly off the screen edge; the rest march inward.
-      const x =
-        side === 'left'
-          ? -width * 0.22 + col * colStep
-          : vw - width * 0.78 - col * colStep
-      for (let i = 0; i < rows; i++) {
-        const top = i * slot - (height - slot) / 2
-        cards.push({
-          left: `${Math.round(x)}px`,
-          top: `${Math.round(top)+25}px`,
-          size: Math.round(width-10),
-          delay: -rnd(0, 20),
-          dur: rnd(24, 40),
-          rot: rnd(-6, 6), // small rotation jitter only
-        })
-      }
-    }
-  }
-  return cards
-}
-
 /** A few real commander images (with art), spread across the pool. Changes daily. */
 function pickRealImages(count: number): string[] {
   const imgs = ZOOM_POOL.map((c) => c.normalImage ?? c.artCrop).filter(
@@ -100,30 +55,17 @@ function pickRealImages(count: number): string[] {
   )
   if (imgs.length === 0) return []
 
-  const today = new Date()
-  const dayOfMonth = today.getDate() // 1–31
-  const offset = dayOfMonth % imgs.length // Ensure it's within bounds
-
+  const offset = new Date().getDate() % imgs.length
   const step = Math.max(1, Math.floor(imgs.length / count))
   return Array.from({ length: count }, (_, i) => imgs[(offset + i * step) % imgs.length])
 }
 
+/** Decorative layer of real card images floating behind the page content. */
 export default function CardBackdrop() {
   const isMobile = useIsMobile()
-  // useMemo so random positions/picks stay stable across re-renders.
-  const cards = useMemo(
-    () =>
-      RANDOMIZE
-        ? edgeCards(CARDS_PER_SIDE, COLUMNS_PER_SIDE)
-        : isMobile
-          ? HARDCODED_CARDS_MOBILE
-          : HARDCODED_CARDS,
-    [isMobile],
-  )
-  const images = useMemo(
-    () => (USE_REAL_CARDS ? pickRealImages(cards.length) : []),
-    [cards.length],
-  )
+  const cards = isMobile ? CARDS_MOBILE : CARDS
+  // useMemo so the day's picks stay stable across re-renders.
+  const images = useMemo(() => pickRealImages(cards.length), [cards.length])
 
   return (
     <div className="card-backdrop" aria-hidden="true">
@@ -138,7 +80,7 @@ export default function CardBackdrop() {
           animationDelay: `${c.delay}s`,
           ['--rot' as string]: `${c.rot}deg`,
         }
-        return USE_REAL_CARDS && src ? (
+        return src ? (
           <img key={i} className="bg-card bg-card-real" src={src} alt="" style={style} />
         ) : (
           <span key={i} className="bg-card" style={style} />

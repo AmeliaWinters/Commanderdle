@@ -145,25 +145,41 @@ function trackPageview(mode: Mode) {
  * Router hook: returns the current mode (derived from the URL) and a navigate function that
  * pushes a new mode-page. Keeps mode and URL in sync across back/forward navigation.
  */
+/** True for pages outside the mode system (privacy, higher/lower, archive). */
+function isStandalonePath(path: string): boolean {
+  return (
+    isPrivacyPath(path) ||
+    isHigherLowerPath(path) ||
+    isArchiveBrowsePath(path) ||
+    parseArchivePlay(path) !== null
+  )
+}
+
 export function useModeRoute(): [Mode, (mode: Mode) => void] {
   const [mode, setMode] = useState<Mode>(() => modeFromPath(window.location.pathname))
+  // Bumped on every route change so mode meta re-applies when returning from a
+  // standalone page (which sets its own title) even if the mode didn't change.
+  const [routeTick, setRouteTick] = useState(0)
 
   useEffect(() => {
     const onPop = () => {
       const path = window.location.pathname
-      if (!isPrivacyPath(path) && !isHigherLowerPath(path)) {
-        setMode(modeFromPath(path))
-      }
+      setRouteTick((t) => t + 1)
+      // Standalone pages aren't mode routes; deriving a mode from them would
+      // misreport 'classic' to meta/analytics.
+      if (!isStandalonePath(path)) setMode(modeFromPath(path))
     }
     window.addEventListener('popstate', onPop)
     return () => window.removeEventListener('popstate', onPop)
   }, [])
 
   // Keep the document title and pageview tracking in step with the active mode.
+  // Standalone pages own their meta, so leave theirs alone.
   useEffect(() => {
+    if (isStandalonePath(window.location.pathname)) return
     applyModeMeta(mode)
     trackPageview(mode)
-  }, [mode])
+  }, [mode, routeTick])
 
   const navigate = (next: Mode) => {
     if (next === mode) return

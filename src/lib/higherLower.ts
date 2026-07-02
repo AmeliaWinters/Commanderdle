@@ -1,6 +1,6 @@
 import type { Commander } from "../types/commander";
 import { COMMANDERS } from "./commanders";
-import { todayKey, puzzleNumber } from "./dailyAnswer";
+import { todayKey, hashString } from "./dailyAnswer";
 
 /**
  * "Higher / Lower" — a bonus daily that lives outside the main mode set. Players
@@ -13,18 +13,6 @@ import { todayKey, puzzleNumber } from "./dailyAnswer";
 export const HL_STAT_LABEL = "decks";
 export function hlValue(c: Commander): number {
   return c.numDecks;
-}
-
-/** Deterministic 32-bit hash (xmur3-style) of a string. */
-function hashString(str: string): number {
-  let h = 1779033703 ^ str.length;
-  for (let i = 0; i < str.length; i++) {
-    h = Math.imul(h ^ str.charCodeAt(i), 3432918353);
-    h = (h << 13) | (h >>> 19);
-  }
-  h = Math.imul(h ^ (h >>> 16), 2246822507);
-  h = Math.imul(h ^ (h >>> 13), 3266489909);
-  return (h ^ (h >>> 16)) >>> 0;
 }
 
 /** mulberry32 PRNG — small, fast, deterministic from a 32-bit seed. */
@@ -123,5 +111,3 @@ export function endlessChain(): Commander[] {
 }
 
 export const HL_MAX_SCORE = CHAIN_LENGTH - 1;
-
-export { puzzleNumber };

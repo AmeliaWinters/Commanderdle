@@ -8,15 +8,11 @@ import {
   isClose,
   HL_STAT_LABEL,
   HL_MAX_SCORE,
-  puzzleNumber,
 } from "../lib/higherLower";
-import {
-  msUntilNextPuzzle,
-  formatCountdown,
-  todayKey,
-} from "../lib/dailyAnswer";
+import { todayKey, puzzleNumber } from "../lib/dailyAnswer";
 import { navigateToPath, MODE_PATHS, HIGHER_LOWER_PATH } from "../lib/router";
-import { shareOrCopy } from "../lib/share";
+import { shareOrCopy, shareOrigin } from "../lib/share";
+import { useCountdown } from "../lib/useCountdown";
 import { prefersReducedMotion } from "../lib/reducedMotion";
 import CardBackdrop from "./CardBackdrop";
 import { playSound } from "../lib/sounds";
@@ -64,23 +60,6 @@ function loadNumber(key: string): number {
   } catch {
     return 0;
   }
-}
-
-/** Canonical origin for share links (env-configured, falling back to origin). */
-function shareOrigin(): string {
-  return (
-    import.meta.env.VITE_SITE_URL?.replace(/\/$/, "") ||
-    window.location.origin
-  );
-}
-
-function useCountdown(): string {
-  const [ms, setMs] = useState(() => msUntilNextPuzzle());
-  useEffect(() => {
-    const id = setInterval(() => setMs(msUntilNextPuzzle()), 1000);
-    return () => clearInterval(id);
-  }, []);
-  return formatCountdown(ms);
 }
 
 /**
@@ -185,6 +164,9 @@ function CardSlot({
 }
 
 export default function HigherLowerMode() {
+  useEffect(() => {
+    document.title = "Commandle — Higher / Lower";
+  }, []);
   const [mode, setMode] = useState<Mode>("daily");
   const [chain, setChain] = useState<Commander[]>(dailyChain);
 

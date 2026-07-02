@@ -1,6 +1,7 @@
 import type { Commander } from '../types/commander'
 import CardZoom from './CardZoom'
 import GuessDots from './GuessDots'
+import { buildDots } from '../lib/guessDots'
 
 interface Props {
   answer: Commander
@@ -22,13 +23,7 @@ export default function SilhouetteMode({ answer, guesses, skips, wrongGuesses, m
   const darken = solved ? 0 : Math.max(0, 0.55 - wrongGuesses * (0.55 / guessesToClear))
   const src = answer.artCrop ?? answer.normalImage ?? ''
 
-  // One dot per allowed guess: green = correct, red = wrong/skipped, empty = not yet used.
-  const dots = Array.from({ length: maxGuesses }, (_, i) => {
-    const g = guesses[i]
-    if (g) return g.name === answer.name ? 'correct' : 'wrong'
-    if (i < guesses.length + skips) return 'wrong'
-    return 'empty'
-  })
+  const dots = buildDots(guesses, answer, skips, maxGuesses)
 
   const image = src ? (
     <img

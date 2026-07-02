@@ -1,5 +1,7 @@
 import type { Mode } from "../types/commander";
 import { todayKey, puzzleNumber } from "./dailyAnswer";
+import { MAX_GUESSES } from "./shareCode";
+import { dailyStorageKey, type PersistedDaily } from "./useGameState";
 
 /** Mode order + labels for the aggregated daily-recap share. */
 const RECAP_MODES: { mode: Mode; label: string }[] = [
@@ -10,26 +12,11 @@ const RECAP_MODES: { mode: Mode; label: string }[] = [
   { mode: "quote", label: "Quote" },
 ];
 
-const MAX_GUESSES: Record<Mode, number> = {
-  classic: 6,
-  silhouette: 5,
-  zoom: 5,
-  synergy: 5,
-  quote: 5,
-};
-
-interface PersistedDaily {
-  date: string;
-  answerName: string;
-  guessNames: string[];
-  skips?: number;
-}
-
 /** One finished mode's line for the recap, or null if today's daily isn't done yet. */
 function lineFor(mode: Mode, label: string): string | null {
   let saved: PersistedDaily | null = null;
   try {
-    const raw = localStorage.getItem(`commanderdle:${mode}:daily`);
+    const raw = localStorage.getItem(dailyStorageKey(mode));
     if (raw) saved = JSON.parse(raw) as PersistedDaily;
   } catch {
     return null;

@@ -45,8 +45,8 @@ export function formatCountdown(ms: number): string {
   return `${h}:${m}:${s}`;
 }
 
-/** Deterministic 32-bit hash (xmur3-style) of a string. */
-function hashString(str: string): number {
+/** Deterministic 32-bit hash (xmur3-style) of a string. Also seeds Higher/Lower's PRNG. */
+export function hashString(str: string): number {
   let h = 1779033703 ^ str.length;
   for (let i = 0; i < str.length; i++) {
     h = Math.imul(h ^ str.charCodeAt(i), 3432918353);

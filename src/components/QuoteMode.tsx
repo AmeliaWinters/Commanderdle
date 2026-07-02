@@ -2,6 +2,7 @@ import { statDisplay } from "../lib/compare";
 import type { Commander } from "../types/commander";
 import GuessDots from "./GuessDots";
 import ManaCost from "./ManaSymbols";
+import { buildDots } from "../lib/guessDots";
 
 interface Props {
   answer: Commander;
@@ -38,12 +39,7 @@ export default function QuoteMode({
   const all = hints(answer);
   const revealed = all.slice(0, wrongGuesses);
 
-  const dots = Array.from({ length: maxGuesses }, (_, i) => {
-    const g = guesses[i];
-    if (g) return g.name === answer.name ? "correct" : "wrong";
-    if (i < guesses.length + skips) return "wrong";
-    return "empty";
-  });
+  const dots = buildDots(guesses, answer, skips, maxGuesses);
 
   return (
     <div className="quote-mode">

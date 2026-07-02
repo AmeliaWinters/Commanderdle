@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import type { Commander } from '../types/commander'
 import CardZoom from './CardZoom'
 import GuessDots from './GuessDots'
+import { buildDots } from '../lib/guessDots'
 
 interface Props {
   answer: Commander
@@ -35,12 +36,7 @@ export default function ZoomMode({ answer, guesses, skips, wrongGuesses, maxGues
     return `${x}% ${y}%`
   }, [answer.name])
 
-  const dots = Array.from({ length: maxGuesses }, (_, i) => {
-    const g = guesses[i]
-    if (g) return g.name === answer.name ? 'correct' : 'wrong'
-    if (i < guesses.length + skips) return 'wrong'
-    return 'empty'
-  })
+  const dots = buildDots(guesses, answer, skips, maxGuesses)
 
   const image = src ? (
     <img

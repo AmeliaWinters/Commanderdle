@@ -1,10 +1,6 @@
-import type { ComponentType } from 'react'
-import { TbLayoutGrid } from 'react-icons/tb'
-import { BsPersonFill } from 'react-icons/bs'
-import { FiZoomIn } from 'react-icons/fi'
-import { LuNetwork } from 'react-icons/lu'
-import { FaQuoteRight, FaCheck } from 'react-icons/fa6'
+import { FaCheck } from 'react-icons/fa6'
 import type { Mode } from '../types/commander'
+import { MODE_LIST } from './modeList'
 import { MODE_PATHS } from '../lib/router'
 import { isModeCompletedToday } from '../lib/stats'
 import { todayKey } from '../lib/dailyAnswer'
@@ -20,21 +16,11 @@ interface Props {
   hrefFor?: (mode: Mode) => string
 }
 
-// Each mode carries a small glyph that previews the kind of puzzle it is, so the
-// nav reads as the personality of the site rather than a row of identical boxes.
-const MODES: { id: Mode; label: string; Icon: ComponentType }[] = [
-  { id: 'classic', label: 'Classic', Icon: TbLayoutGrid },
-  { id: 'silhouette', label: 'Silhouette', Icon: BsPersonFill },
-  { id: 'zoom', label: 'Zoom', Icon: FiZoomIn },
-  { id: 'synergy', label: 'Synergy', Icon: LuNetwork },
-  { id: 'quote', label: 'Quote', Icon: FaQuoteRight },
-]
-
 export default function ModeTabs({ mode, onNavigate, completedSignal, isCompleted, hrefFor }: Props) {
   const today = todayKey()
   return (
     <nav className="mode-tabs">
-      {MODES.map((m) => {
+      {MODE_LIST.map((m) => {
         void completedSignal // recompute when a game finishes
         const completed = isCompleted ? isCompleted(m.id) : isModeCompletedToday(m.id, today)
         return (

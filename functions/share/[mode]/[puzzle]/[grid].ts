@@ -6,7 +6,7 @@
  *
  * Cloudflare Pages Function. No data store — everything is derived from the URL.
  */
-import { deriveResult, isShareMode, MODE_LABEL, MODE_PATH } from '../../../../src/lib/shareCode'
+import { deriveResult, isShareMode, isValidGridCode, MODE_LABEL, MODE_PATH } from '../../../../src/lib/shareCode'
 
 interface Params {
   mode: string
@@ -23,6 +23,7 @@ function escapeHtml(s: string): string {
 export const onRequest = (context: { params: Params; request: Request }): Response => {
   const { mode, puzzle, grid } = context.params
   if (!isShareMode(mode)) return new Response('Not found', { status: 404 })
+  if (!isValidGridCode(grid)) return new Response('Not found', { status: 404 })
 
   const origin = new URL(context.request.url).origin
   const { won, score } = deriveResult(mode, grid)

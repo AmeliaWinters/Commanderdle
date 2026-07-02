@@ -1,4 +1,10 @@
+import { useEffect } from 'react'
+import { navigateToPath } from '../lib/router'
+
 export default function PrivacyPolicy() {
+  useEffect(() => {
+    document.title = 'Commandle — Privacy Policy'
+  }, [])
   return (
     <div className="privacy-policy">
       <header className="app-header">
@@ -96,7 +102,7 @@ export default function PrivacyPolicy() {
       </article>
 
       <footer className="app-footer">
-        <a href="/" onClick={(e) => { e.preventDefault(); window.history.pushState(null, '', '/'); window.dispatchEvent(new PopStateEvent('popstate')) }}>
+        <a href="/" onClick={(e) => { e.preventDefault(); navigateToPath('/') }}>
           ← Back to game
         </a>
       </footer>

@@ -17,3 +17,10 @@ export async function shareOrCopy(text: string): Promise<"shared" | "copied"> {
   await navigator.clipboard?.writeText(text);
   return "copied";
 }
+
+/** Canonical origin for share links (env-configured, falling back to the current origin). */
+export function shareOrigin(): string {
+  return (
+    import.meta.env.VITE_SITE_URL?.replace(/\/$/, "") || window.location.origin
+  );
+}
