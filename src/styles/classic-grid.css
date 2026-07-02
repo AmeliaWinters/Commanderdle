@@ -243,9 +243,10 @@ button.head-help:hover {
 
 /* Mobile: keep the full desktop table (thumbnails, colors, readable type) and
    let it scroll horizontally instead of compressing columns (jojodle-style). */
-@media (max-width: 560px) {
+@media (max-width: 640px) {
   .results-wrap {
     -webkit-overflow-scrolling: touch;
+    overflow-x: scroll;
   }
   .results-table {
     /* Left-align so the name column is on-screen at rest; scroll for the rest. */

@@ -20,7 +20,7 @@ export default function SilhouetteMode({ answer, guesses, skips, wrongGuesses, m
   // for the final allowed guess (i.e. after maxGuesses - 1 wrong guesses).
   const guessesToClear = Math.max(1, maxGuesses - 1)
   const blur = solved ? 0 : Math.max(0, MAX_BLUR - wrongGuesses * (MAX_BLUR / guessesToClear))
-  const darken = solved ? 0 : Math.max(0, 0.55 - wrongGuesses * (0.55 / guessesToClear))
+  const darken = solved ? 0 : Math.max(0, 0.25 - wrongGuesses * (0.55 / guessesToClear))
   const src = answer.artCrop ?? answer.normalImage ?? ''
 
   const dots = buildDots(guesses, answer, skips, maxGuesses)
@@ -47,7 +47,7 @@ export default function SilhouetteMode({ answer, guesses, skips, wrongGuesses, m
 
       {!solved && wrongGuesses >= maxGuesses - 1 && (
         <p className="hint-line letter-hint">
-          Last guess — the name starts with “{answer.name[0]}…”
+          Last guess! The name starts with "{answer.name[0]}…"
         </p>
       )}
     </div>

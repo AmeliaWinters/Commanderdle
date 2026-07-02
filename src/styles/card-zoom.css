@@ -12,6 +12,13 @@
   animation: zoom-in 0.12s ease-out;
 }
 
+@media (max-width: 640px) {
+  .card-zoom {
+    width: 90vw;
+    max-width: 90vw;
+  }
+}
+
 /* Table popover: fixed so it escapes the scrollable results container. */
 .card-zoom.fixed {
   position: fixed;

@@ -53,7 +53,11 @@ function cellAria(col: ComparedColumn): string {
       : "colorless"
     : col.display;
   const kind =
-    col.kind === "exact" ? "match" : col.kind === "partial" ? "close" : "no match";
+    col.kind === "exact"
+      ? "match"
+      : col.kind === "partial"
+        ? "close"
+        : "no match";
   const dir =
     col.kind !== "exact" && col.direction === "up"
       ? ", answer is higher"
@@ -63,7 +67,15 @@ function cellAria(col: ComparedColumn): string {
   return `${col.label}: ${value}, ${kind}${dir}`;
 }
 
-function Cell({ col, index, win }: { col: ComparedColumn; index: number; win?: boolean }) {
+function Cell({
+  col,
+  index,
+  win,
+}: {
+  col: ComparedColumn;
+  index: number;
+  win?: boolean;
+}) {
   return (
     <div
       className={`grid-cell match-${col.kind}`}
@@ -329,9 +341,6 @@ export default function ClassicGrid({
         )}
         {[...guesses].reverse().map((g) => (
           <GuessRow key={g.name} guess={g} answer={answer} />
-        ))}
-        {Array.from({ length: remaining }, (_, i) => (
-          <PlaceholderRow key={`ph-${i}`} />
         ))}
       </div>
     </div>
