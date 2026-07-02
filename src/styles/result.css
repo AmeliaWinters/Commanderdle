@@ -1,0 +1,284 @@
+/* ---------- Result banner ---------- */
+.result-banner {
+  width: 100%;
+  max-width: 630px;
+}
+
+.result-card {
+  display: flex;
+  gap: 18px;
+  background: var(--panel);
+  border: 2px solid transparent;
+  border-radius: var(--radius);
+  padding: 18px;
+  align-items: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
+}
+
+.result-banner.won .result-card {
+  background:
+    linear-gradient(var(--panel), var(--panel)) padding-box,
+    var(--flame) border-box;
+  box-shadow: 0 0 26px rgba(236, 90, 28, 0.35);
+}
+
+/* ---------- "Casting the commander" win reveal ---------- */
+/* The whole card is summoned: it flips in from face-down while rising into
+   place, with a flash of flame glow that settles into the resting won-glow.
+   Perspective lives on the banner so the card's rotateY reads as 3D. */
+.result-banner.cast {
+  perspective: 1100px;
+}
+
+.result-banner.cast .result-card {
+  position: relative;
+  animation: cast-in 0.9s cubic-bezier(0.22, 1.1, 0.36, 1) both;
+  transform-origin: center;
+}
+
+@keyframes cast-in {
+  0% {
+    transform: rotateY(-180deg) translateY(46px) scale(0.82);
+    opacity: 0;
+    box-shadow: 0 0 0 rgba(236, 90, 28, 0);
+  }
+  55% {
+    opacity: 1;
+  }
+  78% {
+    box-shadow:
+      0 0 60px rgba(236, 90, 28, 0.8),
+      0 0 120px rgba(246, 160, 26, 0.45);
+  }
+  100% {
+    transform: rotateY(0) translateY(0) scale(1);
+    opacity: 1;
+    box-shadow: 0 0 26px rgba(236, 90, 28, 0.35);
+  }
+}
+
+/* The commander's art gets one extra beat: a slight over-zoom that settles,
+   like the card being slammed onto the table. */
+.result-banner.cast .result-art-zoom {
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.result-banner.cast .result-art {
+  animation: cast-art 0.7s 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes cast-art {
+  0% {
+    transform: scale(1.14);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Ember particles flying out from behind the card. */
+.ember-burst {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 1;
+}
+
+.ember {
+  position: absolute;
+  left: 50%;
+  top: 55%;
+  border-radius: 50%;
+  opacity: 0;
+  filter: blur(0.5px);
+  box-shadow: 0 0 8px var(--flame-2);
+  animation: ember-fly var(--dur, 1.6s) var(--delay, 0s) ease-out both;
+}
+
+@keyframes ember-fly {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--dx, 0), var(--dy, -120px)) scale(0.2);
+    opacity: 0;
+  }
+}
+
+.result-art-zoom {
+  flex-shrink: 0;
+  display: block;
+  cursor: zoom-in;
+}
+
+.result-art {
+  width: 225px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  border: 1px solid var(--line);
+  display: block;
+}
+
+.result-info h2 {
+  font-family: "Cinzel", serif;
+  margin: 0 0 8px;
+  font-size: 2rem;
+  color: var(--flame-1);
+}
+
+.result-answer {
+  margin: 0 0 4px;
+  font-size: 1.1rem;
+}
+
+.result-answer strong {
+  font-family: "Cinzel", serif;
+  color: var(--text);
+}
+
+.result-sub {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  font-style: italic;
+  margin: 0 0 14px;
+}
+
+/* Secondary image-share action, styled like the recap companion button. */
+.share-image {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--flame);
+}
+
+.share-image:hover {
+  filter: none;
+  background: rgba(236, 90, 28, 0.12);
+}
+
+/* Score badge + guess pips, sitting together above the share control. */
+.result-scoreline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 0 0 16px;
+}
+
+.result-score {
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: 0.04em;
+  color: var(--flame-1);
+  font-variant-numeric: tabular-nums;
+}
+
+.result-scoreline .guess-dots-row {
+  padding-left: 12px;
+  border-left: 1px solid var(--line);
+}
+
+.share-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ---------- Result synergy cards ---------- */
+.result-synergy {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.result-synergy-label {
+  font-family: "Cinzel", serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin: 0 0 12px;
+  text-align: center;
+}
+
+.result-synergy-cards {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.result-synergy-card {
+  position: relative;
+  width: 88px;
+  aspect-ratio: 488 / 680;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.45);
+}
+
+.result-synergy-zoom,
+.result-synergy-card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.result-synergy-card img {
+  object-fit: cover;
+  cursor: zoom-in;
+}
+
+.result-synergy-noimg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 6px;
+  font-size: 0.72rem;
+  text-align: center;
+  color: var(--text-dim);
+}
+
+.result-synergy-pct {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  padding: 1px 5px;
+  border-radius: 6px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: #1a0d02;
+  background: var(--flame);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  cursor: help;
+}
+
+@media (max-width: 560px) {
+  .result-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  .result-art {
+    width: 130px;
+  }
+}
+
+/* ---------- "Also try" pointer on the result banner ---------- */
+.result-alsotry {
+  margin-top: 10px;
+  color: var(--text-dim);
+  font-size: 0.95rem;
+}

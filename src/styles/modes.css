@@ -1,0 +1,208 @@
+/* ---------- Silhouette mode ---------- */
+.silhouette {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.silhouette-frame {
+  position: relative;
+  width: 360px;
+  max-width: 92vw;
+  aspect-ratio: 626 / 457;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 2px solid transparent;
+  background:
+    linear-gradient(#000, #000) padding-box,
+    var(--flame) border-box;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.6);
+}
+
+.silhouette-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: filter 0.6s ease;
+}
+
+.silhouette-overlay {
+  position: absolute;
+  inset: 0;
+  transition: background 0.6s ease;
+  pointer-events: none;
+}
+
+.silhouette-missing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-dim);
+}
+
+/* Let the hover-zoom anchor fill the silhouette frame. */
+.silhouette-frame .card-zoom-anchor {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: zoom-in;
+}
+
+.guess-dots-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.guess-dots {
+  display: flex;
+  gap: 10px;
+}
+
+.guess-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--line);
+  background: transparent;
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.guess-dot.wrong {
+  background: #c0392b;
+  border-color: #e05546;
+  box-shadow: 0 0 8px rgba(192, 57, 43, 0.6);
+}
+
+.guess-dot.correct {
+  background: #2f9e44;
+  border-color: #51cf66;
+  box-shadow: 0 0 8px rgba(47, 158, 68, 0.6);
+}
+
+.hint-line {
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  font-style: italic;
+  margin: 0;
+}
+
+/* ---------- Quote mode (card text box) ---------- */
+.quote-mode {
+  max-width: 560px;
+  text-align: center;
+}
+
+.flavor {
+  font-family: "EB Garamond", serif;
+  font-size: 1.35rem;
+  font-style: italic;
+  line-height: 1.55;
+  color: var(--text);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 24px 28px;
+  margin: 0 0 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+  position: relative;
+}
+
+.flavor::before {
+  content: "";
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  top: 12px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--flame-2), transparent);
+  opacity: 0.5;
+}
+
+.quote-hints {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px;
+  color: var(--text-dim);
+  font-size: 0.98rem;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.quote-hints li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hint-label {
+  color: var(--flame-1);
+  font-family: "Cinzel", serif;
+  font-size: 0.82rem;
+  letter-spacing: 0.03em;
+}
+
+/* ---------- Guess list (non-classic modes) ---------- */
+.guess-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.guess-list li {
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  font-size: 1.02rem;
+}
+
+.guess-list li.correct {
+  background: var(--exact-bg);
+  border-color: var(--exact-bd);
+  color: #eafff0;
+}
+
+.guess-list-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+}
+
+.guess-list .guess-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid var(--line);
+  flex-shrink: 0;
+}
+
+.guess-list .guess-name {
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-align: left;
+}
+
+/* ---------- Zoom mode ---------- */
+/* Reuses .silhouette / .silhouette-frame; swap the blur transition for a scale one. */
+.zoom-frame img {
+  filter: none;
+  transition: transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+  will-change: transform;
+}

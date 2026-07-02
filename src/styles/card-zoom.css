@@ -1,0 +1,98 @@
+/* ---------- Card zoom popover ---------- */
+.card-zoom-anchor {
+  position: relative;
+}
+
+.card-zoom {
+  z-index: 40;
+  width: 300px;
+  max-width: 70vw;
+  pointer-events: none;
+  filter: drop-shadow(0 18px 40px rgba(0, 0, 0, 0.7));
+  animation: zoom-in 0.12s ease-out;
+}
+
+/* Table popover: fixed so it escapes the scrollable results container. */
+.card-zoom.fixed {
+  position: fixed;
+}
+
+/* Narrow-screen popover: centered, explicitly sized, and tappable to dismiss
+   (touch has no hover, so the enlarged card itself is the close target). */
+.card-zoom.fixed.narrow {
+  max-width: none;
+  pointer-events: auto;
+}
+
+/* Search-dropdown popover: anchored to the input wrapper. */
+.card-zoom.place-right {
+  position: absolute;
+  top: 0;
+  left: calc(100% + 14px);
+}
+
+.card-zoom.place-right.standalone {
+  top: calc(100% + 6px);
+}
+
+.card-zoom img {
+  width: 100%;
+  display: block;
+  border-radius: 16px;
+}
+
+/* Quote mode: blur the bottom 20% of the search preview so its printed flavor
+   text (the very quote being guessed) can't be read off the card. */
+.quote-blur-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 18%;
+  border-radius: 0 0 16px 16px;
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  background: rgba(10, 8, 6, 0.25);
+  pointer-events: none;
+}
+
+@keyframes zoom-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 900px) {
+  .card-zoom.place-right {
+    left: auto;
+    right: 0;
+    top: calc(100% + 6px);
+  }
+  /* On small screens the search preview would blanket the page; the dropdown
+     shows per-suggestion art thumbnails (.ac-thumb) instead. */
+  .card-zoom.place-right.standalone {
+    display: none;
+  }
+}
+
+/* ---------- Mana pips ---------- */
+.mana-cost {
+  display: inline-flex;
+  gap: 3px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.mana-pip {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+  image-rendering: auto;
+}

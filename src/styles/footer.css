@@ -1,0 +1,94 @@
+/* ---------- Footer ---------- */
+.app-footer {
+  text-align: center;
+  margin-top: var(--s5);
+  color: var(--text-dim);
+  font-size: 0.84rem;
+  font-style: italic;
+}
+
+.app-footer a {
+  color: var(--flame-1);
+}
+
+.footer-meta {
+  margin: 0 0 var(--s3);
+  font-style: normal;
+  font-family: "Cinzel", serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+  color: var(--text-dim);
+}
+
+.footer-meta strong {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+}
+
+/* Ad banner */
+.ad-banner {
+  width: 100%;
+  max-width: 728px;
+  margin: 0 auto;
+  padding: 8px 0;
+}
+
+/* Dev-only placeholder shown when ad test mode is on */
+.ad-placeholder {
+  width: 100%;
+  min-height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed var(--accent, #c9a227);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--accent, #c9a227) 8%, transparent);
+}
+
+.ad-placeholder-label {
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: var(--accent, #c9a227);
+  opacity: 0.8;
+  text-align: center;
+  padding: 8px;
+}
+
+/* Bottom bar (ad + footer) */
+.bottom-bar {
+  margin: 36px 0 12px;
+}
+
+/* ---------- Clock-ahead notice (anti time-travel) ---------- */
+.clock-notice {
+  max-width: 32rem;
+  margin: 2rem auto;
+  padding: 1.75rem 1.5rem;
+  text-align: center;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+.clock-notice-icon {
+  font-size: 2.75rem;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.clock-notice h2 {
+  margin: 0 0 0.6rem;
+  color: var(--flame-1);
+}
+
+.clock-notice p {
+  margin: 0.5rem 0 0;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.clock-notice-sub {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+}

@@ -1,0 +1,215 @@
+/* ---------- Card pool modal ---------- */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 1000;
+}
+
+.modal {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.7);
+  width: 100%;
+  max-width: 460px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  padding: 18px;
+}
+
+.pool-modal {
+  max-width: min(1180px, 94vw);
+  max-height: 86vh;
+}
+
+.modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.modal-head h2 {
+  margin: 0;
+  font-family: "Cinzel", serif;
+  font-size: 1.05rem;
+  color: var(--flame-1);
+}
+
+/* Single, consistent close affordance for every modal: a 36px round tap target
+   with a clear hover/active state. */
+.modal-close {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--text-dim);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    color 0.15s,
+    background 0.15s,
+    transform 0.08s ease;
+}
+
+.modal-close:hover {
+  border-color: var(--flame-2);
+  color: var(--flame-1);
+  background: var(--panel);
+}
+
+.modal-close:active {
+  transform: scale(0.94);
+}
+
+/* ---------- How to play ---------- */
+.howto-modal {
+  max-width: 420px;
+}
+
+.howto-intro {
+  margin: 0 0 12px;
+  color: var(--text);
+  line-height: 1.45;
+}
+
+.howto-list {
+  margin: 0 0 16px;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+
+.howto-got-it {
+  align-self: center;
+  width: 100%;
+  max-width: 200px;
+}
+
+.pool-search {
+  width: 100%;
+  padding: 8px 10px;
+  margin-bottom: 10px;
+  background: #000;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+.pool-grid {
+  list-style: none;
+  padding: 4px;
+  margin: 0;
+  overflow-y: auto;
+  display: grid;
+  /* Fluid columns: cards stay legible (~190px min) and pack 5-across in the
+     ~1180px modal on a 1920×1080 screen, fewer as the viewport narrows. */
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 16px;
+}
+
+.pool-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Mobile: drop the card-grid for a compact, scannable row list — thumbnail +
+   name + rank, the way mtgsites surface long card lists on small screens. */
+@media (max-width: 560px) {
+  .pool-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .pool-card {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    padding: 6px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.25);
+  }
+
+  .pool-card img,
+  .pool-card-noart {
+    width: 52px;
+    flex: 0 0 52px;
+    aspect-ratio: 488 / 680;
+  }
+
+  .pool-card-name {
+    flex: 1;
+    font-size: 0.9rem;
+  }
+}
+
+.pool-card-art {
+  position: relative;
+  display: block;
+}
+
+.pool-card-art .quote-blur-overlay {
+  border-radius: 0 0 8px 8px;
+}
+
+.pool-card img {
+  width: 100%;
+  aspect-ratio: 488 / 680;
+  object-fit: cover;
+  object-position: top;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+  display: block;
+  background: #000;
+}
+
+.pool-card-noart {
+  width: 100%;
+  aspect-ratio: 488 / 680;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px dashed var(--line);
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.pool-card-name {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 0.8rem;
+  line-height: 1.2;
+  color: var(--text);
+}
+
+.pool-empty {
+  color: var(--text-dim);
+  font-style: italic;
+  margin: 8px 0 0;
+}

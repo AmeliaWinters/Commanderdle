@@ -1,0 +1,122 @@
+/* ── Archive ────────────────────────────────────────────────────────── */
+.archive-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 0 auto var(--s4);
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+.archive-back {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.85rem;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.archive-back:hover {
+  border-color: var(--flame-2);
+  color: var(--flame-1);
+}
+.archive-page .app-header .archive-back {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.archive-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 620px;
+  margin: 0 auto;
+}
+.archive-empty {
+  text-align: center;
+  color: var(--text-dim);
+  font-style: italic;
+  padding: 32px 0;
+}
+.archive-row {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+.archive-row-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.archive-num {
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  color: var(--flame-1);
+}
+.archive-date {
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 0.82rem;
+  color: var(--text-dim);
+}
+.archive-modes {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+.archive-mode-btn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 4px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--panel-2);
+  color: var(--text);
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition:
+    transform 0.1s ease,
+    border-color 0.15s ease;
+}
+.archive-mode-btn:hover {
+  transform: translateY(-1px);
+  border-color: var(--flame-2);
+}
+.archive-mode-btn.won {
+  border-color: var(--exact-bd);
+}
+.archive-mode-btn.lost {
+  border-color: var(--far-bd);
+}
+.archive-mode-icon {
+  font-size: 1.15rem;
+  display: flex;
+}
+.archive-mode-check {
+  position: absolute;
+  top: 4px;
+  right: 5px;
+  font-size: 0.62rem;
+  color: var(--flame-1);
+}
+.archive-mode-btn.won .archive-mode-check {
+  color: var(--exact-bd);
+}
+.archive-mode-btn.lost .archive-mode-check {
+  color: var(--far-bd);
+}
+
+@media (max-width: 520px) {
+  .archive-mode-label {
+    display: none;
+  }
+}

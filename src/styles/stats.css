@@ -1,0 +1,131 @@
+/* ---------- Stats panel ---------- */
+.stats-panel {
+  margin: 20px auto 0;
+  max-width: 420px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.stats-numbers {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.stats-numbers .stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.stats-numbers .stat-val {
+  font-family: "Cinzel", serif;
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.stats-numbers .stat-label {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  text-align: center;
+  margin-top: 2px;
+}
+
+.stats-dist h3 {
+  font-family: "Cinzel", serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin: 0 0 10px;
+  text-align: center;
+}
+
+.stats-empty {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  text-align: center;
+  margin: 0;
+}
+
+.dist-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.dist-label {
+  width: 12px;
+  text-align: right;
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.dist-bar-track {
+  flex: 1;
+  display: flex;
+}
+
+.dist-bar {
+  background: rgba(255, 255, 255, 0.16);
+  min-width: 22px;
+  border-radius: 3px;
+  padding: 2px 6px;
+  display: flex;
+  justify-content: flex-end;
+  transition: width 0.4s ease;
+}
+
+.dist-bar.current {
+  background: var(--flame);
+  color: #1a0d02;
+}
+
+.dist-count {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.dist-bar.current .dist-count {
+  color: #1a0d02;
+}
+
+/* ---------- Community (global) stats ---------- */
+.global-stats {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.global-stats-title {
+  font-family: "Cinzel", serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin: 0 0 8px;
+}
+
+.global-stats-lead {
+  font-size: 0.9rem;
+  color: var(--text);
+  margin: 0 0 12px;
+  line-height: 1.4;
+}
+
+/* Community bars read as a quieter, cooler counterpart to the personal histogram. */
+.dist-bar.global {
+  background: rgba(120, 170, 255, 0.22);
+}
+
+.dist-bar.global.current {
+  background: var(--flame);
+}

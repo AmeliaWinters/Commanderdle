@@ -1,0 +1,241 @@
+:root {
+  --bg: #0b0b0d;
+  --panel: #161619;
+  --panel-2: #1f1f25;
+  --line: #2c2c34;
+  --text: #f4f4f6;
+  --text-dim: #9b9ba6;
+
+  /* MTG flame: orange -> red */
+  --flame-1: #f6a01a;
+  --flame-2: #ec5a1c;
+  --flame-3: #c01f1f;
+  --flame: linear-gradient(135deg, var(--flame-1), var(--flame-3));
+
+  /* guess feedback */
+  --exact-bg: #1e6b39;
+  --exact-bd: #38b461;
+  --partial-bg: #9a7414;
+  --partial-bd: #e3ab26;
+  --far-bg: #7c2330;
+  --far-bd: #bd4150;
+
+  /* mana pip colors (canonical) */
+  --mW: #fffbd5;
+  --mU: #a9d5f0;
+  --mB: #b6aca7;
+  --mR: #f1a081;
+  --mG: #93c79c;
+  --mC: #c7c0b6;
+
+  --radius: 12px;
+
+  /* ---------- Spacing scale (4px base) ---------- */
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 16px;
+  --s4: 24px;
+  --s5: 40px;
+  --s6: 64px;
+
+  /* Max width of the focused content column. Sized to fit the 7-column classic
+     grid (~640px) plus the input row's centered guess box and side peek button.
+     Narrower modes (quote, synergy, guess list) self-constrain below this, so
+     they still read as a tight, focused column. */
+  --col: 880px;
+
+  font-family: "EB Garamond", Georgia, "Times New Roman", serif;
+
+  /* ---------- Background "blurry ball" glows (tweak these) ---------- */
+  /* Extra softness applied to the whole glow layer. Higher = blurrier. */
+  --orb-blur: 60px;
+  /* Master opacity for the glow layer (0–1). Higher = more pronounced. */
+  --orb-opacity: 0.9;
+  /* How far each glow drifts, and how long one cycle takes. */
+  --orb-drift: 6%;
+  --orb-speed: 14s;
+  /* Per-orb tuning: color, alpha, position (x y) and radius (% of layer). */
+  --orb1-color: 236, 90, 28; /* ember orange */
+  --orb1-alpha: 0.5;
+  --orb1-pos: 25% 30%;
+  --orb1-size: 42%;
+  --orb2-color: 192, 31, 31; /* deep red */
+  --orb2-alpha: 0.45;
+  --orb2-pos: 78% 70%;
+  --orb2-size: 46%;
+  --orb3-color: 246, 160, 26; /* gold */
+  --orb3-alpha: 0.32;
+  --orb3-pos: 60% 15%;
+  --orb3-size: 38%;
+
+  /* ---------- Background floating cards (tweak these) ---------- */
+  --card-border: rgba(246, 160, 26, 0.12);
+  --card-grad-1: rgba(236, 90, 28, 0.07);
+  --card-grad-2: rgba(192, 31, 31, 0.03);
+  --card-blur: 0px; /* set e.g. 2px to soften the cards */
+  --card-opacity: 1; /* overall card visibility */
+  --card-radius: 14px;
+  --card-float: 32px; /* vertical travel of the float animation */
+  --card-spin: 6deg; /* extra rotation added over the float */
+  --card-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.35), inset 0 0 30px rgba(0, 0, 0, 0.25);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* ---------- Accessible focus ring ---------- */
+/* One consistent, visible ring for keyboard users across every interactive
+   control. Mouse clicks don't trigger :focus-visible, so it stays clean. */
+:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--bg),
+    0 0 0 4px var(--flame-2);
+  border-radius: 8px;
+}
+/* Inputs already carry an inset shadow; keep it and stack the ring on top. */
+.guess-input input:focus-visible,
+.pool-search:focus-visible {
+  box-shadow:
+    inset 0 2px 6px rgba(0, 0, 0, 0.5),
+    0 0 0 2px var(--bg),
+    0 0 0 4px var(--flame-2);
+}
+
+body {
+  margin: 0;
+  color: var(--text);
+  min-height: 100vh;
+  background: var(--bg);
+  overflow-x: hidden;
+}
+
+/* ---------- Animated background ---------- */
+/* drifting flame glows */
+body::before {
+  content: "";
+  position: fixed;
+  inset: -20%;
+  z-index: -3;
+  pointer-events: none;
+  opacity: var(--orb-opacity);
+  filter: blur(var(--orb-blur));
+  background:
+    radial-gradient(
+      var(--orb1-size) var(--orb1-size) at var(--orb1-pos),
+      rgba(var(--orb1-color), var(--orb1-alpha)),
+      transparent 70%
+    ),
+    radial-gradient(
+      var(--orb2-size) var(--orb2-size) at var(--orb2-pos),
+      rgba(var(--orb2-color), var(--orb2-alpha)),
+      transparent 70%
+    ),
+    radial-gradient(
+      var(--orb3-size) var(--orb3-size) at var(--orb3-pos),
+      rgba(var(--orb3-color), var(--orb3-alpha)),
+      transparent 70%
+    );
+  animation: drift var(--orb-speed) ease-in-out infinite alternate;
+}
+
+/* floating MTG-card silhouettes */
+.card-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0.3;
+}
+
+.bg-card {
+  position: absolute;
+  display: block;
+  border-radius: var(--card-radius);
+  border: 1px solid var(--card-border);
+  background: linear-gradient(150deg, var(--card-grad-1), var(--card-grad-2));
+  box-shadow: var(--card-shadow);
+  opacity: var(--card-opacity);
+  filter: blur(var(--card-blur));
+  animation-name: float-card;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  will-change: transform;
+}
+
+/* Real-card variant (USE_REAL_CARDS in CardBackdrop.tsx): show the actual card
+   art instead of the abstract gradient silhouette. */
+.bg-card-real {
+  background: none;
+  object-fit: cover;
+  filter: none;
+  opacity: calc(var(--card-opacity) * 1);
+}
+
+@keyframes drift {
+  0% {
+    transform: translate(
+        calc(-1 * var(--orb-drift)),
+        calc(-0.6 * var(--orb-drift))
+      )
+      scale(1);
+  }
+  50% {
+    transform: translate(var(--orb-drift), calc(0.6 * var(--orb-drift)))
+      scale(1.08);
+  }
+  100% {
+    transform: translate(calc(-0.6 * var(--orb-drift)), var(--orb-drift))
+      scale(1);
+  }
+}
+
+@keyframes float-card {
+  0% {
+    transform: translateY(0) rotate(var(--rot, 0deg)) scale(1);
+  }
+  100% {
+    transform: translateY(calc(-1 * var(--card-float)))
+      rotate(calc(var(--rot, 0deg) + var(--card-spin))) scale(1.05);
+  }
+}
+
+/* ---------- Reduced motion ---------- */
+/* Honor the OS "reduce motion" setting globally. We neutralize every animation
+   and transition rather than maintaining a per-component allow-list, so nothing
+   drifts, floats, flips, slides, or counts up for users who've asked for calm.
+   State still changes instantly (near-zero durations), so feedback isn't lost —
+   only the motion is. Individual JS-driven animations (e.g. the count-up in
+   Higher/Lower) also check the same media query and snap to their end state. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* The drifting orbs and floating cards are pure ambient motion with no state
+     to preserve — stop them outright rather than settling on a final frame. */
+  body::before,
+  .bg-card {
+    animation: none !important;
+  }
+}
+
+.app {
+  max-width: var(--col);
+  margin: 0 auto;
+  padding: var(--s5) var(--s3) 0;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}

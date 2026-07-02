@@ -1,0 +1,261 @@
+
+/* ---------- Header / logo ---------- */
+.app-header {
+  text-align: center;
+  margin-bottom: var(--s4);
+  position: relative;
+}
+
+.app-header h1 {
+  font-family: "Cinzel", serif;
+  font-weight: 900;
+  font-size: clamp(2.2rem, 7vw, 3.5rem);
+  margin: 0;
+  letter-spacing: 0.03em;
+  color: var(--text);
+  text-shadow: 0 2px 18px rgba(236, 90, 28, 0.35);
+}
+
+.app-header h1 .accent {
+  background: var(--flame);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.tagline {
+  color: var(--text-dim);
+  margin: 8px auto 0;
+  font-size: 1.02rem;
+  font-style: italic;
+  max-width: 560px;
+}
+
+/* ---------- Mode tabs ---------- */
+.mode-tabs {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.mode-tab {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  /* Ghost by default: just the glyph + dim label, no panel fill or border, so the
+     selected tab is the only one carrying weight. */
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-dim);
+  padding: 9px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  min-width: 96px;
+  text-decoration: none;
+}
+
+.mode-icon {
+  display: block;
+  width: 26px;
+  height: 26px;
+}
+
+.mode-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.mode-tab:hover {
+  color: var(--text);
+}
+
+.mode-tab:hover .mode-icon {
+  filter: drop-shadow(0 0 6px rgba(236, 90, 28, 0.45));
+}
+
+.mode-tab.active {
+  color: var(--flame-1);
+  text-shadow: 1px 1px var(--flame-2);
+}
+
+.mode-tab.active .mode-icon {
+  filter: drop-shadow(0 0 7px rgba(236, 90, 28, 0.55));
+}
+
+/* Little tick marking a mode whose daily puzzle is done today. */
+.mode-complete {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  display: flex;
+  font-size: 0.75rem;
+  color: var(--flame-1);
+}
+
+.mode-label {
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.mode-tab.active .mode-label {
+  color: var(--flame-1);
+}
+
+/* Keep all modes on a single row on phones (gamedle-style), shrinking to fit. */
+@media (max-width: 560px) {
+  .mode-tabs {
+    flex-wrap: nowrap;
+    gap: 4px;
+  }
+
+  .mode-tab {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 8px 4px;
+    gap: 4px;
+  }
+
+  .mode-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .mode-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.01em;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .mode-complete {
+    top: 2px;
+    right: 3px;
+    font-size: 0.6rem;
+  }
+}
+
+/* ---------- Header overflow menu ---------- */
+.menu-wrap {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 20;
+}
+
+.menu-cog {
+  width: 20px;
+  height: 20px;
+}
+
+.menu-btn {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: var(--text-dim);
+  border-radius: 10px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  font-size: 1.4rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.menu-btn:hover,
+.menu-btn[aria-expanded="true"] {
+  border-color: var(--flame-2);
+  color: var(--flame-1);
+}
+
+.menu-pop {
+  position: absolute;
+  top: 46px;
+  right: 0;
+  min-width: 168px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+  text-align: left;
+}
+
+.menu-pop button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.95rem;
+  text-align: left;
+  padding: 8px 12px;
+  border-radius: 7px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.menu-icon {
+  flex-shrink: 0;
+  font-size: 1rem;
+}
+
+.menu-pop button:hover {
+  background: var(--panel-2);
+  color: var(--flame-1);
+}
+
+.menu-pop .menu-reset {
+  color: var(--text-dim);
+  border-top: 1px solid var(--line);
+  margin-top: 4px;
+  padding-top: 10px;
+}
+
+.practice-badge {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 12px;
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--flame-1);
+  border: 1px solid var(--flame-2);
+  border-radius: 999px;
+  padding: 3px 10px;
+  -webkit-text-fill-color: var(--flame-1);
+  text-shadow: none;
+  transform: translateY(-4px);
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: var(--flame-1);
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-family: inherit;
+  padding: 0;
+}
+
+.link-btn:hover {
+  text-decoration: underline;
+}

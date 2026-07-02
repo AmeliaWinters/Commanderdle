@@ -1,0 +1,121 @@
+/* ---------- Results table (classic mode) ---------- */
+.results-wrap {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 4px;
+}
+
+/* ---------- Deductions row (aligned above the headers) ---------- */
+.deduction-row {
+  margin-bottom: 10px;
+}
+
+.deduction-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-width: 0;
+  min-height: 40px;
+  padding: 4px 6px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  overflow: hidden;
+  font-family: "Cinzel", serif;
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Clue cells flip in with the same tile reveal as the guess cells whenever the
+   deduction they show updates (a fresh remount via a changing React key). */
+.deduction-cell:not(.empty):not(.deduction-title-cell) {
+  animation: reveal 1.25s cubic-bezier(0.3, 0.7, 0.3, 1.05) both;
+  transform-origin: center;
+}
+
+.deduction-cell.empty {
+  background: transparent;
+  border-style: dashed;
+  opacity: 0.22;
+}
+
+.deduction-title-cell {
+  background: transparent;
+  border: none;
+  justify-content: flex-start;
+  color: var(--text-dim);
+  font-size: 0.64rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.deduction-cell .mana-pip {
+  width: 18px;
+  height: 18px;
+}
+
+.ded-absent {
+  display: inline-flex;
+  opacity: 0.3;
+}
+
+/* Ruled-out colors: drain the pip to grey so it reads as "not in the identity"
+   at a glance. line-through has no effect on the <img> pips, so we desaturate
+   instead and strike each pip individually with a pseudo-element. */
+.ded-absent .mana-pip {
+  filter: grayscale(1) brightness(1.1);
+}
+
+.ded-absent .mana-cost {
+  position: relative;
+}
+
+.ded-absent .mana-cost::after {
+  content: "";
+  position: absolute;
+  left: -1px;
+  right: -1px;
+  top: 50%;
+  height: 2px;
+  background: black;
+  opacity: 1;
+  transform: rotate(-12deg);
+  pointer-events: none;
+}
+
+/* Unresolved candidates ("at least one of these"). */
+.ded-maybe {
+  display: inline-flex;
+  align-items: center;
+  opacity: 0.72;
+  font-style: italic;
+  max-width: 100%;
+}
+
+span.ded-maybe::before {
+  content: "?";
+  margin-right: 2px;
+  font-size: 0.7rem;
+  opacity: 0.8;
+}
+
+.ded-type {
+  line-height: 1.1;
+  white-space: nowrap;
+  /* Allow this flex item to shrink below its min-content width so the parent
+     cell can constrain it; without this, long type lists overflow the box. */
+  min-width: 0;
+}
+
+/* The "maybe" candidates can be several words; let them wrap as a group. */
+.ded-type.ded-maybe {
+  white-space: normal;
+  text-align: center;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  /* Clamp to the cell so a long list like "Human / Wizard / Assassin" never
+     bleeds out of the amber clue box. */
+  max-width: 100%;
+}

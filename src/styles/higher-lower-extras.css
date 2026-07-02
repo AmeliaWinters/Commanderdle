@@ -1,0 +1,215 @@
+/* Centered card lightbox. */
+.hl-zoom-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.82);
+  cursor: zoom-out;
+  animation: hl-fade 0.15s ease;
+}
+.hl-zoom-img {
+  max-width: min(92vw, 460px);
+  max-height: 90vh;
+  border-radius: 14px;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6);
+  animation: hl-zoom-in 0.2s cubic-bezier(0.22, 1.2, 0.4, 1);
+}
+@keyframes hl-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes hl-zoom-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+/* On touch there's no hover, so always show the zoom affordance. */
+@media (hover: none) {
+  .hl-zoom-hint {
+    opacity: 1;
+  }
+}
+.hl-card-info {
+  padding: 10px 12px 14px;
+  text-align: center;
+}
+.hl-card-name {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.hl-card-value {
+  color: var(--text);
+}
+.hl-card-value strong {
+  color: var(--flame-1);
+  font-size: 1.3rem;
+}
+.hl-card-value.counting strong {
+  color: var(--text);
+}
+.hl-card-value-hidden {
+  color: var(--text-dim);
+  letter-spacing: 0.12em;
+}
+
+/* Correct / Nope badge stamped over the card being revealed. */
+.hl-verdict {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-8deg);
+  z-index: 3;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  border-radius: 8px;
+  border: 2px solid currentColor;
+  background: rgba(0, 0, 0, 0.55);
+  animation: hl-stamp 0.25s cubic-bezier(0.22, 1.4, 0.4, 1);
+}
+.hl-verdict.ok {
+  color: var(--exact-bd);
+}
+.hl-verdict.bad {
+  color: var(--far-bd);
+}
+@keyframes hl-stamp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) rotate(-8deg) scale(1.6);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) rotate(-8deg) scale(1);
+  }
+}
+
+/* Streak-milestone flash. */
+.hl-milestone {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+  font-weight: 700;
+  color: var(--flame-1);
+  background: var(--bg);
+  border: 1px solid var(--flame-1);
+  border-radius: 999px;
+  padding: 6px 16px;
+  animation: hl-pop 1.4s ease forwards;
+}
+@keyframes hl-pop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 6px) scale(0.9);
+  }
+  15% {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -6px) scale(1);
+  }
+}
+
+/* ── Guess buttons ──────────────────────────────────────────────────── */
+.hl-buttons {
+  margin-top: 18px;
+}
+.hl-flavour {
+  color: var(--text-dim);
+  font-style: italic;
+  margin-bottom: 10px;
+  min-height: 1.2em;
+}
+.hl-btn-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.hl-btn {
+  min-width: 170px;
+  padding: 14px 20px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--panel-2);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition:
+    transform 0.08s ease,
+    border-color 0.15s ease,
+    opacity 0.15s ease;
+}
+.hl-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+.hl-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.hl-higher:hover:not(:disabled) {
+  border-color: var(--exact-bd);
+}
+.hl-lower:hover:not(:disabled) {
+  border-color: var(--far-bd);
+}
+
+.hl-result-info {
+  text-align: center;
+}
+.hl-secondary {
+  display: block;
+  margin: 12px auto 0;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-family: inherit;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+.hl-secondary:hover {
+  color: var(--text);
+}
+
+@media (max-width: 560px) {
+  /* Shrink the two-card stage to fit narrow screens while keeping the slide. */
+  .hl-stage {
+    --hl-card-w: min(44vw, 220px);
+    --hl-gap: 12px;
+  }
+  .hl-card-info {
+    padding: 8px 8px 12px;
+    font-size: 0.9rem;
+  }
+  .hl-card-value strong {
+    font-size: 1.15rem;
+  }
+  .hl-btn {
+    min-width: 0;
+    flex: 1 1 46%;
+  }
+}

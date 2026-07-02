@@ -1,0 +1,274 @@
+.results-table {
+  /* min-width is the sum of the column pixel floors (+ gaps), so the box can't
+     shrink below the width where every cell's content fits on one line — on a
+     narrow phone it holds that width and .results-wrap scrolls it. On wider
+     containers width: 100% fills the space and the fr shares expand up to
+     max-width. */
+  width: 100%;
+  min-width: 754px;
+  margin: 0 auto;
+  max-width: 960px;
+}
+
+.grid-row {
+  display: grid;
+  /* Each column has a pixel floor so its content fits on one line — a full set
+     of mana pips in Colours, a word like "Shapeshifter" in Type — and only
+     grows (via the fr share) when there's spare width. This makes the table as
+     wide as it needs to be rather than cramming into a fixed width. */
+  grid-template-columns:
+    minmax(160px, 1.8fr) /* Commander */
+    minmax(132px, 1.1fr) /* Colours */
+    minmax(140px, 1.1fr) /* Type */
+    minmax(72px, 0.7fr) /* Mana Value */
+    minmax(72px, 0.7fr) /* Stat Total */
+    minmax(76px, 0.7fr) /* Rank */
+    minmax(66px, 0.7fr); /* Year */
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.grid-head {
+  margin-bottom: 8px;
+}
+
+/* Reserved empty slots so the board height is stable from the first render
+   and adding a guess never shifts the page down. */
+.grid-cell.placeholder {
+  background: transparent;
+  border-style: dashed;
+  opacity: 0.18;
+  animation: none;
+}
+
+.head-cell {
+  background: transparent !important;
+  color: var(--text-dim);
+  font-family: "Cinzel", serif;
+  font-size: 0.64rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 4px 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: none !important;
+}
+
+/* The Rank header is a real button that toggles an explainer note. */
+button.head-help {
+  cursor: pointer;
+  font: inherit;
+  font-family: "Cinzel", serif;
+  gap: 3px;
+}
+
+button.head-help:hover {
+  color: var(--text);
+}
+
+.help-mark {
+  width: 13px;
+  height: 13px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.55rem;
+  opacity: 0.75;
+  flex-shrink: 0;
+}
+
+.head-tip {
+  margin: 0 0 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel-2);
+  color: var(--text-dim);
+  font-size: 0.82rem;
+  text-align: center;
+}
+
+.grid-cell {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  min-height: 60px;
+  /* Allow grid tracks to keep their fr width; content shrinks/wraps instead of
+     forcing the column wider (which would misalign cells with the headers). */
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 0.9rem;
+  /* Short, Poeltl-style tile flip on reveal (~240ms), plus smooth color
+     transitions so feedback tints ease in rather than snap. */
+  animation: reveal 1.25s cubic-bezier(0.3, 0.7, 0.3, 1.05) both;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+  transform-origin: center;
+  /* Enable container queries so .cell-text can scale with the cell's actual width. */
+  container-type: inline-size;
+}
+
+@keyframes reveal {
+  0% {
+    transform: perspective(700px) rotateX(-90deg);
+    opacity: 0;
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    transform: perspective(700px) rotateX(0);
+    opacity: 1;
+  }
+}
+
+/* Winning row: each tile flips open as usual, then "ignites" with a flame
+   flare + pop, staggered left-to-right (delays set inline per cell). */
+.win-row .grid-cell {
+  animation:
+    reveal 1.25s cubic-bezier(0.3, 0.7, 0.3, 1.05) both,
+    ignite 0.9s ease-out both;
+}
+
+/* No transform here: ignite runs alongside reveal on the same element, and a
+   transform in this keyframe would back-fill during ignite's delay and stomp
+   reveal's rotateX flip. The pop is carried by .cell-inner instead. */
+@keyframes ignite {
+  0% {
+    box-shadow: 0 0 0 rgba(236, 90, 28, 0);
+    border-color: var(--line);
+  }
+  35% {
+    box-shadow:
+      0 0 22px rgba(236, 90, 28, 0.85),
+      0 0 44px rgba(246, 160, 26, 0.4);
+    border-color: var(--flame-1);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(236, 90, 28, 0.35);
+    border-color: var(--flame-2);
+  }
+}
+
+/* The scale pop rides on the inner wrapper so it can't fight the tile flip.
+   It inherits the cell's second animation-delay via a CSS trick: we just reuse
+   the same stagger by delaying via animation-delay set on the parent — inner
+   elements can't inherit that, so the pop starts with the flare's mid-point
+   using the cell's --ignite-delay custom property. */
+.win-row .grid-cell .cell-inner {
+  animation: ignite-pop 0.9s ease-out both;
+  animation-delay: var(--ignite-delay, 0.9s);
+}
+
+@keyframes ignite-pop {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(1.09);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.cell-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px;
+  width: 100%;
+}
+
+.name-cell {
+  justify-content: flex-start;
+}
+
+.name-inner {
+  justify-content: flex-start;
+}
+
+.name-thumb {
+  width: 38px;
+  height: 38px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid var(--line);
+  flex-shrink: 0;
+}
+
+.name-text {
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  font-size: 0.82rem;
+  text-align: left;
+  line-height: 1.15;
+}
+
+.name-text.solved {
+  color: var(--flame-1);
+}
+
+.cell-text {
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  font-size: clamp(0.2rem, 100cqw, 0.9rem);
+  white-space: normal;
+  /* Break at natural hyphenation points (e.g. "Shape-shifter") rather than
+     at arbitrary character positions. Requires lang="en" on <html>, which is set. */
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  /* Fallback where hyphenation isn't available: break anywhere rather than
+     letting a long word ("Shapeshifter") get clipped by the cell. */
+  overflow-wrap: anywhere;
+  line-height: 1.15;
+}
+
+.cell-arrow {
+  margin-left: 3px;
+  font-size: 0.82rem;
+  opacity: 0.9;
+}
+
+/* Mobile: keep the full desktop table (thumbnails, colors, readable type) and
+   let it scroll horizontally instead of compressing columns (jojodle-style). */
+@media (max-width: 560px) {
+  .results-wrap {
+    -webkit-overflow-scrolling: touch;
+  }
+  .results-table {
+    /* Left-align so the name column is on-screen at rest; scroll for the rest. */
+    margin: 0;
+  }
+}
+
+/* feedback colors */
+.match-exact {
+  background: var(--exact-bg);
+  border-color: var(--exact-bd);
+  color: #eafff0;
+}
+
+.match-partial {
+  background: var(--partial-bg);
+  border-color: var(--partial-bd);
+  color: #fff7e0;
+}
+
+/* Wrong = quiet empty gray, so the green/amber hits carry the signal. */
+.match-none {
+  background: var(--panel);
+  border-color: var(--line);
+  color: var(--text-dim);
+}

@@ -1,0 +1,158 @@
+/* ---------- Share dropdown ---------- */
+.share-menu {
+  position: relative;
+  display: inline-block;
+}
+
+.share-menu-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.share-caret {
+  font-size: 0.85em;
+  line-height: 1;
+  transition: transform 0.15s ease;
+}
+
+.share-caret.up {
+  transform: rotate(180deg);
+}
+
+.share-menu-panel {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 8px);
+  transform: translateX(-50%);
+  z-index: 20;
+  min-width: 260px;
+  padding: 6px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  animation: share-menu-in 0.14s ease-out both;
+}
+
+@keyframes share-menu-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.share-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 12px;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  color: var(--text);
+}
+
+.share-menu-item:hover {
+  background: rgba(236, 90, 28, 0.12);
+}
+
+.share-menu-icon {
+  flex-shrink: 0;
+  font-size: 1.2rem;
+  width: 28px;
+  text-align: center;
+}
+
+.share-menu-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.share-menu-label {
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.share-menu-hint {
+  color: var(--text-dim);
+  font-size: 0.8rem;
+}
+
+.share-btn {
+  background: var(--flame);
+  color: #1a0d02;
+  border: none;
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  min-height: 44px;
+}
+
+.share-btn:hover {
+  filter: brightness(1.08);
+}
+
+.result-countdown {
+  margin: 12px 0 0;
+  color: var(--text-dim);
+  font-size: 0.9rem;
+}
+
+.result-countdown strong {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+/* ── Share: challenge variant + referral banner ─────────────────────── */
+.share-btn.share-challenge {
+  background: var(--panel-2);
+  border: 1px solid var(--flame-2);
+  color: var(--flame-1);
+}
+.share-btn.share-challenge:hover {
+  background: var(--flame);
+  color: #1a1207;
+}
+.challenge-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  max-width: 620px;
+  margin: 0 auto var(--s4);
+  padding: 10px 16px;
+  border: 1px solid var(--flame-2);
+  border-radius: 10px;
+  background: rgba(236, 90, 28, 0.1);
+  color: var(--text);
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 0.92rem;
+}
+.challenge-dismiss {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 2px 6px;
+}
+.challenge-dismiss:hover {
+  color: var(--flame-1);
+}

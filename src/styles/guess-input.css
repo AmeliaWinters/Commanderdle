@@ -1,0 +1,233 @@
+/* ---------- Play area ---------- */
+.play-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s4);
+  width: 100%;
+}
+
+/* ---------- Skip button ---------- */
+.skip-btn {
+  margin-left: 8px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: none;
+  border: 1px solid var(--flame-1);
+  border-radius: 50%;
+  color: var(--flame-1);
+  font-size: 1rem;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    color 0.15s;
+}
+
+.skip-btn:hover {
+  border-color: var(--flame-2);
+  color: var(--flame-2);
+}
+
+/* ---------- Guess input ---------- */
+/* Row that keeps the input centered while letting the pool-peek button sit to its left. */
+.input-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+  /* Safety net: if the column is ever too narrow for the centered input plus its
+     side peek button, wrap instead of letting the button spill outside. */
+  flex-wrap: wrap;
+}
+
+.input-side {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+}
+
+.input-side-left {
+  justify-content: flex-end;
+}
+
+.pool-peek-btn {
+  white-space: nowrap;
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  min-height: 44px;
+  padding: 13px 16px;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    color 0.15s,
+    background 0.15s,
+    transform 0.08s ease,
+    opacity 0.15s;
+}
+
+.pool-peek-btn:not(:disabled):hover {
+  border-color: var(--flame-2);
+  color: var(--flame-1);
+  background: var(--panel-2);
+}
+
+.pool-peek-btn:not(:disabled):active {
+  transform: translateY(1px);
+}
+
+.pool-peek-btn:disabled {
+  cursor: default;
+  opacity: 0.55;
+  color: var(--text-dim);
+}
+
+.guess-input {
+  position: relative;
+  flex: 0 1 480px;
+  width: 100%;
+  max-width: 480px;
+}
+
+/* Mobile: stack the row and let each control fill the full column as a big,
+   tappable target. */
+@media (max-width: 560px) {
+  .input-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .input-side {
+    width: 100%;
+    flex: none;
+  }
+  .input-side-left {
+    justify-content: stretch;
+  }
+  /* An empty right-hand spacer would add a phantom gap; collapse it. */
+  .input-side:empty {
+    display: none;
+  }
+  .pool-peek-btn {
+    width: 100%;
+  }
+  .guess-input {
+    flex: none;
+    max-width: none;
+  }
+  /* Comfortable tap targets on touch screens (min ~44px). */
+  .menu-btn {
+    width: 44px;
+    height: 44px;
+  }
+  .skip-btn {
+    width: 36px;
+    height: 36px;
+  }
+  .pool-peek-btn {
+    min-height: 44px;
+  }
+}
+
+.guess-input input {
+  width: 100%;
+  min-height: 44px;
+  padding: 14px 16px;
+  font-size: 1.05rem;
+  font-family: inherit;
+  background: #100f12;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--text);
+  outline: none;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.5);
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+
+.guess-input input::placeholder {
+  color: #6f6f7a;
+  font-style: italic;
+}
+
+.guess-input input:focus {
+  border-color: var(--flame-2);
+  box-shadow:
+    inset 0 2px 6px rgba(0, 0, 0, 0.5),
+    0 0 0 1px var(--flame-2);
+}
+
+.autocomplete {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 5px;
+  list-style: none;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  max-height: 330px;
+  overflow-y: auto;
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.6);
+}
+
+.autocomplete-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.autocomplete-item.active {
+  background: #2a2630;
+}
+
+.autocomplete-item.used {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ac-name {
+  font-size: 1.02rem;
+}
+
+.ac-rank {
+  color: var(--text-dim);
+  font-size: 0.82rem;
+  margin-left: auto;
+}
+
+/* Small card art beside each suggestion — the mobile stand-in for the big
+   hover preview, which would cover the whole screen there. */
+.ac-thumb {
+  width: 34px;
+  height: 34px;
+  border-radius: 5px;
+  object-fit: cover;
+  border: 1px solid var(--line);
+  flex-shrink: 0;
+}
+
+/* Desktop keeps the full card preview beside the input instead. */
+@media (min-width: 901px) {
+  .ac-thumb {
+    display: none;
+  }
+}
