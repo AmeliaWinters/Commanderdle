@@ -213,3 +213,28 @@
     flex: 1 1 46%;
   }
 }
+
+/* Mobile: pull the guess buttons up so they stay on-screen on short phones. */
+@media (max-width: 560px) {
+  /* The prompt line restates the rules every turn, so the tagline only costs
+     vertical space here. */
+  .hl-header .tagline {
+    display: none;
+  }
+  .hl-stage {
+    --hl-card-w: min(41vw, 200px);
+  }
+  .hl-prompt {
+    margin-bottom: 10px;
+    font-size: 0.98rem;
+  }
+  .hl-score {
+    margin-bottom: 10px;
+  }
+  .hl-buttons {
+    margin-top: 12px;
+  }
+  .hl-mode-tabs {
+    margin-top: 8px;
+  }
+}

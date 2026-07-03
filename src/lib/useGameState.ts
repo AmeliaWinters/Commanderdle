@@ -135,7 +135,11 @@ export function useGameState(mode: Mode, archiveDate?: string) {
       // Recording the finished result is handled by the status effect above
       // (idempotently), keeping this updater free of storage side effects.
       const status = deriveStatus(prev.answer, guesses, prev.skips, mode)
-      playSound(status === 'won' ? 'win' : status === 'lost' ? 'lose' : 'guess')
+      // Classic wins defer their fanfare to useWinReveal, which fires it once
+      // the winning row has finished flipping in.
+      if (!(mode === 'classic' && status === 'won')) {
+        playSound(status === 'won' ? 'win' : status === 'lost' ? 'lose' : 'guess')
+      }
       return { ...prev, guesses, status }
     })
   }, [mode, dateKey])

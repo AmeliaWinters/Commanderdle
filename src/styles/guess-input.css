@@ -113,6 +113,9 @@
   }
   .input-side-left {
     justify-content: stretch;
+    /* The guess box is the primary action — put it first on mobile and let
+       the pool-peek button drop underneath. */
+    order: 2;
   }
   /* An empty right-hand spacer would add a phantom gap; collapse it. */
   .input-side:empty {

@@ -235,7 +235,18 @@ body::before {
   max-width: var(--col);
   margin: 0 auto;
   padding: var(--s5) var(--s3) 0;
+  /* Keep content clear of notches/rounded corners on phones (viewport-fit=cover). */
+  padding-left: max(var(--s3), env(safe-area-inset-left));
+  padding-right: max(var(--s3), env(safe-area-inset-right));
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
+}
+
+/* Mobile-first: gameplay above the fold. Trim the decorative top padding so
+   the board and input land higher on small screens. */
+@media (max-width: 560px) {
+  .app {
+    padding-top: var(--s3);
+  }
 }

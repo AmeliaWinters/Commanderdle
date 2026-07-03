@@ -131,35 +131,33 @@
   gap: 6px;
 }
 
-/* Mobile: drop the card-grid for a compact, scannable row list — thumbnail +
-   name + rank, the way mtgsites surface long card lists on small screens. */
+/* Mobile: keep the card grid but lock it to two cards side by side, each with
+   its name + rank caption below the art. */
 @media (max-width: 560px) {
   .pool-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .pool-card {
-    flex-direction: row;
-    align-items: center;
+    grid-template-columns: repeat(2, 1fr);
     gap: 12px;
-    padding: 6px;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    background: rgba(0, 0, 0, 0.25);
-  }
-
-  .pool-card img,
-  .pool-card-noart {
-    width: 52px;
-    flex: 0 0 52px;
-    aspect-ratio: 488 / 680;
   }
 
   .pool-card-name {
-    flex: 1;
-    font-size: 0.9rem;
+    font-size: 0.78rem;
+  }
+
+  /* 16px floor stops iOS Safari from auto-zooming the page when the search
+     field gains focus. */
+  .pool-search {
+    font-size: 16px;
+    min-height: 44px;
+  }
+
+  /* Use nearly the whole phone screen for the pool browser. */
+  .modal-backdrop {
+    padding: 10px;
+  }
+  .modal,
+  .pool-modal {
+    max-height: 92dvh;
+    padding: 14px;
   }
 }
 

@@ -1,0 +1,113 @@
+/* ---------- Shared motion ----------
+   Poeltl/Wordle-style easing: soft settle, no bounce. These are cosmetic
+   entrance/expand animations only — state changes remain instant, and the
+   global prefers-reduced-motion block in base.css neutralizes every one of
+   them for users who've asked for calm. */
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes drop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ---------- Mode / page transitions ----------
+   The play area is keyed on the active mode, so switching modes remounts this
+   wrapper and replays the entrance. Guesses within a mode keep the same key, so
+   they don't retrigger it. */
+.mode-view {
+  /* Mirror .play-area's flex layout so wrapping the mode's children in this
+     animation container doesn't change how they lay out (centering, gap, width). */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s4);
+  width: 100%;
+  animation: rise-in 0.32s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+/* ---------- Header banners ---------- */
+.archive-bar,
+.challenge-banner {
+  animation: drop-in 0.3s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+/* ---------- Settings menu expand ----------
+   Grows out of the cog in the top-right corner. */
+.menu-pop {
+  transform-origin: top right;
+  animation: menu-expand 0.18s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@keyframes menu-expand {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Stagger the menu items so they cascade in under the expanding panel. */
+.menu-pop button {
+  animation: rise-in 0.22s ease both;
+}
+.menu-pop button:nth-child(1) { animation-delay: 0.02s; }
+.menu-pop button:nth-child(2) { animation-delay: 0.04s; }
+.menu-pop button:nth-child(3) { animation-delay: 0.06s; }
+.menu-pop button:nth-child(4) { animation-delay: 0.08s; }
+.menu-pop button:nth-child(5) { animation-delay: 0.10s; }
+.menu-pop button:nth-child(6) { animation-delay: 0.12s; }
+.menu-pop button:nth-child(7) { animation-delay: 0.14s; }
+
+/* ---------- Modals ---------- */
+.modal-backdrop {
+  animation: fade-in 0.18s ease both;
+}
+
+.modal {
+  animation: pop-in 0.22s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+/* ---------- Mode tab active pop ----------
+   The freshly selected tab's icon gives a small settle when it becomes active. */
+.mode-tab.active .mode-icon {
+  animation: pop-in 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}

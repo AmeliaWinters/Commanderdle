@@ -259,3 +259,40 @@
 .link-btn:hover {
   text-decoration: underline;
 }
+
+/* Mobile-first: one compact row of five tabs instead of a two-row wrap, and a
+   quieter tagline, so the puzzle itself starts higher on the screen. */
+@media (max-width: 560px) {
+  .app-header {
+    margin-bottom: var(--s3);
+  }
+  .tagline {
+    font-size: 0.85rem;
+    margin-top: 4px;
+    display: none;
+  }
+  .mode-tabs {
+    flex-wrap: nowrap;
+    gap: 2px;
+    margin-bottom: 12px;
+  }
+  .mode-tab {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 8px 2px;
+    gap: 4px;
+  }
+  .mode-icon {
+    width: 22px;
+    height: 22px;
+  }
+  .mode-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.02em;
+  }
+  .mode-complete {
+    top: 2px;
+    right: 4px;
+    font-size: 0.65rem;
+  }
+}
