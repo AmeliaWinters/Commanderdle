@@ -5,7 +5,10 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate icon" type="image/png" href="/favicon-32.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
     <meta name="theme-color" content="#0b0b0d" />
     <!-- Paint the app's dark background from the very first frame so there's no white
          flash before the stylesheet/JS load. Must be set on BODY, not HTML: the animated
@@ -16,28 +19,212 @@
       body {
         background: #0b0b0d;
       }
+
+      /* ------------------------------------------------------------------ *
+       * Inline app-shell skeleton.
+       *
+       * The app is a client-rendered SPA: without this, #root stays empty
+       * until ~110KB (gzip) of React + app JS downloads, parses and executes,
+       * so on a mid-tier phone the first meaningful paint (and LCP) lands
+       * around 5-6s. This static shell arrives with the HTML and paints as
+       * soon as the (small, ~9KB gzip) stylesheet is in — giving a real
+       * contentful paint (the <h1>) seconds before the JS is ready. React's
+       * createRoot().render() clears #root on mount, swapping the skeleton
+       * for the live app. The <h1> here is byte-for-byte the same element the
+       * app renders, so the title never moves (no layout shift, stable LCP).
+       *
+       * Everything is scoped under #boot so it can't leak into the loaded
+       * stylesheet, and it's aria-hidden so it's invisible to assistive tech.
+       * ------------------------------------------------------------------ */
+      #boot {
+        --bg: #0b0b0d;
+        --panel: #161619;
+        --panel-2: #1f1f25;
+        --line: #2c2c34;
+        --text: #f4f4f6;
+        --text-dim: #9b9ba6;
+        --flame-1: #f6a01a;
+        --flame: linear-gradient(135deg, #f6a01a, #c01f1f);
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 16px 16px 0;
+        display: flex;
+        flex-direction: column;
+        font-family: "EB Garamond", Georgia, serif;
+      }
+      #boot .boot-header {
+        text-align: center;
+        margin-bottom: 16px;
+        position: relative;
+      }
+      #boot .boot-cog {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 40px;
+        height: 40px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+      }
+      /* Matches .app-header h1 exactly so the title doesn't shift on swap. */
+      #boot h1 {
+        font-family: "Cinzel", serif;
+        font-weight: 900;
+        font-size: clamp(3rem, 7vw, 4rem);
+        margin: 0;
+        letter-spacing: 0.03em;
+        color: var(--text);
+        text-shadow: 0 2px 18px rgba(236, 90, 28, 0.35);
+      }
+      #boot h1 span {
+        background: var(--flame);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+      }
+      #boot .boot-tabs {
+        display: flex;
+        gap: 2px;
+        justify-content: center;
+        margin-bottom: 12px;
+      }
+      #boot .boot-tab {
+        flex: 1 1 0;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 2px;
+        color: var(--text-dim);
+        font-family: "Cinzel", serif;
+        font-weight: 700;
+        font-size: 0.68rem;
+        letter-spacing: 0.02em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      #boot .boot-tab::before {
+        content: "";
+        width: 22px;
+        height: 22px;
+        border-radius: 5px;
+        background: var(--panel-2);
+      }
+      #boot .boot-tab-active {
+        color: var(--flame-1);
+      }
+      #boot .boot-tab-active::before {
+        background: var(--flame);
+        opacity: 0.8;
+      }
+      #boot .boot-input {
+        height: 58px;
+        border-radius: 12px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        margin: 0 auto 14px;
+        max-width: 560px;
+        width: 100%;
+      }
+      #boot .boot-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      #boot .boot-row {
+        height: 46px;
+        border-radius: 10px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        opacity: 0.85;
+        animation: boot-pulse 1.4s ease-in-out infinite;
+      }
+      #boot .boot-row:nth-child(2) {
+        animation-delay: 0.1s;
+      }
+      #boot .boot-row:nth-child(3) {
+        animation-delay: 0.2s;
+      }
+      #boot .boot-button {
+        height: 46px;
+        border-radius: 12px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        margin: 0 auto 14px;
+        max-width: 560px;
+        width: 100%;
+      }
+      #boot .boot-dots-row {
+        position: relative;
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+
+      #boot .boot-dots {
+        display: flex;
+        gap: 10px;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+
+      #boot .boot-dot {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        border: 2px solid var(--line);
+        background: transparent;
+      }
+      @keyframes boot-pulse {
+        0%,
+        100% {
+          opacity: 0.55;
+        }
+        50% {
+          opacity: 0.9;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #boot .boot-row {
+          animation: none;
+        }
+      }
     </style>
     <link rel="manifest" href="/manifest.webmanifest" />
     <title>Commandle — Daily MTG Commander Guessing Game</title>
-    <meta name="description" content="Guess the daily Magic: The Gathering commander from the top 500. Five modes: Classic, Silhouette, Zoom, Synergy, and Quote — a fresh puzzle every day." />
+    <meta
+      name="description"
+      content="Guess the daily Magic: The Gathering commander from the top 500. Five modes: Classic, Silhouette, Zoom, Synergy, and Quote — a fresh puzzle every day."
+    />
     <link rel="canonical" href="https://commandle.com/" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Commandle" />
-    <meta property="og:title" content="Commandle — Daily MTG Commander Guessing Game" />
-    <meta property="og:description" content="Guess the daily Magic: The Gathering commander. Five modes, a fresh puzzle every day." />
+    <meta
+      property="og:title"
+      content="Commandle — Daily MTG Commander Guessing Game"
+    />
+    <meta
+      property="og:description"
+      content="Guess the daily Magic: The Gathering commander. Five modes, a fresh puzzle every day."
+    />
     <meta property="og:url" content="https://commandle.com/" />
     <meta property="og:image" content="https://commandle.com/og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Commandle — a daily Magic: The Gathering commander guessing game" />
-
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Commandle — Daily MTG Commander Guessing Game" />
-    <meta name="twitter:description" content="Guess the daily Magic: The Gathering commander. Five modes, a fresh puzzle every day." />
-    <meta name="twitter:image" content="https://commandle.com/og-image.png" />
+    <meta
+      property="og:image:alt"
+      content="Commandle a daily Magic: The Gathering commander guessing game"
+    />
 
     <!-- Self-hosted fonts (see @font-face in base.css). Preload the two faces used in
          the first paint so text swaps to the real font as early as possible. -->
@@ -77,23 +264,70 @@
   </head>
   <body>
     <div id="root">
+      <!-- Static app-shell skeleton (styles in <head>). Painted with the HTML so
+           there's meaningful content on screen long before the JS bundle is ready;
+           React clears it on mount. See the #boot comment above. -->
+      <div id="boot" aria-hidden="true">
+        <header class="boot-header">
+          <div class="boot-cog"></div>
+          <h1>Comman<span>dle</span></h1>
+        </header>
+        <nav class="boot-tabs">
+          <span class="boot-tab boot-tab-active">Classic</span>
+          <span class="boot-tab">Synergy</span>
+          <span class="boot-tab">Silhouette</span>
+          <span class="boot-tab">Zoom</span>
+          <span class="boot-tab">Quote</span>
+        </nav>
+        <div class="boot-input"></div>
+        <div class="boot-button"></div>
+        <div className="boot-dots-row">
+          <div class="boot-dots">
+            <span class="boot-dot"></span>
+            <span class="boot-dot"></span>
+            <span class="boot-dot"></span>
+            <span class="boot-dot"></span>
+            <span class="boot-dot"></span>
+          </div>
+        </div>
+        <div class="boot-grid">
+          <div class="boot-row"></div>
+          <div class="boot-row"></div>
+          <div class="boot-row"></div>
+        </div>
+      </div>
       <!-- Crawler-visible fallback. React replaces this on mount; search engines and
            no-JS clients index the real copy below instead of an empty shell. -->
       <noscript>
         <h1>Commandle — Daily MTG Commander Guessing Game</h1>
         <p>
-          Commandle is a free daily <strong>Magic: The Gathering</strong> commander
-          guessing game. Every day everyone gets the same puzzle: deduce the day's
-          commander, then share a spoiler-free result grid.
+          Commandle is a free daily
+          <strong>Magic: The Gathering</strong> commander guessing game. Every
+          day everyone gets the same puzzle: deduce the day's commander, then
+          share a spoiler-free result grid.
         </p>
         <h2>Game modes</h2>
         <ul>
-          <li><a href="/">Classic</a> — deduce the commander from colour, type, and stat clues.</li>
-          <li><a href="/silhouette">Silhouette</a> — name it from the card-art outline.</li>
-          <li><a href="/zoom">Zoom</a> — identify it from a crop that widens with each guess.</li>
-          <li><a href="/synergy">Synergy</a> — guess it from the cards it synergizes with most.</li>
+          <li>
+            <a href="/">Classic</a> — deduce the commander from colour, type,
+            and stat clues.
+          </li>
+          <li>
+            <a href="/silhouette">Silhouette</a> — name it from the card-art
+            outline.
+          </li>
+          <li>
+            <a href="/zoom">Zoom</a> — identify it from a crop that widens with
+            each guess.
+          </li>
+          <li>
+            <a href="/synergy">Synergy</a> — guess it from the cards it
+            synergizes with most.
+          </li>
           <li><a href="/quote">Quote</a> — place it from its flavor text.</li>
-          <li><a href="/higher-lower">Higher / Lower</a> — an endless bonus round.</li>
+          <li>
+            <a href="/higher-lower">Higher / Lower</a> — an endless bonus round.
+          </li>
         </ul>
         <p>JavaScript is required to play. Please enable it and reload.</p>
       </noscript>
