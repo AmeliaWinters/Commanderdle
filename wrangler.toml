@@ -22,3 +22,4 @@ database_id = "ac4ef84f-8b4a-40c2-8cc9-e4a2feb2471a"
 
 [assets]
 directory = "./dist"
+not_found_handling = "single-page-application"
