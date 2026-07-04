@@ -22,10 +22,8 @@ import { useSynergyData } from "../lib/useSynergy";
 import ModeTabs from "./ModeTabs";
 import GuessInput from "./GuessInput";
 import ClassicGrid from "./classic/ClassicGrid";
-import ResultBanner from "./result/ResultBanner";
 import GuessList from "./GuessList";
 import GuessDots from "./GuessDots";
-import CardBackdrop from "./CardBackdrop";
 import AppHeader from "./layout/AppHeader";
 import AppFooter from "./layout/AppFooter";
 import ClockAheadNotice from "./layout/ClockAheadNotice";
@@ -42,6 +40,12 @@ const PrivacyPolicy = lazy(() => import("./PrivacyPolicy"));
 const HigherLowerMode = lazy(() => import("./higher-lower/HigherLowerMode"));
 const Archive = lazy(() => import("./Archive"));
 const HowToPlay = lazy(() => import("./HowToPlay"));
+// Off the Classic first-paint path: the decorative backdrop (which only mounts its images
+// once the browser is idle anyway) and the result banner (shown only once a game is done,
+// and it drags in the share/canvas code). Splitting them keeps their parse/execute out of
+// the initial render task that Total Blocking Time measures.
+const CardBackdrop = lazy(() => import("./CardBackdrop"));
+const ResultBanner = lazy(() => import("./result/ResultBanner"));
 
 // The non-classic modes share one props contract; the active view is picked from
 // this map instead of four near-identical conditional blocks.
@@ -139,7 +143,9 @@ export default function App() {
 
   return (
     <div className="app">
-      <CardBackdrop />
+      <Suspense fallback={null}>
+        <CardBackdrop />
+      </Suspense>
       <AppHeader
         isDaily={isDaily}
         isArchive={isArchive}
@@ -277,16 +283,18 @@ export default function App() {
             )}
 
             {done && !revealHeld && (
-              <ResultBanner
-                status={status as "won" | "lost"}
-                answer={answer}
-                guesses={guesses}
-                mode={mode}
-                maxGuesses={maxGuesses}
-                isDaily={isDaily}
-                skips={skips}
-                celebrate={freshWin}
-              />
+              <Suspense fallback={null}>
+                <ResultBanner
+                  status={status as "won" | "lost"}
+                  answer={answer}
+                  guesses={guesses}
+                  mode={mode}
+                  maxGuesses={maxGuesses}
+                  isDaily={isDaily}
+                  skips={skips}
+                  celebrate={freshWin}
+                />
+              </Suspense>
             )}
 
             {mode === "classic" && (!done || revealHeld) && (

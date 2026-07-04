@@ -1,5 +1,5 @@
 import type { Commander, Mode } from "../types/commander";
-import { COMMANDERS, QUOTE_POOL, SYNERGY_POOL, ZOOM_POOL } from "./commanders";
+import { COMMANDERS, quotePool, synergyPool, zoomPool } from "./commanders";
 
 /** Local calendar date as YYYY-MM-DD (puzzle rolls over at the player's local midnight). */
 export function todayKey(d = new Date()): string {
@@ -60,11 +60,11 @@ export function hashString(str: string): number {
 export function poolFor(mode: Mode): Commander[] {
   switch (mode) {
     case "quote":
-      return QUOTE_POOL;
+      return quotePool();
     case "synergy":
-      return SYNERGY_POOL;
+      return synergyPool();
     case "zoom":
-      return ZOOM_POOL;
+      return zoomPool();
     default:
       return COMMANDERS;
   }

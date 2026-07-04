@@ -7,7 +7,7 @@ import {
   dailyAnswer,
   poolFor,
 } from './dailyAnswer'
-import { COMMANDERS, QUOTE_POOL, SYNERGY_POOL, ZOOM_POOL } from './commanders'
+import { COMMANDERS, quotePool, synergyPool, zoomPool } from './commanders'
 import type { Mode } from '../types/commander'
 
 const MODES: Mode[] = ['classic', 'silhouette', 'quote', 'synergy', 'zoom']
@@ -65,9 +65,9 @@ describe('formatCountdown', () => {
 
 describe('poolFor', () => {
   it('maps each mode to its pool', () => {
-    expect(poolFor('quote')).toBe(QUOTE_POOL)
-    expect(poolFor('synergy')).toBe(SYNERGY_POOL)
-    expect(poolFor('zoom')).toBe(ZOOM_POOL)
+    expect(poolFor('quote')).toBe(quotePool())
+    expect(poolFor('synergy')).toBe(synergyPool())
+    expect(poolFor('zoom')).toBe(zoomPool())
     expect(poolFor('classic')).toBe(COMMANDERS)
     expect(poolFor('silhouette')).toBe(COMMANDERS)
   })

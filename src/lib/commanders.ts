@@ -49,16 +49,25 @@ export function ensureSynergyLoaded(): Promise<void> {
   return synergyPromise
 }
 
+// The three non-Classic answer pools are each a full scan over COMMANDERS. Classic (the
+// initial view) never needs them, so they're computed lazily on first access rather than
+// at module load — keeping that work out of the first-render task that TBT measures. Each
+// result is cached, so repeat callers get a stable array identity.
+function memoPool(build: () => Commander[]): () => Commander[] {
+  let cached: Commander[] | null = null
+  return () => (cached ??= build())
+}
+
 /** Commanders eligible as Quote-mode answers (must have flavor text to show). */
-export const QUOTE_POOL: Commander[] = COMMANDERS.filter((c) => c.flavorText)
+export const quotePool = memoPool(() => COMMANDERS.filter((c) => c.flavorText))
 
 /** Commanders eligible as Synergy-mode answers (need enough synergy cards to reveal).
  * Uses the core `synergyCount` so the pool — and thus the deterministic daily answer —
  * is stable whether or not the synergy arrays have been hydrated yet. */
-export const SYNERGY_POOL: Commander[] = COMMANDERS.filter((c) => c.synergyCount >= 4)
+export const synergyPool = memoPool(() => COMMANDERS.filter((c) => c.synergyCount >= 4))
 
 /** Commanders eligible as Zoom-mode answers (need an image to zoom into). */
-export const ZOOM_POOL: Commander[] = COMMANDERS.filter((c) => c.normalImage ?? c.artCrop)
+export const zoomPool = memoPool(() => COMMANDERS.filter((c) => c.normalImage ?? c.artCrop))
 
 /** Case-insensitive substring search over commander names, ranked by EDHREC popularity. */
 export function searchCommanders(query: string, limit = 8): Commander[] {

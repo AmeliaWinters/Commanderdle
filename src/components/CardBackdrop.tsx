@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { ZOOM_POOL } from "../lib/commanders";
+import { zoomPool } from "../lib/commanders";
 
 /** Position + size of a single backdrop card, in the same units at any width. */
 interface Pos {
@@ -168,7 +168,7 @@ function useIdleMount(): boolean {
 }
 
 function pickRealImages(count: number): string[] {
-  const imgs = ZOOM_POOL.map((c) => c.normalImage ?? c.artCrop).filter(
+  const imgs = zoomPool().map((c) => c.normalImage ?? c.artCrop).filter(
     (src): src is string => Boolean(src),
   );
   if (imgs.length === 0) return [];
