@@ -93,8 +93,6 @@
   font-size: 0.9rem;
 }
 
-/* Mobile: tighter gap above the footer and keep it clear of the home-indicator
-   area on notched phones. */
 @media (max-width: 560px) {
   .bottom-bar {
     margin: 20px 0 8px;
