@@ -20,11 +20,11 @@ const PATH_TO_MODE: Record<string, Mode> = Object.fromEntries(
 ) as Record<string, Mode>
 
 const MODE_TITLES: Record<Mode, string> = {
-  classic: 'Commandle — Classic',
-  silhouette: 'Commandle — Silhouette',
-  zoom: 'Commandle — Zoom',
+  classic: 'Commandle - Classic',
+  silhouette: 'Commandle - Silhouette',
+  zoom: 'Commandle - Zoom',
   synergy: 'Commandle — Synergy',
-  quote: 'Commandle — Quote',
+  quote: 'Commandle - Quote',
 }
 
 const MODE_DESCRIPTIONS: Record<Mode, string> = {

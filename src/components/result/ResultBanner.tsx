@@ -39,12 +39,14 @@ export default function ResultBanner({
   const guessCount = guesses.length;
   const wrongGuesses =
     guesses.filter((g) => g.name !== answer.name).length + skips;
+  // Skips consume a turn just like guesses, so the winning turn number counts both.
+  const attempts = guessCount + skips;
 
   // Mirrors the in-play pip row so the result screen shows how the game went.
   const dots = buildDots(guesses, answer, skips, maxGuesses);
 
   const score =
-    status === "won" ? `${guessCount}/${maxGuesses}` : `X/${maxGuesses}`;
+    status === "won" ? `${attempts}/${maxGuesses}` : `X/${maxGuesses}`;
 
   const shareOptions = useShareOptions({
     status,
@@ -136,7 +138,7 @@ export default function ResultBanner({
         <StatsPanel
           mode={mode}
           maxGuesses={maxGuesses}
-          highlight={status === "won" ? guessCount : undefined}
+          highlight={status === "won" ? attempts : undefined}
         />
       )}
     </div>

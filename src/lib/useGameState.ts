@@ -101,15 +101,17 @@ export function useGameState(mode: Mode, archiveDate?: string) {
   useEffect(() => {
     if (state.status === 'playing') return
     const won = state.status === 'won'
-    recordResult(state, mode, won, state.guesses.length)
+    // Skips consume a turn like guesses, so the turn count used for stats is both.
+    const attempts = state.guesses.length + state.skips
+    recordResult(state, mode, won, attempts)
     // Contribute to the anonymous community aggregate (live daily only; best-effort,
     // deduped server-side). A loss records the guess cap as guesses-used.
     if (state.isDaily && !state.isArchive) {
-      const guesses = won ? state.guesses.length : maxGuessesFor(mode)
+      const guesses = won ? attempts : maxGuessesFor(mode)
       void submitGlobalResult(mode as ShareMode, puzzleNumber(state.dateKey), won, guesses)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mode, state.dateKey, state.isDaily, state.isArchive, state.status, state.guesses.length])
+  }, [mode, state.dateKey, state.isDaily, state.isArchive, state.status, state.guesses.length, state.skips])
 
   // Persist progress (both live daily and archive plays; not practice).
   useEffect(() => {

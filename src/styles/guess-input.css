@@ -43,7 +43,7 @@
   width: 100%;
   /* Safety net: if the column is ever too narrow for the centered input plus its
      side peek button, wrap instead of letting the button spill outside. */
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .input-side {
@@ -54,6 +54,10 @@
 
 .input-side-left {
   justify-content: flex-end;
+  /* Hold the peek button's full width: the sides still grow equally to keep the
+     input centered on wide columns, but this side can't shrink below its button,
+     so on tighter widths the input narrows instead of the button spilling off-screen. */
+  min-width: max-content;
 }
 
 .pool-peek-btn {

@@ -1,91 +1,165 @@
-import { useEffect, useMemo, useState } from 'react'
-import { ZOOM_POOL } from '../lib/commanders'
+import { useEffect, useMemo, useState } from "react";
+import { ZOOM_POOL } from "../lib/commanders";
 
-interface CardSpec {
-  left: string
-  top: string
-  size: number
-  delay: number
-  dur: number
-  rot: number
+/** Position + size of a single backdrop card, in the same units at any width. */
+interface Pos {
+  left?: number; // % from left edge
+  right?: number; // % from right edge
+  top: number; // % from top
+  size: number; // width in px (height derived from card aspect ratio)
 }
+
+interface CardSpec extends Pos {
+  delay: number;
+  dur: number;
+  rot: number;
+  /** Target position/size at (and below) MOBILE_W. Cards lerp desktop -> mobile. */
+  mobile: Pos;
+}
+
+/**
+ * Cards interpolate linearly between their desktop spec (at >=DESKTOP_W) and
+ * their `mobile` spec (at <=MOBILE_W). Between the two the position/size is a
+ * straight lerp; outside the range it clamps to the nearest end.
+ */
+const DESKTOP_W = 900;
+const MOBILE_W = 450;
 
 /** Desktop layout: a handful of large cards drifting around the page edges. */
 const CARDS: CardSpec[] = [
-  { left: '8%', top: '12%', size: 150, delay: 0, dur: 26, rot: -13 },
-  { left: '78%', top: '18%', size: 190, delay: -6, dur: 32, rot: 9 },
-  { left: '72%', top: '64%', size: 170, delay: -12, dur: 28, rot: 3 },
-  { left: '20%', top: '34%', size: 210, delay: -18, dur: 36, rot: -5 },
-  { left: '90%', top: '72%', size: 230, delay: -8, dur: 22, rot: 11 },
-  { left: '0%', top: '70%', size: 250, delay: -10, dur: 30, rot: -16 },
-]
+  {
+    left: 8, top: 12, size: 150, delay: 0, dur: 26, rot: -13,
+    mobile: { left: 12, top: 12, size: 150 },
+  },
+  {
+    right: 10, top: 18, size: 190, delay: -6, dur: 32, rot: 9,
+    mobile: { right: -4, top: 27, size: 190 },
+  },
+  {
+    right: 0, top: 72, size: 230, delay: -8, dur: 22, rot: 11,
+    mobile: { right: -5, top: 76, size: 230 },
+  },
+  {
+    left: 0, top: 70, size: 250, delay: -10, dur: 30, rot: -16,
+    mobile: { left: -0, top: 50, size: 250 },
+  },
+  {
+    left: 20, top: 34, size: 210, delay: -18, dur: 36, rot: -5,
+    mobile: { left: 20, top: 34, size: 210 },
+  },
+  {
+    left: 72, top: 64, size: 170, delay: -12, dur: 28, rot: 3,
+    mobile: { left: 72, top: 64, size: 170 },
+  },
+];
 
-/**
- * Phone layout: a handful of small cards tucked into the corners so they peek in
- * from the edges without crowding the content column. Sizes are deliberately small
- * and positions hug the top/bottom corners where the UI leaves breathing room.
- */
-const CARDS_MOBILE: CardSpec[] = [
-  { left: '-10%', top: '2%', size: 110, delay: 0, dur: 26, rot: -13 },
-  { left: '80%', top: '5%', size: 120, delay: -6, dur: 32, rot: 10 },
-  { left: '-12%', top: '78%', size: 130, delay: -12, dur: 28, rot: -8 },
-  { left: '82%', top: '80%', size: 120, delay: -8, dur: 30, rot: 12 },
-]
+const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+
+/** Interpolate one edge value (left/right); undefined on both sides stays undefined. */
+function lerpEdge(
+  mobileVal: number | undefined,
+  deskVal: number | undefined,
+  t: number,
+): number | undefined {
+  if (deskVal === undefined && mobileVal === undefined) return undefined;
+  return lerp(mobileVal ?? deskVal ?? 0, deskVal ?? mobileVal ?? 0, t);
+}
+
+/** Resolve a card's position/size at the current interpolation factor (0=mobile, 1=desktop). */
+function interpCard(c: CardSpec, t: number): Pos {
+  return {
+    left: lerpEdge(c.mobile.left, c.left, t),
+    right: lerpEdge(c.mobile.right, c.right, t),
+    top: lerp(c.mobile.top, c.top, t),
+    size: lerp(c.mobile.size, c.size, t),
+  };
+}
+
+/** Current viewport width, tracked across resizes. */
+function useViewportWidth(): number {
+  const [w, setW] = useState(() =>
+    typeof window === "undefined" ? DESKTOP_W : window.innerWidth,
+  );
+  useEffect(() => {
+    const onResize = () => setW(window.innerWidth);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+  return w;
+}
 
 /** Matches the mobile breakpoint used elsewhere in the layout. */
-const MOBILE_QUERY = '(max-width: 640px)'
 
-function useIsMobile(): boolean {
+function useIsWidth(width: string): boolean {
+  const QUERY = `(max-width: ${width})`;
   const [isMobile, setIsMobile] = useState(
-    () => typeof window !== 'undefined' && window.matchMedia(MOBILE_QUERY).matches,
-  )
+    () => typeof window !== "undefined" && window.matchMedia(QUERY).matches,
+  );
   useEffect(() => {
-    const mql = window.matchMedia(MOBILE_QUERY)
-    const onChange = () => setIsMobile(mql.matches)
-    mql.addEventListener('change', onChange)
-    return () => mql.removeEventListener('change', onChange)
-  }, [])
-  return isMobile
+    const mql = window.matchMedia(QUERY);
+    const onChange = () => setIsMobile(mql.matches);
+    mql.addEventListener("change", onChange);
+    return () => mql.removeEventListener("change", onChange);
+  }, []);
+  return isMobile;
 }
 
 /** A few real commander images (with art), spread across the pool. Changes daily. */
 function pickRealImages(count: number): string[] {
   const imgs = ZOOM_POOL.map((c) => c.normalImage ?? c.artCrop).filter(
     (src): src is string => Boolean(src),
-  )
-  if (imgs.length === 0) return []
+  );
+  if (imgs.length === 0) return [];
 
-  const offset = new Date().getDate() % imgs.length
-  const step = Math.max(1, Math.floor(imgs.length / count))
-  return Array.from({ length: count }, (_, i) => imgs[(offset + i * step) % imgs.length])
+  const offset = new Date().getDate() % imgs.length;
+  const step = Math.max(1, Math.floor(imgs.length / 6));
+  return Array.from(
+    { length: count },
+    (_, i) => imgs[(offset + i * step) % imgs.length],
+  );
 }
 
 /** Decorative layer of real card images floating behind the page content. */
 export default function CardBackdrop() {
-  const isMobile = useIsMobile()
-  const cards = isMobile ? CARDS_MOBILE : CARDS
+  const width = useViewportWidth();
+  const t = Math.min(1, Math.max(0, (width - MOBILE_W) / (DESKTOP_W - MOBILE_W)));
+  const is4Breakpoint = useIsWidth("800px");
+  const is5Breakpoint = useIsWidth("1180px");
+  const cards = is4Breakpoint
+    ? CARDS.slice(0, 4)
+    : is5Breakpoint
+      ? CARDS.slice(0, 5)
+      : CARDS;
   // useMemo so the day's picks stay stable across re-renders.
-  const images = useMemo(() => pickRealImages(cards.length), [cards.length])
+  const images = useMemo(() => pickRealImages(cards.length), [cards.length]);
 
   return (
     <div className="card-backdrop" aria-hidden="true">
       {cards.map((c, i) => {
-        const src = images[i]
+        const src = images[i];
+        const p = interpCard(c, t);
         const style = {
-          left: c.left,
-          top: c.top,
-          width: c.size,
-          height: c.size * 1.4, // MTG card aspect ratio (~63:88)
+          left: p.left !== undefined ? `${p.left}%` : undefined,
+          right: p.right !== undefined ? `${p.right}%` : undefined,
+          top: `${p.top}%`,
+          width: p.size,
+          height: p.size * 1.4, // MTG card aspect ratio (~63:88)
           animationDuration: `${c.dur}s`,
           animationDelay: `${c.delay}s`,
-          ['--rot' as string]: `${c.rot}deg`,
-        }
+          ["--rot" as string]: `${c.rot}deg`,
+        };
         return src ? (
-          <img key={i} className="bg-card bg-card-real" src={src} alt="" style={style} />
+          <img
+            key={i}
+            className="bg-card bg-card-real"
+            src={src}
+            alt=""
+            style={style}
+          />
         ) : (
           <span key={i} className="bg-card" style={style} />
-        )
+        );
       })}
     </div>
-  )
+  );
 }

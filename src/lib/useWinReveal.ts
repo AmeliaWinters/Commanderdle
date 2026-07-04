@@ -6,12 +6,15 @@ import { playSound } from "./sounds";
 type Status = "playing" | "won" | "lost";
 
 // Classic grid reveal timing — must stay in sync with the per-cell stagger set
-// inline in GuessRow and the `reveal` animation in classic-grid.css. The last
-// cell finishes flipping in at (cells - 1) * stagger + duration.
+// inline in GuessRow and the `reveal`/`ignite` animations in classic-grid.css.
+// The last cell finishes flipping in at (cells - 1) * stagger + duration, then
+// the whole row does a brief orange "ignite" flash before the banner appears.
 const CELL_COUNT = 7; // name column + 6 comparison columns
 const CELL_STAGGER_MS = 500;
 const REVEAL_MS = 1250;
-const GRID_REVEAL_MS = (CELL_COUNT - 1) * CELL_STAGGER_MS + REVEAL_MS;
+const IGNITE_MS = 500;
+const GRID_REVEAL_MS =
+  (CELL_COUNT - 1) * CELL_STAGGER_MS + REVEAL_MS + IGNITE_MS;
 
 /**
  * Win choreography. A "fresh" win is one that happened during this session

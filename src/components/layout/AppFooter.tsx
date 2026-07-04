@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
 import { puzzleNumber } from "../../lib/dailyAnswer";
 import { navigateToPath, ARCHIVE_PATH } from "../../lib/router";
 import { useCountdown } from "../../lib/useCountdown";
-import AdBanner, { toggleAdTestMode, isAdTestMode } from "../AdBanner";
+import AdBanner from "../AdBanner";
 
 interface Props {
   isArchive: boolean;
@@ -12,15 +11,6 @@ interface Props {
 /** Bottom bar: ad slot, puzzle number/countdown line, credits and privacy link. */
 export default function AppFooter({ isArchive, archiveDate }: Props) {
   const countdown = useCountdown();
-  const [adTest, setAdTest] = useState(isAdTestMode);
-
-  useEffect(() => {
-    const onToggle = (e: Event) =>
-      setAdTest((e as CustomEvent<boolean>).detail);
-    window.addEventListener("commanderdle:ad-test-toggle", onToggle);
-    return () =>
-      window.removeEventListener("commanderdle:ad-test-toggle", onToggle);
-  }, []);
 
   function navPrivacy(e: React.MouseEvent) {
     e.preventDefault();
@@ -70,7 +60,6 @@ export default function AppFooter({ isArchive, archiveDate }: Props) {
         <a href="/privacy" onClick={navPrivacy}>
           Privacy Policy
         </a>
-
       </footer>
     </div>
   );

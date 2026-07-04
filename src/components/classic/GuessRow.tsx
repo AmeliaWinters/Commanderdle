@@ -34,20 +34,28 @@ function cellAria(col: ComparedColumn): string {
   return `${col.label}: ${value}, ${kind}${dir}`;
 }
 
-function Cell({ col, index, win }: { col: ComparedColumn; index: number; win?: boolean }) {
+function Cell({
+  col,
+  index,
+  win,
+  igniteDelay,
+}: {
+  col: ComparedColumn;
+  index: number;
+  win?: boolean;
+  igniteDelay: number;
+}) {
   return (
     <div
       className={`grid-cell match-${col.kind}`}
-      // Winning rows run a second "ignite" animation per cell; it needs its own
-      // delay so the flare lands just as the tile finishes flipping open.
       style={
         {
           animationDelay: win
-            ? `${index * 0.5}s, ${index * 0.5 + 0.9}s`
+            ? `${index * 0.5}s, ${igniteDelay}s`
             : `${index * 0.5}s`,
           // The inner scale pop can't inherit the cell's animation-delay list,
-          // so it reads its stagger from this custom property instead.
-          "--ignite-delay": win ? `${index * 0.5 + 0.9}s` : undefined,
+          // so it reads its timing from this custom property instead.
+          "--ignite-delay": win ? `${igniteDelay}s` : undefined,
         } as React.CSSProperties
       }
       role="cell"
@@ -80,7 +88,7 @@ export default function GuessRow({
 }) {
   const cols = compareCommander(guess, answer);
   const solved = guess.name === answer.name;
-  // Hidden clue: tint the name amber when it shares a word with the answer.
+  const revealEnd = cols.length * 0.5 + 1.25;
   const shareWord = !solved && sharesNameWord(guess.name, answer.name);
   const nameAria = solved
     ? `${guess.name}, correct`
@@ -91,7 +99,14 @@ export default function GuessRow({
     <div className={`grid-row${solved ? " win-row" : ""}`} role="row">
       <div
         className={`grid-cell name-cell${shareWord ? " match-partial" : ""}`}
-        style={{ animationDelay: solved ? "0s, 0.9s" : "0s" }}
+        style={
+          solved
+            ? ({
+                animationDelay: `0s, ${revealEnd}s`,
+                "--ignite-delay": `${revealEnd}s`,
+              } as React.CSSProperties)
+            : { animationDelay: "0s" }
+        }
         role="cell"
         aria-label={nameAria}
       >
@@ -114,7 +129,13 @@ export default function GuessRow({
         </CardZoom>
       </div>
       {cols.map((col, i) => (
-        <Cell key={col.label} col={col} index={i + 1} win={solved} />
+        <Cell
+          key={col.label}
+          col={col}
+          index={i + 1}
+          win={solved}
+          igniteDelay={revealEnd}
+        />
       ))}
     </div>
   );

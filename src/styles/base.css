@@ -42,7 +42,7 @@
      grid (~640px) plus the input row's centered guess box and side peek button.
      Narrower modes (quote, synergy, guess list) self-constrain below this, so
      they still read as a tight, focused column. */
-  --col: 880px;
+  --col: 1080px;
 
   font-family: "EB Garamond", Georgia, "Times New Roman", serif;
 

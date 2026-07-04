@@ -8,6 +8,7 @@
   min-width: 754px;
   margin: 0 auto;
   max-width: 960px;
+  overflow-x: hidden;
 }
 
 .grid-row {
@@ -32,8 +33,6 @@
   margin-bottom: 8px;
 }
 
-/* Reserved empty slots so the board height is stable from the first render
-   and adding a guess never shifts the page down. */
 .grid-cell.placeholder {
   background: transparent;
   border-style: dashed;
@@ -45,7 +44,7 @@
   background: transparent !important;
   color: var(--text-dim);
   font-family: "Cinzel", serif;
-  font-size: 0.64rem;
+font-size: 0.8rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   text-align: center;
@@ -105,9 +104,7 @@ button.head-help:hover {
   align-items: center;
   justify-content: center;
   text-align: center;
-  font-size: 0.9rem;
-  /* Short, Poeltl-style tile flip on reveal (~240ms), plus smooth color
-     transitions so feedback tints ease in rather than snap. */
+  font-size: 1rem;
   animation: reveal 1.25s cubic-bezier(0.3, 0.7, 0.3, 1.05) both;
   transition:
     background-color 0.2s ease,
@@ -137,7 +134,7 @@ button.head-help:hover {
 .win-row .grid-cell {
   animation:
     reveal 1.25s cubic-bezier(0.3, 0.7, 0.3, 1.05) both,
-    ignite 0.9s ease-out both;
+    ignite 0.5s ease-out both;
 }
 
 /* No transform here: ignite runs alongside reveal on the same element, and a
@@ -146,9 +143,35 @@ button.head-help:hover {
 @keyframes ignite {
   0% {
     box-shadow: 0 0 0 rgba(236, 90, 28, 0);
+    border-color: var(--exact-bd);
+  }
+  50% {
+    box-shadow:
+      0 0 22px rgba(236, 90, 28, 0.85),
+      0 0 44px rgba(246, 160, 26, 0.4);
+    border-color: var(--flame-1);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(236, 90, 28, 0.35);
+    border-color: var(--flame-2);
+  }
+}
+
+.win-row .name-cell {
+  animation:
+    reveal 1.25s cubic-bezier(0.3, 0.7, 0.3, 1.05) both,
+    name-ignite 0.5s ease-out both;
+}
+
+/* No transform here: ignite runs alongside reveal on the same element, and a
+   transform in this keyframe would back-fill during ignite's delay and stomp
+   reveal's rotateX flip. The pop is carried by .cell-inner instead. */
+@keyframes name-ignite {
+  0% {
+    box-shadow: 0 0 0 rgba(236, 90, 28, 0);
     border-color: var(--line);
   }
-  35% {
+  50% {
     box-shadow:
       0 0 22px rgba(236, 90, 28, 0.85),
       0 0 44px rgba(246, 160, 26, 0.4);
@@ -166,7 +189,7 @@ button.head-help:hover {
    elements can't inherit that, so the pop starts with the flare's mid-point
    using the cell's --ignite-delay custom property. */
 .win-row .grid-cell .cell-inner {
-  animation: ignite-pop 0.9s ease-out both;
+  animation: ignite-pop 0.25s ease-out both;
   animation-delay: var(--ignite-delay, 0.9s);
 }
 
@@ -211,7 +234,7 @@ button.head-help:hover {
 .name-text {
   font-family: "Cinzel", serif;
   font-weight: 700;
-  font-size: 0.82rem;
+  font-size: 1rem;
   text-align: left;
   line-height: 1.15;
 }
@@ -223,7 +246,7 @@ button.head-help:hover {
 .cell-text {
   font-family: "Cinzel", serif;
   font-weight: 700;
-  font-size: clamp(0.2rem, 100cqw, 0.9rem);
+  font-size: clamp(0.2rem, 100cqw, 1rem);
   white-space: normal;
   /* Break at natural hyphenation points (e.g. "Shape-shifter") rather than
      at arbitrary character positions. Requires lang="en" on <html>, which is set. */
@@ -251,6 +274,9 @@ button.head-help:hover {
   .results-table {
     /* Left-align so the name column is on-screen at rest; scroll for the rest. */
     margin: 0;
+  }
+  .name-text {
+    font-size: 0.75rem;
   }
 }
 

@@ -41,10 +41,6 @@ export default function AppHeader({
           <span className="practice-badge">Practice</span>
         )}
       </h1>
-      <p className="tagline">
-        Guess the daily Magic The Gathering commander (top 500 by EDHREC
-        popularity)
-      </p>
     </header>
   );
 }
