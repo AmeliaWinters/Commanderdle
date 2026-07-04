@@ -8,9 +8,9 @@
 export type SoundName = 'guess' | 'win' | 'lose'
 
 const FILES: Record<SoundName, string> = {
-  guess: '/sounds/guess.wav',
-  win: '/sounds/win.wav',
-  lose: '/sounds/lose.wav',
+  guess: '/sounds/guess.mp3',
+  win: '/sounds/win.mp3',
+  lose: '/sounds/lose.mp3',
 }
 
 // All effects play at half volume.
@@ -45,6 +45,25 @@ function element(name: SoundName): HTMLAudioElement | null {
 /** Warm the audio cache so the first real play has no fetch latency. */
 export function preloadSounds() {
   ;(Object.keys(FILES) as SoundName[]).forEach(element)
+}
+
+/**
+ * Warm the audio cache lazily on the first user interaction rather than at load. The
+ * effect files are decorative and browsers block playback until a gesture anyway, so
+ * fetching them during initial paint only steals bandwidth from LCP-critical resources.
+ * Idempotent; self-unsubscribes after the first gesture.
+ */
+export function preloadSoundsOnFirstGesture(): () => void {
+  if (typeof window === 'undefined') return () => {}
+  const events = ['pointerdown', 'keydown'] as const
+  const onGesture = () => {
+    preloadSounds()
+    events.forEach((e) => window.removeEventListener(e, onGesture))
+  }
+  events.forEach((e) =>
+    window.addEventListener(e, onGesture, { once: true, passive: true }),
+  )
+  return () => events.forEach((e) => window.removeEventListener(e, onGesture))
 }
 
 /** Play a sound effect. No-op when muted or when playback is blocked. */

@@ -198,6 +198,11 @@ export default function CardBackdrop() {
       : CARDS;
   // useMemo so the day's picks stay stable across re-renders.
   const images = useMemo(() => pickRealImages(cards.length), [cards.length]);
+  // The largest rendered card is the LCP element; hint the browser to fetch it first.
+  const lcpIndex = cards.reduce(
+    (best, c, i) => (c.size > cards[best].size ? i : best),
+    0,
+  );
 
   // Keep the container in the tree from the start (so it doesn't shift layout), but
   // hold the card images back until the browser is idle after first paint.
@@ -225,7 +230,7 @@ export default function CardBackdrop() {
             src={src}
             alt=""
             decoding="async"
-            loading="lazy"
+            fetchPriority={i === lcpIndex ? "high" : undefined}
             style={style}
           />
         ) : (

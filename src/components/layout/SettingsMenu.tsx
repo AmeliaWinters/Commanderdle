@@ -7,7 +7,7 @@ import {
   notificationsSupported,
 } from "../../lib/reminder";
 import {
-  preloadSounds,
+  preloadSoundsOnFirstGesture,
   isMuted,
   toggleMuted,
   onMuteChange,
@@ -40,10 +40,15 @@ export default function SettingsMenu({
   const [muted, setMuted] = useState(isMuted);
   const [reminderOn, setReminderOn] = useState(isReminderEnabled);
 
-  // Warm the audio cache on first mount and keep the mute button in sync.
+  // Keep the mute button in sync, and warm the audio cache on the first user gesture
+  // (not at mount) so the effect files don't compete with LCP-critical resources.
   useEffect(() => {
-    preloadSounds();
-    return onMuteChange(setMuted);
+    const stopPreload = preloadSoundsOnFirstGesture();
+    const stopMute = onMuteChange(setMuted);
+    return () => {
+      stopPreload();
+      stopMute();
+    };
   }, []);
 
   // Arm the daily reminder timer on load if the player opted in.

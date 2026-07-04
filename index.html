@@ -197,6 +197,55 @@
           animation: none;
         }
       }
+
+      /* ------------------------------------------------------------------ *
+       * Boot-shell backdrop card (LCP element).
+       *
+       * The largest floating card is the page's Largest Contentful Paint. In
+       * the live app it's a React-rendered <img> that can't appear until the
+       * JS bundle boots (~6s on throttled mobile), so LCP was pinned to that.
+       * We instead paint the same card straight from the HTML: an inline head
+       * script (injected at build by the backdrop-lcp-preload Vite plugin)
+       * preloads today's card and drops this <img> into #boot-backdrop on
+       * DOMContentLoaded, so it paints before any app JS. React's CardBackdrop
+       * renders the byte-identical card at the same slot, so the swap is
+       * invisible and no larger LCP candidate appears later.
+       *
+       * Scoped + self-contained so it doesn't depend on the (JS-injected in
+       * dev) main stylesheet. Values mirror CARDS[3] / .bg-card-real in
+       * CardBackdrop.tsx + base.css.
+       * ------------------------------------------------------------------ */
+      #boot-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: -2;
+        pointer-events: none;
+        overflow: hidden;
+        opacity: 0.3;
+      }
+      #boot-backdrop img {
+        position: absolute;
+        display: block;
+        border-radius: 14px;
+        border: 1px solid rgba(246, 160, 26, 0.12);
+        object-fit: cover;
+        will-change: transform;
+        animation: boot-float 30s ease-in-out infinite alternate;
+      }
+      @keyframes boot-float {
+        from {
+          transform: translateY(0) rotate(var(--rot, 0deg)) scale(1);
+        }
+        to {
+          transform: translateY(-32px) rotate(calc(var(--rot, 0deg) + 6deg))
+            scale(1.05);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #boot-backdrop img {
+          animation: none;
+        }
+      }
     </style>
     <link rel="manifest" href="/manifest.webmanifest" />
     <title>Commandle — Daily MTG Commander Guessing Game</title>
@@ -268,6 +317,10 @@
            there's meaningful content on screen long before the JS bundle is ready;
            React clears it on mount. See the #boot comment above. -->
       <div id="boot" aria-hidden="true">
+        <!-- LCP backdrop card. The inline head script (injected by the
+             backdrop-lcp-preload Vite plugin) fills this with today's card
+             image on DOMContentLoaded, painting the LCP element pre-JS. -->
+        <div id="boot-backdrop" aria-hidden="true"></div>
         <header class="boot-header">
           <div class="boot-cog"></div>
           <h1>Comman<span>dle</span></h1>
