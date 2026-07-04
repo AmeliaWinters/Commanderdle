@@ -3,6 +3,7 @@ import CardZoom from "./CardZoom";
 import SynergyPct from "./SynergyPct";
 import GuessDots from "./GuessDots";
 import { buildDots } from "../lib/guessDots";
+import { useSynergyData } from "../lib/useSynergy";
 
 interface Props {
   answer: Commander;
@@ -27,10 +28,32 @@ export default function SynergyMode({
   solved,
   onSkip,
 }: Props) {
+  // The synergy card arrays are loaded on demand (split out of the initial bundle).
+  const synergyReady = useSynergyData(true);
   const cards = answer.synergyCards;
   const revealCount = solved
     ? cards.length
     : Math.min(cards.length, wrongGuesses + 1);
+
+  if (!synergyReady) {
+    return (
+      <div className="synergy-mode">
+        <header className="synergy-intro">
+          <h2>Top synergy cards</h2>
+          <p>Name the commander from EDHREC&rsquo;s most synergistic cards</p>
+        </header>
+        <ol className="synergy-cards">
+          {[0, 1, 2, 3, 4].map((i) => (
+            <li key={i} className="synergy-card hidden">
+              <div className="synergy-card-back" aria-hidden="true">
+                ?
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    );
+  }
 
   const dots = buildDots(guesses, answer, skips, maxGuesses);
 

@@ -1,47 +1,34 @@
-import { useEffect } from "react";
+import { useEffect, type ReactNode } from "react";
 import { createPortal } from "react-dom";
+import { MdKeyboardArrowUp, MdKeyboardArrowDown } from "react-icons/md";
 import type { Mode } from "../types/commander";
+import { markHowToSeen } from "../lib/howToSeen";
 
 interface Props {
   mode: Mode;
   onClose: () => void;
 }
 
-const SEEN_KEY = (mode: Mode) => `commanderdle:${mode}:howto-seen`;
-
-/** True once the player has dismissed the how-to for this mode at least once. */
-export function hasSeenHowTo(mode: Mode): boolean {
-  try {
-    return localStorage.getItem(SEEN_KEY(mode)) === "1";
-  } catch {
-    return true; // If storage is unavailable, don't nag.
-  }
-}
-
-function markSeen(mode: Mode) {
-  try {
-    localStorage.setItem(SEEN_KEY(mode), "1");
-  } catch {
-    /* ignore */
-  }
-}
-
 interface Guide {
   title: string;
   intro: string;
-  bullets: string[];
+  bullets: ReactNode[];
 }
 
 const GUIDES: Record<Mode, Guide> = {
   classic: {
     title: "How to play — Classic",
     intro:
-      "Guess the daily commander in 6 tries. Each guess reveals how it compares to the answer across six columns.",
+      "Guess the daily commander in 6 tries. Each guess reveals how it compares to the answer across five columns.",
     bullets: [
       "🟩 Green = exact match for that attribute.",
       "🟨 Amber = partially right (e.g. shares some colors, or the number is close).",
       "⬛ Grey = no match.",
-      "↑ / ↓ arrows on Mana Value, Stat Total, Popularity and Year tell you if the answer is higher or lower.",
+      <>
+        <MdKeyboardArrowUp className="howto-arrow" /> /{" "}
+        <MdKeyboardArrowDown className="howto-arrow" /> arrows on Mana Value,
+        Popularity and Price tell you if the answer is higher or lower.
+      </>,
       "Popularity is the commander's EDHREC rank — #1 is the most-built commander.",
     ],
   },
@@ -92,7 +79,7 @@ export default function HowToPlay({ mode, onClose }: Props) {
   }, []);
 
   function close() {
-    markSeen(mode);
+    markHowToSeen(mode);
     onClose();
   }
 
@@ -113,8 +100,8 @@ export default function HowToPlay({ mode, onClose }: Props) {
         </div>
         <p className="howto-intro">{guide.intro}</p>
         <ul className="howto-list">
-          {guide.bullets.map((b) => (
-            <li key={b}>{b}</li>
+          {guide.bullets.map((b, i) => (
+            <li key={i}>{b}</li>
           ))}
         </ul>
         <button className="share-btn howto-got-it" onClick={close}>

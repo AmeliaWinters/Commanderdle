@@ -25,10 +25,18 @@ export interface Commander {
   rarity: string
   year: number
   setName: string
+  /** Card-market price in USD (Scryfall `prices.usd`, foil as fallback). null when unpriced. */
+  price: number | null
   flavorText: string | null
   artCrop: string | null
   normalImage: string | null
-  /** Top cards by EDHREC synergy score, most synergistic first. May be empty. */
+  /** How many high-synergy cards this commander has. Lives in the eager "core" data
+   * (unlike the `synergyCards` array itself) so Synergy-mode eligibility and pool
+   * membership can be computed without loading the heavy synergy payload. */
+  synergyCount: number
+  /** Top cards by EDHREC synergy score, most synergistic first. Empty until the
+   * lazily-loaded synergy data is hydrated (see `ensureSynergyLoaded` in commanders.ts).
+   * Only Synergy mode reads it, so it's split out of the initial bundle. */
   synergyCards: SynergyCard[]
 }
 

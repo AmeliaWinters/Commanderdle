@@ -12,6 +12,17 @@ export default defineConfig({
     // Honor a port injected via env (e.g. the preview harness) when present.
     port: process.env.PORT ? Number(process.env.PORT) : undefined,
   },
+  build: {
+    rollupOptions: {
+      output: {
+        // Keep React in its own long-lived chunk so app-code changes don't bust
+        // the framework cache for returning players.
+        manualChunks: {
+          react: ['react', 'react-dom'],
+        },
+      },
+    },
+  },
   test: {
     // jsdom gives the pure-logic tests a localStorage (stats.ts) and lets the
     // ManaSymbols import used by deduce.ts resolve without a real browser.

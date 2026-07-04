@@ -41,6 +41,9 @@ const WEBP_QUALITY = 80
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const OUT_FILE = join(__dirname, '..', 'src', 'data', 'commanders.json')
+// Derived splits consumed by the app (see the write near the end of main()).
+const CORE_FILE = join(__dirname, '..', 'src', 'data', 'commanders.core.json')
+const SYNERGY_FILE = join(__dirname, '..', 'src', 'data', 'synergy.json')
 // Vite serves public/ at the deploy root; images land here and ship as static assets.
 const CARDS_DIR = join(__dirname, '..', 'public', 'cards')
 // Last-good EDHREC payload, committed so the build survives json.edhrec.com going away.
@@ -171,6 +174,7 @@ interface ScryfallCard {
   rarity?: string
   released_at?: string
   set_name?: string
+  prices?: { usd?: string | null; usd_foil?: string | null }
   flavor_text?: string
   card_faces?: Array<{
     type_line?: string
@@ -204,6 +208,7 @@ export interface Commander {
   rarity: string
   year: number
   setName: string
+  price: number | null
   flavorText: string | null
   artCrop: string | null
   normalImage: string | null
@@ -341,6 +346,7 @@ function toCommander(
   const loyalty = card.loyalty ?? pickFace(card, (f) => (f as any).loyalty) ?? null
   const flavor = card.flavor_text ?? pickFace(card, (f) => (f as any).flavor_text) ?? null
   const year = card.released_at ? new Date(card.released_at).getUTCFullYear() : 0
+  const usd = card.prices?.usd ?? card.prices?.usd_foil ?? null
   return {
     rank,
     name: card.name,
@@ -354,6 +360,7 @@ function toCommander(
     rarity: card.rarity ?? 'unknown',
     year,
     setName: card.set_name ?? '',
+    price: usd != null ? Number(usd) : null,
     flavorText: flavor ?? null,
     artCrop: images?.art_crop ?? null,
     normalImage: images?.normal ?? null,
@@ -602,6 +609,20 @@ async function main() {
   await mkdir(dirname(OUT_FILE), { recursive: true })
   await writeFile(OUT_FILE, JSON.stringify(commanders, null, 2), 'utf-8')
   console.log(`Wrote ${commanders.length} commanders to ${OUT_FILE}`)
+
+  // Derived, app-facing splits (keep in sync with src/lib/commanders.ts):
+  //  - commanders.core.json: every field except the heavy `synergyCards` arrays,
+  //    plus a `synergyCount`, so it loads in the initial bundle.
+  //  - synergy.json: name -> SynergyCard[], loaded on demand by Synergy mode only.
+  const core = commanders.map(({ synergyCards, ...rest }) => ({
+    ...rest,
+    synergyCount: synergyCards.length,
+  }))
+  const synergy: Record<string, (typeof commanders)[number]['synergyCards']> = {}
+  for (const c of commanders) synergy[c.name] = c.synergyCards
+  await writeFile(CORE_FILE, JSON.stringify(core), 'utf-8')
+  await writeFile(SYNERGY_FILE, JSON.stringify(synergy), 'utf-8')
+  console.log(`Wrote core -> ${CORE_FILE} and synergy -> ${SYNERGY_FILE}`)
   const withFlavor = commanders.filter((c) => c.flavorText).length
   const withArt = commanders.filter((c) => c.artCrop).length
   const withSynergy = commanders.filter((c) => c.synergyCards.length >= 4).length

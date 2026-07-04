@@ -138,15 +138,14 @@ describe('compareCommander', () => {
     year: 2021,
   })
 
-  it('returns the six columns in ClassicGrid order', () => {
+  it('returns the columns in canonical COLUMNS order', () => {
     const cols = compareCommander(answer, answer)
     expect(cols.map((c) => c.label)).toEqual([
-      'Colors',
       'Type',
+      'Colors',
       'Mana Value',
-      'Stat Total',
+      'Price',
       'Popularity',
-      'Year',
     ])
   })
 

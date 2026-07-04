@@ -1,3 +1,35 @@
+/* Self-hosted fonts (latin subset, woff2). Replaces the render-blocking Google Fonts
+   stylesheet: no extra cross-origin round-trips, and `swap` keeps text visible while
+   the face loads. Cinzel and EB Garamond ship as variable fonts, so one file per
+   subset covers every weight we use. */
+@font-face {
+  font-family: "Cinzel";
+  font-style: normal;
+  font-weight: 500 900;
+  font-display: swap;
+  src: url("/fonts/cinzel-latin.woff2") format("woff2");
+}
+@font-face {
+  font-family: "EB Garamond";
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url("/fonts/ebgaramond-latin.woff2") format("woff2");
+}
+@font-face {
+  font-family: "EB Garamond";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/ebgaramond-italic-latin.woff2") format("woff2");
+}
+
+/* Reserve space while a code-split mode view fetches its chunk, so swapping the
+   loaded component in doesn't shift the layout below it. */
+.mode-view-loading {
+  min-height: 320px;
+}
+
 :root {
   --bg: #0b0b0d;
   --panel: #161619;
@@ -42,7 +74,7 @@
      grid (~640px) plus the input row's centered guess box and side peek button.
      Narrower modes (quote, synergy, guess list) self-constrain below this, so
      they still read as a tight, focused column. */
-  --col: 1080px;
+  --col: 1000px;
 
   font-family: "EB Garamond", Georgia, "Times New Roman", serif;
 

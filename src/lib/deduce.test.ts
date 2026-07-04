@@ -88,6 +88,14 @@ describe('deduce — numerics', () => {
     expect(mv.value).toBe('<8')
   })
 
+  it('greys a bound built only from far guesses', () => {
+    // guess mv 1 is 4 below the answer (5), well outside the ±2 tolerance, so the
+    // lower bound is "far" — the clue should read match-none, not match-partial.
+    const guess = makeCommander({ manaValue: 1, power: '1', toughness: '1', rank: 50, year: 2020 })
+    const mv = deduce([guess], answer).numerics.find((n) => n.label === 'Mana value')!
+    expect(mv.tone).toBe('none')
+  })
+
   it('collapses to an exact value once a guess matches', () => {
     const guess = makeCommander({ manaValue: 5, power: '1', toughness: '1', rank: 50, year: 2020 })
     const mv = deduce([guess], answer).numerics.find((n) => n.label === 'Mana value')!
@@ -109,10 +117,10 @@ describe('deduce — numerics', () => {
   })
 
   it('omits a numeric whose answer value is uncomparable', () => {
-    const starAnswer = makeCommander({ power: '*', toughness: '*', loyalty: null })
-    const guess = makeCommander({ power: '3', toughness: '3' })
-    const labels = deduce([guess], starAnswer).numerics.map((n) => n.label)
-    expect(labels).not.toContain('Stat total')
+    const unpricedAnswer = makeCommander({ price: null })
+    const guess = makeCommander({ price: 5 })
+    const labels = deduce([guess], unpricedAnswer).numerics.map((n) => n.label)
+    expect(labels).not.toContain('Price')
   })
 })
 

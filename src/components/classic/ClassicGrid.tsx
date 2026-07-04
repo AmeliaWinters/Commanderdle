@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { Commander } from "../../types/commander";
 import GuessRow from "./GuessRow";
 import DeductionRow from "./DeductionRow";
+import { COLUMNS } from "../../lib/columns";
 
 interface Props {
   guesses: Commander[];
@@ -9,17 +10,8 @@ interface Props {
   maxGuesses: number;
 }
 
-const HEADERS = [
-  "Commander",
-  "Colours",
-  "Type",
-  "Mana Value",
-  "Stat Total",
-  "Rank",
-  "Year",
-];
+const HEADERS = ["Commander", ...COLUMNS.map((c) => c.header)];
 
-/** A reserved, empty row so the board keeps a stable height before it's filled. */
 function PlaceholderRow() {
   return (
     <div className="grid-row" aria-hidden="true">
@@ -44,20 +36,38 @@ export default function ClassicGrid({ guesses, answer, maxGuesses }: Props) {
         <div className="grid-row grid-head" role="row">
           {HEADERS.map((h) =>
             h === "Rank" ? (
-              <button
+              <div
                 key={h}
-                type="button"
-                className="grid-cell head-cell head-help"
+                className="grid-cell head-cell head-help-wrap"
                 role="columnheader"
-                aria-expanded={rankTipOpen}
-                title="What does Rank mean?"
-                onClick={() => setRankTipOpen((o) => !o)}
               >
-                {h}
-                <span className="help-mark" aria-hidden="true">
-                  ?
-                </span>
-              </button>
+                <button
+                  type="button"
+                  className="head-help"
+                  aria-expanded={rankTipOpen}
+                  title="What does Rank mean?"
+                  onClick={() => setRankTipOpen((o) => !o)}
+                >
+                  {h}
+                  <span className="help-mark" aria-hidden="true">
+                    ?
+                  </span>
+                </button>
+                {rankTipOpen && (
+                  <div className="head-tip" role="note">
+                    Rank is the commander&rsquo;s popularity on EDHREC — #1 is
+                    the most-built commander.
+                    <button
+                      type="button"
+                      className="head-tip-close"
+                      aria-label="Close"
+                      onClick={() => setRankTipOpen(false)}
+                    >
+                      ×
+                    </button>
+                  </div>
+                )}
+              </div>
             ) : (
               <div key={h} className="grid-cell head-cell" role="columnheader">
                 {h}
@@ -65,12 +75,6 @@ export default function ClassicGrid({ guesses, answer, maxGuesses }: Props) {
             ),
           )}
         </div>
-        {rankTipOpen && (
-          <div className="head-tip" role="note">
-            Rank is the commander&rsquo;s popularity on EDHREC — #1 is the
-            most-built commander.
-          </div>
-        )}
         {[...guesses].reverse().map((g) => (
           <GuessRow key={g.name} guess={g} answer={answer} />
         ))}

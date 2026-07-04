@@ -7,7 +7,7 @@
   width: 100%;
   min-width: 754px;
   margin: 0 auto;
-  max-width: 960px;
+  max-width: var(--col);
   overflow-x: hidden;
 }
 
@@ -19,12 +19,11 @@
      wide as it needs to be rather than cramming into a fixed width. */
   grid-template-columns:
     minmax(160px, 1.8fr) /* Commander */
-    minmax(132px, 1.1fr) /* Colours */
     minmax(140px, 1.1fr) /* Type */
+    minmax(132px, 1.1fr) /* Colours */
     minmax(72px, 0.7fr) /* Mana Value */
-    minmax(72px, 0.7fr) /* Stat Total */
-    minmax(76px, 0.7fr) /* Rank */
-    minmax(66px, 0.7fr); /* Year */
+    minmax(72px, 0.7fr) /* Price */
+    minmax(76px, 0.7fr); /* Rank */
   gap: 6px;
   margin-bottom: 6px;
 }
@@ -44,7 +43,7 @@
   background: transparent !important;
   color: var(--text-dim);
   font-family: "Cinzel", serif;
-font-size: 0.8rem;
+  font-size: 0.8rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   text-align: center;
@@ -52,15 +51,30 @@ font-size: 0.8rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: visible;
   animation: none !important;
 }
 
-/* The Rank header is a real button that toggles an explainer note. */
+/* The Rank header hosts a button that toggles an explainer popover. */
+.grid-cell.head-help-wrap {
+  position: relative;
+  overflow: visible;
+}
+
 button.head-help {
   cursor: pointer;
   font: inherit;
   font-family: "Cinzel", serif;
+  color: inherit;
+  background: transparent;
+  border: none;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   gap: 3px;
+  text-transform: uppercase;
+  letter-spacing: inherit;
 }
 
 button.head-help:hover {
@@ -80,15 +94,57 @@ button.head-help:hover {
   flex-shrink: 0;
 }
 
+/* Popover: overlays the board instead of shifting rows. */
 .head-tip {
-  margin: 0 0 8px;
-  padding: 8px 12px;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  width: max-content;
+  max-width: min(260px, 70vw);
+  padding: 10px 28px 10px 12px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--panel-2);
   color: var(--text-dim);
+  font-family: system-ui, sans-serif;
   font-size: 0.82rem;
-  text-align: center;
+  line-height: 1.4;
+  letter-spacing: normal;
+  text-transform: none;
+  text-align: left;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+/* Little arrow pointing up at the header. */
+.head-tip::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-bottom-color: var(--panel-2);
+}
+
+.head-tip-close {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  padding: 0;
+  width: 18px;
+  height: 18px;
+  line-height: 1;
+  border: none;
+  background: transparent;
+  color: var(--text-dim);
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.head-tip-close:hover {
+  color: var(--text);
 }
 
 .grid-cell {
@@ -255,13 +311,18 @@ button.head-help:hover {
   /* Fallback where hyphenation isn't available: break anywhere rather than
      letting a long word ("Shapeshifter") get clipped by the cell. */
   overflow-wrap: anywhere;
-  line-height: 1.15;
+  display: flex;
 }
 
 .cell-arrow {
   margin-left: 3px;
   font-size: 0.82rem;
   opacity: 0.9;
+}
+
+.cell-arrow svg,
+.howto-arrow {
+  vertical-align: -0.15em;
 }
 
 /* Mobile: keep the full desktop table (thumbnails, colors, readable type) and

@@ -2,8 +2,9 @@ import type { Commander } from "../types/commander";
 import {
   compareNumeric,
   compareSets,
+  formatPrice,
   POPULARITY_TOL,
-  statTotal,
+  PRICE_TOL,
   subtypes,
   type MatchKind,
 } from "./compare";
@@ -63,8 +64,8 @@ export function quotePool(pool: Commander[], answer: Commander): Commander[] {
 
 export interface NumericClue {
   label: string;
-  /** 'exact' = pinned value (green); 'partial' = bounded by guesses (amber). */
-  tone: "exact" | "partial";
+  /** 'exact' = pinned value (green); 'partial' = bounded by close guesses (amber); 'none' = bounded by far guesses (grey). */
+  tone: "exact" | "partial" | "none";
   value: string;
 }
 
@@ -94,16 +95,17 @@ interface NumericSpec {
   label: string;
   get: (c: Commander) => number | null;
   fmt: (n: number) => string;
+  /** Distance within which a guess reads as "close" — matches the column's tolerance. */
+  tol: number;
 }
 
 const id = (n: number) => String(n);
 
 const NUMERIC_SPECS: NumericSpec[] = [
-  { label: "Mana value", get: (c) => c.manaValue, fmt: id },
-  { label: "Stat total", get: (c) => statTotal(c), fmt: id },
+  { label: "Mana value", get: (c) => c.manaValue, fmt: id, tol: 2 },
   // Popularity is keyed on EDHREC rank (lower = more popular), shown as "#42".
-  { label: "Popularity", get: (c) => c.rank, fmt: (n) => `#${n}` },
-  { label: "Year", get: (c) => c.year, fmt: id },
+  { label: "Popularity", get: (c) => c.rank, fmt: (n) => `#${n}`, tol: POPULARITY_TOL },
+  { label: "Price", get: (c) => c.price, fmt: (n) => formatPrice(n), tol: PRICE_TOL },
 ];
 
 const WUBRG = ["W", "U", "B", "R", "G"];
@@ -150,7 +152,13 @@ function numericClue(
   else if (hasGt) value = `>${spec.fmt(gt)}`;
   else value = `<${spec.fmt(lt)}`;
 
-  return { label: spec.label, tone: "partial", value };
+  // The bound reads as "close" (amber) only if one of the tightest bounding
+  // guesses actually landed within tolerance of the answer; otherwise the answer
+  // is only loosely fenced in by far guesses, so the clue stays grey.
+  const closeBounded =
+    (hasGt && a - gt <= spec.tol) || (hasLt && lt - a <= spec.tol);
+
+  return { label: spec.label, tone: closeBounded ? "partial" : "none", value };
 }
 
 interface SetClue {

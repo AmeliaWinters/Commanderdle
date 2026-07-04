@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, lazy, Suspense } from "react";
 import { useGameState } from "../lib/useGameState";
 import {
   useModeRoute,
@@ -18,25 +18,30 @@ import { isArchiveCompleted } from "../lib/archive";
 import { isModeCompletedToday } from "../lib/stats";
 import { getPeek } from "../lib/peek";
 import { useWinReveal } from "../lib/useWinReveal";
+import { useSynergyData } from "../lib/useSynergy";
 import ModeTabs from "./ModeTabs";
 import GuessInput from "./GuessInput";
 import ClassicGrid from "./classic/ClassicGrid";
-import SilhouetteMode from "./SilhouetteMode";
-import ZoomMode from "./ZoomMode";
-import SynergyMode from "./SynergyMode";
-import QuoteMode from "./QuoteMode";
 import ResultBanner from "./result/ResultBanner";
 import GuessList from "./GuessList";
 import GuessDots from "./GuessDots";
-import PoolModal from "./PoolModal";
 import CardBackdrop from "./CardBackdrop";
-import PrivacyPolicy from "./PrivacyPolicy";
-import HigherLowerMode from "./higher-lower/HigherLowerMode";
-import Archive from "./Archive";
-import HowToPlay, { hasSeenHowTo } from "./HowToPlay";
 import AppHeader from "./layout/AppHeader";
 import AppFooter from "./layout/AppFooter";
 import ClockAheadNotice from "./layout/ClockAheadNotice";
+import { hasSeenHowTo } from "../lib/howToSeen";
+
+// Everything below the Classic landing is code-split: the initial chunk ships only
+// Classic + the shared shell, and each other mode/modal fetches its own chunk on demand.
+const SilhouetteMode = lazy(() => import("./SilhouetteMode"));
+const ZoomMode = lazy(() => import("./ZoomMode"));
+const SynergyMode = lazy(() => import("./SynergyMode"));
+const QuoteMode = lazy(() => import("./QuoteMode"));
+const PoolModal = lazy(() => import("./PoolModal"));
+const PrivacyPolicy = lazy(() => import("./PrivacyPolicy"));
+const HigherLowerMode = lazy(() => import("./higher-lower/HigherLowerMode"));
+const Archive = lazy(() => import("./Archive"));
+const HowToPlay = lazy(() => import("./HowToPlay"));
 
 // The non-classic modes share one props contract; the active view is picked from
 // this map instead of four near-identical conditional blocks.
@@ -98,18 +103,39 @@ export default function App() {
   const clockBlocked = clockState === "ahead" && isDaily && !isArchive;
   const disabledNames = new Set(guesses.map((g) => g.name));
 
+  // Synergy mode's card data is split out of the initial bundle; kick off its lazy
+  // load whenever this mode is active (covers the peek pool and the result banner even
+  // when a completed puzzle is opened without ever mounting SynergyMode).
+  const synergyReady = useSynergyData(mode === "synergy");
+
   const peek = useMemo(
     () => getPeek(mode, guesses, answer, wrongGuesses),
-    [mode, guesses, answer, wrongGuesses],
+    // synergyReady: recompute the synergy peek once the lazy data lands.
+    [mode, guesses, answer, wrongGuesses, synergyReady],
   );
   const peekUnlocked = peek !== null && wrongGuesses >= peek.unlockAt;
   const ModeView = mode === "classic" ? null : MODE_VIEWS[mode];
 
   // Standalone pages: return only after every hook above has run, so the hook order
   // stays constant across client-side navigation (React requires this).
-  if (isPrivacy) return <PrivacyPolicy />;
-  if (isHigherLower) return <HigherLowerMode />;
-  if (isArchiveBrowse) return <Archive />;
+  if (isPrivacy)
+    return (
+      <Suspense fallback={null}>
+        <PrivacyPolicy />
+      </Suspense>
+    );
+  if (isHigherLower)
+    return (
+      <Suspense fallback={null}>
+        <HigherLowerMode />
+      </Suspense>
+    );
+  if (isArchiveBrowse)
+    return (
+      <Suspense fallback={null}>
+        <Archive />
+      </Suspense>
+    );
 
   return (
     <div className="app">
@@ -182,16 +208,20 @@ export default function App() {
       />
 
       {howToOpen && (
-        <HowToPlay mode={mode} onClose={() => setHowToOpen(false)} />
+        <Suspense fallback={null}>
+          <HowToPlay mode={mode} onClose={() => setHowToOpen(false)} />
+        </Suspense>
       )}
 
       {poolOpen && (
-        <PoolModal
-          pool={peek ? peek.pool : poolFor(mode)}
-          onClose={() => setPoolOpen(false)}
-          blurQuote={mode === "quote"}
-          heading={peek ? "Possible commanders" : undefined}
-        />
+        <Suspense fallback={null}>
+          <PoolModal
+            pool={peek ? peek.pool : poolFor(mode)}
+            onClose={() => setPoolOpen(false)}
+            blurQuote={mode === "quote"}
+            heading={peek ? "Possible commanders" : undefined}
+          />
+        </Suspense>
       )}
 
       <main className="play-area">
@@ -200,15 +230,17 @@ export default function App() {
         ) : (
           <div className="mode-view" key={mode}>
             {!done && ModeView && (
-              <ModeView
-                answer={answer}
-                guesses={guesses}
-                skips={skips}
-                wrongGuesses={wrongGuesses}
-                maxGuesses={maxGuesses}
-                solved={solved}
-                onSkip={skip}
-              />
+              <Suspense fallback={<div className="mode-view-loading" />}>
+                <ModeView
+                  answer={answer}
+                  guesses={guesses}
+                  skips={skips}
+                  wrongGuesses={wrongGuesses}
+                  maxGuesses={maxGuesses}
+                  solved={solved}
+                  onSkip={skip}
+                />
+              </Suspense>
             )}
 
             {!done && (

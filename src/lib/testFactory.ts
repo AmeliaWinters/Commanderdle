@@ -15,9 +15,11 @@ export function makeCommander(overrides: Partial<Commander> = {}): Commander {
     rarity: 'mythic',
     year: 2020,
     setName: 'Test Set',
+    price: 5,
     flavorText: null,
     artCrop: null,
     normalImage: null,
+    synergyCount: 0,
     synergyCards: [],
     ...overrides,
   }

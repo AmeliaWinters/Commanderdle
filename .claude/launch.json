@@ -13,6 +13,13 @@
       "runtimeExecutable": "npx",
       "runtimeArgs": ["wrangler", "pages", "dev", "dist", "--port", "8788"],
       "port": 8788
+    },
+    {
+      "name": "preview",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["vite", "preview", "--port", "4173"],
+      "port": 4173,
+      "autoPort": true
     }
   ]
 }

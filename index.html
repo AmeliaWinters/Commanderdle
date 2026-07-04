@@ -7,6 +7,16 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#0b0b0d" />
+    <!-- Paint the app's dark background from the very first frame so there's no white
+         flash before the stylesheet/JS load. Must be set on BODY, not HTML: the animated
+         orbs (body::before) and card backdrop sit at negative z-index and rely on the
+         body background propagating to the canvas. An html background would break that
+         propagation and paint the body's own background over them, hiding both. -->
+    <style>
+      body {
+        background: #0b0b0d;
+      }
+    </style>
     <link rel="manifest" href="/manifest.webmanifest" />
     <title>Commandle — Daily MTG Commander Guessing Game</title>
     <meta name="description" content="Guess the daily Magic: The Gathering commander from the top 500. Five modes: Classic, Silhouette, Zoom, Synergy, and Quote — a fresh puzzle every day." />
@@ -29,11 +39,21 @@
     <meta name="twitter:description" content="Guess the daily Magic: The Gathering commander. Five modes, a fresh puzzle every day." />
     <meta name="twitter:image" content="https://commandle.com/og-image.png" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Self-hosted fonts (see @font-face in base.css). Preload the two faces used in
+         the first paint so text swaps to the real font as early as possible. -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      href="/fonts/cinzel-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/ebgaramond-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
     />
     <!-- AdSense and analytics are loaded at runtime from Vite env vars (see AdBanner.tsx / analytics.ts). -->
 

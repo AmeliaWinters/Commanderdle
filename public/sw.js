@@ -3,7 +3,7 @@
  * keeps working offline and installs as a PWA. Deliberately simple and cache-busting:
  * bump CACHE_VERSION to retire old caches on deploy.
  */
-const CACHE_VERSION = 'commandle-v2'
+const CACHE_VERSION = 'commandle-v3'
 const CORE_ASSETS = [
   '/',
   '/index.html',

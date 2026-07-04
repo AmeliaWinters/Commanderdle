@@ -5,14 +5,30 @@ import {
   type ComparedColumn,
   type MatchKind,
 } from "../../lib/compare";
+import {
+  MdKeyboardArrowUp,
+  MdKeyboardArrowDown,
+  MdKeyboardDoubleArrowUp,
+  MdKeyboardDoubleArrowDown,
+} from "react-icons/md";
 import ManaCost from "../ManaSymbols";
 import CardZoom from "../CardZoom";
 
-/** Thin arrow = close (just off); heavy double-line arrow = far. */
-function arrow(kind: MatchKind, direction?: string): string {
-  if (direction !== "up" && direction !== "down") return "";
-  if (kind === "none") return direction === "up" ? "⇑" : "⇓";
-  return direction === "up" ? "↑" : "↓";
+/** Single arrow = close (just off); double arrow = far. */
+function arrow(kind: MatchKind, direction?: string): React.ReactNode {
+  if (direction !== "up" && direction !== "down") return null;
+  if (kind === "none") {
+    return direction === "up" ? (
+      <MdKeyboardDoubleArrowUp size="20px" />
+    ) : (
+      <MdKeyboardDoubleArrowDown size="20px" />
+    );
+  }
+  return direction === "up" ? (
+    <MdKeyboardArrowUp size="20px" />
+  ) : (
+    <MdKeyboardArrowDown size="20px" />
+  );
 }
 
 /** Spoken description of a cell for screen readers — conveys the colour-coded clue
@@ -24,7 +40,11 @@ function cellAria(col: ComparedColumn): string {
       : "colorless"
     : col.display;
   const kind =
-    col.kind === "exact" ? "match" : col.kind === "partial" ? "close" : "no match";
+    col.kind === "exact"
+      ? "match"
+      : col.kind === "partial"
+        ? "close"
+        : "no match";
   const dir =
     col.kind !== "exact" && col.direction === "up"
       ? ", answer is higher"

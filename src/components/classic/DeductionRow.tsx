@@ -1,6 +1,7 @@
 import { cloneElement, useEffect, useRef, useState } from "react";
 import type { Commander } from "../../types/commander";
 import { deduce, type Deductions, type NumericClue } from "../../lib/deduce";
+import { COLUMNS, type ColumnId } from "../../lib/columns";
 import { prefersReducedMotion } from "../../lib/reducedMotion";
 import ManaCost from "../ManaSymbols";
 
@@ -9,10 +10,11 @@ interface Props {
   answer: Commander;
 }
 
-// The six clue columns (colors, type, then four numerics), in table order. Their
-// indices line up with the guess row's cells so each clue waits for its matching
+// One clue column per data column in the results table. Their reveal indices line
+// up with the guess row's cells (the name cell is index 0, so a data column at
+// position `p` maps to cell index `p + 1`) so each clue waits for its matching
 // cell to flip open.
-const DED_COL_COUNT = 6;
+const DED_COL_COUNT = COLUMNS.length;
 
 /** Deduction row aligned to the table columns, sitting just above the headers. */
 export default function DeductionRow({ guesses, answer }: Props) {
@@ -59,8 +61,8 @@ export default function DeductionRow({ guesses, answer }: Props) {
   const numFrom = (d: Deductions, label: string): NumericClue | undefined =>
     d.numerics.find((n) => n.label === label);
 
-  const colorsCell = () => {
-    const colors = colorsFrom(revealedFor(0));
+  const colorsCell = (i: number) => {
+    const colors = colorsFrom(revealedFor(i));
     if (!colors) return <div className="deduction-cell empty" />;
     if (colors.exact) {
       return (
@@ -74,7 +76,9 @@ export default function DeductionRow({ guesses, answer }: Props) {
       );
     }
     return (
-      <div className="deduction-cell match-partial">
+      <div
+        className={`deduction-cell ${colors.absent.length ? "match-none" : "match-partial"}`}
+      >
         {colors.present.length > 0 && <ManaCost colors={colors.present} />}
         {colors.maybe.length > 0 && (
           <span className="ded-maybe" title="at least one of these">
@@ -90,8 +94,8 @@ export default function DeductionRow({ guesses, answer }: Props) {
     );
   };
 
-  const typeCell = () => {
-    const types = typesFrom(revealedFor(1));
+  const typeCell = (i: number) => {
+    const types = typesFrom(revealedFor(i));
     if (!types) return <div className="deduction-cell empty" />;
     return (
       <div
@@ -123,14 +127,16 @@ export default function DeductionRow({ guesses, answer }: Props) {
   const reflectCount = (i: number) =>
     i < colsShown ? guesses.length : guesses.length - 1;
 
-  const cells = [
-    colorsCell(),
-    typeCell(),
-    numCell(2, "Mana value"),
-    numCell(3, "Stat total"),
-    numCell(4, "Popularity"),
-    numCell(5, "Year"),
-  ];
+  // Reveal index for a column is its cell index in the guess row: position + 1,
+  // since the name cell occupies index 0.
+  const cellFor: Record<ColumnId, (i: number) => React.ReactElement> = {
+    type: (i) => typeCell(i),
+    colors: (i) => colorsCell(i),
+    manaValue: (i) => numCell(i, "Mana value"),
+    price: (i) => numCell(i, "Price"),
+    popularity: (i) => numCell(i, "Popularity"),
+  };
+  const cells = COLUMNS.map((c, pos) => cellFor[c.id](pos + 1));
 
   return (
     <div
