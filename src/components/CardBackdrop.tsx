@@ -167,10 +167,22 @@ function useIdleMount(): boolean {
   return ready;
 }
 
+/**
+ * Swap a full-size /cards/normal_*.webp URL for its downscaled, more-compressed
+ * /cards-bg/ backdrop variant (see scripts/build-backdrop-images.ts). These render tiny and
+ * at low opacity, and the largest is the LCP image, so the smaller file matters. Non-matching
+ * URLs (legacy absolute links, art crops) are left as-is. Kept in sync with the same rewrite
+ * in the backdrop-lcp-preload build plugin (vite.config.ts).
+ */
+function toBackdropVariant(src: string): string {
+  return src.replace(/\/cards\/(normal_[^/]+)$/, "/cards-bg/$1");
+}
+
 function pickRealImages(count: number): string[] {
-  const imgs = zoomPool().map((c) => c.normalImage ?? c.artCrop).filter(
-    (src): src is string => Boolean(src),
-  );
+  const imgs = zoomPool()
+    .map((c) => c.normalImage ?? c.artCrop)
+    .filter((src): src is string => Boolean(src))
+    .map(toBackdropVariant);
   if (imgs.length === 0) return [];
 
   const offset = new Date().getDate() % imgs.length;

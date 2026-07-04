@@ -34,6 +34,8 @@ function backdropLcpPreload(): Plugin {
           .map((c) => c.normalImage ?? c.artCrop)
           .filter((s): s is string => Boolean(s))
           .map((p) => '/' + p.replace(/^\//, ''))
+          // Match CardBackdrop.toBackdropVariant: serve the smaller /cards-bg/ file.
+          .map((p) => p.replace(/\/cards\/(normal_[^/]+)$/, '/cards-bg/$1'))
         const len = imgs.length
         if (!len) return html
         const step = Math.max(1, Math.floor(len / 6)) // mirrors pickRealImages
@@ -53,14 +55,47 @@ function backdropLcpPreload(): Plugin {
   }
 }
 
+/**
+ * Take the main stylesheet off the critical render path.
+ *
+ * Vite injects the app CSS as a render-blocking <link rel="stylesheet">, which blocks even
+ * the inline-styled boot skeleton (and the LCP card) from painting until it downloads
+ * (~150ms). The real app UI is styled by this sheet but doesn't render until React mounts —
+ * and React's mount is gated on the async core-data fetch (see main.tsx), which is larger
+ * and finishes later than this ~9KB (gzip) sheet. So we can load it non-blocking via the
+ * rel=preload swap and let the skeleton paint sooner, with zero risk of unstyled app
+ * content. A <noscript> fallback keeps it blocking when JS is off.
+ */
+function deferMainCss(): Plugin {
+  return {
+    name: 'defer-main-css',
+    transformIndexHtml: {
+      order: 'post',
+      handler(html) {
+        return html.replace(
+          /<link rel="stylesheet"([^>]*?)href="([^"]+\.css)"[^>]*>/,
+          (_m, attrs: string, href: string) =>
+            `<link rel="preload" as="style"${attrs}href="${href}" onload="this.onload=null;this.rel='stylesheet'">` +
+            `<noscript><link rel="stylesheet"${attrs}href="${href}"></noscript>`,
+        )
+      },
+    },
+  }
+}
+
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), backdropLcpPreload()],
+  plugins: [react(), backdropLcpPreload(), deferMainCss()],
   // Must be absolute: the SPA fallback serves index.html at nested routes like
   // /archive/classic/2026-07-01, where relative './assets/…' URLs would 404.
   base: '/',
   server: {
     // Honor a port injected via env (e.g. the preview harness) when present.
+    port: process.env.PORT ? Number(process.env.PORT) : undefined,
+  },
+  preview: {
+    // Same for `vite preview` (the production-bundle server), so the preview harness can
+    // assign it a free port instead of colliding on the default 4173.
     port: process.env.PORT ? Number(process.env.PORT) : undefined,
   },
   build: {

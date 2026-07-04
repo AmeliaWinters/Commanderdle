@@ -1,6 +1,13 @@
-// The eager "core" dataset: every field except the heavy `synergyCards` arrays,
-// which are split into ../data/synergy.json and hydrated on demand (Synergy mode only).
-import core from '../data/commanders.core.json'
+// The "core" dataset (every field except the heavy `synergyCards` arrays, which are split
+// into ../data/synergy.json and hydrated on demand for Synergy mode only).
+//
+// It is *not* imported as a JS module: inlining the ~239KB JSON into the main bundle turned
+// it into a giant object literal the engine had to evaluate on the main thread before React
+// could boot, pushing LCP to ~6s on throttled mobile. The `?url` import emits it as a
+// separate, content-hashed static asset (auto cache-busted when the daily refresh changes
+// it); loadCommanders() fetches and JSON.parses it — ~2x faster than evaluating a literal,
+// and in parallel with the JS download. See main.tsx, which gates React's mount on the load.
+import coreUrl from '../data/commanders.core.json?url'
 import type { Commander, SynergyCard } from '../types/commander'
 
 // Images are self-hosted under public/cards/ as "cards/<file>" paths. Resolve them against
@@ -17,14 +24,45 @@ function resolveAsset(path: string | null): string | null {
 // ensureSynergyLoaded() fills in place once the split payload arrives.
 type CoreCommander = Omit<Commander, 'synergyCards'>
 
-export const COMMANDERS: Commander[] = (core as CoreCommander[]).map((c) => ({
-  ...c,
-  artCrop: resolveAsset(c.artCrop),
-  normalImage: resolveAsset(c.normalImage),
-  synergyCards: [],
-}))
+// Populated by hydrateCommanders() (called by loadCommanders() in the app, and synchronously
+// from the test setup). Both stay stable references so modules that captured them at import
+// time see the data once it lands. Empty until hydrated — the app keeps the HTML skeleton on
+// screen until then (see main.tsx), so nothing reads these before they're filled.
+export const COMMANDERS: Commander[] = []
+export const COMMANDERS_BY_NAME = new Map<string, Commander>()
 
-export const COMMANDERS_BY_NAME = new Map(COMMANDERS.map((c) => [c.name, c]))
+/** Populate COMMANDERS + COMMANDERS_BY_NAME from a parsed core payload. Idempotent. */
+export function hydrateCommanders(core: CoreCommander[]): void {
+  COMMANDERS.length = 0
+  COMMANDERS_BY_NAME.clear()
+  for (const c of core) {
+    const commander: Commander = {
+      ...c,
+      artCrop: resolveAsset(c.artCrop),
+      normalImage: resolveAsset(c.normalImage),
+      synergyCards: [],
+    }
+    COMMANDERS.push(commander)
+    COMMANDERS_BY_NAME.set(commander.name, commander)
+  }
+  resetPools()
+}
+
+let corePromise: Promise<void> | null = null
+/**
+ * Fetch + parse the core dataset and hydrate COMMANDERS. Idempotent (fires at most once).
+ * One retry on failure — a hard failure leaves the arrays empty and the caller keeps the
+ * loading skeleton up rather than rendering a broken game.
+ */
+export function loadCommanders(): Promise<void> {
+  if (!corePromise) {
+    const fetchCore = () => fetch(coreUrl).then((r) => r.json() as Promise<CoreCommander[]>)
+    corePromise = fetchCore()
+      .catch(() => fetchCore())
+      .then(hydrateCommanders)
+  }
+  return corePromise
+}
 
 let synergyPromise: Promise<void> | null = null
 /** True once the split synergy payload has been hydrated onto COMMANDERS. */
@@ -52,9 +90,17 @@ export function ensureSynergyLoaded(): Promise<void> {
 // The three non-Classic answer pools are each a full scan over COMMANDERS. Classic (the
 // initial view) never needs them, so they're computed lazily on first access rather than
 // at module load — keeping that work out of the first-render task that TBT measures. Each
-// result is cached, so repeat callers get a stable array identity.
+// result is cached, so repeat callers get a stable array identity. The caches are cleared by
+// hydrateCommanders() so a pool queried before the data lands can't pin an empty result.
+const poolResetters: Array<() => void> = []
+function resetPools(): void {
+  for (const reset of poolResetters) reset()
+}
 function memoPool(build: () => Commander[]): () => Commander[] {
   let cached: Commander[] | null = null
+  poolResetters.push(() => {
+    cached = null
+  })
   return () => (cached ??= build())
 }
 

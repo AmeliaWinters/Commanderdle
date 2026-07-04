@@ -1,3 +1,10 @@
+import core from './data/commanders.core.json'
+import { hydrateCommanders } from './lib/commanders'
+
+// The app fetches the core dataset at runtime (see commanders.ts), but tests have no
+// network — hydrate COMMANDERS synchronously from the bundled JSON before any test runs.
+hydrateCommanders(core as Parameters<typeof hydrateCommanders>[0])
+
 // jsdom's localStorage is unreliable across versions, so install a small
 // in-memory implementation the stats/recap tests can rely on.
 class MemoryStorage implements Storage {
