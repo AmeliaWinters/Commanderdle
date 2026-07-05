@@ -3,7 +3,7 @@ import ContentPage from "./ContentPage";
 export default function HowToPlayPage() {
   return (
     <ContentPage
-      title="How to play Commandle — rules, clues and strategy"
+      title="How to play Commandle - rules, clues and strategy"
       description="A complete guide to playing Commandle, the daily Magic: The Gathering commander guessing game. Learn every mode, what the colour clues mean, and tips to solve the puzzle in fewer guesses."
       canonical="https://commandle.com/how-to-play"
     >
@@ -12,45 +12,44 @@ export default function HowToPlayPage() {
       <section>
         <p>
           The goal is simple: identify the day&rsquo;s hidden{" "}
-          <em>Magic: The Gathering</em> commander in as few guesses as possible.
-          Type the name of any legendary creature into the box &mdash; the game
-          autocompletes from the full pool of eligible commanders &mdash; and
-          each guess gives you feedback that narrows down the answer. Everyone
-          plays the same puzzle each day, and your progress is saved in your
-          browser so you can come back and finish later.
+          <em>Magic: The Gathering</em> commander in as few guesses as you can.
+          Start typing any legendary creature and the box autocompletes from the
+          full pool of eligible commanders. Every guess feeds back clues that
+          narrow things down. Everyone plays the same puzzle each day, and your
+          progress saves in your browser so you can go and finish later.
         </p>
       </section>
 
       <section>
         <h3>Classic mode: reading the clues</h3>
         <p>
-          In Classic mode you have <strong>six guesses</strong>. Every guess is
-          compared to the answer across five columns, and each cell is coloured:
+          Classic gives you <strong>six guesses</strong>. Each one gets stacked
+          against the answer across five columns, and every cell lights up a
+          colour:
         </p>
         <ul>
           <li>
-            <strong>🟩 Green</strong> &mdash; an exact match for that attribute.
+            <strong>🟩 Green</strong> - nailed it, exact match.
           </li>
           <li>
-            <strong>🟨 Amber</strong> &mdash; partially right. For colour
-            identity it means you share some but not all colours; for a number
-            it means you&rsquo;re close.
+            <strong>🟨 Amber</strong> - close. For colour identity you share
+            some colours but not all; for a number you're in the neighbourhood.
           </li>
           <li>
-            <strong>⬛ Grey</strong> &mdash; no match at all.
+            <strong>⬛ Grey</strong> - nope, cold, far away.
           </li>
           <li>
-            <strong>▲ / ▼ arrows</strong> &mdash; on the Mana Value, Popularity
-            and Price columns an arrow tells you whether the true answer is
-            higher or lower than your guess.
+            <strong>▲ / ▼ arrows</strong> - on Mana Value, Popularity and Price,
+            the arrow points you toward the real answer (higher or lower than
+            your guess).
           </li>
         </ul>
         <p>
           The five columns are <strong>colour identity</strong>,{" "}
           <strong>card type</strong>, <strong>mana value</strong>,{" "}
-          <strong>popularity</strong> (the commander&rsquo;s EDHREC rank, where
-          #1 is the most-built commander of all time) and{" "}
-          <strong>price</strong> (the approximate market price of the card).
+          <strong>popularity</strong> (the commander's EDHREC rank, where #1 is
+          the most-built commander of all time) and <strong>price</strong> (the
+          approximate market price of the card).
         </p>
       </section>
 
@@ -75,13 +74,13 @@ export default function HowToPlayPage() {
           </li>
           <li>
             <strong>Quote</strong> shows the flavour text printed on the card,
-            unlocking extra hints (colour identity, stat total, release year)
-            as you miss.
+            unlocking extra hints (colour identity, stat total, release year) as
+            you miss.
           </li>
         </ul>
         <p>
-          In the art and clue modes you can also <strong>skip</strong> a guess
-          to reveal the next hint without spending one of your named guesses.
+          In the art and clue modes you can also <strong>skip</strong> to reveal
+          the next hint.
         </p>
       </section>
 
@@ -95,22 +94,21 @@ export default function HowToPlayPage() {
           </li>
           <li>
             <strong>Follow the arrows.</strong> The higher/lower arrows on mana
-            value and popularity are the fastest way to halve the remaining
-            field &mdash; treat it like a binary search.
+            value and popularity halve the field fast.
           </li>
           <li>
-            <strong>Lock colours first.</strong> Once you have a green colour
-            identity, only guess commanders that share exactly those colours.
+            <strong>Colours first.</strong> Once a colour identity goes green,
+            only guess commanders with exactly those colours.
           </li>
           <li>
-            <strong>Use the card pool peek.</strong> After a few misses the game
-            lets you view the shortlist of remaining candidates &mdash; a big
-            help on the tougher modes.
+            <strong>Use the card pool.</strong> After a few misses the game
+            shows the shortlist of who's still in the running, clutch on the
+            harder modes.
           </li>
           <li>
-            <strong>Think in archetypes.</strong> In Synergy mode the revealed
-            cards usually point at a well-known strategy (tokens, +1/+1
-            counters, reanimator) that only a handful of commanders lead.
+            <strong>Think in archetypes</strong> In Synergy, the revealed cards
+            usually point at a strategy (tokens, +1/+1 counters, reanimator)
+            that only a handful of commanders actually lead.
           </li>
         </ul>
       </section>
@@ -118,14 +116,14 @@ export default function HowToPlayPage() {
       <section>
         <h3>Streaks, stats and the archive</h3>
         <p>
-          Solving the daily puzzle builds your win streak, and the game tracks
-          your guess distribution per mode. Curious how you stack up? Each
-          finished puzzle also shows global stats &mdash; the share of players
-          who solved it and in how many guesses. And if you want more, the{" "}
-          <a href="/archive">archive</a> holds every past puzzle in every mode.
+          Solve the daily and your win streak climbs, plus the game tracks your
+          guess distribution per mode. Every finished puzzle shows global stats
+          - how many players solved it and in how many guesses. Want even more?
+          The <a href="/archive">archive</a> has every past puzzle in every
+          mode.
         </p>
         <p>
-          Ready to play? <a href="/">Jump into today&rsquo;s puzzle.</a>
+          Alright, enough readingggg <a href="/">Go play today's puzzle.</a>
         </p>
       </section>
     </ContentPage>

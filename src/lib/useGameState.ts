@@ -88,7 +88,7 @@ function recordResult(state: GameState, mode: Mode, won: boolean, guessCount: nu
 
 /**
  * Game state for a mode. With no `archiveDate`, this drives the live daily puzzle.
- * Pass a past `archiveDate` (YYYY-MM-DD) to replay that day's puzzle from the archive —
+ * Pass a past `archiveDate` (YYYY-MM-DD) to replay that day's puzzle from the archive -
  * such plays persist under a date-scoped key and never touch daily streak stats.
  */
 export function useGameState(mode: Mode, archiveDate?: string) {

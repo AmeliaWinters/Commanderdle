@@ -19,7 +19,7 @@ interface Props {
   maxGuesses: number;
   isDaily: boolean;
   skips: number;
-  /** True when the game was just won this session — plays the "casting the
+  /** True when the game was just won this session - plays the "casting the
    * commander" reveal (card flip-in + ember burst) instead of a static mount. */
   celebrate?: boolean;
 }

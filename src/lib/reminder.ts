@@ -3,7 +3,7 @@ import { msUntilNextPuzzle } from './dailyAnswer'
 /**
  * A "remind me" nudge with zero backend: while the tab is open we set a timer for the next
  * local midnight and fire a browser notification when the new puzzle unlocks. This can only
- * fire while a Commandle tab is alive, so it degrades gracefully — no push server, no cost.
+ * fire while a Commandle tab is alive, so it degrades gracefully - no push server, no cost.
  */
 
 const ENABLED_KEY = 'commanderdle:reminder'
@@ -47,7 +47,7 @@ export function scheduleReminder(): void {
   timer = setTimeout(() => {
     try {
       new Notification('New Commandle is live', {
-        body: "Today's commander puzzles are ready — keep your streak going!",
+        body: "Today's commander puzzles are ready - keep your streak going!",
         icon: '/icon-192.png',
         badge: '/favicon-32.png',
       })

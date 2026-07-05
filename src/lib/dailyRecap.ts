@@ -36,7 +36,7 @@ function lineFor(mode: Mode, label: string): string | null {
 
 /**
  * Aggregated spoiler-free recap of every mode the player has finished today,
- * LoLdle-style — one paste advertises all modes. Returns null if nothing is
+ * LoLdle-style - one paste advertises all modes. Returns null if nothing is
  * finished yet.
  */
 export function buildDailyRecap(): string | null {
@@ -44,5 +44,5 @@ export function buildDailyRecap(): string | null {
     (l): l is string => l !== null,
   );
   if (lines.length === 0) return null;
-  return `Commandle #${puzzleNumber()} — Daily recap\n${lines.join("\n")}`;
+  return `Commandle #${puzzleNumber()} - Daily recap\n${lines.join("\n")}`;
 }

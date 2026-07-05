@@ -12,7 +12,7 @@ export default function EmberBurst() {
         return {
           id: i,
           dx: `${Math.cos(angle) * dist}px`,
-          // Bias upward — embers rise.
+          // Bias upward - embers rise.
           dy: `${Math.sin(angle) * dist * 0.6 - 70 - Math.random() * 90}px`,
           size: `${3 + Math.random() * 6}px`,
           dur: `${1.1 + Math.random() * 1.1}s`,

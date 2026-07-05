@@ -45,7 +45,7 @@ export default function ZoomMode({
     let h = 0;
     for (let i = 0; i < answer.name.length; i++)
       h = (h * 31 + answer.name.charCodeAt(i)) >>> 0;
-    const x = 25 + (h % 50); // 25%–75%
+    const x = 25 + (h % 50); // 25%-75%
     const y = 25 + ((h >>> 8) % 50);
     return `${x}% ${y}%`;
   }, [answer.name]);
@@ -84,7 +84,7 @@ export default function ZoomMode({
 
       {!solved && wrongGuesses >= maxGuesses - 1 && (
         <p className="hint-line letter-hint">
-          Last guess! The name starts with “{answer.name[0].toUpperCase()}…”
+          Last guess! The name starts with "{answer.name[0].toUpperCase()}..."
         </p>
       )}
     </div>

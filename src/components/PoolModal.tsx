@@ -66,7 +66,7 @@ export default function PoolModal({ pool, onClose, blurQuote, heading }: Props) 
           className="pool-search"
           type="text"
           value={query}
-          placeholder="Filter…"
+          placeholder="Filter..."
           autoComplete="off"
           spellCheck={false}
           onChange={(e) => setQuery(e.target.value)}

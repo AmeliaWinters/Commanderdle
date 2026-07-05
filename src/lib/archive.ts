@@ -43,7 +43,7 @@ export function isArchiveCompleted(mode: Mode, date: string): boolean {
   return archiveResult(mode, date) !== null
 }
 
-/** Record a finished archived play. Idempotent — first result for a cell wins. */
+/** Record a finished archived play. Idempotent - first result for a cell wins. */
 export function recordArchiveResult(mode: Mode, date: string, won: boolean, guesses: number): void {
   const map = loadMap()
   const key = cellKey(mode, date)

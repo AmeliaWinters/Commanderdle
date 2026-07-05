@@ -11,15 +11,16 @@ export default function AboutPage() {
 
       <section>
         <p>
-          <strong>Commandle</strong> is a free daily browser game for fans of{" "}
-          <em>Magic: The Gathering</em> and, in particular, the Commander (EDH)
-          format. Every day there is one new mystery commander to identify. It
-          only takes a couple of minutes, it is free, and there is nothing to
-          install. Just open the page and guess.
+          <strong>Commandle</strong> is your free daily{" "}
+          <em>Magic: The Gathering</em> Commander (EDH) dle game. One commander
+          drops every day, and your job is to figure out who it is. No download,
+          no login, no catch. Open the page, take a few guesses, and get on with
+          your day.
         </p>
         <p>
-          The game was inspired by the wave of daily "-dle" word and trivia
-          games, reimagined for the Commander format of MTG.
+          Yes, it's another "-dle". I play a few 'dle' games myself, and picked
+          up MTG not long ago, and didn't find the current mtg dle games fun, so
+          I decided to create this
         </p>
       </section>
 
@@ -27,19 +28,18 @@ export default function AboutPage() {
         <h3>The game modes</h3>
         <ul>
           <li>
-            <strong>Classic</strong> - guess the commander in six tries. Each
-            guess is scored across five columns (colour identity, card type,
-            mana value, EDHREC popularity rank and price), telling you what you
-            got right, what&rsquo;s hot or cold, and whether the commander is
-            higher or lower.
+            <strong>Classic</strong> - six tries to name the commander. Every
+            guess gets scored across five columns (colour identity, card type,
+            mana value, EDHREC popularity rank and price) so you know what's a
+            hit, what's not, and whether to go higher or lower.
           </li>
           <li>
-            <strong>Silhouette</strong> - name the commander from its card art,
-            which starts heavily blurred and sharpens with every miss.
+            <strong>Silhouette</strong> - name the commander from its art.
+            Starts heavily blurred, gets clearer every time you miss.
           </li>
           <li>
-            <strong>Zoom</strong> - identify the commander from an extreme
-            close-up crop of its art that widens with each wrong guess.
+            <strong>Zoom</strong> - an extreme close-up of the art that slowly
+            pulls back with each wrong guess.
           </li>
           <li>
             <strong>Synergy</strong> - work out the commander from the cards
@@ -52,43 +52,44 @@ export default function AboutPage() {
           </li>
           <li>
             <strong>Higher / Lower</strong> - an endless bonus mode: which of
-            two commanders is built more often on EDHREC?
+            two commanders gets built more on EDHREC?
           </li>
         </ul>
         <p>
-          Missed a day? The <a href="/archive">puzzle archive</a> lets you play
-          back every past puzzle in any mode.
+          Missed a day? No biggie cos the <a href="/archive">puzzle archive</a>{" "}
+          has every past puzzle in every mode, ready whenever you are.
         </p>
       </section>
 
       <section>
         <h3>Where the data comes from</h3>
         <p>
-          Card images and card details are sourced from{" "}
+          Card images and details come from{" "}
           <a href="https://scryfall.com" target="_blank" rel="noreferrer">
             Scryfall
           </a>
-          , and the popularity and synergy figures come from{" "}
+          , and the popularity and synergy numbers come from{" "}
           <a href="https://edhrec.com" target="_blank" rel="noreferrer">
             EDHREC
           </a>
-          . "Rank" throughout the game refers to a commander's EDHREC rank. This
-          is how popular the commander is according to the EDHREC database.
+          . Whenever the game says "Rank," it means the commander's EDHREC rank
+          . Thank you to both!
         </p>
       </section>
 
       <section>
         <h3>An unofficial fan project</h3>
         <p>
-          Commandle is an independent, non-commercial fan project. It is not
-          produced, endorsed, supported or affiliated with Wizards of the Coast.
-          Magic: The Gathering, Commander, and all associated card names and
-          images are trademarks of and &copy; Wizards of the Coast LLC. The game
-          is offered under WOTC's Fan Content Policy.
+          Commandle is an independent, non-commercial fan project made by me, a
+          person who doesn't have an active enough pod. It's not produced,
+          endorsed, or affiliated with Wizards of the Coast. Magic: The
+          Gathering, Commander, and all card names and images are trademarks of
+          and &copy; Wizards of the Coast LLC, used here under WOTC's Fan
+          Content Policy.
         </p>
         <p>
-          Have feedback, spotted a bug, or want to suggest a feature? Head to
-          our <a href="/contact">contact page</a> and send us a message.
+          Got feedback, found a bug, or have a big-brain feature idea? Go to{" "}
+          <a href="/contact">contact page</a> and let me know.
         </p>
       </section>
     </ContentPage>

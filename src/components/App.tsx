@@ -345,7 +345,7 @@ export default function App() {
             {mode === "classic" && (!done || revealHeld) && (
               <GuessDots
                 // While the winning row is still flipping in, keep the final
-                // pip un-lit — it turns green only once the reveal completes.
+                // pip un-lit - it turns green only once the reveal completes.
                 dots={buildDots(
                   revealHeld ? guesses.slice(0, -1) : guesses,
                   answer,

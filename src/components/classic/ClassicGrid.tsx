@@ -56,7 +56,7 @@ export default function ClassicGrid({ guesses, answer, maxGuesses }: Props) {
     };
   }, [rankTipOpen]);
   // Guesses already present when this grid mounted were loaded from storage
-  // (e.g. after switching modes and back), not just made — they must not replay
+  // (e.g. after switching modes and back), not just made - they must not replay
   // the flip-in/reveal animation. Only rows for guesses added while mounted animate.
   const initialNames = useRef(new Set(guesses.map((g) => g.name)));
   const isNew = (g: Commander) => !initialNames.current.has(g.name);
@@ -104,7 +104,7 @@ export default function ClassicGrid({ guesses, answer, maxGuesses }: Props) {
                       role="note"
                       style={{ left: tipPos.left, top: tipPos.top }}
                     >
-                      Rank is the commander&rsquo;s popularity on EDHRE. #1 is
+                      Rank is the commander's popularity on EDHRE. #1 is
                       the most-built commander.
                       <button
                         type="button"

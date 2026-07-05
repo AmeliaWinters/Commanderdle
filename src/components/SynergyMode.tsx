@@ -40,7 +40,7 @@ export default function SynergyMode({
       <div className="synergy-mode">
         <header className="synergy-intro">
           <h2>Top synergy cards</h2>
-          <p>Name the commander from EDHREC&rsquo;s most synergistic cards</p>
+          <p>Name the commander from EDHREC's most synergistic cards</p>
         </header>
         <ol className="synergy-cards">
           {[0, 1, 2, 3, 4].map((i) => (
@@ -61,7 +61,7 @@ export default function SynergyMode({
     <div className="synergy-mode">
       <header className="synergy-intro">
         <h2>Top synergy cards</h2>
-        <p>Name the commander from EDHREC&rsquo;s most synergistic cards</p>
+        <p>Name the commander from EDHREC's most synergistic cards</p>
       </header>
 
       <ol className="synergy-cards">

@@ -65,7 +65,7 @@ export default function CardSlot({
   revealed: boolean;
   counting: boolean;
   verdict: "ok" | "bad" | null;
-  /** Only cards near the current position load their image — an 80-card Endless
+  /** Only cards near the current position load their image - an 80-card Endless
    * chain otherwise fetches every card at once. */
   showImage: boolean;
   onZoom: (card: Commander) => void;

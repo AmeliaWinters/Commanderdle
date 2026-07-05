@@ -3,7 +3,7 @@ import type { CellCode } from "./shareCode";
 /**
  * Client-side renderer for the branded share card: a PNG of the result grid
  * dressed like the og-image (hero card art under a dark scrim, two-tone
- * Cinzel wordmark, editorial header block), sized for social feeds. Rendered on demand with <canvas> — no
+ * Cinzel wordmark, editorial header block), sized for social feeds. Rendered on demand with <canvas> - no
  * server round-trip, works offline, and never spoils the answer.
  */
 
@@ -97,7 +97,7 @@ export async function renderShareCard(opts: ShareCardOpts): Promise<Blob> {
       document.fonts.load('700 44px "Cinzel"'),
       document.fonts.load('600 30px "EB Garamond"'),
     ]).catch(() => {
-      // Fonts unavailable — serif fallbacks below still read fine.
+      // Fonts unavailable - serif fallbacks below still read fine.
     }),
   ]);
 
@@ -110,7 +110,7 @@ export async function renderShareCard(opts: ShareCardOpts): Promise<Blob> {
   ctx.fillStyle = BG;
   ctx.fillRect(0, 0, W, H);
 
-  // Hero art across the top (cover-fit), fading into the dark body — same
+  // Hero art across the top (cover-fit), fading into the dark body - same
   // composition as the static og-image.
   if (art) {
     const bandH = 560;
@@ -161,7 +161,7 @@ export async function renderShareCard(opts: ShareCardOpts): Promise<Blob> {
   const modeText = `${opts.modeLabel}${puzzleBit}`;
   ctx.fillText(modeText, left, 322);
   ctx.fillStyle = TEXT;
-  ctx.fillText(`  —  ${opts.score}`, left + ctx.measureText(modeText).width, 322);
+  ctx.fillText(`  -  ${opts.score}`, left + ctx.measureText(modeText).width, 322);
 
   // Result grid in a rounded panel, sized to fit between header and footer.
   const headerBottom = 356;
@@ -248,7 +248,7 @@ export async function shareCardImage(
       await navigator.share({ text, files: [file] });
       return "shared";
     } catch {
-      // Cancelled or failed — fall through.
+      // Cancelled or failed - fall through.
     }
   }
   if (typeof ClipboardItem !== "undefined" && navigator.clipboard?.write) {
@@ -258,7 +258,7 @@ export async function shareCardImage(
       ]);
       return "copied-image";
     } catch {
-      // Clipboard blocked — fall through to download.
+      // Clipboard blocked - fall through to download.
     }
   }
   const url = URL.createObjectURL(blob);

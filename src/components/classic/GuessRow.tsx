@@ -31,7 +31,7 @@ function arrow(kind: MatchKind, direction?: string): React.ReactNode {
   );
 }
 
-/** Spoken description of a cell for screen readers — conveys the colour-coded clue
+/** Spoken description of a cell for screen readers - conveys the colour-coded clue
  * (match / close / no match) and arrow direction that sighted players read visually. */
 function cellAria(col: ComparedColumn): string {
   const value = col.colors

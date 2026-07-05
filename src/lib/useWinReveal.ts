@@ -5,7 +5,7 @@ import { playSound } from "./sounds";
 
 type Status = "playing" | "won" | "lost";
 
-// Classic grid reveal timing — must stay in sync with the per-cell stagger set
+// Classic grid reveal timing - must stay in sync with the per-cell stagger set
 // inline in GuessRow and the `reveal`/`ignite` animations in classic-grid.css.
 // The last cell finishes flipping in at (cells - 1) * stagger + duration, then
 // the whole row does a brief orange "ignite" flash before the banner appears.
@@ -19,7 +19,7 @@ const GRID_REVEAL_MS =
 /**
  * Win choreography. A "fresh" win is one that happened during this session
  * (playing → won), as opposed to remounting an already-solved puzzle from
- * storage — only fresh wins get the cast-the-commander celebration. In
+ * storage - only fresh wins get the cast-the-commander celebration. In
  * classic mode the result banner, the green win pip, and the win sound are
  * additionally held back until the winning row has finished flipping in.
  */

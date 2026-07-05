@@ -61,7 +61,7 @@ export default function GuessInput({ onGuess, disabledNames, disabled, blurQuote
       <input
         type="text"
         value={query}
-        placeholder="Type a commander name…"
+        placeholder="Type a commander name..."
         disabled={disabled}
         autoComplete="off"
         autoCapitalize="off"

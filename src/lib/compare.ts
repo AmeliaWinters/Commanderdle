@@ -10,9 +10,9 @@ export const POPULARITY_TOL = 20;
 /** Price distance (USD) counted as "close" for the Card Market Price column/clue. */
 export const PRICE_TOL = 3;
 
-/** Human-readable market price, e.g. 3.45 -> "$3.45"; null (unpriced) -> "—". */
+/** Human-readable market price, e.g. 3.45 -> "$3.45"; null (unpriced) -> "-". */
 export function formatPrice(price: number | null): string {
-  if (price == null) return "—";
+  if (price == null) return "-";
   return `$${price.toFixed(2)}`;
 }
 
@@ -59,7 +59,7 @@ export function statDisplay(c: Commander): string {
   if (total != null) return String(total);
   if (c.power != null || c.toughness != null)
     return `${c.power ?? "?"}/${c.toughness ?? "?"}`;
-  return "—";
+  return "-";
 }
 
 /** Short connective words ignored when matching shared words between names. */
@@ -80,9 +80,9 @@ export function sharesNameWord(a: string, b: string): boolean {
   return words(b).some((w) => first.has(w));
 }
 
-/** Creature races / other subtypes (the part after the "—" in the type line). */
+/** Creature races / other subtypes (the part after the "-" in the type line). */
 export function subtypes(c: Commander): string[] {
-  const dash = c.typeLine.split("—")[1];
+  const dash = c.typeLine.split("-")[1];
   return dash ? dash.trim().split(/\s+/) : [];
 }
 
@@ -157,7 +157,7 @@ export function compareCommander(
   const price = compareStat(guess.price, answer.price, PRICE_TOL);
 
   const byId: Record<ColumnId, ComparedColumn> = {
-    type: { label: "Type", display: subtypes(guess).join(" ") || "—", kind: type },
+    type: { label: "Type", display: subtypes(guess).join(" ") || "-", kind: type },
     colors: { label: "Colors", display: "", kind: color, colors: guess.colorIdentity },
     manaValue: {
       label: "Mana Value",

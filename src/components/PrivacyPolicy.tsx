@@ -11,24 +11,24 @@ export default function PrivacyPolicy() {
       <p className="privacy-date">Last updated: 5 July 2026</p>
 
       <section>
-        <h3>Who we are</h3>
+        <h3>Who I am</h3>
         <p>
-          Commandle (&ldquo;we&rdquo;, &ldquo;us&rdquo;, the
-          &ldquo;site&rdquo;) is a free, unofficial fan game for{" "}
+          Commandle ("I", "me", the
+          "site") is a free, unofficial fan game for{" "}
           <em>Magic: The Gathering</em>. It is not affiliated with or endorsed
           by Wizards of the Coast. This policy explains what data is processed
           when you use the site and the choices you have. If you have any
-          questions, contact us through our{" "}
+          questions, contact me through my{" "}
           <a href="/contact">contact page</a>.
         </p>
       </section>
 
       <section>
-        <h3>Information we collect</h3>
+        <h3>Information I collect</h3>
         <p>
-          We do not ask you to create an account and we do not collect data that
+          I do not ask you to create an account and I do not collect data that
           directly identifies you (such as your name or email) unless you choose
-          to email us. The information involved in running the site falls into
+          to email me. The information involved in running the site falls into
           three categories:
         </p>
         <ul>
@@ -36,16 +36,16 @@ export default function PrivacyPolicy() {
             <strong>Game progress.</strong> Your daily guesses, results,
             streaks and settings are stored entirely in your browser using{" "}
             <code>localStorage</code>. This data stays on your device and is not
-            sent to us.
+            sent to me.
           </li>
           <li>
             <strong>Anonymous puzzle statistics.</strong> When you finish a
-            puzzle we may record an anonymous, aggregate tally (for example
-            &ldquo;solved in 4 guesses&rdquo;) so we can show global solve
+            puzzle I may record an anonymous, aggregate tally (for example
+            "solved in 4 guesses") so I can show global solve
             rates. These records are not linked to you or your device.
           </li>
           <li>
-            <strong>Technical data.</strong> Like most websites, our hosting
+            <strong>Technical data.</strong> Like most websites, my hosting
             provider automatically processes standard technical information
             (such as IP address, browser type and requested pages) to deliver
             and secure the site.
@@ -56,8 +56,8 @@ export default function PrivacyPolicy() {
       <section>
         <h3>Cookies and similar technologies</h3>
         <p>
-          Cookies are small files stored on your device. We use{" "}
-          <code>localStorage</code> to remember your game progress, and our
+          Cookies are small files stored on your device. I use{" "}
+          <code>localStorage</code> to remember your game progress, and my
           advertising and analytics partners may set cookies as described below.
           You can clear or block cookies through your browser settings, though
           doing so may reset your saved progress.
@@ -73,7 +73,7 @@ export default function PrivacyPolicy() {
         </p>
         <ul>
           <li>
-            Google&rsquo;s use of advertising cookies enables it and its
+            Google's use of advertising cookies enables it and its
             partners to serve ads to you based on your visits to this site
             and/or other sites on the Internet.
           </li>
@@ -89,7 +89,7 @@ export default function PrivacyPolicy() {
             .
           </li>
           <li>
-            You can also opt out of a third-party vendor&rsquo;s use of cookies
+            You can also opt out of a third-party vendor's use of cookies
             for personalised advertising by visiting{" "}
             <a href="https://www.aboutads.info/choices/" target="_blank" rel="noreferrer">
               aboutads.info
@@ -119,7 +119,7 @@ export default function PrivacyPolicy() {
         <h3>Consent (EEA, UK and Switzerland)</h3>
         <p>
           If you are located in the European Economic Area, the United Kingdom
-          or Switzerland, we (and our advertising partners) rely on your consent
+          or Switzerland, I (and my advertising partners) rely on your consent
           to store or access non-essential cookies and to serve personalised
           ads. Where required, you will be shown a consent message and can
           accept, reject or manage your choices, and you may withdraw consent at
@@ -135,10 +135,10 @@ export default function PrivacyPolicy() {
           data, including the right to access, correct, delete or restrict its
           processing, and to object to certain processing. Residents of
           California and similar jurisdictions may have the right to opt out of
-          the &ldquo;sale&rdquo; or &ldquo;sharing&rdquo; of personal
+          the "sale" or "sharing" of personal
           information for targeted advertising; you can exercise this using the
-          advertising opt-out links above. To make a request relating to data we
-          hold, contact us through our{" "}
+          advertising opt-out links above. To make a request relating to data I
+          hold, contact me through my{" "}
           <a href="/contact">contact page</a>.
         </p>
       </section>
@@ -146,7 +146,7 @@ export default function PrivacyPolicy() {
       <section>
         <h3>Analytics</h3>
         <p>
-          We may use privacy-respecting analytics (such as Google Analytics) to
+          I may use privacy-respecting analytics (such as Google Analytics) to
           understand aggregate usage patterns like page views and session
           counts. This data is used in aggregate and is not used to identify
           individual users.
@@ -154,13 +154,13 @@ export default function PrivacyPolicy() {
       </section>
 
       <section>
-        <h3>Children&rsquo;s privacy</h3>
+        <h3>Children's privacy</h3>
         <p>
           This site is intended for a general audience and is not directed at
           children under the age of 13 (or the equivalent minimum age in your
-          jurisdiction). We do not knowingly collect personal information from
-          children. If you believe a child has provided us with personal
-          information, please contact us so we can remove it.
+          jurisdiction). I do not knowingly collect personal information from
+          children. If you believe a child has provided me with personal
+          information, please contact me so I can remove it.
         </p>
       </section>
 
@@ -176,7 +176,7 @@ export default function PrivacyPolicy() {
             EDHREC
           </a>
           . When their APIs or images are called, your request is handled under
-          their respective privacy policies. We are not responsible for the
+          their respective privacy policies. I am not responsible for the
           privacy practices of third-party sites.
         </p>
       </section>
@@ -193,8 +193,8 @@ export default function PrivacyPolicy() {
       <section>
         <h3>Changes to this policy</h3>
         <p>
-          We may update this policy from time to time. Material changes will be
-          reflected by the &ldquo;last updated&rdquo; date above. Continued use
+          I may update this policy from time to time. Material changes will be
+          reflected by the "last updated" date above. Continued use
           of the site after changes take effect constitutes acceptance of the
           updated policy.
         </p>
@@ -203,7 +203,7 @@ export default function PrivacyPolicy() {
       <section>
         <h3>Contact</h3>
         <p>
-          Questions about this policy or your data? Reach out through our{" "}
+          Questions about this policy or your data? Reach out through my{" "}
           <a href="/contact">contact page</a>.
         </p>
       </section>

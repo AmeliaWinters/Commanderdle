@@ -20,36 +20,34 @@ const GUIDES: Record<Mode, Guide> = {
   classic: {
     title: "How to play Classic",
     intro:
-      "Guess the daily commander in 6 tries. Each guess reveals how it compares to the answer across five columns",
+      "Name the daily commander in 6 tries. Every guess shows how it stacks up against the answer across five columns",
     bullets: [
-      "🟩 Green = exact match for that attribute.",
-      "🟨 Amber = partially right/close (e.g. shares some colors, or the number is close).",
-      "⬛ Grey = no match/far (e.g. no shared colors, or the number is far off).",
+      "🟩 Green = nailed it, exact match.",
+      "🟨 Amber = close (shares some colors, or the number's close).",
+      "⬛ Grey = nope, nothing here (no shared colors, or way off).",
       <>
         <MdKeyboardArrowUp className="howto-arrow" /> /{" "}
         <MdKeyboardArrowDown className="howto-arrow" /> arrows on Mana Value,
-        Popularity, and Price tell you if the answer is higher or lower.
+        Popularity, and Price point you higher or lower.
       </>,
-      "Rank is the commander's EDHREC rank with #1 is the most built commander.",
+      "Rank = the commander's EDHREC rank, where #1 is the most-built of all time.",
     ],
   },
   silhouette: {
     title: "How to play Silhouette",
-    intro: "Guess the commander from its blurred card art in 5 tries",
-    bullets: [
-      "The art starts heavily blurred and gets clearer with every wrong guess",
-    ],
+    intro: "Name the commander from its blurred card art in 5 tries",
+    bullets: ["The art sharpens with every wrong guess"],
   },
   zoom: {
     title: "How to play Zoom",
-    intro: "Guess the commander from an extreme close-up of its art in 5 tries",
-    bullets: ["The art zooms out a little with every wrong guess"],
+    intro: "Name the commander from a  close crop of its art in 5 tries",
+    bullets: ["The view pulls back a little with every wrong guess"],
   },
   synergy: {
     title: "How to play Synergy",
     intro: "Guess the commander from its most synergistic cards in 5 tries",
     bullets: [
-      "One more high-synergy card is revealed with each wrong guess",
+      "One more high-synergy card drops with each wrong guess",
       "These are EDHREC's top synergy % cards",
     ],
   },
@@ -57,7 +55,7 @@ const GUIDES: Record<Mode, Guide> = {
     title: "How to play Quote",
     intro: "Guess the commander from its card's flavor text in 5 tries.",
     bullets: [
-      "Extra hints (color identity, price, stat total, and year released) unlock as you miss.",
+      "Extra hints (color identity, price, stat total, and release year) unlock as you miss.",
     ],
   },
 };

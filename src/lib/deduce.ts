@@ -35,7 +35,7 @@ export function possiblePool(
 /**
  * Synergy mode peek: commanders still consistent with the colors of the synergy
  * cards revealed so far. Every card in a deck sits within its commander's color
- * identity, so the union of revealed cards' colors is a lower bound — a candidate
+ * identity, so the union of revealed cards' colors is a lower bound - a candidate
  * survives only if its identity contains all of those colors.
  */
 export function synergyPool(
@@ -95,7 +95,7 @@ interface NumericSpec {
   label: string;
   get: (c: Commander) => number | null;
   fmt: (n: number) => string;
-  /** Distance within which a guess reads as "close" — matches the column's tolerance. */
+  /** Distance within which a guess reads as "close" - matches the column's tolerance. */
   tol: number;
 }
 
@@ -111,7 +111,7 @@ const NUMERIC_SPECS: NumericSpec[] = [
 const WUBRG = ["W", "U", "B", "R", "G"];
 
 /**
- * Numeric clue derived purely from the guessed values — never the close/far
+ * Numeric clue derived purely from the guessed values - never the close/far
  * tolerance. A guess the answer sits above contributes a strict lower bound,
  * a guess it sits below a strict upper bound. We deliberately do NOT use the
  * comparison tolerance to tighten these: that would leak the tolerance and

@@ -3,7 +3,7 @@ import { COMMANDERS } from "./commanders";
 import { todayKey, hashString } from "./dailyAnswer";
 
 /**
- * "Higher / Lower" — a bonus daily that lives outside the main mode set. Players
+ * "Higher / Lower" - a bonus daily that lives outside the main mode set. Players
  * are shown one commander's EDHREC popularity (deck count) and guess whether the
  * next commander in the day's chain sits in more or fewer decks. Same chain for
  * everyone on a given date, so scores are comparable and shareable.
@@ -15,7 +15,7 @@ export function hlValue(c: Commander): number {
   return c.numDecks;
 }
 
-/** mulberry32 PRNG — small, fast, deterministic from a 32-bit seed. */
+/** mulberry32 PRNG - small, fast, deterministic from a 32-bit seed. */
 function mulberry32(seed: number): () => number {
   return function () {
     seed |= 0;
@@ -44,7 +44,7 @@ function fairGap(a: Commander, b: Commander): boolean {
 }
 
 /**
- * A comparison is "close" when the two cards sit near the fair-gap floor — a
+ * A comparison is "close" when the two cards sit near the fair-gap floor - a
  * correct guess there earns a "Phew!" and a miss earns a "So close!".
  */
 const CLOSE_RATIO = 0.15;
@@ -88,7 +88,7 @@ export function dailyChain(dateKey = todayKey()): Commander[] {
   return chainFromShuffle(seededShuffle(rng), CHAIN_LENGTH);
 }
 
-/** Fisher–Yates over a copy of the pool, driven by the given PRNG. */
+/** Fisher-Yates over a copy of the pool, driven by the given PRNG. */
 function seededShuffle(rng: () => number): Commander[] {
   const shuffled = COMMANDERS.slice();
   for (let i = shuffled.length - 1; i > 0; i--) {
@@ -102,7 +102,7 @@ function seededShuffle(rng: () => number): Commander[] {
 const ENDLESS_LENGTH = 80;
 
 /**
- * A fresh, un-seeded chain for Endless mode — a new random order every run so
+ * A fresh, un-seeded chain for Endless mode - a new random order every run so
  * players can chase a personal best without waiting for tomorrow's puzzle.
  */
 export function endlessChain(): Commander[] {

@@ -32,7 +32,7 @@ export default function ContactForm() {
         setStatus("err");
         setError(
           res.status === 503
-            ? "The contact form is temporarily unavailable — please try again later."
+            ? "The contact form is temporarily unavailable - please try again later."
             : "Something went wrong sending your message. Please try again.",
         );
         return;
@@ -41,14 +41,14 @@ export default function ContactForm() {
       setStatus("ok");
     } catch {
       setStatus("err");
-      setError("Couldn’t reach the server. Check your connection and try again.");
+      setError("Couldn't reach the server. Check your connection and try again.");
     }
   }
 
   if (status === "ok") {
     return (
       <p className="contact-status ok">
-        Thanks — your message is on its way. We’ll get back to you soon.
+        Thanks - your message is on its way. I'll *try* get back to you soon.
       </p>
     );
   }
@@ -60,7 +60,7 @@ export default function ContactForm() {
         <input type="text" name="name" autoComplete="name" maxLength={200} />
       </label>
       <label>
-        Your email (optional, so we can reply)
+        Your email (optional, so I can reply)
         <input type="email" name="email" autoComplete="email" maxLength={320} />
       </label>
       <label>
@@ -68,7 +68,7 @@ export default function ContactForm() {
         <textarea name="message" required maxLength={5000} />
       </label>
       <button type="submit" disabled={status === "sending"}>
-        {status === "sending" ? "Sending…" : "Send message"}
+        {status === "sending" ? "Sending..." : "Send message"}
       </button>
       {status === "err" && <p className="contact-status err">{error}</p>}
     </form>

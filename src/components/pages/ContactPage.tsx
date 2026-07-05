@@ -4,23 +4,23 @@ import ContactForm from "./ContactForm";
 export default function ContactPage() {
   return (
     <ContentPage
-      title="Commandle — Contact"
+      title="Commandle - Contact"
       description="Get in touch with the Commandle team. Report a bug, suggest a feature, ask about the daily Magic: The Gathering commander game, or raise a privacy request."
       canonical="https://commandle.com/contact"
     >
-      <h2>Contact us</h2>
+      <h2>Contact me</h2>
 
       <section>
         <p>
-          Commandle is a small, independent fan project, and we genuinely like
-          hearing from players. Whether you&rsquo;ve found a bug, spotted a
-          wrong answer, have an idea for a new mode, or just want to say hello,
-          we&rsquo;d love to hear from you.
+          Commandle is a small, independent fan project, and honestly? Hearing
+          what you like about it would be pretty cool. Found a bug, caught a wrong answer, got a
+          big idea for a new mode, or just want to say hi - I'm
+          all ears.
         </p>
         <p>
-          The best way to reach us is with the form below. It comes straight to
-          our inbox — we read every message and try to reply as quickly as we
-          can. Leave your email if you&rsquo;d like a reply.
+          Easiest way to reach me is the form below. It lands straight in my
+          inbox, I read every single message, and I try to get back to you
+          quickly. Drop your email if you want a reply.
         </p>
         <ContactForm />
       </section>
@@ -29,22 +29,21 @@ export default function ContactPage() {
         <h3>What to include</h3>
         <ul>
           <li>
-            <strong>Bug reports</strong> &mdash; tell us which mode and puzzle
-            date, what you did, and what went wrong. A screenshot helps a lot.
+            <strong>Bug reports</strong> - which mode and puzzle date, what
+            you did, and what broke. A screenshot goes a long way.
           </li>
           <li>
-            <strong>Wrong or missing data</strong> &mdash; let us know the
-            commander and what looks off, and we&rsquo;ll check it against
-            Scryfall and EDHREC.
+            <strong>Wrong or missing data</strong> - tell me the commander
+            and what looks off, and I'll cross-check it against Scryfall
+            and EDHREC.
           </li>
           <li>
-            <strong>Feature ideas</strong> &mdash; new modes, quality-of-life
-            tweaks, accessibility improvements &mdash; all welcome.
+            <strong>Feature ideas</strong> - new modes, quality-of-life
+            stuff, accessibility.
           </li>
           <li>
-            <strong>Privacy requests</strong> &mdash; questions about your data
-            or the choices described in our{" "}
-            <a href="/privacy">privacy policy</a>.
+            <strong>Privacy requests</strong> - questions about your data
+            or anything in the <a href="/privacy">privacy policy</a>.
           </li>
         </ul>
       </section>
@@ -52,11 +51,10 @@ export default function ContactPage() {
       <section>
         <h3>Before you write</h3>
         <p>
-          Many common questions are already answered on our{" "}
+          Odds are your questions are already covered on the{" "}
           <a href="/faq">FAQ page</a>, and the{" "}
-          <a href="/how-to-play">how to play</a> guide covers the rules for every
-          mode. If your question is there, you&rsquo;ll get an answer straight
-          away.
+          <a href="/how-to-play">how to play</a> guide breaks down every mode. If
+          it's there, you'll get your answer faster.
         </p>
       </section>
     </ContentPage>

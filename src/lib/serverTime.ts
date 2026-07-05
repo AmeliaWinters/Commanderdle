@@ -7,7 +7,7 @@ import { puzzleNumber, todayKey } from './dailyAnswer'
  * the bundle), but we can stop the casual "just change the date" cheat by checking
  * the device clock against an authoritative server time.
  *
- * We read the `Date` response header from a same-origin request — every response
+ * We read the `Date` response header from a same-origin request - every response
  * (Cloudflare Pages in prod, Vite in dev) carries it, so no dedicated endpoint is
  * needed. It has second resolution, which is plenty for a day-level check.
  *
@@ -35,7 +35,7 @@ export async function syncServerTime(): Promise<void> {
       capturedAtMs = Date.now()
     }
   } catch {
-    /* offline or blocked — we simply can't verify, so we trust the local clock */
+    /* offline or blocked - we simply can't verify, so we trust the local clock */
   }
 }
 

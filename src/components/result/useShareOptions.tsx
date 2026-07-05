@@ -24,8 +24,8 @@ interface Args {
 }
 
 /**
- * All the ways a finished game can be shared — emoji-grid text, branded image
- * card, head-to-head challenge link, and the all-modes daily recap — bundled as
+ * All the ways a finished game can be shared - emoji-grid text, branded image
+ * card, head-to-head challenge link, and the all-modes daily recap - bundled as
  * ready-to-render ShareMenu options with their copy/share feedback state.
  */
 export function useShareOptions({
@@ -49,7 +49,7 @@ export function useShareOptions({
   };
 
   // A shareable link that unfurls into a per-result preview card and drops the
-  // recipient onto today's exact puzzle. Daily only — practice/archive have no shared day.
+  // recipient onto today's exact puzzle. Daily only - practice/archive have no shared day.
   const resultUrl = isDaily
     ? buildShareUrl(
         shareOrigin(),
@@ -115,7 +115,7 @@ export function useShareOptions({
   const challenge = () => {
     if (!resultUrl) return;
     const verb = status === "won" ? `in ${score}` : "and it beat me";
-    const text = `I played today's Commandle ${MODE_LABEL[mode]} ${verb} — think you can beat me?\n${resultUrl}`;
+    const text = `I played today's Commandle ${MODE_LABEL[mode]} ${verb} - think you can beat me?\n${resultUrl}`;
     shareOrCopy(text).then(
       () => flash(setChallenged),
       () => {},

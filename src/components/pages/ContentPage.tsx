@@ -2,7 +2,7 @@ import { useEffect, type ReactNode } from "react";
 import { navigateToPath } from "../../lib/router";
 
 interface Props {
-  /** Full document + og title, e.g. "Commandle — About". */
+  /** Full document + og title, e.g. "Commandle - About". */
   title: string;
   /** Meta description for this page (SEO). */
   description: string;

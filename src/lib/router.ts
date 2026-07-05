@@ -4,7 +4,7 @@ import type { Mode } from '../types/commander'
 /**
  * Each game mode is its own page (its own URL + document title). Navigating between modes
  * is a client-side route change rather than a full reload, but we fire a virtual pageview on
- * every change so ad/analytics scripts re-count it — that's the point of splitting modes into
+ * every change so ad/analytics scripts re-count it - that's the point of splitting modes into
  * pages: each mode switch is a fresh impression opportunity.
  */
 export const MODE_PATHS: Record<Mode, string> = {
@@ -23,7 +23,7 @@ const MODE_TITLES: Record<Mode, string> = {
   classic: 'Commandle - Classic',
   silhouette: 'Commandle - Silhouette',
   zoom: 'Commandle - Zoom',
-  synergy: 'Commandle — Synergy',
+  synergy: 'Commandle - Synergy',
   quote: 'Commandle - Quote',
 }
 
@@ -41,7 +41,7 @@ const MODE_DESCRIPTIONS: Record<Mode, string> = {
 /** Canonical site origin (no trailing slash), configurable per deploy. */
 const SITE_URL = (import.meta.env.VITE_SITE_URL ?? 'https://commandle.com').replace(/\/$/, '')
 
-/** Set (or create) a <meta name=…> or <meta property=…> tag's content. */
+/** Set (or create) a <meta name=...> or <meta property=...> tag's content. */
 function setMeta(attr: 'name' | 'property', key: string, content: string) {
   let el = document.head.querySelector<HTMLMetaElement>(`meta[${attr}="${key}"]`)
   if (!el) {
@@ -115,14 +115,14 @@ export function isContactPath(pathname: string): boolean {
   return normalize(pathname) === CONTACT_PATH
 }
 
-/** Bonus "Higher / Lower" game — its own page, deliberately outside the mode tabs. */
+/** Bonus "Higher / Lower" game - its own page, deliberately outside the mode tabs. */
 export const HIGHER_LOWER_PATH = '/higher-lower'
 
 export function isHigherLowerPath(pathname: string): boolean {
   return normalize(pathname) === HIGHER_LOWER_PATH
 }
 
-/** Puzzle archive — browse past days. */
+/** Puzzle archive - browse past days. */
 export const ARCHIVE_PATH = '/archive'
 
 export function isArchiveBrowsePath(pathname: string): boolean {

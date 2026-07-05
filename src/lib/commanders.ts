@@ -5,7 +5,7 @@
 // it into a giant object literal the engine had to evaluate on the main thread before React
 // could boot, pushing LCP to ~6s on throttled mobile. The `?url` import emits it as a
 // separate, content-hashed static asset (auto cache-busted when the daily refresh changes
-// it); loadCommanders() fetches and JSON.parses it — ~2x faster than evaluating a literal,
+// it); loadCommanders() fetches and JSON.parses it - ~2x faster than evaluating a literal,
 // and in parallel with the JS download. See main.tsx, which gates React's mount on the load.
 import coreUrl from '../data/commanders.core.json?url'
 import type { Commander, SynergyCard } from '../types/commander'
@@ -26,7 +26,7 @@ type CoreCommander = Omit<Commander, 'synergyCards'>
 
 // Populated by hydrateCommanders() (called by loadCommanders() in the app, and synchronously
 // from the test setup). Both stay stable references so modules that captured them at import
-// time see the data once it lands. Empty until hydrated — the app keeps the HTML skeleton on
+// time see the data once it lands. Empty until hydrated - the app keeps the HTML skeleton on
 // screen until then (see main.tsx), so nothing reads these before they're filled.
 export const COMMANDERS: Commander[] = []
 export const COMMANDERS_BY_NAME = new Map<string, Commander>()
@@ -51,7 +51,7 @@ export function hydrateCommanders(core: CoreCommander[]): void {
 let corePromise: Promise<void> | null = null
 /**
  * Fetch + parse the core dataset and hydrate COMMANDERS. Idempotent (fires at most once).
- * One retry on failure — a hard failure leaves the arrays empty and the caller keeps the
+ * One retry on failure - a hard failure leaves the arrays empty and the caller keeps the
  * loading skeleton up rather than rendering a broken game.
  */
 export function loadCommanders(): Promise<void> {
@@ -69,7 +69,7 @@ let synergyPromise: Promise<void> | null = null
 export let synergyLoaded = false
 
 /**
- * Lazily load ../data/synergy.json (the largest slice of the dataset — kept out of the
+ * Lazily load ../data/synergy.json (the largest slice of the dataset - kept out of the
  * initial bundle) and fill each commander's `synergyCards` in place. Idempotent: the
  * import fires at most once. Only Synergy mode needs this.
  */
@@ -89,7 +89,7 @@ export function ensureSynergyLoaded(): Promise<void> {
 
 // The three non-Classic answer pools are each a full scan over COMMANDERS. Classic (the
 // initial view) never needs them, so they're computed lazily on first access rather than
-// at module load — keeping that work out of the first-render task that TBT measures. Each
+// at module load - keeping that work out of the first-render task that TBT measures. Each
 // result is cached, so repeat callers get a stable array identity. The caches are cleared by
 // hydrateCommanders() so a pool queried before the data lands can't pin an empty result.
 const poolResetters: Array<() => void> = []
@@ -108,7 +108,7 @@ function memoPool(build: () => Commander[]): () => Commander[] {
 export const quotePool = memoPool(() => COMMANDERS.filter((c) => c.flavorText))
 
 /** Commanders eligible as Synergy-mode answers (need enough synergy cards to reveal).
- * Uses the core `synergyCount` so the pool — and thus the deterministic daily answer —
+ * Uses the core `synergyCount` so the pool - and thus the deterministic daily answer -
  * is stable whether or not the synergy arrays have been hydrated yet. */
 export const synergyPool = memoPool(() => COMMANDERS.filter((c) => c.synergyCount >= 4))
 

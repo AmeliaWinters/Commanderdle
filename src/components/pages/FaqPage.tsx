@@ -10,21 +10,21 @@ const FAQS: QA[] = [
     q: "What is Commandle?",
     a: (
       <>
-        Commandle is a free daily guessing game for Magic: The Gathering{" "}
-        Commander format (EDH) fans. Each day there is one hidden commander to identify
-        using clues about its colours, mana value, popularity, card art, flavour
-        text and synergies. See the <a href="/how-to-play">how to play</a> guide
-        for the full rules.
+        It's a free daily guessing game for Magic: The Gathering Commander (EDH)
+        fans. Every day there's one hidden commander to identify using clues
+        about its colours, mana value, popularity, card art, flavour text and
+        synergies. Want more help? Check the{" "}
+        <a href="/how-to-play">how to play</a> guide.
       </>
     ),
   },
   {
-    q: "How often are new puzzles released?",
+    q: "How often do new puzzles drop?",
     a: (
       <>
-        A brand-new puzzle for every mode goes live each day at midnight in your
-        local time. Everyone in the same day plays the same commander, so you
-        can compare results with friends.
+        New puzzles for every mode go live daily at midnight your local time.
+        Everyone gets the same commander that day, so you and your pod can flex
+        together.
       </>
     ),
   },
@@ -32,9 +32,8 @@ const FAQS: QA[] = [
     q: "Can I play puzzles I missed?",
     a: (
       <>
-        Yes. The <a href="/archive">puzzle archive</a> lets you play back any
-        past day in any mode. Archive puzzles don't affect your daily
-        streak, so you can practise freely.
+        Ya. The <a href="/archive">puzzle archive</a> has every past day in
+        every mode. Archive runs don't touch your daily streak.
       </>
     ),
   },
@@ -42,23 +41,22 @@ const FAQS: QA[] = [
     q: "What does 'Rank' mean?",
     a: (
       <>
-        Rank refers to a commander's rank on{" "}
+        Rank is the commander's spot on{" "}
         <a href="https://edhrec.com" target="_blank" rel="noreferrer">
           EDHREC
         </a>
-        , based on how many decks the community has registered with that
-        commander in charge. A rank of #1 means it is the most built commander.
+        , based on how many decks the community has registered with it at the
+        helm. Rank #1 = the most-built commander out there. Basically its
+        popularity score.
       </>
     ),
   },
   {
-    q: "Which commanders can appear as answers?",
+    q: "Which commanders can show up as answers?",
     a: (
       <>
-        Answers are drawn from the pool of legendaries
-        that can legally be a Commander in the EDH format. To keep the game
-        fair, daily answers favour reasonably well known commanders rather than
-        the most obscure printings.
+        Any legendary that can legally sit in the command zone in EDH. To keep
+        things fair, daily answers lean toward commanders people actually know.
       </>
     ),
   },
@@ -66,21 +64,19 @@ const FAQS: QA[] = [
     q: "Is my progress saved?",
     a: (
       <>
-        Yes! Your guesses, results and streaks are stored locally in your
-        browser, so you can close the tab and come back to finish. Nothing is
-        tied to an account, and clearing your browser data will reset your
-        history.
+        Yep! Your guesses, results and streaks live locally in your browser, so
+        you can close the tab and finish later. There's no account involved.
+        Just heads up that clearing your browser data wipes your history.
       </>
     ),
   },
   {
-    q: "Is Commandle free? How is it funded?",
+    q: "Is Commandle free? How is it kept running?",
     a: (
       <>
-        Commandle is completely free to play. Running costs are covered by
-        (hopefully!) unobtrusive advertising served through Google AdSense. See the{" "}
-        <a href="/privacy">privacy policy</a> for how advertising cookies are
-        used and how to opt out of personalised ads.
+        100% free. I keep the lights on with (hopefully!) low-key ads through
+        Google AdSense. Check the <a href="/privacy">privacy policy</a> for how
+        advertising cookies work and how to opt out of personalised ads.
       </>
     ),
   },
@@ -88,20 +84,19 @@ const FAQS: QA[] = [
     q: "Is this an official Wizards of the Coast product?",
     a: (
       <>
-        No. Commandle is an unofficial, non-commercial fan project. It is not
-        affiliated with, endorsed by or produced by Wizards of the Coast.{" "}
-        Magic: The Gathering and all card names and images are
-        trademarks of and &copy; Wizards of the Coast LLC.
+        Nope. Commandle is an unofficial, non-commercial fan project. It is not
+        affiliated with, endorsed by, or produced by Wizards of the Coast.
+        Magic: The Gathering and all card names and images are trademarks of and
+        &copy; Wizards of the Coast LLC.
       </>
     ),
   },
   {
-    q: "I found a bug or have a suggestion. How do I get in touch?",
+    q: "I found a bug or have an idea. How do I reach you?",
     a: (
       <>
-        Please head to our{" "}
-        <a href="/contact">contact page</a> and send us your bugs, feedback or
-        feature ideas.
+        Go to my <a href="/contact">contact page</a> and send me your bugs,
+        feedback, or ideas.
       </>
     ),
   },
@@ -110,7 +105,7 @@ const FAQS: QA[] = [
 export default function FaqPage() {
   return (
     <ContentPage
-      title="Commandle FAQ — frequently asked questions"
+      title="Commandle FAQ - frequently asked questions"
       description="Answers to common questions about Commandle, the daily Magic: The Gathering commander guessing game: how puzzles work, playing past days, how popularity is measured, and more."
       canonical="https://commandle.com/faq"
     >

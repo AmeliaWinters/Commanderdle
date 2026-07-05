@@ -47,7 +47,7 @@ export default function SilhouetteMode({ answer, guesses, skips, wrongGuesses, m
 
       {!solved && wrongGuesses >= maxGuesses - 1 && (
         <p className="hint-line letter-hint">
-          Last guess! The name starts with "{answer.name[0]}…"
+          Last guess! The name starts with "{answer.name[0]}..."
         </p>
       )}
     </div>

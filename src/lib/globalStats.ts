@@ -1,5 +1,5 @@
 /**
- * Shared shape + derivations for global (community) solve statistics — the anonymous,
+ * Shared shape + derivations for global (community) solve statistics - the anonymous,
  * aggregated "42% of players solved Classic #128 in ≤3" numbers. Dependency-free so it can
  * be imported by both the browser bundle and the Cloudflare Pages Function (`functions/api`).
  */
@@ -60,7 +60,7 @@ export function summarize(stats: GlobalStats): GlobalStatsSummary {
       const others = total - 1
       if (others <= 0) return null
       // Winners who solved in `n` or fewer (includes this player). Everyone else among the
-      // other finishers — worse winners and all losers — was beaten.
+      // other finishers - worse winners and all losers - was beaten.
       let within = 0
       for (const [k, v] of Object.entries(dist)) {
         if (Number(k) <= n) within += v

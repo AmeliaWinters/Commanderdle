@@ -11,7 +11,7 @@ export async function shareOrCopy(text: string): Promise<"shared" | "copied"> {
       await navigator.share({ text });
       return "shared";
     } catch {
-      // User cancelled or share failed — fall through to clipboard.
+      // User cancelled or share failed - fall through to clipboard.
     }
   }
   await navigator.clipboard?.writeText(text);
