@@ -3,7 +3,7 @@ import type { Mode } from "../types/commander";
 // Whether the first-run how-to has been dismissed, per mode. Kept in its own tiny
 // module (separate from the HowToPlay component) so App can check it eagerly without
 // pulling the lazily-loaded modal into the initial bundle.
-const SEEN_KEY = (mode: Mode) => `commanderdle:${mode}:howto-seen`;
+const SEEN_KEY = (mode: Mode) => `commandle:${mode}:howto-seen`;
 
 /** True once the player has dismissed the how-to for this mode at least once. */
 export function hasSeenHowTo(mode: Mode): boolean {

@@ -10,7 +10,7 @@ export interface ArchiveResult {
   guesses: number
 }
 
-const ARCHIVE_KEY = 'commanderdle:archive:done'
+const ARCHIVE_KEY = 'commandle:archive:done'
 
 type ArchiveMap = Record<string, ArchiveResult>
 

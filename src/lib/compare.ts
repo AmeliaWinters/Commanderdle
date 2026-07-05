@@ -59,7 +59,7 @@ export function statDisplay(c: Commander): string {
   if (total != null) return String(total);
   if (c.power != null || c.toughness != null)
     return `${c.power ?? "?"}/${c.toughness ?? "?"}`;
-  return "-";
+  return "—";
 }
 
 /** Short connective words ignored when matching shared words between names. */
@@ -80,9 +80,9 @@ export function sharesNameWord(a: string, b: string): boolean {
   return words(b).some((w) => first.has(w));
 }
 
-/** Creature races / other subtypes (the part after the "-" in the type line). */
+/** Creature races / other subtypes (the part after the "—" in the type line). */
 export function subtypes(c: Commander): string[] {
-  const dash = c.typeLine.split("-")[1];
+  const dash = c.typeLine.split("—")[1];
   return dash ? dash.trim().split(/\s+/) : [];
 }
 

@@ -50,7 +50,7 @@ export default function AppHeader({
           type="button"
           className={`logo-btn${bursts.length ? " logo-pop" : ""}`}
           onClick={pop}
-          aria-label="Commanderdle"
+          aria-label="commandle"
         >
           Comman<span className="accent">dle</span>
           {bursts.map((id) => (

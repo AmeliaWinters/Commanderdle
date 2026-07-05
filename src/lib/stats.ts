@@ -11,7 +11,7 @@ export interface ModeStats {
   distribution: Record<number, number>;
 }
 
-const statsKey = (mode: Mode) => `commanderdle:stats:${mode}`;
+const statsKey = (mode: Mode) => `commandle:stats:${mode}`;
 
 /** Has today's daily for `mode` been finished (won or lost)? */
 export function isModeCompletedToday(mode: Mode, today: string): boolean {

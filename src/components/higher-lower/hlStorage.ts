@@ -11,9 +11,9 @@ export interface Persisted extends Run {
   date: string;
 }
 
-export const STORAGE_KEY = "commanderdle:higher-lower:daily";
-export const BEST_KEY = "commanderdle:higher-lower:best";
-export const ENDLESS_BEST_KEY = "commanderdle:higher-lower:endless-best";
+export const STORAGE_KEY = "commandle:higher-lower:daily";
+export const BEST_KEY = "commandle:higher-lower:best";
+export const ENDLESS_BEST_KEY = "commandle:higher-lower:endless-best";
 
 export function loadDaily(): Persisted {
   try {

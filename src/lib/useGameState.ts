@@ -38,11 +38,11 @@ export interface PersistedDaily {
 }
 
 /** localStorage slot for a mode's live daily game. */
-export const dailyStorageKey = (mode: Mode) => `commanderdle:${mode}:daily`
+export const dailyStorageKey = (mode: Mode) => `commandle:${mode}:daily`
 
 /** Persistence key: the live daily uses a stable `:daily` slot; archives key by date. */
 const storageKey = (mode: Mode, dateKey: string, isArchive: boolean) =>
-  isArchive ? `commanderdle:${mode}:${dateKey}` : dailyStorageKey(mode)
+  isArchive ? `commandle:${mode}:${dateKey}` : dailyStorageKey(mode)
 
 function loadGame(mode: Mode, dateKey: string, isArchive: boolean): GameState {
   const answer = dailyAnswer(mode, dateKey)
@@ -148,9 +148,13 @@ export function useGameState(mode: Mode, archiveDate?: string) {
       // Recording the finished result is handled by the status effect above
       // (idempotently), keeping this updater free of storage side effects.
       const status = deriveStatus(prev.answer, guesses, prev.skips, mode)
-      // Classic wins defer their fanfare to useWinReveal, which fires it once
-      // the winning row has finished flipping in.
-      if (!(mode === 'classic' && status === 'won')) {
+      // Classic wins still get the immediate flip sound like any other guess -
+      // otherwise the tell-tale silence gives the win away before the row even
+      // flips in. Only the win fanfare is deferred to useWinReveal, which fires
+      // it once the winning row has finished flipping in.
+      if (mode === 'classic' && status === 'won') {
+        playSound('guess')
+      } else {
         playSound(status === 'won' ? 'win' : status === 'lost' ? 'lose' : 'guess')
       }
       return { ...prev, guesses, status }

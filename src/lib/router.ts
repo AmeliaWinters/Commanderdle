@@ -165,7 +165,7 @@ function trackPageview(mode: Mode) {
   // Google Analytics (gtag) virtual pageview, if present.
   w.gtag?.('event', 'page_view', { page_path: path, page_title: MODE_TITLES[mode] })
   // GPT / AdSense ad refresh, if a slot manager hooks into this. Apps can listen for it.
-  window.dispatchEvent(new CustomEvent('commanderdle:pageview', { detail: { mode, path } }))
+  window.dispatchEvent(new CustomEvent('commandle:pageview', { detail: { mode, path } }))
 }
 
 /**

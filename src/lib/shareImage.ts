@@ -15,7 +15,7 @@ export interface ShareCardOpts {
   /** e.g. "4/6" or "X/6" */
   score: string;
   grid: CellCode[][];
-  /** Hostname printed at the bottom, e.g. "commanderdle.com". */
+  /** Hostname printed at the bottom, e.g. "commandle.com". */
   site: string;
 }
 

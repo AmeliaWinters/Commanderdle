@@ -19,13 +19,13 @@ describe('loadStats', () => {
   })
 
   it('survives corrupt storage', () => {
-    localStorage.setItem('commanderdle:stats:classic', '{not json')
+    localStorage.setItem('commandle:stats:classic', '{not json')
     expect(loadStats(MODE)).toEqual(emptyStats())
   })
 
   it('backfills a missing distribution on legacy records', () => {
     localStorage.setItem(
-      'commanderdle:stats:classic',
+      'commandle:stats:classic',
       JSON.stringify({ played: 3, wins: 2 }),
     )
     const s = loadStats(MODE)

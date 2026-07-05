@@ -10,7 +10,7 @@ function seed(
   data: { answerName: string; guessNames: string[]; skips?: number; date?: string },
 ) {
   localStorage.setItem(
-    `commanderdle:${mode}:daily`,
+    `commandle:${mode}:daily`,
     JSON.stringify({ date: data.date ?? TODAY, ...data }),
   )
 }

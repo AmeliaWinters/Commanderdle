@@ -11,7 +11,7 @@ function apiBase(): string {
   return import.meta.env.VITE_API_URL?.replace(/\/$/, '') ?? ''
 }
 
-const CLIENT_ID_KEY = 'commanderdle:clientId'
+const CLIENT_ID_KEY = 'commandle:clientId'
 
 /**
  * A stable, anonymous per-browser id used only to dedupe submissions server-side (so one

@@ -4,8 +4,8 @@ const PUB_ID = import.meta.env.VITE_ADSENSE_PUB_ID ?? ''
 const SLOT_ID = import.meta.env.VITE_ADSENSE_SLOT_ID ?? ''
 /** Ads only render once a real publisher + slot are configured via env. */
 const ADS_CONFIGURED = PUB_ID !== '' && SLOT_ID !== ''
-const STORAGE_KEY = 'commanderdle:ad-test'
-const TOGGLE_EVENT = 'commanderdle:ad-test-toggle'
+const STORAGE_KEY = 'commandle:ad-test'
+const TOGGLE_EVENT = 'commandle:ad-test-toggle'
 
 declare global {
   interface Window {
@@ -65,8 +65,8 @@ export default function AdBanner() {
   // Bump refreshKey on pageview so the placeholder re-labels itself.
   useEffect(() => {
     const onPageview = () => setRefreshKey((k) => k + 1)
-    window.addEventListener('commanderdle:pageview', onPageview)
-    return () => window.removeEventListener('commanderdle:pageview', onPageview)
+    window.addEventListener('commandle:pageview', onPageview)
+    return () => window.removeEventListener('commandle:pageview', onPageview)
   }, [])
 
   // Real AdSense slot mount + refresh on pageview.
@@ -99,9 +99,9 @@ export default function AdBanner() {
     mountAd()
 
     const onPageview = () => mountAd()
-    window.addEventListener('commanderdle:pageview', onPageview)
+    window.addEventListener('commandle:pageview', onPageview)
     return () => {
-      window.removeEventListener('commanderdle:pageview', onPageview)
+      window.removeEventListener('commandle:pageview', onPageview)
       if (containerRef.current) containerRef.current.innerHTML = ''
     }
   }, [testMode])

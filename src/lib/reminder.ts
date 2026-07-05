@@ -6,7 +6,7 @@ import { msUntilNextPuzzle } from './dailyAnswer'
  * fire while a Commandle tab is alive, so it degrades gracefully - no push server, no cost.
  */
 
-const ENABLED_KEY = 'commanderdle:reminder'
+const ENABLED_KEY = 'commandle:reminder'
 
 export function notificationsSupported(): boolean {
   return typeof window !== 'undefined' && 'Notification' in window

@@ -1,4 +1,4 @@
-// Lightweight sound-effect player for Commanderdle.
+// Lightweight sound-effect player for commandle.
 //
 // Sound files live in /public/sounds. Playback is best-effort: browsers block
 // audio until the first user gesture, and any failure to load/play is swallowed
@@ -16,8 +16,8 @@ const FILES: Record<SoundName, string> = {
 // All effects play at half volume.
 const VOLUME = 0.5
 
-const MUTE_KEY = 'commanderdle:muted'
-const MUTE_EVENT = 'commanderdle:mute-change'
+const MUTE_KEY = 'commandle:muted'
+const MUTE_EVENT = 'commandle:mute-change'
 
 let muted = readMuted()
 const cache = new Map<SoundName, HTMLAudioElement>()
