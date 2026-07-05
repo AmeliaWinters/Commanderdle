@@ -8,6 +8,9 @@ import ManaCost from "../ManaSymbols";
 interface Props {
   guesses: Commander[];
   answer: Commander;
+  /** Play the clue flip-in animation. False when the grid mounted with these
+   *  guesses already present (e.g. mode switch), so the reveal doesn't replay. */
+  animate?: boolean;
 }
 
 // One clue column per data column in the results table. Their reveal indices line
@@ -17,7 +20,11 @@ interface Props {
 const DED_COL_COUNT = COLUMNS.length;
 
 /** Deduction row aligned to the table columns, sitting just above the headers. */
-export default function DeductionRow({ guesses, answer }: Props) {
+export default function DeductionRow({
+  guesses,
+  answer,
+  animate = true,
+}: Props) {
   // When a new guess lands, hold each clue column on the deductions from the
   // *previous* guesses until its matching cell has flipped open in the guess row
   // below, so clues update in step with the reveal rather than all at once.
@@ -140,7 +147,7 @@ export default function DeductionRow({ guesses, answer }: Props) {
 
   return (
     <div
-      className="grid-row deduction-row"
+      className={`grid-row deduction-row${animate ? "" : " no-anim"}`}
       role="row"
       aria-label="Clues deduced so far"
     >

@@ -21,6 +21,12 @@ export interface GlobalStatsSummary {
   winPct: number
   /** Percentage of *all* finishers who solved in `n` guesses or fewer. */
   solvedWithinPct: (n: number) => number
+  /**
+   * Of the *other* finishers (excluding this player), the percentage this player beat by
+   * winning in `n` guesses: every loser, plus every winner who took more than `n` guesses.
+   * Returns null when this player is the only finisher (nobody to beat).
+   */
+  beatenPct: (n: number) => number | null
   /** The most common winning guess count, or null if there are no wins yet. */
   modeGuesses: number | null
 }
@@ -49,6 +55,18 @@ export function summarize(stats: GlobalStats): GlobalStatsSummary {
         if (Number(k) <= n) within += v
       }
       return Math.round((within / total) * 100)
+    },
+    beatenPct: (n: number) => {
+      const others = total - 1
+      if (others <= 0) return null
+      // Winners who solved in `n` or fewer (includes this player). Everyone else among the
+      // other finishers — worse winners and all losers — was beaten.
+      let within = 0
+      for (const [k, v] of Object.entries(dist)) {
+        if (Number(k) <= n) within += v
+      }
+      const beaten = total - within
+      return Math.round((beaten / others) * 100)
     },
   }
 }

@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import type { Commander } from '../types/commander'
+import { useExitAnimation } from '../lib/useExitAnimation'
 
 interface Props {
   pool: Commander[]
@@ -19,12 +20,13 @@ const persisted = { query: '', scrollTop: 0 }
 export default function PoolModal({ pool, onClose, blurQuote, heading }: Props) {
   const [query, setQuery] = useState(persisted.query)
   const gridRef = useRef<HTMLUListElement>(null)
+  const { closing, beginClose } = useExitAnimation(onClose)
 
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && beginClose()
     document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)
-  }, [onClose])
+  }, [beginClose])
 
   // Restore the saved scroll offset once the list is rendered.
   useLayoutEffect(() => {
@@ -43,9 +45,12 @@ export default function PoolModal({ pool, onClose, blurQuote, heading }: Props) 
   }, [pool, query])
 
   return createPortal(
-    <div className="modal-backdrop" onMouseDown={onClose}>
+    <div
+      className={`modal-backdrop${closing ? ' is-closing' : ''}`}
+      onMouseDown={beginClose}
+    >
       <div
-        className="modal pool-modal"
+        className={`modal pool-modal${closing ? ' is-closing' : ''}`}
         role="dialog"
         aria-modal="true"
         aria-label={heading ?? "Card pool"}
@@ -53,7 +58,7 @@ export default function PoolModal({ pool, onClose, blurQuote, heading }: Props) 
       >
         <div className="modal-head">
           <h2>{heading ?? 'Card pool'} · {pool.length} commanders (Includes partner cards)</h2>
-          <button className="modal-close" onClick={onClose} aria-label="Close">
+          <button className="modal-close" onClick={beginClose} aria-label="Close">
             ✕
           </button>
         </div>

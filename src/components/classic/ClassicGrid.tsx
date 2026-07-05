@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { Commander } from "../../types/commander";
 import GuessRow from "./GuessRow";
 import DeductionRow from "./DeductionRow";
@@ -25,6 +25,12 @@ function PlaceholderRow() {
 export default function ClassicGrid({ guesses, answer, maxGuesses }: Props) {
   const remaining = Math.max(0, maxGuesses - guesses.length);
   const [rankTipOpen, setRankTipOpen] = useState(false);
+  // Guesses already present when this grid mounted were loaded from storage
+  // (e.g. after switching modes and back), not just made — they must not replay
+  // the flip-in/reveal animation. Only rows for guesses added while mounted animate.
+  const initialNames = useRef(new Set(guesses.map((g) => g.name)));
+  const isNew = (g: Commander) => !initialNames.current.has(g.name);
+  const latest = guesses[guesses.length - 1];
   return (
     <div className="results-wrap">
       <div
@@ -32,7 +38,11 @@ export default function ClassicGrid({ guesses, answer, maxGuesses }: Props) {
         role="table"
         aria-label="Guess comparison grid"
       >
-        <DeductionRow guesses={guesses} answer={answer} />
+        <DeductionRow
+          guesses={guesses}
+          answer={answer}
+          animate={latest ? isNew(latest) : false}
+        />
         <div className="grid-row grid-head" role="row">
           {HEADERS.map((h) =>
             h === "Rank" ? (
@@ -76,7 +86,7 @@ export default function ClassicGrid({ guesses, answer, maxGuesses }: Props) {
           )}
         </div>
         {[...guesses].reverse().map((g) => (
-          <GuessRow key={g.name} guess={g} answer={answer} />
+          <GuessRow key={g.name} guess={g} answer={answer} animate={isNew(g)} />
         ))}
         {Array.from({ length: remaining }, (_, i) => (
           <PlaceholderRow key={`ph-${i}`} />

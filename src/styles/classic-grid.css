@@ -171,6 +171,13 @@ button.head-help:hover {
   container-type: inline-size;
 }
 
+/* Rows loaded from storage (not freshly guessed): no flip-in or win ignite.
+   Overrides the reveal/ignite declarations above, including .win-row. */
+.grid-row.no-anim .grid-cell,
+.grid-row.no-anim .grid-cell .cell-inner {
+  animation: none !important;
+}
+
 @keyframes reveal {
   0% {
     transform: perspective(700px) rotateX(-90deg);

@@ -16,6 +16,135 @@
   text-shadow: 0 2px 18px rgba(236, 90, 28, 0.35);
 }
 
+/* ---------- Interactive logo ---------- */
+.logo-btn {
+  position: relative;
+  display: inline-block;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+  -webkit-text-fill-color: inherit;
+  transform-origin: center bottom;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+    filter 0.2s ease;
+}
+
+.logo-btn:hover {
+  animation: logo-wobble 0.6s ease-in-out;
+  filter: drop-shadow(0 0 14px rgba(236, 90, 28, 0.55));
+}
+
+.logo-btn:active {
+  transform: scale(0.94);
+}
+
+/* Springy squash-and-stretch on click. */
+.logo-pop {
+  animation: logo-boing 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes logo-wobble {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-2deg) scale(1.03);
+  }
+  75% {
+    transform: rotate(2deg) scale(1.03);
+  }
+}
+
+@keyframes logo-boing {
+  0% {
+    transform: scale(0.9, 1.1);
+  }
+  40% {
+    transform: scale(1.12, 0.9);
+  }
+  70% {
+    transform: scale(0.98, 1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Embers puffing up from the logo on click. */
+.logo-embers {
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.logo-embers i {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--flame);
+  -webkit-text-fill-color: initial;
+  box-shadow: 0 0 8px rgba(236, 90, 28, 0.8);
+  opacity: 0;
+  animation: ember-fly 0.7s ease-out forwards;
+}
+
+.logo-embers i:nth-child(1) {
+  --dx: -60px;
+  --dr: -1;
+  animation-delay: 0s;
+}
+.logo-embers i:nth-child(2) {
+  --dx: -28px;
+  --dr: -0.5;
+  animation-delay: 0.04s;
+}
+.logo-embers i:nth-child(3) {
+  --dx: 0px;
+  --dr: 0;
+  animation-delay: 0.08s;
+}
+.logo-embers i:nth-child(4) {
+  --dx: 30px;
+  --dr: 0.6;
+  animation-delay: 0.05s;
+}
+.logo-embers i:nth-child(5) {
+  --dx: 62px;
+  --dr: 1;
+  animation-delay: 0.02s;
+}
+
+@keyframes ember-fly {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx), -46px) scale(0.3);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-btn:hover,
+  .logo-pop {
+    animation: none;
+  }
+  .logo-embers {
+    display: none;
+  }
+}
+
 .app-header h1 .accent {
   background: var(--flame);
   -webkit-background-clip: text;

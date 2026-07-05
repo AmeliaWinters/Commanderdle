@@ -102,9 +102,13 @@ function Cell({
 export default function GuessRow({
   guess,
   answer,
+  animate = true,
 }: {
   guess: Commander;
   answer: Commander;
+  /** Play the flip-in / win-reveal animation. False for rows loaded from
+   *  storage on mount, so remounting (e.g. mode switch) doesn't replay them. */
+  animate?: boolean;
 }) {
   const cols = compareCommander(guess, answer);
   const solved = guess.name === answer.name;
@@ -116,7 +120,10 @@ export default function GuessRow({
       ? `${guess.name}, shares a word with the answer`
       : guess.name;
   return (
-    <div className={`grid-row${solved ? " win-row" : ""}`} role="row">
+    <div
+      className={`grid-row${solved ? " win-row" : ""}${animate ? "" : " no-anim"}`}
+      role="row"
+    >
       <div
         className={`grid-cell name-cell${shareWord ? " match-partial" : ""}`}
         style={

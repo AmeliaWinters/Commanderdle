@@ -52,10 +52,10 @@ export default function GlobalStats({
         <strong>{s.winPct}%</strong> of{" "}
         {stats.total.toLocaleString()}{" "}
         {stats.total === 1 ? "player" : "players"} solved this puzzle
-        {highlight !== undefined && (
+        {highlight !== undefined && s.beatenPct(highlight) !== null && (
           <>
             {" — you beat "}
-            <strong>{100 - s.solvedWithinPct(highlight)}%</strong> of them
+            <strong>{s.beatenPct(highlight)}%</strong> of them
           </>
         )}
         .

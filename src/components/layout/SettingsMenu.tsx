@@ -37,8 +37,23 @@ export default function SettingsMenu({
   onReset,
 }: Props) {
   const [open, setOpen] = useState(false);
+  const [closing, setClosing] = useState(false);
   const [muted, setMuted] = useState(isMuted);
   const [reminderOn, setReminderOn] = useState(isReminderEnabled);
+
+  // Play the collapse animation before unmounting the panel. Reduced-motion
+  // users skip straight to closed, matching the entrance animations.
+  const closeMenu = () => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setOpen(false);
+      return;
+    }
+    setClosing(true);
+    window.setTimeout(() => {
+      setOpen(false);
+      setClosing(false);
+    }, 150);
+  };
 
   // Keep the mute button in sync, and warm the audio cache on the first user gesture
   // (not at mount) so the effect files don't compete with LCP-critical resources.
@@ -56,23 +71,24 @@ export default function SettingsMenu({
     scheduleReminder();
   }, []);
 
-  // Close the menu on any outside click or Escape.
+  // Close the menu on any outside click.
   useEffect(() => {
-    if (!open) return;
-    const close = () => setOpen(false);
+    if (!open || closing) return;
+    const close = () => closeMenu();
     window.addEventListener("click", close);
     return () => window.removeEventListener("click", close);
-  }, [open]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, closing]);
 
   async function handleReminderToggle() {
     const on = await toggleReminder();
     setReminderOn(on);
-    setOpen(false);
+    closeMenu();
   }
 
   const pick = (action: () => void) => () => {
     action();
-    setOpen(false);
+    closeMenu();
   };
 
   return (
@@ -83,13 +99,17 @@ export default function SettingsMenu({
         aria-expanded={open}
         onClick={(e) => {
           e.stopPropagation();
-          setOpen((o) => !o);
+          if (open) closeMenu();
+          else setOpen(true);
         }}
       >
         <FiSettings className="menu-cog" />
       </button>
       {open && (
-        <div className="menu-pop" onClick={(e) => e.stopPropagation()}>
+        <div
+          className={`menu-pop${closing ? " is-closing" : ""}`}
+          onClick={(e) => e.stopPropagation()}
+        >
           <button onClick={pick(onHowTo)}>How to play</button>
           <button onClick={pick(() => navigateToPath(ARCHIVE_PATH))}>
             Archive ↗

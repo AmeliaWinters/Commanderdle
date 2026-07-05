@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { MdKeyboardArrowUp, MdKeyboardArrowDown } from "react-icons/md";
 import type { Mode } from "../types/commander";
 import { markHowToSeen } from "../lib/howToSeen";
+import { useExitAnimation } from "../lib/useExitAnimation";
 
 interface Props {
   mode: Mode;
@@ -70,23 +71,24 @@ const GUIDES: Record<Mode, Guide> = {
 /** First-run, mode-specific explainer. Dismissing it records the mode as seen. */
 export default function HowToPlay({ mode, onClose }: Props) {
   const guide = GUIDES[mode];
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && close();
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  function close() {
+  const { closing, beginClose } = useExitAnimation(() => {
     markHowToSeen(mode);
     onClose();
-  }
+  });
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && beginClose();
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [beginClose]);
 
   return createPortal(
-    <div className="modal-backdrop" onMouseDown={close}>
+    <div
+      className={`modal-backdrop${closing ? " is-closing" : ""}`}
+      onMouseDown={beginClose}
+    >
       <div
-        className="modal howto-modal"
+        className={`modal howto-modal${closing ? " is-closing" : ""}`}
         role="dialog"
         aria-modal="true"
         aria-label={guide.title}
@@ -94,7 +96,7 @@ export default function HowToPlay({ mode, onClose }: Props) {
       >
         <div className="modal-head">
           <h2>{guide.title}</h2>
-          <button className="modal-close" onClick={close} aria-label="Close">
+          <button className="modal-close" onClick={beginClose} aria-label="Close">
             ✕
           </button>
         </div>
@@ -104,7 +106,7 @@ export default function HowToPlay({ mode, onClose }: Props) {
             <li key={i}>{b}</li>
           ))}
         </ul>
-        <button className="share-btn howto-got-it" onClick={close}>
+        <button className="share-btn howto-got-it" onClick={beginClose}>
           Got it
         </button>
       </div>

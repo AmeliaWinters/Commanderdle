@@ -42,6 +42,11 @@
   transform-origin: center;
 }
 
+/* Clues loaded from storage (grid remounted, e.g. mode switch): show instantly. */
+.deduction-row.no-anim .deduction-cell {
+  animation: none !important;
+}
+
 .deduction-cell.empty {
   background: transparent;
   border-style: dashed;
