@@ -1,0 +1,102 @@
+import { useEffect, useState } from "react";
+import type { Mode } from "../types/commander";
+import {
+  puzzleNumber,
+  msUntilNextPuzzle,
+  formatCountdown,
+} from "../lib/dailyAnswer";
+import { fetchGlobalStats } from "../lib/api";
+import { summarize } from "../lib/globalStats";
+import { MODE_LABEL } from "../lib/shareCode";
+
+interface Props {
+  mode: Mode;
+  /** Render the face-down mystery card (classic & quote only - the other modes
+   *  already show large art of their own and have no room for it). */
+  showCard: boolean;
+  /** Any guess/skip made yet - hides the tagline to tighten the layout. */
+  started: boolean;
+}
+
+/** Ticking HH:MM:SS until the next local-midnight rollover. */
+function useCountdown(): string {
+  const [ms, setMs] = useState(msUntilNextPuzzle);
+  useEffect(() => {
+    const id = window.setInterval(() => setMs(msUntilNextPuzzle()), 1000);
+    return () => window.clearInterval(id);
+  }, []);
+  return formatCountdown(ms);
+}
+
+/** "1,234 players solved today's Classic" - live community pulse for the landing view. */
+function usePulse(mode: Mode): string | null {
+  const [line, setLine] = useState<string | null>(null);
+  useEffect(() => {
+    setLine(null);
+    const ctrl = new AbortController();
+    fetchGlobalStats(mode, puzzleNumber(), ctrl.signal).then((stats) => {
+      if (!stats || stats.total < 5) return; // too few to be social proof
+      const s = summarize(stats);
+      const solved = `${stats.wins.toLocaleString()} ${
+        stats.wins === 1 ? "player has" : "players have"
+      } solved today's ${MODE_LABEL[mode]}`;
+      setLine(
+        s.modeGuesses !== null
+          ? `${solved} · most in ${s.modeGuesses} ${s.modeGuesses === 1 ? "guess" : "guesses"}`
+          : solved,
+      );
+    });
+    return () => ctrl.abort();
+  }, [mode]);
+  return line;
+}
+
+const DATE_FMT = new Intl.DateTimeFormat(undefined, {
+  month: "long",
+  day: "numeric",
+  year: "numeric",
+});
+
+/**
+ * Daily framing band under the mode tabs: puzzle number + date, next-puzzle
+ * countdown, a live community line, and (classic/quote) a face-down MTG-style
+ * mystery card. Once the game is decided, the card is withdrawn (showCard goes
+ * false) and the result banner performs the flip-to-answer reveal instead.
+ */
+export default function DailyHero({ mode, showCard, started }: Props) {
+  const countdown = useCountdown();
+  const pulse = usePulse(mode);
+
+  return (
+    <div className={`daily-hero${showCard ? " with-card" : ""}`}>
+      {showCard && (
+        <div className="hero-card-wrap" aria-hidden="true">
+          <div className="hero-card">
+            <div className="hero-face hero-back">
+              <img src="/card-back.jpg" alt="" draggable={false} />
+              <span className="hero-card-mark">?</span>
+              <div className="hero-card-shine" />
+            </div>
+          </div>
+          {!started && (
+            <p className="hero-tagline">Today&rsquo;s commander awaits</p>
+          )}
+        </div>
+      )}
+      <p className="hero-meta">
+        <span className="hero-puzzle">Puzzle #{puzzleNumber()}</span>
+        <span className="hero-sep" aria-hidden="true">
+          ·
+        </span>
+        <span>{DATE_FMT.format(new Date())}</span>
+        <span className="hero-sep" aria-hidden="true">
+          ·
+        </span>
+        <span className="hero-countdown" title="Time until the next puzzle">
+          next in {countdown}
+        </span>
+      </p>
+      {pulse && <p className="hero-pulse">{pulse}</p>}
+    </div>
+  );
+}

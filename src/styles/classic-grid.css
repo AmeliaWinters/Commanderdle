@@ -195,15 +195,16 @@ button.head-help:hover {
     box-shadow: 0 0 0 rgba(236, 90, 28, 0);
     border-color: var(--exact-bd);
   }
-  50% {
+  40% {
     box-shadow:
       0 0 22px rgba(236, 90, 28, 0.85),
       0 0 44px rgba(246, 160, 26, 0.4);
     border-color: var(--flame-1);
   }
+  /* Flare, then die out completely - a lingering glow reads as smeared glare. */
   100% {
-    box-shadow: 0 0 10px rgba(236, 90, 28, 0.35);
-    border-color: var(--flame-2);
+    box-shadow: 0 0 0 rgba(236, 90, 28, 0);
+    border-color: var(--exact-bd);
   }
 }
 
@@ -221,14 +222,15 @@ button.head-help:hover {
     box-shadow: 0 0 0 rgba(236, 90, 28, 0);
     border-color: var(--line);
   }
-  50% {
+  40% {
     box-shadow:
       0 0 22px rgba(236, 90, 28, 0.85),
       0 0 44px rgba(246, 160, 26, 0.4);
     border-color: var(--flame-1);
   }
+  /* Same flare-and-settle: the glow dies; the flame border + name text carry the win. */
   100% {
-    box-shadow: 0 0 10px rgba(236, 90, 28, 0.35);
+    box-shadow: 0 0 0 rgba(236, 90, 28, 0);
     border-color: var(--flame-2);
   }
 }

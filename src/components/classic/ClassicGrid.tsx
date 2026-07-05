@@ -3,19 +3,27 @@ import { createPortal } from "react-dom";
 import type { Commander } from "../../types/commander";
 import GuessRow from "./GuessRow";
 import DeductionRow from "./DeductionRow";
+import ExampleRow from "./ExampleRow";
 import { COLUMNS } from "../../lib/columns";
 
 interface Props {
   guesses: Commander[];
   answer: Commander;
   maxGuesses: number;
+  /** Show the static teaching row for first-time players (empty grid only). */
+  showExample?: boolean;
 }
 
 const HEADERS = ["Commander", ...COLUMNS.map((c) => c.header)];
 
-function PlaceholderRow() {
+function PlaceholderRow({ index }: { index: number }) {
   return (
-    <div className="grid-row" aria-hidden="true">
+    <div
+      className="grid-row placeholder-row"
+      aria-hidden="true"
+      // Drives the intro-cascade delay so empty rows rise in one after another.
+      style={{ "--row-i": index } as React.CSSProperties}
+    >
       {HEADERS.map((h) => (
         <div key={h} className="grid-cell placeholder" />
       ))}
@@ -23,7 +31,12 @@ function PlaceholderRow() {
   );
 }
 
-export default function ClassicGrid({ guesses, answer, maxGuesses }: Props) {
+export default function ClassicGrid({
+  guesses,
+  answer,
+  maxGuesses,
+  showExample,
+}: Props) {
   const remaining = Math.max(0, maxGuesses - guesses.length);
   const [rankTipOpen, setRankTipOpen] = useState(false);
   const rankBtnRef = useRef<HTMLButtonElement>(null);
@@ -125,11 +138,12 @@ export default function ClassicGrid({ guesses, answer, maxGuesses }: Props) {
             ),
           )}
         </div>
+        {showExample && guesses.length === 0 && <ExampleRow />}
         {[...guesses].reverse().map((g) => (
           <GuessRow key={g.name} guess={g} answer={answer} animate={isNew(g)} />
         ))}
         {Array.from({ length: remaining }, (_, i) => (
-          <PlaceholderRow key={`ph-${i}`} />
+          <PlaceholderRow key={`ph-${i}`} index={i} />
         ))}
       </div>
     </div>

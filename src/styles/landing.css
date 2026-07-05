@@ -1,0 +1,214 @@
+/* ---------- First-load landing polish: intro stagger, daily hero, example row ---------- */
+
+/* Intro cascade: tabs, hero and empty grid rows rise in on mount. Mode switches
+   remount .mode-view (key=mode), so the cascade replays there too - intentional. */
+@keyframes intro-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mode-tabs,
+.daily-hero {
+  animation: intro-rise 0.45s ease-out both;
+}
+
+.daily-hero {
+  animation-delay: 0.08s;
+}
+
+/* Placeholder rows keep their dashed look but cascade in one after another.
+   --row-i is set inline by ClassicGrid. */
+.grid-row.placeholder-row {
+  animation: intro-rise 0.4s ease-out both;
+  animation-delay: calc(0.15s + var(--row-i, 0) * 0.07s);
+}
+
+/* ---------- Daily hero band ---------- */
+
+.daily-hero {
+  text-align: center;
+  margin: 0 auto var(--s3, 12px);
+  padding: 0 8px;
+}
+
+.hero-meta {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.hero-puzzle {
+  font-family: "Cinzel", serif;
+  letter-spacing: 0.05em;
+  color: var(--text);
+}
+
+.hero-sep {
+  opacity: 0.5;
+}
+
+.hero-countdown {
+  font-variant-numeric: tabular-nums;
+}
+
+.hero-pulse {
+  margin: 4px 0 0;
+  font-size: 0.8rem;
+  color: var(--accent, #ec5a1c);
+  text-shadow: 0 0 12px rgba(236, 90, 28, 0.25);
+}
+
+/* ---------- Face-down mystery card (result banner handles the reveal) ---------- */
+
+.hero-card-wrap {
+  margin-bottom: 10px;
+}
+
+.hero-card {
+  position: relative;
+  width: 96px;
+  height: 134px; /* MTG aspect ratio ~63:88 */
+  margin: 0 auto;
+  animation: hero-float 5s ease-in-out infinite;
+}
+
+.hero-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 4.75% / 3.4%; /* real MTG corner radius, scales with size */
+  overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+}
+
+/* The real MTG card back (self-hosted, /card-back.jpg). */
+.hero-back {
+  background: #14100c;
+}
+
+.hero-back img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Glowing "?" centred over the card back's oval. */
+.hero-card-mark {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  font-family: "Cinzel", serif;
+  font-weight: 900;
+  font-size: 2.6rem;
+  color: #5c8f92;
+  text-shadow:
+    1px 1px 5px rgba(0, 0, 0, 1.0),
+    0 0 20px rgba(236, 90, 28, 0.7);
+}
+
+/* Foil shimmer sweeping across the card back. */
+.hero-card-shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.14) 48%,
+    rgba(255, 255, 255, 0.05) 52%,
+    transparent 70%
+  );
+  transform: translateX(-100%);
+  animation: hero-shine 3.4s ease-in-out infinite;
+}
+
+@keyframes hero-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-2deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(2deg);
+  }
+}
+
+@keyframes hero-shine {
+  0%,
+  55% {
+    transform: translateX(-100%);
+  }
+  85%,
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.hero-tagline {
+  margin: 8px 0 0;
+  font-family: "Cinzel", serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+}
+
+/* ---------- First-timer example row ---------- */
+
+.example-row .grid-cell {
+  animation: none;
+}
+
+.example-row .cell-inner {
+  animation: none;
+}
+
+.example-wrap {
+  opacity: 0.92;
+  animation: intro-rise 0.4s ease-out 0.1s both;
+}
+
+.example-caption {
+  margin: 8px 0 10px;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  text-align: center;
+  /* The row lives inside the grid's horizontal scroller (min-width 754px);
+     pin the caption to the visible viewport so it doesn't scroll off-screen. */
+  position: sticky;
+  left: 8px;
+  max-width: calc(100vw - 16px);
+}
+
+.example-caption .ex-green {
+  color: var(--exact-bd);
+}
+
+.example-caption .ex-yellow {
+  color: var(--partial-bd);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mode-tabs,
+  .daily-hero,
+  .grid-row.placeholder-row,
+  .example-wrap {
+    animation: none;
+  }
+  .hero-card,
+  .hero-card-shine {
+    animation: none;
+  }
+}

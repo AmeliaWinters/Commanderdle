@@ -29,10 +29,13 @@ import GuessInput from "./GuessInput";
 import ClassicGrid from "./classic/ClassicGrid";
 import GuessList from "./GuessList";
 import GuessDots from "./GuessDots";
+import GhostRace from "./GhostRace";
+import { useGhost, ghostScore } from "../lib/ghost";
+import DailyHero from "./DailyHero";
 import AppHeader from "./layout/AppHeader";
 import AppFooter from "./layout/AppFooter";
 import ClockAheadNotice from "./layout/ClockAheadNotice";
-import { hasSeenHowTo } from "../lib/howToSeen";
+import { hasSeenHowTo, markHowToSeen } from "../lib/howToSeen";
 
 // Everything below the Classic landing is code-split: the initial chunk ships only
 // Classic + the shared shell, and each other mode/modal fetches its own chunk on demand.
@@ -103,15 +106,31 @@ export default function App() {
   }, []);
 
   // Show the how-to-play once per mode the first time it's opened (live daily only).
+  // Classic is exempt: first-timers get the inline example row instead of a modal.
   useEffect(() => {
-    if (!archivePlay && !hasSeenHowTo(mode)) setHowToOpen(true);
+    if (!archivePlay && mode !== "classic" && !hasSeenHowTo(mode))
+      setHowToOpen(true);
   }, [mode, archivePlay]);
+
+  // First-timer teaching row on the Classic grid, shown until the first-ever
+  // classic guess (or until the how-to modal is opened manually and dismissed).
+  const [classicIntro, setClassicIntro] = useState(
+    () => !hasSeenHowTo("classic"),
+  );
 
   const { state, guess, skip, startPractice, backToDaily, reset, maxGuesses } =
     useGameState(mode, archivePlay?.date);
 
   const { answer, guesses, skips, status, isDaily, isArchive } = state;
   const archiveDate = archivePlay?.date;
+
+  // The first real classic guess graduates the player past the teaching row.
+  useEffect(() => {
+    if (mode === "classic" && classicIntro && guesses.length > 0) {
+      markHowToSeen("classic");
+      setClassicIntro(false);
+    }
+  }, [mode, classicIntro, guesses.length]);
 
   const { freshWin, revealHeld } = useWinReveal(mode, status, archiveDate);
   const wrongGuesses =
@@ -134,6 +153,10 @@ export default function App() {
   );
   const peekUnlocked = peek !== null && wrongGuesses >= peek.unlockAt;
   const ModeView = mode === "classic" ? null : MODE_VIEWS[mode];
+
+  // Ghost race: a challenge link opened today replays the sender's run beside
+  // this game (live daily only - archive/practice have no shared day to race).
+  const ghost = useGhost(mode, isDaily && !isArchive);
 
   // Standalone pages: return only after every hook above has run, so the hook order
   // stays constant across client-side navigation (React requires this).
@@ -222,7 +245,11 @@ export default function App() {
 
       {fromShare && !isArchive && (
         <div className="challenge-banner">
-          <span>You've been challenged! Solve today's puzzle!</span>
+          <span>
+            {ghost
+              ? `Ghost race! Your challenger went ${ghostScore(ghost, maxGuesses)} - beat their ghost!`
+              : "You've been challenged! Solve today's puzzle!"}
+          </span>
           <button
             className="challenge-dismiss"
             aria-label="Dismiss"
@@ -258,6 +285,21 @@ export default function App() {
         }
       />
 
+      {isDaily && !isArchive && !clockBlocked && (
+        <DailyHero
+          mode={mode}
+          // Only classic and quote have room for the mystery card; the art
+          // modes (silhouette/zoom/synergy) already lead with a big visual.
+          // Once the game is decided the result banner takes over as the card
+          // reveal (its art flips in from the card back), so the mystery card
+          // bows out rather than duplicating the answer.
+          showCard={
+            (mode === "classic" || mode === "quote") && (!done || revealHeld)
+          }
+          started={guesses.length + skips > 0}
+        />
+      )}
+
       {howToOpen && (
         <Suspense fallback={null}>
           <HowToPlay mode={mode} onClose={() => setHowToOpen(false)} />
@@ -280,8 +322,25 @@ export default function App() {
           <ClockAheadNotice />
         ) : (
           <div className="mode-view" key={mode}>
+            {state.mode === mode && (
+              <>
             {!done && ModeView && (
-              <Suspense fallback={<div className="mode-view-loading" />}>
+              <Suspense
+                fallback={
+                  <div className="mode-view-loading">
+                    <span className="mana-loader" aria-label="Loading">
+                      {["W", "U", "B", "R", "G"].map((c, i) => (
+                        <img
+                          key={c}
+                          src={`/mana/${c}.svg`}
+                          alt=""
+                          style={{ animationDelay: `${i * 0.15}s` }}
+                        />
+                      ))}
+                    </span>
+                  </div>
+                }
+              >
                 <ModeView
                   answer={answer}
                   guesses={guesses}
@@ -357,14 +416,27 @@ export default function App() {
               />
             )}
 
+            {ghost && (
+              <GhostRace
+                ghost={ghost}
+                playerTurns={guesses.length + skips}
+                playerWon={solved}
+                done={done && !revealHeld}
+                maxGuesses={maxGuesses}
+              />
+            )}
+
             {mode === "classic" ? (
               <ClassicGrid
                 guesses={guesses}
                 answer={answer}
                 maxGuesses={maxGuesses}
+                showExample={classicIntro}
               />
             ) : (
               <GuessList guesses={guesses} answer={answer} />
+            )}
+              </>
             )}
           </div>
         )}

@@ -1,0 +1,128 @@
+/* ---------- MTG flavour layer: tab tease, mana loader, card-frame tiles, foil hover ---------- */
+
+/* Unplayed-mode tease: icons of tabs that aren't active and aren't completed
+   today give a little wiggle-and-glow every few seconds, staggered per tab.
+   Uses :has() so completed tabs (tick badge present) sit still; browsers
+   without :has() simply tease every inactive tab - harmless. */
+@keyframes tab-tease {
+  0%,
+  86%,
+  100% {
+    transform: none;
+    filter: none;
+  }
+  90% {
+    transform: rotate(-9deg) scale(1.16);
+    filter: drop-shadow(0 0 6px rgba(236, 90, 28, 0.55));
+  }
+  96% {
+    transform: rotate(6deg) scale(1.08);
+  }
+}
+
+.mode-tab:not(.active):not(:has(.mode-complete)) .mode-icon {
+  animation: tab-tease 7s ease-in-out infinite;
+}
+
+/* Delay selectors repeat :not(.active) so they outrank the shorthand above
+   (which would otherwise reset animation-delay to 0 for every tab). */
+.mode-tab:not(.active):nth-child(2) .mode-icon { animation-delay: 0.8s; }
+.mode-tab:not(.active):nth-child(3) .mode-icon { animation-delay: 1.6s; }
+.mode-tab:not(.active):nth-child(4) .mode-icon { animation-delay: 2.4s; }
+.mode-tab:not(.active):nth-child(5) .mode-icon { animation-delay: 3.2s; }
+
+/* ---------- Mana-pip loading state (code-split mode views) ---------- */
+
+.mode-view-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mana-loader {
+  display: flex;
+  gap: 10px;
+}
+
+.mana-loader img {
+  width: 26px;
+  height: 26px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+  animation: mana-bounce 0.9s ease-in-out infinite;
+}
+
+@keyframes mana-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.45;
+  }
+  50% {
+    transform: translateY(-9px);
+    opacity: 1;
+  }
+}
+
+/* ---------- Card-frame borders on grid tiles ---------- */
+
+/* Inner hairline + top bevel, like the frame-within-a-frame of a real card.
+   Drawn on ::before (not box-shadow) so the win ignite animation - which
+   animates the cell's own box-shadow - can't stomp it. */
+.grid-row:not(.grid-head):not(.deduction-row) .grid-cell:not(.placeholder) {
+  position: relative;
+}
+
+.grid-row:not(.grid-head):not(.deduction-row) .grid-cell:not(.placeholder)::before {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ---------- Foil/shine sweep on tile hover ---------- */
+
+@keyframes foil-sweep {
+  from {
+    transform: translateX(-130%) skewX(-12deg);
+  }
+  to {
+    transform: translateX(130%) skewX(-12deg);
+  }
+}
+
+@media (hover: hover) {
+  .grid-row:not(.grid-head):not(.deduction-row) .grid-cell:not(.placeholder)::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+    /* Faint rainbow banding between the white highlights = foil. */
+    background: linear-gradient(
+      115deg,
+      transparent 25%,
+      rgba(169, 213, 240, 0.1) 42%,
+      rgba(255, 255, 255, 0.18) 48%,
+      rgba(255, 251, 213, 0.1) 54%,
+      rgba(241, 160, 129, 0.08) 60%,
+      transparent 75%
+    );
+    transform: translateX(-130%) skewX(-12deg);
+  }
+
+  .grid-row:not(.grid-head):not(.deduction-row) .grid-cell:not(.placeholder):hover::after {
+    animation: foil-sweep 0.7s ease-out;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mode-tab .mode-icon,
+  .mana-loader img,
+  .grid-cell::after {
+    animation: none !important;
+  }
+}

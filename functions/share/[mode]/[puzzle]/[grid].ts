@@ -29,7 +29,10 @@ export const onRequest = (context: { params: Params; request: Request }): Respon
   const { won, score } = deriveResult(mode, grid)
   const label = MODE_LABEL[mode]
   const playPath = MODE_PATH[mode]
-  const playUrl = `${origin}${playPath}?from=share`
+  // The grid rides along so the app can replay the sender's run as a live
+  // "ghost race"; the puzzle number lets it reject stale (non-today) ghosts.
+  const ghostParam = /^\d{1,6}$/.test(puzzle) ? `&ghost=${grid}&p=${puzzle}` : ''
+  const playUrl = `${origin}${playPath}?from=share${ghostParam}`
 
   const title = `Commandle ${label} #${puzzle} - ${won ? `solved in ${score}` : 'missed it'}`
   const description = won

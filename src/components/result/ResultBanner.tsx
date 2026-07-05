@@ -69,11 +69,23 @@ export default function ResultBanner({
             image={answer.normalImage}
             className="result-art-zoom"
           >
-            <img
-              src={answer.normalImage}
-              alt={answer.name}
-              className="result-art"
-            />
+            {/* On a fresh win the art arrives as the face-down mystery card
+                (taking over from the DailyHero one) and flips to the answer. */}
+            <div className="result-art-flip">
+              {cast && (
+                <img
+                  src="/card-back.jpg"
+                  alt=""
+                  className="result-art result-art-back"
+                  draggable={false}
+                />
+              )}
+              <img
+                src={answer.normalImage}
+                alt={answer.name}
+                className="result-art"
+              />
+            </div>
           </CardZoom>
         )}
         <div className="result-info">
