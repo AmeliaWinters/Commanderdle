@@ -23,8 +23,8 @@ const GUIDES: Record<Mode, Guide> = {
       "Name the daily commander in 6 tries. Every guess shows how it stacks up against the answer across five columns",
     bullets: [
       "🟩 Green = nailed it, exact match.",
-      "🟨 Amber = close (shares some colors, or the number's close).",
-      "⬛ Grey = nope, nothing here (no shared colors, or way off).",
+      "🟨 Amber = close (shares some colours, or the number's close).",
+      "⬛ Grey = nope, nothing here (no shared colours/types, or way off).",
       <>
         <MdKeyboardArrowUp className="howto-arrow" /> /{" "}
         <MdKeyboardArrowDown className="howto-arrow" /> arrows on Mana Value,

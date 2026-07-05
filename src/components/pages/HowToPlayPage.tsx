@@ -36,7 +36,7 @@ export default function HowToPlayPage() {
             some colours but not all; for a number you're in the neighbourhood.
           </li>
           <li>
-            <strong>⬛ Grey</strong> - nope, cold, far away.
+            <strong>⬛ Grey</strong> - nope, cold, no match, far away.
           </li>
           <li>
             <strong>▲ / ▼ arrows</strong> - on Mana Value, Popularity and Price,
@@ -123,7 +123,8 @@ export default function HowToPlayPage() {
           mode.
         </p>
         <p>
-          Alright, enough readingggg <a href="/">Go play today's puzzle.</a>
+          Alright, enough readingggg{"       "}{" "}
+          <a href="/">go play today's puzzle.</a>
         </p>
       </section>
     </ContentPage>
