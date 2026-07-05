@@ -18,6 +18,11 @@ export interface GameState {
   /** The date this game belongs to. Kept on the state itself so the persist/record
    * effects can never pair a stale game with the date of the puzzle being switched to. */
   dateKey: string
+  /** The mode this game belongs to. When `mode` switches, the component re-renders with
+   * the new mode one frame *before* the reload effect swaps in that mode's state; the
+   * record/persist effects guard on this so they never act on a mismatched (mode, state)
+   * pair (which corrupted stats + community submissions across modes). */
+  mode: Mode
   /** The live daily puzzle (feeds streak stats). */
   isDaily: boolean
   /** A past puzzle replayed from the archive (kept out of streak stats). */
@@ -46,6 +51,7 @@ function loadGame(mode: Mode, dateKey: string, isArchive: boolean): GameState {
     guesses: [],
     skips: 0,
     dateKey,
+    mode,
     isDaily: !isArchive,
     isArchive,
     status: 'playing',
@@ -99,6 +105,9 @@ export function useGameState(mode: Mode, archiveDate?: string) {
 
   // Record a finished result (idempotent per date+mode / archive cell).
   useEffect(() => {
+    // Ignore the stale frame right after a mode switch, where `mode` has updated but
+    // `state` still belongs to the previous mode (would record it under the wrong mode).
+    if (state.mode !== mode) return
     if (state.status === 'playing') return
     const won = state.status === 'won'
     // Skips consume a turn like guesses, so the turn count used for stats is both.
@@ -115,6 +124,8 @@ export function useGameState(mode: Mode, archiveDate?: string) {
 
   // Persist progress (both live daily and archive plays; not practice).
   useEffect(() => {
+    // Same stale-frame guard as above: never persist a game under another mode's key.
+    if (state.mode !== mode) return
     if (!state.isDaily && !state.isArchive) return
     const payload: PersistedDaily = {
       date: state.dateKey,
@@ -157,7 +168,7 @@ export function useGameState(mode: Mode, archiveDate?: string) {
   }, [mode, dateKey])
 
   const startPractice = useCallback(() => {
-    setState({ answer: randomAnswer(mode), guesses: [], skips: 0, dateKey: todayKey(), isDaily: false, isArchive: false, status: 'playing' })
+    setState({ answer: randomAnswer(mode), guesses: [], skips: 0, dateKey: todayKey(), mode, isDaily: false, isArchive: false, status: 'playing' })
   }, [mode])
 
   const backToDaily = useCallback(() => {
