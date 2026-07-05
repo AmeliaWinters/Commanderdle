@@ -1,9 +1,10 @@
-import { useEffect, type ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { MdKeyboardArrowUp, MdKeyboardArrowDown } from "react-icons/md";
 import type { Mode } from "../types/commander";
 import { markHowToSeen } from "../lib/howToSeen";
 import { useExitAnimation } from "../lib/useExitAnimation";
+import { useModalFocus } from "../lib/useModalFocus";
 
 interface Props {
   mode: Mode;
@@ -63,16 +64,14 @@ const GUIDES: Record<Mode, Guide> = {
 /** First-run, mode-specific explainer. Dismissing it records the mode as seen. */
 export default function HowToPlay({ mode, onClose }: Props) {
   const guide = GUIDES[mode];
+  const dialogRef = useRef<HTMLDivElement>(null);
   const { closing, beginClose } = useExitAnimation(() => {
     markHowToSeen(mode);
     onClose();
   });
 
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && beginClose();
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [beginClose]);
+  // Move focus into the dialog, trap Tab, close on Escape, restore focus on close.
+  useModalFocus(dialogRef, beginClose);
 
   return createPortal(
     <div
@@ -80,6 +79,7 @@ export default function HowToPlay({ mode, onClose }: Props) {
       onMouseDown={beginClose}
     >
       <div
+        ref={dialogRef}
         className={`modal howto-modal${closing ? " is-closing" : ""}`}
         role="dialog"
         aria-modal="true"

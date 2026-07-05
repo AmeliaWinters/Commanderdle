@@ -293,6 +293,25 @@ button.head-help:hover {
   color: var(--flame-1);
 }
 
+/* During a fresh win reveal, don't flame the answer's name until its tile has
+   finished flipping in and ignites - lighting it early spoils the win before
+   the row's glow-up finishes. Backfilled to the neutral colour through the
+   ignite delay (shared via --ignite-delay), then settles on flame. Stored rows
+   (.no-anim) skip this and stay flame immediately. */
+.win-row:not(.no-anim) .name-text.solved {
+  animation: name-text-ignite 0.3s ease-out both;
+  animation-delay: var(--ignite-delay, 0.9s);
+}
+
+@keyframes name-text-ignite {
+  from {
+    color: var(--text);
+  }
+  to {
+    color: var(--flame-1);
+  }
+}
+
 .cell-text {
   font-family: "Cinzel", serif;
   font-weight: 700;

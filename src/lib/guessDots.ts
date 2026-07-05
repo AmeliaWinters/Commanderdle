@@ -13,9 +13,13 @@ export function buildDots(
   skips: number,
   maxGuesses: number,
 ): GuessDot[] {
+  const won = guesses.some((g) => g.name === answer.name)
+  // Guesses and skips both spend a turn; the winning guess is always the last
+  // turn taken, so a skip earlier in the game pushes the green pip further right.
+  const used = guesses.length + skips
   return Array.from({ length: maxGuesses }, (_, i) => {
-    const g = guesses[i]
-    if (g) return g.name === answer.name ? 'correct' : 'wrong'
-    return i < guesses.length + skips ? 'wrong' : 'empty'
+    if (i >= used) return 'empty'
+    if (won && i === used - 1) return 'correct'
+    return 'wrong'
   })
 }

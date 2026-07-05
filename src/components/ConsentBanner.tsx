@@ -25,9 +25,8 @@ export default function ConsentBanner() {
   return (
     <div
       className="consent-banner"
-      role="dialog"
+      role="region"
       aria-label="Cookie consent"
-      aria-live="polite"
     >
       <div className="consent-inner">
         <p className="consent-text">

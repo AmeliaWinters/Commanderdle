@@ -13,6 +13,12 @@
   padding: 18px;
   align-items: center;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
+  /* Keep the card (and its share dropdown, which overflows downward) stacked
+     above the synergy cards below it - the cast animation's transform makes the
+     card its own stacking context, so the dropdown's z-index can't otherwise
+     escape past the positioned synergy tiles. */
+  position: relative;
+  z-index: 2;
 }
 
 .result-banner.won .result-card {
@@ -195,6 +201,8 @@
   margin-top: 20px;
   padding-top: 18px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  z-index: 1;
 }
 
 .result-synergy-label {

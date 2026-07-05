@@ -52,6 +52,7 @@ export default function ResultBanner({
     status,
     answer,
     guesses,
+    skips,
     mode,
     isDaily,
     score,

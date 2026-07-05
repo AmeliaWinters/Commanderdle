@@ -17,6 +17,7 @@ interface Args {
   status: "won" | "lost";
   answer: Commander;
   guesses: Commander[];
+  skips: number;
   mode: Mode;
   isDaily: boolean;
   score: string;
@@ -32,6 +33,7 @@ export function useShareOptions({
   status,
   answer,
   guesses,
+  skips,
   mode,
   isDaily,
   score,
@@ -55,7 +57,7 @@ export function useShareOptions({
         shareOrigin(),
         mode,
         puzzleNumber(),
-        encodeGrid(buildGridCodes(mode, guesses, answer)),
+        encodeGrid(buildGridCodes(mode, guesses, answer, skips)),
       )
     : null;
 
@@ -67,7 +69,8 @@ export function useShareOptions({
       modeLabel: MODE_LABEL[mode],
       puzzle: isDaily ? puzzleNumber() : null,
       score,
-      grid: buildGridCodes(mode, guesses, answer),
+      grid: buildGridCodes(mode, guesses, answer, skips),
+      round: mode !== "classic",
       site: shareOrigin().replace(/^https?:\/\//, ""),
     }).then(
       (blob) => {
@@ -79,7 +82,7 @@ export function useShareOptions({
       alive = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mode, guesses.length, status]);
+  }, [mode, guesses.length, skips, status]);
 
   const heading = isDaily
     ? `Commandle ${MODE_LABEL[mode]} #${puzzleNumber()} ${score}`
@@ -101,7 +104,7 @@ export function useShareOptions({
   };
 
   const share = () => {
-    const grid = buildGrid(mode, guesses, answer, status);
+    const grid = buildGrid(mode, guesses, answer, skips);
     // Daily results nudge a return visit with the countdown + a playable link.
     const footer = resultUrl ? `\n${resultUrl}` : "";
     const text = `${heading}\n${grid}${footer}`;

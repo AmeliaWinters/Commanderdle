@@ -84,7 +84,7 @@ export default function ZoomMode({
 
       {!solved && wrongGuesses >= maxGuesses - 1 && (
         <p className="hint-line letter-hint">
-          Last guess! The name starts with "{answer.name[0].toUpperCase()}..."
+          Last guess! The name starts with "{answer.name[0].toUpperCase()} ..."
         </p>
       )}
     </div>

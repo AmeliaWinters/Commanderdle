@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import type { Commander } from '../types/commander'
 import { useExitAnimation } from '../lib/useExitAnimation'
+import { useModalFocus } from '../lib/useModalFocus'
 
 interface Props {
   pool: Commander[]
@@ -20,13 +21,11 @@ const persisted = { query: '', scrollTop: 0 }
 export default function PoolModal({ pool, onClose, blurQuote, heading }: Props) {
   const [query, setQuery] = useState(persisted.query)
   const gridRef = useRef<HTMLUListElement>(null)
+  const dialogRef = useRef<HTMLDivElement>(null)
   const { closing, beginClose } = useExitAnimation(onClose)
 
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && beginClose()
-    document.addEventListener('keydown', onKey)
-    return () => document.removeEventListener('keydown', onKey)
-  }, [beginClose])
+  // Move focus into the dialog, trap Tab, close on Escape, restore focus on close.
+  useModalFocus(dialogRef, beginClose)
 
   // Restore the saved scroll offset once the list is rendered.
   useLayoutEffect(() => {
@@ -50,6 +49,7 @@ export default function PoolModal({ pool, onClose, blurQuote, heading }: Props) 
       onMouseDown={beginClose}
     >
       <div
+        ref={dialogRef}
         className={`modal pool-modal${closing ? ' is-closing' : ''}`}
         role="dialog"
         aria-modal="true"

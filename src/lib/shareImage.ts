@@ -15,6 +15,9 @@ export interface ShareCardOpts {
   /** e.g. "4/6" or "X/6" */
   score: string;
   grid: CellCode[][];
+  /** Draw the cells as circles (visual modes' single pip row) rather than
+   * rounded squares (classic's comparison grid). */
+  round?: boolean;
   /** Hostname printed at the bottom, e.g. "commandle.com". */
   site: string;
 }
@@ -204,7 +207,12 @@ export async function renderShareCard(opts: ShareCardOpts): Promise<Blob> {
       const x = x0 + c * (cell + gap);
       const y = panelY + pad + r * (cell + gap);
       ctx.fillStyle = CELL_FILL[code];
-      roundRect(ctx, x, y, cell, cell, Math.round(cell * 0.18));
+      if (opts.round) {
+        ctx.beginPath();
+        ctx.arc(x + cell / 2, y + cell / 2, cell / 2, 0, Math.PI * 2);
+      } else {
+        roundRect(ctx, x, y, cell, cell, Math.round(cell * 0.18));
+      }
       ctx.fill();
       ctx.strokeStyle = LINE;
       ctx.lineWidth = 2;

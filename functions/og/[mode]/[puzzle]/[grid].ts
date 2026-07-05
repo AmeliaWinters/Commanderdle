@@ -53,13 +53,15 @@ function loadCinzel(): Promise<ArrayBuffer | null> {
   return cinzelPromise
 }
 
-function gridMarkup(rows: CellCode[][]): string {
+function gridMarkup(rows: CellCode[][], round: boolean): string {
   const size = rows.length > 4 || (rows[0]?.length ?? 0) > 3 ? 46 : 62
+  // Visual modes are a single pip row - draw circles; classic keeps rounded squares.
+  const radius = round ? size / 2 : 10
   const cells = (row: CellCode[]) =>
     row
       .map(
         (c) =>
-          `<div style="display:flex;width:${size}px;height:${size}px;border-radius:10px;background:${CELL_COLOR[c]};"></div>`,
+          `<div style="display:flex;width:${size}px;height:${size}px;border-radius:${radius}px;background:${CELL_COLOR[c]};"></div>`,
       )
       .join('')
   return rows.map((row) => `<div style="display:flex;gap:8px;">${cells(row)}</div>`).join('')
@@ -89,7 +91,7 @@ export const onRequest = async (context: { params: Params }): Promise<Response> 
           <div style="display:flex;align-items:center;justify-content:center;width:186px;height:186px;border-radius:26px;background:${accent};color:#0b0b0d;font-size:${score.length > 3 ? 60 : 74}px;font-weight:900;">${score}</div>
         </div>
         <div style="display:flex;flex:1;align-items:center;justify-content:center;">
-          <div style="display:flex;flex-direction:column;gap:8px;">${gridMarkup(rows)}</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">${gridMarkup(rows, mode !== 'classic')}</div>
         </div>
         <div style="display:flex;justify-content:center;font-size:30px;color:#9b9ba6;">commandle.com</div>
       </div>

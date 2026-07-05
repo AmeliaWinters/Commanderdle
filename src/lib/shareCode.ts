@@ -68,10 +68,19 @@ export interface ShareResult {
 /** Derive the human-readable result from a mode + encoded grid. */
 export function deriveResult(mode: ShareMode, code: string): ShareResult {
   const rows = decodeGrid(code)
-  const guessCount = rows.length
-  const last = rows[rows.length - 1] ?? []
-  const won = last.length > 0 && last.every((c) => c === 2)
   const maxGuesses = MAX_GUESSES[mode]
+  if (mode === 'classic') {
+    // One row per guess; a win is a final row of all-green.
+    const guessCount = rows.length
+    const last = rows[rows.length - 1] ?? []
+    const won = last.length > 0 && last.every((c) => c === 2)
+    return { won, guessCount, maxGuesses, score: won ? `${guessCount}/${maxGuesses}` : `X/${maxGuesses}` }
+  }
+  // Visual modes: a single row of per-turn pips (green win, red miss/skip, grey unspent).
+  // Turns used = non-empty cells; the win lands on the last spent turn.
+  const cells = rows[0] ?? []
+  const guessCount = cells.filter((c) => c !== 0).length
+  const won = cells.includes(2)
   return { won, guessCount, maxGuesses, score: won ? `${guessCount}/${maxGuesses}` : `X/${maxGuesses}` }
 }
 
