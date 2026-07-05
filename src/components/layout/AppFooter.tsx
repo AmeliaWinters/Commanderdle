@@ -79,15 +79,6 @@ export default function AppFooter({ isArchive, archiveDate }: Props) {
           <a href="/privacy" onClick={navTo("/privacy")}>
             Privacy Policy
           </a>
-          <a
-            href="#cookie-settings"
-            onClick={(e) => {
-              e.preventDefault();
-              reopenConsent();
-            }}
-          >
-            Cookie Settings
-          </a>
         </nav>
       </footer>
     </div>
