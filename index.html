@@ -9,11 +9,11 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
-    <script
-      async
-      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8490154467445019"
-      crossorigin="anonymous"
-    ></script>
+    <!-- AdSense is NOT loaded here. The loader is injected at runtime by AdBanner.tsx,
+         and only after (a) VITE_ADSENSE_PUB_ID / VITE_ADSENSE_SLOT_ID are configured and
+         (b) the visitor has granted consent via the cookie banner. Hardcoding the tag here
+         would load it for everyone before consent — a GDPR problem and dead weight when ads
+         aren't configured. -->
     <meta name="theme-color" content="#0b0b0d" />
     <!-- Paint the app's dark background from the very first frame so there's no white
          flash before the stylesheet/JS load. Must be set on BODY, not HTML: the animated

@@ -1,6 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './components/App'
+import ConsentBanner from './components/ConsentBanner'
 import './styles/index.css'
 import { loadCommanders } from './lib/commanders'
 
@@ -15,6 +16,9 @@ loadCommanders()
     createRoot(document.getElementById('root')!).render(
       <StrictMode>
         <App />
+        {/* Sibling of App so the cookie banner shows on every route, including the
+            standalone pages that App returns early for. */}
+        <ConsentBanner />
       </StrictMode>,
     )
   })

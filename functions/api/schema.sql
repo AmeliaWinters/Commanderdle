@@ -20,3 +20,14 @@ CREATE TABLE IF NOT EXISTS results (
 
 -- Aggregate reads always scope to a single (mode, puzzle); the primary key already
 -- covers that prefix, so no extra index is needed.
+
+-- Fixed-window rate-limit buckets (see functions/api/rateLimit.ts). Keyed by
+-- "<endpoint>:<client-ip>"; each row holds the count in the current window and the unix
+-- second the window resets. Shared by the contact relay and the stats ingest endpoint to
+-- blunt spam / stats-stuffing. Rows are self-expiring (overwritten once reset_at passes), so
+-- no cleanup job is required.
+CREATE TABLE IF NOT EXISTS rate_limits (
+  bucket   TEXT    PRIMARY KEY,
+  count    INTEGER NOT NULL,
+  reset_at INTEGER NOT NULL                 -- unix seconds; window resets when now > reset_at
+) WITHOUT ROWID;

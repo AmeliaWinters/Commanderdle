@@ -1,6 +1,7 @@
 import { puzzleNumber } from "../../lib/dailyAnswer";
 import { navigateToPath, ARCHIVE_PATH } from "../../lib/router";
 import { useCountdown } from "../../lib/useCountdown";
+import { reopenConsent } from "../../lib/consent";
 import AdBanner from "../AdBanner";
 
 interface Props {
@@ -77,6 +78,15 @@ export default function AppFooter({ isArchive, archiveDate }: Props) {
           </a>
           <a href="/privacy" onClick={navTo("/privacy")}>
             Privacy Policy
+          </a>
+          <a
+            href="#cookie-settings"
+            onClick={(e) => {
+              e.preventDefault();
+              reopenConsent();
+            }}
+          >
+            Cookie Settings
           </a>
         </nav>
       </footer>

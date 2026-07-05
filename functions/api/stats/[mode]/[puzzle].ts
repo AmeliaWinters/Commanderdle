@@ -13,6 +13,13 @@
  */
 import { isShareMode, type ShareMode } from '../../../../src/lib/shareCode'
 import { validateSubmission, type GlobalStats } from '../../../../src/lib/globalStats'
+import { rateLimitOk, clientIp } from '../../rateLimit'
+
+// Per-IP ingest cap. Dedupe already collapses repeat submissions of the same daily by
+// client id, but a script can mint fresh client ids to stuff the distribution — so also
+// bound how many results one IP can post per hour across all puzzles.
+const POST_LIMIT = 40
+const POST_WINDOW_SEC = 60 * 60
 
 interface Env {
   STATS_DB?: D1Database
@@ -91,6 +98,15 @@ async function postResult(
 
   const valid = validateSubmission(mode, puzzle, Boolean(body.won), Number(body.guesses))
   if (!valid) return json({ error: 'invalid result' }, 400)
+
+  // Cap how fast one IP can inject results, so fresh-client-id churn can't stuff the stats.
+  const allowed = await rateLimitOk(
+    db,
+    `stats:${clientIp(ctx.request)}`,
+    POST_LIMIT,
+    POST_WINDOW_SEC,
+  )
+  if (!allowed) return json({ error: 'rate limited' }, 429)
 
   // Dedupe by (mode, puzzle, client): a resubmit of the same daily is a silent no-op,
   // so aggregates count distinct players rather than requests.

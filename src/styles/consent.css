@@ -1,0 +1,74 @@
+/* Cookie-consent banner (see ConsentBanner.tsx). Fixed to the bottom of the viewport,
+   above everything, until the visitor makes a choice. */
+.consent-banner {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  background: var(--panel, #161619);
+  border-top: 1px solid var(--line, #2c2c34);
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.45);
+  padding: 14px 16px calc(14px + env(safe-area-inset-bottom, 0px));
+}
+
+.consent-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.consent-text {
+  flex: 1 1 320px;
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--text-dim, #9b9ba6);
+}
+
+.consent-text a {
+  color: var(--flame-1, #f6a01a);
+}
+
+.consent-actions {
+  display: flex;
+  gap: 10px;
+  flex: 0 0 auto;
+}
+
+.consent-btn {
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 9px 18px;
+  border-radius: 10px;
+  border: 1px solid var(--line, #2c2c34);
+  cursor: pointer;
+}
+
+.consent-reject {
+  background: var(--panel-2, #1f1f25);
+  color: var(--text, #f4f4f6);
+}
+
+.consent-accept {
+  background: var(--flame, linear-gradient(135deg, #f6a01a, #c01f1f));
+  color: #fff;
+  border-color: transparent;
+}
+
+.consent-btn:hover {
+  filter: brightness(1.08);
+}
+
+@media (max-width: 560px) {
+  .consent-actions {
+    width: 100%;
+  }
+  .consent-btn {
+    flex: 1 1 0;
+  }
+}

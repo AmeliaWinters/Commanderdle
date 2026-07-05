@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { hasAdConsent, onConsentChange } from '../lib/consent'
 
 const PUB_ID = import.meta.env.VITE_ADSENSE_PUB_ID ?? ''
 const SLOT_ID = import.meta.env.VITE_ADSENSE_SLOT_ID ?? ''
@@ -54,6 +55,10 @@ export default function AdBanner() {
   const containerRef = useRef<HTMLDivElement>(null)
   const [testMode, setTestMode] = useState(isAdTestMode)
   const [refreshKey, setRefreshKey] = useState(0)
+  const [consented, setConsented] = useState(hasAdConsent)
+
+  // Ads may only load once the visitor has granted cookie consent.
+  const adsActive = ADS_CONFIGURED && consented
 
   // Track toggle events from the footer button.
   useEffect(() => {
@@ -61,6 +66,9 @@ export default function AdBanner() {
     window.addEventListener(TOGGLE_EVENT, onToggle)
     return () => window.removeEventListener(TOGGLE_EVENT, onToggle)
   }, [])
+
+  // React to consent grant/withdraw so ads appear (or stay off) without a reload.
+  useEffect(() => onConsentChange((c) => setConsented(c === 'granted')), [])
 
   // Bump refreshKey on pageview so the placeholder re-labels itself.
   useEffect(() => {
@@ -71,7 +79,7 @@ export default function AdBanner() {
 
   // Real AdSense slot mount + refresh on pageview.
   useEffect(() => {
-    if (testMode || !ADS_CONFIGURED) return
+    if (testMode || !adsActive) return
 
     ensureAdSenseScript()
 
@@ -104,11 +112,13 @@ export default function AdBanner() {
       window.removeEventListener('commandle:pageview', onPageview)
       if (containerRef.current) containerRef.current.innerHTML = ''
     }
-  }, [testMode])
+  }, [testMode, adsActive])
 
-  // Test mode, or no real ad config yet: show a labelled placeholder instead of an empty gap.
-  if (testMode || !ADS_CONFIGURED) {
-    const label = ADS_CONFIGURED
+  // Test mode, or no real ad config / no consent yet: show a labelled placeholder instead of
+  // an empty gap. The detailed debug label (slot id, refresh count) is test-mode only, so it
+  // never leaks to real visitors who've simply declined ad cookies.
+  if (testMode || !adsActive) {
+    const label = testMode
       ? `Ad slot · refresh #${refreshKey} · slot ${SLOT_ID}`
       : 'Ad slot'
     return (
