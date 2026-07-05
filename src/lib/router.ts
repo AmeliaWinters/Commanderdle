@@ -88,6 +88,33 @@ export function isPrivacyPath(pathname: string): boolean {
   return normalize(pathname) === '/privacy'
 }
 
+/** Static content pages (SEO landing pages, outside the mode system). */
+export const ABOUT_PATH = '/about'
+export const HOW_TO_PLAY_PATH = '/how-to-play'
+export const FAQ_PATH = '/faq'
+export const TERMS_PATH = '/terms'
+export const CONTACT_PATH = '/contact'
+
+export function isAboutPath(pathname: string): boolean {
+  return normalize(pathname) === ABOUT_PATH
+}
+
+export function isHowToPlayPath(pathname: string): boolean {
+  return normalize(pathname) === HOW_TO_PLAY_PATH
+}
+
+export function isFaqPath(pathname: string): boolean {
+  return normalize(pathname) === FAQ_PATH
+}
+
+export function isTermsPath(pathname: string): boolean {
+  return normalize(pathname) === TERMS_PATH
+}
+
+export function isContactPath(pathname: string): boolean {
+  return normalize(pathname) === CONTACT_PATH
+}
+
 /** Bonus "Higher / Lower" game — its own page, deliberately outside the mode tabs. */
 export const HIGHER_LOWER_PATH = '/higher-lower'
 
@@ -149,6 +176,11 @@ function trackPageview(mode: Mode) {
 function isStandalonePath(path: string): boolean {
   return (
     isPrivacyPath(path) ||
+    isAboutPath(path) ||
+    isHowToPlayPath(path) ||
+    isFaqPath(path) ||
+    isTermsPath(path) ||
+    isContactPath(path) ||
     isHigherLowerPath(path) ||
     isArchiveBrowsePath(path) ||
     parseArchivePlay(path) !== null

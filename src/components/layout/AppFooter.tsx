@@ -12,9 +12,11 @@ interface Props {
 export default function AppFooter({ isArchive, archiveDate }: Props) {
   const countdown = useCountdown();
 
-  function navPrivacy(e: React.MouseEvent) {
-    e.preventDefault();
-    navigateToPath("/privacy");
+  function navTo(path: string) {
+    return (e: React.MouseEvent) => {
+      e.preventDefault();
+      navigateToPath(path);
+    };
   }
 
   return (
@@ -56,10 +58,27 @@ export default function AppFooter({ isArchive, archiveDate }: Props) {
         <a href="https://scryfall.com" target="_blank" rel="noreferrer">
           Scryfall
         </a>
-        . Card images © Wizards of the Coast. Unofficial fan project. ·{" "}
-        <a href="/privacy" onClick={navPrivacy}>
-          Privacy Policy
-        </a>
+        . Card images © Wizards of the Coast. Unofficial fan project.
+        <nav className="footer-links" aria-label="Site pages">
+          <a href="/how-to-play" onClick={navTo("/how-to-play")}>
+            How to Play
+          </a>
+          <a href="/faq" onClick={navTo("/faq")}>
+            FAQ
+          </a>
+          <a href="/about" onClick={navTo("/about")}>
+            About
+          </a>
+          <a href="/contact" onClick={navTo("/contact")}>
+            Contact
+          </a>
+          <a href="/terms" onClick={navTo("/terms")}>
+            Terms
+          </a>
+          <a href="/privacy" onClick={navTo("/privacy")}>
+            Privacy Policy
+          </a>
+        </nav>
       </footer>
     </div>
   );

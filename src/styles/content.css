@@ -1,0 +1,102 @@
+/* Static content / SEO landing pages: About, How to Play, FAQ, Privacy.
+   All share the ContentPage shell (src/components/pages/ContentPage.tsx). */
+
+.content-page,
+.privacy-policy {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: var(--s4) var(--s3) var(--s5);
+  padding-left: max(var(--s3), env(safe-area-inset-left));
+  padding-right: max(var(--s3), env(safe-area-inset-right));
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-page .app-header h1 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.content-body {
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 1.05rem;
+}
+
+.content-body h2 {
+  font-family: "Cinzel", serif;
+  color: var(--flame-1);
+  margin: 0 0 var(--s3);
+  font-size: 1.7rem;
+}
+
+.content-body h3 {
+  color: var(--text);
+  margin: var(--s4) 0 var(--s2);
+  font-size: 1.2rem;
+}
+
+.content-body section {
+  margin-bottom: var(--s3);
+}
+
+.content-body p {
+  margin: 0 0 var(--s2);
+}
+
+.content-body ul {
+  margin: 0 0 var(--s2);
+  padding-left: 1.4rem;
+}
+
+.content-body li {
+  margin-bottom: 0.4rem;
+}
+
+.content-body a {
+  color: var(--flame-1);
+}
+
+.content-body code {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0.05em 0.35em;
+  font-size: 0.9em;
+}
+
+.privacy-date {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  margin-top: -0.25rem;
+}
+
+/* Inline page nav shown on content pages and in the game footer. */
+.content-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s3);
+  justify-content: center;
+  margin: var(--s4) 0 var(--s3);
+  padding-top: var(--s3);
+  border-top: 1px solid var(--line);
+}
+
+.content-nav a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.content-nav a:hover {
+  color: var(--flame-1);
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  justify-content: center;
+  margin-top: 0.6rem;
+}

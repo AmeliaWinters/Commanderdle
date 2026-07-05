@@ -3,6 +3,11 @@ import { useGameState } from "../lib/useGameState";
 import {
   useModeRoute,
   isPrivacyPath,
+  isAboutPath,
+  isHowToPlayPath,
+  isFaqPath,
+  isTermsPath,
+  isContactPath,
   isHigherLowerPath,
   isArchiveBrowsePath,
   archivePlayPath,
@@ -37,6 +42,11 @@ const SynergyMode = lazy(() => import("./SynergyMode"));
 const QuoteMode = lazy(() => import("./QuoteMode"));
 const PoolModal = lazy(() => import("./PoolModal"));
 const PrivacyPolicy = lazy(() => import("./PrivacyPolicy"));
+const AboutPage = lazy(() => import("./pages/AboutPage"));
+const HowToPlayPage = lazy(() => import("./pages/HowToPlayPage"));
+const FaqPage = lazy(() => import("./pages/FaqPage"));
+const TermsPage = lazy(() => import("./pages/TermsPage"));
+const ContactPage = lazy(() => import("./pages/ContactPage"));
 const HigherLowerMode = lazy(() => import("./higher-lower/HigherLowerMode"));
 const Archive = lazy(() => import("./Archive"));
 const HowToPlay = lazy(() => import("./HowToPlay"));
@@ -58,6 +68,11 @@ const MODE_VIEWS = {
 
 export default function App() {
   const isPrivacy = usePathMatch(isPrivacyPath);
+  const isAbout = usePathMatch(isAboutPath);
+  const isHowToPlay = usePathMatch(isHowToPlayPath);
+  const isFaq = usePathMatch(isFaqPath);
+  const isTerms = usePathMatch(isTermsPath);
+  const isContact = usePathMatch(isContactPath);
   const isHigherLower = usePathMatch(isHigherLowerPath);
   const isArchiveBrowse = usePathMatch(isArchiveBrowsePath);
   const archivePlay = useArchivePlay();
@@ -126,6 +141,36 @@ export default function App() {
     return (
       <Suspense fallback={null}>
         <PrivacyPolicy />
+      </Suspense>
+    );
+  if (isAbout)
+    return (
+      <Suspense fallback={null}>
+        <AboutPage />
+      </Suspense>
+    );
+  if (isHowToPlay)
+    return (
+      <Suspense fallback={null}>
+        <HowToPlayPage />
+      </Suspense>
+    );
+  if (isFaq)
+    return (
+      <Suspense fallback={null}>
+        <FaqPage />
+      </Suspense>
+    );
+  if (isTerms)
+    return (
+      <Suspense fallback={null}>
+        <TermsPage />
+      </Suspense>
+    );
+  if (isContact)
+    return (
+      <Suspense fallback={null}>
+        <ContactPage />
       </Suspense>
     );
   if (isHigherLower)
