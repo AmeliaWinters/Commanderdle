@@ -23,8 +23,9 @@ function hints(answer: Commander): { label: string; value: string }[] {
         ? answer.colorIdentity.join("")
         : "Colorless",
     },
-    { label: "Stat Total", value: statDisplay(answer) },
     { label: "Year Released", value: String(answer.year) },
+    { label: "Price", value: String(answer.price) },
+    { label: "Stat Total", value: statDisplay(answer) },
   ];
 }
 

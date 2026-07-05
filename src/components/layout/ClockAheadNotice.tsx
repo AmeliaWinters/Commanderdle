@@ -7,7 +7,7 @@ export default function ClockAheadNotice() {
       <p>
         Your device&rsquo;s date looks set into the future, so today&rsquo;s
         puzzle isn&rsquo;t available yet. Everyone plays the same commander on
-        the same day — set your clock back to the correct date to play.
+        the same day. Set your clock back to the correct date to play.
       </p>
       <p className="clock-notice-sub">
         The Archive is still open if you&rsquo;d like to replay past puzzles.

@@ -1,4 +1,5 @@
-import { useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import type { Commander } from "../../types/commander";
 import GuessRow from "./GuessRow";
 import DeductionRow from "./DeductionRow";
@@ -25,6 +26,35 @@ function PlaceholderRow() {
 export default function ClassicGrid({ guesses, answer, maxGuesses }: Props) {
   const remaining = Math.max(0, maxGuesses - guesses.length);
   const [rankTipOpen, setRankTipOpen] = useState(false);
+  const rankBtnRef = useRef<HTMLButtonElement>(null);
+  const [tipPos, setTipPos] = useState<{ left: number; top: number } | null>(
+    null,
+  );
+
+  // The popover uses position: fixed so it escapes the table's overflow
+  // clipping. Measure the trigger and clamp the box within the viewport so it's
+  // always fully on screen, even when the Rank header sits at the right edge on
+  // a narrow phone.
+  useLayoutEffect(() => {
+    if (!rankTipOpen) return;
+    const measure = () => {
+      const btn = rankBtnRef.current;
+      if (!btn) return;
+      const r = btn.getBoundingClientRect();
+      const margin = 8;
+      const width = Math.min(260, window.innerWidth - margin * 2);
+      let left = r.left + r.width / 2 - width / 2;
+      left = Math.max(margin, Math.min(left, window.innerWidth - width - margin));
+      setTipPos({ left, top: r.bottom + 6 });
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    window.addEventListener("scroll", measure, true);
+    return () => {
+      window.removeEventListener("resize", measure);
+      window.removeEventListener("scroll", measure, true);
+    };
+  }, [rankTipOpen]);
   // Guesses already present when this grid mounted were loaded from storage
   // (e.g. after switching modes and back), not just made — they must not replay
   // the flip-in/reveal animation. Only rows for guesses added while mounted animate.
@@ -50,8 +80,11 @@ export default function ClassicGrid({ guesses, answer, maxGuesses }: Props) {
                 key={h}
                 className="grid-cell head-cell head-help-wrap"
                 role="columnheader"
+                onMouseEnter={() => setRankTipOpen(true)}
+                onMouseLeave={() => setRankTipOpen(false)}
               >
                 <button
+                  ref={rankBtnRef}
                   type="button"
                   className="head-help"
                   aria-expanded={rankTipOpen}
@@ -63,20 +96,27 @@ export default function ClassicGrid({ guesses, answer, maxGuesses }: Props) {
                     ?
                   </span>
                 </button>
-                {rankTipOpen && (
-                  <div className="head-tip" role="note">
-                    Rank is the commander&rsquo;s popularity on EDHREC — #1 is
-                    the most-built commander.
-                    <button
-                      type="button"
-                      className="head-tip-close"
-                      aria-label="Close"
-                      onClick={() => setRankTipOpen(false)}
+                {rankTipOpen &&
+                  tipPos &&
+                  createPortal(
+                    <div
+                      className="head-tip"
+                      role="note"
+                      style={{ left: tipPos.left, top: tipPos.top }}
                     >
-                      ×
-                    </button>
-                  </div>
-                )}
+                      Rank is the commander&rsquo;s popularity on EDHRE. #1 is
+                      the most-built commander.
+                      <button
+                        type="button"
+                        className="head-tip-close"
+                        aria-label="Close"
+                        onClick={() => setRankTipOpen(false)}
+                      >
+                        ×
+                      </button>
+                    </div>,
+                    document.body,
+                  )}
               </div>
             ) : (
               <div key={h} className="grid-cell head-cell" role="columnheader">

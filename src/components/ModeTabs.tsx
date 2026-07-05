@@ -58,7 +58,7 @@ export default function ModeTabs({
             {completed && (
               <span
                 className="mode-complete"
-                title="You completed today’s puzzle"
+                title="You completed today's puzzle"
                 aria-label="Completed today"
               >
                 <FaCheck />

@@ -69,7 +69,7 @@ export default function AdBanner() {
     return () => window.removeEventListener('commanderdle:pageview', onPageview)
   }, [])
 
-  // Real AdSense slot — mount + refresh on pageview.
+  // Real AdSense slot mount + refresh on pageview.
   useEffect(() => {
     if (testMode || !ADS_CONFIGURED) return
 

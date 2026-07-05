@@ -54,7 +54,7 @@ export default function GlobalStats({
         {stats.total === 1 ? "player" : "players"} solved this puzzle
         {highlight !== undefined && s.beatenPct(highlight) !== null && (
           <>
-            {" — you beat "}
+            {" - you beat "}
             <strong>{s.beatenPct(highlight)}%</strong> of them
           </>
         )}

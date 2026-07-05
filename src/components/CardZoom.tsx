@@ -70,7 +70,7 @@ export default function CardZoom({ name, image, children, className }: Props) {
     else placeFrom(e.currentTarget)
   }
 
-  // While the popover is open, the next pointer down anywhere dismisses it — the
+  // While the popover is open, the next pointer down anywhere dismisses it - the
   // anchor's own onClick can't fire for taps landing outside it. Attached after
   // the opening tap has already resolved, so it only catches subsequent touches.
   useEffect(() => {

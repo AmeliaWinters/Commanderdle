@@ -2,8 +2,8 @@ import type { CellCode } from "./shareCode";
 
 /**
  * Client-side renderer for the branded share card: a PNG of the result grid
- * dressed in the site's flame identity (dark panel, ember glows, Cinzel
- * heading), sized for social feeds. Rendered on demand with <canvas> — no
+ * dressed like the og-image (hero card art under a dark scrim, two-tone
+ * Cinzel wordmark, editorial header block), sized for social feeds. Rendered on demand with <canvas> — no
  * server round-trip, works offline, and never spoils the answer.
  */
 
@@ -22,15 +22,19 @@ export interface ShareCardOpts {
 const W = 1080;
 const H = 1080;
 
-// Palette mirrored from index.css custom properties.
-const BG = "#0b0b0d";
-const PANEL = "#161619";
+// Palette mirrored from index.css custom properties + the og-image build.
+const BG = "#08080a";
+const PANEL = "rgba(22, 22, 25, 0.88)";
 const LINE = "#2c2c34";
-const TEXT = "#f4f4f6";
-const DIM = "#9b9ba6";
+const TEXT = "#fafafc";
+const DIM = "#e7e7ee";
 const FLAME_1 = "#f6a01a";
-const FLAME_2 = "#ec5a1c";
+const FLAME_2 = "#ee5f22";
 const FLAME_3 = "#c01f1f";
+const FLAME_SOFT = "#f3894a";
+
+// Same hero art as the static og-image (The Ur-Dragon).
+const HERO_ART = "/cards/art_crop_10d42b35-844f-4a64-9981-c6118d45e826.webp";
 
 const CELL_FILL: Record<CellCode, string> = {
   0: "#26262d", // no match
@@ -72,16 +76,30 @@ function orb(
   ctx.fillRect(x - radius, y - radius, radius * 2, radius * 2);
 }
 
+/** Load the hero art; resolves null if it can't be fetched (offline, etc). */
+function loadHeroArt(): Promise<HTMLImageElement | null> {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => resolve(null);
+    img.src = HERO_ART;
+    // Don't hold the card hostage on a slow asset.
+    setTimeout(() => resolve(null), 3000);
+  });
+}
+
 export async function renderShareCard(opts: ShareCardOpts): Promise<Blob> {
   // Make sure the brand fonts are usable on the canvas before drawing.
-  try {
-    await Promise.all([
-      document.fonts.load('700 80px "Cinzel"'),
-      document.fonts.load('500 40px "EB Garamond"'),
-    ]);
-  } catch {
-    // Fonts unavailable — serif fallbacks below still read fine.
-  }
+  const [art] = await Promise.all([
+    loadHeroArt(),
+    Promise.all([
+      document.fonts.load('900 120px "Cinzel"'),
+      document.fonts.load('700 44px "Cinzel"'),
+      document.fonts.load('600 30px "EB Garamond"'),
+    ]).catch(() => {
+      // Fonts unavailable — serif fallbacks below still read fine.
+    }),
+  ]);
 
   const canvas = document.createElement("canvas");
   canvas.width = W;
@@ -89,51 +107,92 @@ export async function renderShareCard(opts: ShareCardOpts): Promise<Blob> {
   const ctx = canvas.getContext("2d");
   if (!ctx) throw new Error("canvas 2d context unavailable");
 
-  // Background + ember orbs.
   ctx.fillStyle = BG;
   ctx.fillRect(0, 0, W, H);
-  orb(ctx, W * 0.22, H * 0.24, 440, "236, 90, 28", 0.22);
-  orb(ctx, W * 0.82, H * 0.78, 480, "192, 31, 31", 0.2);
-  orb(ctx, W * 0.65, H * 0.12, 380, "246, 160, 26", 0.14);
 
-  // Flame-gradient heading, mirroring the site logo (Comman + dle).
-  const grad = ctx.createLinearGradient(0, 150, W, 260);
-  grad.addColorStop(0, FLAME_1);
-  grad.addColorStop(1, FLAME_3);
-  ctx.textAlign = "center";
+  // Hero art across the top (cover-fit), fading into the dark body — same
+  // composition as the static og-image.
+  if (art) {
+    const bandH = 560;
+    const scale = Math.max(W / art.naturalWidth, bandH / art.naturalHeight);
+    const dw = art.naturalWidth * scale;
+    const dh = art.naturalHeight * scale;
+    ctx.drawImage(art, (W - dw) / 2, 0, dw, dh);
+    const scrim = ctx.createLinearGradient(0, 0, 0, bandH + 60);
+    scrim.addColorStop(0, "rgba(8, 8, 10, 0.30)");
+    scrim.addColorStop(0.45, "rgba(8, 8, 10, 0.66)");
+    scrim.addColorStop(0.8, "rgba(8, 8, 10, 0.94)");
+    scrim.addColorStop(1, BG);
+    ctx.fillStyle = scrim;
+    ctx.fillRect(0, 0, W, Math.max(bandH + 60, dh));
+  } else {
+    // Offline fallback: the site's ember orbs.
+    orb(ctx, W * 0.22, H * 0.24, 440, "236, 90, 28", 0.22);
+    orb(ctx, W * 0.82, H * 0.78, 480, "192, 31, 31", 0.2);
+    orb(ctx, W * 0.65, H * 0.12, 380, "246, 160, 26", 0.14);
+  }
+
+  // Editorial header block, left-aligned like the og-image: accent bar,
+  // small-caps tagline, two-tone wordmark, then the result line.
+  const left = 84;
+  ctx.textAlign = "left";
   ctx.textBaseline = "alphabetic";
-  ctx.fillStyle = grad;
-  ctx.font = '700 96px "Cinzel", Georgia, serif';
-  ctx.fillText("COMMANDLE", W / 2, 190);
 
-  // Mode + puzzle number + score.
+  const bar = ctx.createLinearGradient(left, 0, left + 56, 0);
+  bar.addColorStop(0, FLAME_1);
+  bar.addColorStop(1, FLAME_3);
+  ctx.fillStyle = bar;
+  roundRect(ctx, left, 84, 56, 5, 3);
+  ctx.fill();
+
+  ctx.fillStyle = DIM;
+  ctx.font = '600 27px "EB Garamond", Georgia, serif';
+  ctx.fillText("THE DAILY MTG COMMANDER GUESSING GAME", left, 136);
+
+  ctx.font = '900 118px "Cinzel", Georgia, serif';
   ctx.fillStyle = TEXT;
-  ctx.font = '700 52px "Cinzel", Georgia, serif';
-  const puzzleBit = opts.puzzle != null ? ` #${opts.puzzle}` : " (practice)";
-  ctx.fillText(`${opts.modeLabel}${puzzleBit}  —  ${opts.score}`, W / 2, 286);
+  ctx.fillText("Comman", left, 250);
+  ctx.fillStyle = FLAME_2;
+  ctx.fillText("dle", left + ctx.measureText("Comman").width, 250);
 
-  // Result grid, centered in a rounded panel.
+  const puzzleBit = opts.puzzle != null ? ` #${opts.puzzle}` : " (practice)";
+  ctx.font = '700 44px "Cinzel", Georgia, serif';
+  ctx.fillStyle = FLAME_SOFT;
+  const modeText = `${opts.modeLabel}${puzzleBit}`;
+  ctx.fillText(modeText, left, 322);
+  ctx.fillStyle = TEXT;
+  ctx.fillText(`  —  ${opts.score}`, left + ctx.measureText(modeText).width, 322);
+
+  // Result grid in a rounded panel, sized to fit between header and footer.
+  const headerBottom = 356;
+  const footerTop = H - 108;
   const rows = opts.grid.length;
   const cols = Math.max(1, ...opts.grid.map((r) => r.length));
-  const cell = Math.min(96, 620 / cols, 560 / Math.max(rows, 1));
+  const pad = 40;
+  const maxPanelH = footerTop - headerBottom - 32;
+  // cell + gap where gap = 0.14 * cell → solve against both axes.
+  const cell = Math.min(
+    92,
+    (W - 240 - pad * 2) / (cols + (cols - 1) * 0.14),
+    (maxPanelH - pad * 2) / (rows + (rows - 1) * 0.14),
+  );
   const gap = Math.round(cell * 0.14);
   const gridW = cols * cell + (cols - 1) * gap;
   const gridH = rows * cell + (rows - 1) * gap;
-  const pad = 44;
   const panelW = gridW + pad * 2;
   const panelH = gridH + pad * 2;
   const panelX = (W - panelW) / 2;
-  const panelY = 340 + (560 - panelH) / 2;
+  const panelY = headerBottom + (footerTop - headerBottom - panelH) / 2;
 
   ctx.save();
-  ctx.shadowColor = "rgba(236, 90, 28, 0.35)";
-  ctx.shadowBlur = 60;
+  ctx.shadowColor = "rgba(236, 90, 28, 0.30)";
+  ctx.shadowBlur = 70;
   ctx.fillStyle = PANEL;
   roundRect(ctx, panelX, panelY, panelW, panelH, 28);
   ctx.fill();
   ctx.restore();
-  ctx.strokeStyle = FLAME_2;
-  ctx.lineWidth = 3;
+  ctx.strokeStyle = "rgba(238, 95, 34, 0.75)";
+  ctx.lineWidth = 2.5;
   roundRect(ctx, panelX, panelY, panelW, panelH, 28);
   ctx.stroke();
 
@@ -153,13 +212,11 @@ export async function renderShareCard(opts: ShareCardOpts): Promise<Blob> {
     });
   });
 
-  // Footer.
-  ctx.fillStyle = DIM;
-  ctx.font = 'italic 500 40px "EB Garamond", Georgia, serif';
-  ctx.fillText("Guess the daily MTG commander", W / 2, H - 116);
+  // Footer: accent rule + site, centered.
+  ctx.textAlign = "center";
   ctx.fillStyle = FLAME_1;
-  ctx.font = '700 44px "Cinzel", Georgia, serif';
-  ctx.fillText(opts.site, W / 2, H - 56);
+  ctx.font = '700 40px "Cinzel", Georgia, serif';
+  ctx.fillText(opts.site, W / 2, H - 52);
 
   return new Promise<Blob>((resolve, reject) =>
     canvas.toBlob(

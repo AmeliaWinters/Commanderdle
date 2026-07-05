@@ -94,15 +94,13 @@ button.head-help:hover {
   flex-shrink: 0;
 }
 
-/* Popover: overlays the board instead of shifting rows. */
+/* Popover: fixed positioning (coordinates set inline via JS) so it escapes the
+   table/scroll-wrap overflow clipping and stays fully on screen. */
 .head-tip {
-  position: absolute;
-  top: calc(100% + 6px);
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 20;
+  position: fixed;
+  z-index: 100;
   width: max-content;
-  max-width: min(260px, 70vw);
+  max-width: min(260px, calc(100vw - 16px));
   padding: 10px 28px 10px 12px;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -115,17 +113,6 @@ button.head-help:hover {
   text-transform: none;
   text-align: left;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-}
-
-/* Little arrow pointing up at the header. */
-.head-tip::before {
-  content: "";
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 6px solid transparent;
-  border-bottom-color: var(--panel-2);
 }
 
 .head-tip-close {
@@ -297,7 +284,7 @@ button.head-help:hover {
 .name-text {
   font-family: "Cinzel", serif;
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 0.95rem;
   text-align: left;
   line-height: 1.15;
 }
@@ -309,7 +296,7 @@ button.head-help:hover {
 .cell-text {
   font-family: "Cinzel", serif;
   font-weight: 700;
-  font-size: clamp(0.2rem, 100cqw, 1rem);
+  font-size: clamp(0.2rem, 100cqw, 0.95rem);
   white-space: normal;
   /* Break at natural hyphenation points (e.g. "Shape-shifter") rather than
      at arbitrary character positions. Requires lang="en" on <html>, which is set. */

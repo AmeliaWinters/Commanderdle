@@ -222,7 +222,7 @@ export default function App() {
 
       {fromShare && !isArchive && (
         <div className="challenge-banner">
-          <span>You’ve been challenged — solve today’s puzzle!</span>
+          <span>You've been challenged! Solve today's puzzle!</span>
           <button
             className="challenge-dismiss"
             aria-label="Dismiss"

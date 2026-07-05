@@ -31,7 +31,7 @@ export const onRequest = (context: { params: Params; request: Request }): Respon
   const playPath = MODE_PATH[mode]
   const playUrl = `${origin}${playPath}?from=share`
 
-  const title = `Commandle ${label} #${puzzle} — ${won ? `solved in ${score}` : 'missed it'}`
+  const title = `Commandle ${label} #${puzzle} - ${won ? `solved in ${score}` : 'missed it'}`
   const description = won
     ? `I solved today's Commandle ${label} in ${score}. Think you can beat me?`
     : `Today's Commandle ${label} got me. Can you solve it?`

@@ -43,7 +43,7 @@ export default function StatsPanel({ mode, maxGuesses, highlight }: Props) {
       <div className="stats-dist">
         <h3>Guess distribution</h3>
         {stats.wins === 0 ? (
-          <p className="stats-empty">No daily wins yet — solve one to start!</p>
+          <p className="stats-empty">No daily wins yet. Solve one to start!</p>
         ) : (
           rows.map((n) => {
             const count = stats.distribution[n] ?? 0;

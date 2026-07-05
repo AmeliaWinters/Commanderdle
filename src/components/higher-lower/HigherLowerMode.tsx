@@ -36,7 +36,7 @@ const SLIDE_MS = 650;
 
 export default function HigherLowerMode() {
   useEffect(() => {
-    document.title = "Commandle — Higher / Lower";
+    document.title = "Commandle Higher / Lower";
   }, []);
   const [mode, setMode] = useState<Mode>("daily");
   const [chain, setChain] = useState<Commander[]>(dailyChain);
@@ -170,7 +170,7 @@ export default function HigherLowerMode() {
   const flavour =
     lastGuess && phase !== "idle" && lastGuess.close
       ? lastGuess.correct
-        ? "Phew — that was close!"
+        ? "Phew! That was close!"
         : "So close!"
       : null;
 

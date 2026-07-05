@@ -25,7 +25,7 @@ export default function GuessDots({ dots, onSkip, wrongGuesses, maxGuesses }: Pr
         <button
           className="skip-btn"
           onClick={onSkip}
-          title="Skip — counts as a wrong guess"
+          title="Skip - counts as a wrong guess"
         >
           <span style={{ transform: 'translateY(-2px)' }}>»</span>
         </button>

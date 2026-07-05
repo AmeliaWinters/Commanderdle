@@ -3,7 +3,7 @@ import ContentPage from "./pages/ContentPage";
 export default function PrivacyPolicy() {
   return (
     <ContentPage
-      title="Commandle — Privacy Policy"
+      title="Commandle Privacy Policy"
       description="How Commandle handles data: local browser storage for your puzzle progress, Google AdSense advertising cookies, analytics, and your choices under GDPR and CCPA."
       canonical="https://commandle.com/privacy"
     >

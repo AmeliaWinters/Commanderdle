@@ -18,52 +18,46 @@ interface Guide {
 
 const GUIDES: Record<Mode, Guide> = {
   classic: {
-    title: "How to play — Classic",
+    title: "How to play Classic",
     intro:
-      "Guess the daily commander in 6 tries. Each guess reveals how it compares to the answer across five columns.",
+      "Guess the daily commander in 6 tries. Each guess reveals how it compares to the answer across five columns",
     bullets: [
       "🟩 Green = exact match for that attribute.",
-      "🟨 Amber = partially right (e.g. shares some colors, or the number is close).",
-      "⬛ Grey = no match.",
+      "🟨 Amber = partially right/close (e.g. shares some colors, or the number is close).",
+      "⬛ Grey = no match/far (e.g. no shared colors, or the number is far off).",
       <>
         <MdKeyboardArrowUp className="howto-arrow" /> /{" "}
         <MdKeyboardArrowDown className="howto-arrow" /> arrows on Mana Value,
-        Popularity and Price tell you if the answer is higher or lower.
+        Popularity, and Price tell you if the answer is higher or lower.
       </>,
-      "Popularity is the commander's EDHREC rank — #1 is the most-built commander.",
+      "Rank is the commander's EDHREC rank with #1 is the most built commander.",
     ],
   },
   silhouette: {
-    title: "How to play — Silhouette",
-    intro: "Guess the commander from its blurred card art in 5 tries.",
+    title: "How to play Silhouette",
+    intro: "Guess the commander from its blurred card art in 5 tries",
     bullets: [
-      "The art starts heavily blurred and gets clearer with every wrong guess.",
-      "Skip a guess to reveal more without using up a name.",
+      "The art starts heavily blurred and gets clearer with every wrong guess",
     ],
   },
   zoom: {
-    title: "How to play — Zoom",
-    intro: "Guess the commander from an extreme close-up of its art in 5 tries.",
-    bullets: [
-      "The art zooms out a little with every wrong guess.",
-      "Skip a guess to zoom out without using up a name.",
-    ],
+    title: "How to play Zoom",
+    intro: "Guess the commander from an extreme close-up of its art in 5 tries",
+    bullets: ["The art zooms out a little with every wrong guess"],
   },
   synergy: {
-    title: "How to play — Synergy",
-    intro:
-      "Guess the commander from the cards that pair best with it in 5 tries.",
+    title: "How to play Synergy",
+    intro: "Guess the commander from its most synergistic cards in 5 tries",
     bullets: [
-      "One more high-synergy card is revealed with each wrong guess.",
-      "These are EDHREC's top synergy cards — the deck's signature pieces.",
+      "One more high-synergy card is revealed with each wrong guess",
+      "These are EDHREC's top synergy % cards",
     ],
   },
   quote: {
-    title: "How to play — Quote",
+    title: "How to play Quote",
     intro: "Guess the commander from its card's flavor text in 5 tries.",
     bullets: [
-      "Extra hints (color identity, stat total, year) unlock as you miss.",
-      "Skip a guess to unlock the next hint without using up a name.",
+      "Extra hints (color identity, price, stat total, and year released) unlock as you miss.",
     ],
   },
 };
@@ -96,7 +90,11 @@ export default function HowToPlay({ mode, onClose }: Props) {
       >
         <div className="modal-head">
           <h2>{guide.title}</h2>
-          <button className="modal-close" onClick={beginClose} aria-label="Close">
+          <button
+            className="modal-close"
+            onClick={beginClose}
+            aria-label="Close"
+          >
             ✕
           </button>
         </div>
