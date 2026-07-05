@@ -27,3 +27,12 @@ not_found_handling = "single-page-application"
 binding = "STATS_DB"
 database_name = "commandle-stats"
 database_id = "ac4ef84f-8b4a-40c2-8cc9-e4a2feb2471a"
+
+# Contact-form relay (functions/api/contact.ts → Resend). The owner's inbox is a var, not
+# hardcoded in the client, so the personal address never ships in the bundle. Missing key →
+# /api/contact returns 503 and the form shows "temporarily unavailable".
+#   npx wrangler secret put RESEND_API_KEY     (do NOT put the key in this file)
+# CONTACT_FROM must be a Resend-verified sender on a domain you control.
+[vars]
+CONTACT_TO = "anonylunt@gmail.com"
+CONTACT_FROM = "Commandle <contact@commandle.com>"

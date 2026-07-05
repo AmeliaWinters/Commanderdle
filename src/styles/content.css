@@ -100,3 +100,71 @@
   justify-content: center;
   margin-top: 0.6rem;
 }
+
+/* Contact form (ContactPage). Posts to /api/contact, which relays via email so
+   the owner's address is never shipped to the client. */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+  margin: var(--s2) 0 0;
+}
+
+.contact-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.95rem;
+  color: var(--text-dim);
+}
+
+.contact-form input,
+.contact-form textarea {
+  font: inherit;
+  color: var(--text);
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.55rem 0.7rem;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: none;
+  border-color: var(--flame-1);
+}
+
+.contact-form textarea {
+  resize: vertical;
+  min-height: 8rem;
+}
+
+.contact-form button {
+  align-self: flex-start;
+  font: inherit;
+  font-weight: 600;
+  color: var(--bg, #10100f);
+  background: var(--flame-1);
+  border: none;
+  border-radius: 8px;
+  padding: 0.55rem 1.2rem;
+  cursor: pointer;
+}
+
+.contact-form button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.contact-status {
+  margin: var(--s2) 0 0;
+  font-size: 0.95rem;
+}
+
+.contact-status.ok {
+  color: var(--flame-1);
+}
+
+.contact-status.err {
+  color: #ff8a8a;
+}

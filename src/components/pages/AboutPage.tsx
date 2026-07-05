@@ -87,7 +87,8 @@ export default function AboutPage() {
           is offered under WOTC's Fan Content Policy.
         </p>
         <p>
-          Have feedback, spotted a bug, or want to suggest a feature? Email{" "}
+          Have feedback, spotted a bug, or want to suggest a feature? Head to
+          our <a href="/contact">contact page</a> and send us a message.
         </p>
       </section>
     </ContentPage>

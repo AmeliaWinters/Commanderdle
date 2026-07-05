@@ -109,8 +109,7 @@ export default function TermsPage() {
         <h3>Contact</h3>
         <p>
           Questions about these terms? Get in touch via our{" "}
-          <a href="/contact">contact page</a> or email{" "}
-          <a href="mailto:anonylunt@gmail.com">anonylunt@gmail.com</a>.
+          <a href="/contact">contact page</a>.
         </p>
       </section>
     </ContentPage>

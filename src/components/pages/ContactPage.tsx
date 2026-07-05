@@ -1,4 +1,5 @@
 import ContentPage from "./ContentPage";
+import ContactForm from "./ContactForm";
 
 export default function ContactPage() {
   return (
@@ -17,10 +18,11 @@ export default function ContactPage() {
           we&rsquo;d love to hear from you.
         </p>
         <p>
-          The best way to reach us is by email:{" "}
-          <a href="mailto:anonylunt@gmail.com">anonylunt@gmail.com</a>. We read
-          every message and try to reply as quickly as we can.
+          The best way to reach us is with the form below. It comes straight to
+          our inbox — we read every message and try to reply as quickly as we
+          can. Leave your email if you&rsquo;d like a reply.
         </p>
+        <ContactForm />
       </section>
 
       <section>

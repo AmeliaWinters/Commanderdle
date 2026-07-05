@@ -18,8 +18,8 @@ export default function PrivacyPolicy() {
           <em>Magic: The Gathering</em>. It is not affiliated with or endorsed
           by Wizards of the Coast. This policy explains what data is processed
           when you use the site and the choices you have. If you have any
-          questions, contact us at{" "}
-          <a href="mailto:anonylunt@gmail.com">anonylunt@gmail.com</a>.
+          questions, contact us through our{" "}
+          <a href="/contact">contact page</a>.
         </p>
       </section>
 
@@ -138,8 +138,8 @@ export default function PrivacyPolicy() {
           the &ldquo;sale&rdquo; or &ldquo;sharing&rdquo; of personal
           information for targeted advertising; you can exercise this using the
           advertising opt-out links above. To make a request relating to data we
-          hold, contact us at{" "}
-          <a href="mailto:anonylunt@gmail.com">anonylunt@gmail.com</a>.
+          hold, contact us through our{" "}
+          <a href="/contact">contact page</a>.
         </p>
       </section>
 
@@ -203,8 +203,8 @@ export default function PrivacyPolicy() {
       <section>
         <h3>Contact</h3>
         <p>
-          Questions about this policy or your data? Reach out at{" "}
-          <a href="mailto:anonylunt@gmail.com">anonylunt@gmail.com</a>.
+          Questions about this policy or your data? Reach out through our{" "}
+          <a href="/contact">contact page</a>.
         </p>
       </section>
     </ContentPage>

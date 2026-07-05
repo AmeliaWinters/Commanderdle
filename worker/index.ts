@@ -12,6 +12,7 @@
  *   GET      /share/:mode/:puzzle/:grid      → OG landing page that bounces humans to the game
  */
 import { onRequest as statsHandler } from '../functions/api/stats/[mode]/[puzzle]'
+import { onRequest as contactHandler, type ContactEnv } from '../functions/api/contact'
 import { onRequest as ogHandler } from '../functions/og/[mode]/[puzzle]/[grid]'
 import { onRequest as shareHandler } from '../functions/share/[mode]/[puzzle]/[grid]'
 
@@ -20,8 +21,13 @@ interface Env {
   ASSETS: { fetch: (request: Request) => Promise<Response> }
   // Optional D1 database backing global stats; absent → the stats route returns 503.
   STATS_DB?: unknown
+  // Contact-form relay config (Resend). Absent → /api/contact returns 503.
+  RESEND_API_KEY?: string
+  CONTACT_TO?: string
+  CONTACT_FROM?: string
 }
 
+const CONTACT = /^\/api\/contact\/?$/
 const STATS = /^\/api\/stats\/([^/]+)\/([^/]+)\/?$/
 const OG = /^\/og\/([^/]+)\/([^/]+)\/([^/]+)\/?$/
 const SHARE = /^\/share\/([^/]+)\/([^/]+)\/([^/]+)\/?$/
@@ -33,6 +39,9 @@ export default {
     const { pathname } = new URL(request.url)
 
     let m: RegExpMatchArray | null
+    if (CONTACT.test(pathname)) {
+      return contactHandler({ request, env: env as ContactEnv })
+    }
     if ((m = pathname.match(STATS))) {
       return statsHandler({ request, env, params: { mode: dec(m[1]), puzzle: dec(m[2]) } } as never)
     }
