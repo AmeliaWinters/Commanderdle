@@ -15,21 +15,6 @@
   }
 }
 
-.hl-back {
-  background: none;
-  border: none;
-  color: var(--text-dim);
-  cursor: pointer;
-  font-family: inherit;
-  font-size: 0.95rem;
-  padding: 0;
-  align-self: flex-start;
-  margin-bottom: 8px;
-}
-.hl-back:hover {
-  color: var(--text);
-}
-
 .hl-score {
   color: var(--text-dim);
   margin-bottom: 16px;

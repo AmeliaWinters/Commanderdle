@@ -1,10 +1,11 @@
 import { useEffect } from "react";
-import { FaCheck, FaArrowLeft } from "react-icons/fa6";
+import { FaCheck } from "react-icons/fa6";
 import { todayKey, puzzleNumber } from "../lib/dailyAnswer";
 import { archivePlayPath, navigateToPath } from "../lib/router";
 import { archiveResult } from "../lib/archive";
 import { MODE_LIST } from "./modeList";
 import LogoTitle from "./layout/LogoTitle";
+import BackButton from "./layout/BackButton";
 
 /** Every past puzzle date, most recent first (today is live, so it's excluded). */
 function pastDates(): string[] {
@@ -39,14 +40,7 @@ export default function Archive() {
   return (
     <div className="app archive-page">
       <header className="app-header">
-        <button
-          className="archive-back"
-          onClick={() => navigateToPath("/")}
-          aria-label="Back to today"
-        >
-          <FaArrowLeft />
-          <span>Back to today</span>
-        </button>
+        <BackButton to="/" label="Back to today" />
         <LogoTitle
           to="/"
           ariaLabel="Back to today"

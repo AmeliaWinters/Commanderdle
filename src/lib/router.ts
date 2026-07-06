@@ -94,6 +94,7 @@ export const HOW_TO_PLAY_PATH = '/how-to-play'
 export const FAQ_PATH = '/faq'
 export const TERMS_PATH = '/terms'
 export const CONTACT_PATH = '/contact'
+export const CHANGELOG_PATH = '/changelog'
 
 export function isAboutPath(pathname: string): boolean {
   return normalize(pathname) === ABOUT_PATH
@@ -113,6 +114,10 @@ export function isTermsPath(pathname: string): boolean {
 
 export function isContactPath(pathname: string): boolean {
   return normalize(pathname) === CONTACT_PATH
+}
+
+export function isChangelogPath(pathname: string): boolean {
+  return normalize(pathname) === CHANGELOG_PATH
 }
 
 /** Bonus "Higher / Lower" game - its own page, deliberately outside the mode tabs. */
@@ -211,6 +216,7 @@ function isStandalonePath(path: string): boolean {
     isFaqPath(path) ||
     isTermsPath(path) ||
     isContactPath(path) ||
+    isChangelogPath(path) ||
     isHigherLowerPath(path) ||
     isPriceIsRightPath(path) ||
     isGridPath(path) ||

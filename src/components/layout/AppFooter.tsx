@@ -65,7 +65,7 @@ export default function AppFooter({ isArchive }: Props) {
           <a href="https://scryfall.com" target="_blank" rel="noreferrer">
             Scryfall
           </a>
-          .{refreshed ? ` Refreshed daily. Last updated ${refreshed}.` : ""}
+          .{refreshed ? ` Last updated ${refreshed}` : ""}
         </span>
         <span className="footer-fanpolicy">
           Commandle is unofficial Fan Content permitted under the{" "}

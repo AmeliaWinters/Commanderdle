@@ -8,6 +8,7 @@ import {
   isFaqPath,
   isTermsPath,
   isContactPath,
+  isChangelogPath,
   isHigherLowerPath,
   isPriceIsRightPath,
   isGridPath,
@@ -54,6 +55,7 @@ const HowToPlayPage = lazy(() => import("./pages/HowToPlayPage"));
 const FaqPage = lazy(() => import("./pages/FaqPage"));
 const TermsPage = lazy(() => import("./pages/TermsPage"));
 const ContactPage = lazy(() => import("./pages/ContactPage"));
+const ChangelogPage = lazy(() => import("./pages/ChangelogPage"));
 const HigherLowerMode = lazy(() => import("./higher-lower/HigherLowerMode"));
 const PriceIsRightMode = lazy(() => import("./price-is-right/PriceIsRightMode"));
 const GridMode = lazy(() => import("./grid/GridMode"));
@@ -84,6 +86,7 @@ export default function App() {
   const isFaq = usePathMatch(isFaqPath);
   const isTerms = usePathMatch(isTermsPath);
   const isContact = usePathMatch(isContactPath);
+  const isChangelog = usePathMatch(isChangelogPath);
   const isHigherLower = usePathMatch(isHigherLowerPath);
   const isPriceIsRight = usePathMatch(isPriceIsRightPath);
   const isGrid = usePathMatch(isGridPath);
@@ -206,6 +209,12 @@ export default function App() {
     return (
       <Suspense fallback={null}>
         <ContactPage />
+      </Suspense>
+    );
+  if (isChangelog)
+    return (
+      <Suspense fallback={null}>
+        <ChangelogPage />
       </Suspense>
     );
   if (isHigherLower)

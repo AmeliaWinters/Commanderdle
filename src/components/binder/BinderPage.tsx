@@ -2,10 +2,11 @@ import { useEffect, useMemo, useState } from "react";
 import { COMMANDERS } from "../../lib/commanders";
 import { loadCollection, subscribeCollection } from "../../lib/collection";
 import { colorIdentityName } from "../../lib/colorNames";
-import { navigateToPath, GAMES_PATH } from "../../lib/router";
+import { GAMES_PATH } from "../../lib/router";
 import CardBackdrop from "../CardBackdrop";
 import LogoTitle from "../layout/LogoTitle";
 import GameSettingsMenu from "../layout/GameSettingsMenu";
+import BackButton from "../layout/BackButton";
 import AppFooter from "../layout/AppFooter";
 import BinderCard from "./BinderCard";
 
@@ -82,12 +83,7 @@ export default function BinderPage() {
     <div className="app">
       <CardBackdrop />
       <header className="app-header binder-header">
-        <button
-          className="hl-back"
-          onClick={() => navigateToPath(GAMES_PATH)}
-        >
-          ← All games
-        </button>
+        <BackButton to={GAMES_PATH} label="All games" />
         <GameSettingsMenu />
         <LogoTitle ariaLabel="commandle">
           Comman<span className="accent">dle</span>

@@ -6,6 +6,12 @@ a change that a player could notice.
 
 ## 2026-07-06
 
+- The Changelog and other info pages now have a "Back to today" button, and Higher/Lower,
+  Price Is Right, The Binder and Grid now use the same flame-styled back button as the
+  archive.
+- New page: **Changelog** (`/changelog`) — a friendly, version-by-version history of
+  what's been added to Commandle, with v1.0.0 as today's release. Linked from the games hub
+  under Miscellaneous.
 - In The Binder, found cards now read "Found {date} in {mode}" and no longer show the
   colored mode dots or the corner tick on the art. Undiscovered commanders now show in
   full-opacity grayscale instead of dimmed.

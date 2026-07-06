@@ -1,6 +1,7 @@
 import { useEffect, type ReactNode } from "react";
 import { navigateToPath } from "../../lib/router";
 import AppFooter from "../layout/AppFooter";
+import BackButton from "../layout/BackButton";
 
 interface Props {
   /** Full document + og title, e.g. "Commandle - About". */
@@ -59,6 +60,7 @@ export default function ContentPage({
   return (
     <div className="content-page">
       <header className="app-header">
+        <BackButton to="/" label="Back to today" />
         <h1>
           <a
             href="/"

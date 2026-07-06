@@ -21,10 +21,11 @@ import {
   type GuessTier,
 } from "../../lib/gridRarity";
 import { puzzleNumber } from "../../lib/dailyAnswer";
-import { navigateToPath, GAMES_PATH } from "../../lib/router";
+import { GAMES_PATH } from "../../lib/router";
 import { playSound } from "../../lib/sounds";
 import CardBackdrop from "../CardBackdrop";
 import LogoTitle from "../layout/LogoTitle";
+import BackButton from "../layout/BackButton";
 import GameSettingsMenu from "../layout/GameSettingsMenu";
 import AppFooter from "../layout/AppFooter";
 import GridBoard from "./GridBoard";
@@ -164,9 +165,7 @@ export default function GridMode() {
     <div className="app">
       <CardBackdrop />
       <header className="app-header hl-header">
-        <button className="hl-back" onClick={() => navigateToPath(GAMES_PATH)}>
-          ← All games
-        </button>
+        <BackButton to={GAMES_PATH} label="All games" />
         <GameSettingsMenu />
         <LogoTitle ariaLabel="commandle">
           Comman<span className="accent">dle</span>

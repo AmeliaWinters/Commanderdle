@@ -1,6 +1,7 @@
-import { navigateToPath, GAMES_PATH } from "../../lib/router";
+import { GAMES_PATH } from "../../lib/router";
 import LogoTitle from "../layout/LogoTitle";
 import GameSettingsMenu from "../layout/GameSettingsMenu";
+import BackButton from "../layout/BackButton";
 
 type Mode = "daily" | "endless";
 
@@ -13,12 +14,7 @@ interface Props {
 export default function HlHeader({ mode, onSwitchMode }: Props) {
   return (
     <header className="app-header hl-header">
-      <button
-        className="hl-back"
-        onClick={() => navigateToPath(GAMES_PATH)}
-      >
-        ← All games
-      </button>
+      <BackButton to={GAMES_PATH} label="All games" />
       <GameSettingsMenu />
       <LogoTitle ariaLabel="commandle">
         Comman<span className="accent">dle</span>

@@ -10,7 +10,7 @@
   font-size: 0.85rem;
   color: var(--text-dim);
 }
-.archive-back {
+.back-btn {
   position: absolute;
   left: 0;
   top: 6px;
@@ -29,20 +29,20 @@
   cursor: pointer;
   transition: filter 0.15s ease, transform 0.15s ease;
 }
-.archive-back svg {
+.back-btn svg {
   transition: transform 0.15s ease;
 }
-.archive-back:hover {
+.back-btn:hover {
   filter: drop-shadow(0 0 8px rgba(236, 90, 28, 0.55));
 }
-.archive-back:hover svg {
+.back-btn:hover svg {
   transform: translateX(-3px);
 }
 @media (max-width: 560px) {
-  .archive-back span {
+  .back-btn span {
     display: none;
   }
-  .archive-back svg {
+  .back-btn svg {
     font-size: 1.25rem;
   }
 }

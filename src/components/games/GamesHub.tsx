@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from "react";
 import type { ComponentType, CSSProperties } from "react";
 import { FaCheck } from "react-icons/fa6";
-import { TbArrowsUpDown, TbCoin, TbBook } from "react-icons/tb";
+import { TbArrowsUpDown, TbCoin, TbBook, TbHistory } from "react-icons/tb";
 import { BsGrid3X3 } from "react-icons/bs";
 import { MODE_LIST } from "../modeList";
 import type { Mode } from "../../types/commander";
@@ -11,6 +11,7 @@ import {
   PRICE_IS_RIGHT_PATH,
   GRID_PATH,
   BINDER_PATH,
+  CHANGELOG_PATH,
   navigateToPath,
 } from "../../lib/router";
 import { COMMANDERS } from "../../lib/commanders";
@@ -123,6 +124,21 @@ function BinderSection() {
           </span>
         </span>
       </a>
+
+      <a
+        href={CHANGELOG_PATH}
+        className="hub-tile hub-tile-game"
+        style={{ "--tile-accent": "#8a7fb5" } as CSSProperties}
+        onClick={tileClick(CHANGELOG_PATH)}
+      >
+        <span className="hub-tile-icon" aria-hidden="true">
+          <TbHistory />
+        </span>
+        <span className="hub-tile-text">
+          <span className="hub-tile-label">Changelog</span>
+          <span className="hub-tile-blurb">What's new, version by version</span>
+        </span>
+      </a>
     </section>
   );
 }
@@ -155,7 +171,7 @@ export default function GamesHub() {
       <main className="play-area hub-area">
         <div className="hub-columns">
           <section className="hub-col" aria-labelledby="hub-daily">
-            <h2 id="hub-daily">Daily Modes</h2>
+            <h2 id="hub-daily">Daily Games</h2>
             {MODE_LIST.map((m) => {
               const completed = isModeCompletedToday(m.id, today);
               return (

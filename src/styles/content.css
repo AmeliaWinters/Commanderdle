@@ -101,6 +101,27 @@
   margin-top: 0.6rem;
 }
 
+/* Changelog page (ChangelogPage). */
+.changelog-release h3 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.changelog-version {
+  font-family: "Cinzel", serif;
+  color: var(--flame-1);
+  font-weight: 700;
+}
+
+.changelog-date {
+  margin-left: auto;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  font-weight: 400;
+}
+
 /* Contact form (ContactPage). Posts to /api/contact, which relays via email so
    the owner's address is never shipped to the client. */
 .contact-form {
