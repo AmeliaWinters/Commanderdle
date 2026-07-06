@@ -118,7 +118,7 @@ export default function HigherLowerMode() {
       }
       const newScore = score + 1;
       const willWin = mode === "daily" && newScore >= HL_MAX_SCORE;
-      playSound(willWin ? "win" : "guess");
+      playSound(willWin ? "win" : "correct");
       if (newScore % 5 === 0 && !willWin) {
         setMilestone(newScore);
         track(() => setMilestone(null), 1400);

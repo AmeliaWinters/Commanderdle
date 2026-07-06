@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './components/App'
 import ConsentBanner from './components/ConsentBanner'
+import 'keyrune/css/keyrune.css'
 import './styles/index.css'
 import { loadCommanders } from './lib/commanders'
 

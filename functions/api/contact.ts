@@ -101,7 +101,7 @@ export const onRequest = async (ctx: Ctx): Promise<Response> => {
       to: env.CONTACT_TO,
       // reply_to lets the owner just hit "reply" to answer the visitor.
       ...(email && EMAIL_RE.test(email) ? { reply_to: email } : {}),
-      subject: `Commandle contact — ${from}`,
+      subject: `Commandle contact from ${from}`,
       text,
     }),
   })

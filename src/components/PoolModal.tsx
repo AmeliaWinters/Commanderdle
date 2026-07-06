@@ -44,9 +44,13 @@ export default function PoolModal({ pool, onClose, blurQuote, heading }: Props) 
   }, [pool, query])
 
   return createPortal(
+    // Pointer (not mouse) events: after a tap, mobile browsers replay a synthetic
+    // mousedown at the tap point once the modal has mounted — it hits the backdrop
+    // and instantly closes it ("nothing pops up"). pointerdown fires at touch time,
+    // before the modal exists, so it can't ghost-close.
     <div
       className={`modal-backdrop${closing ? ' is-closing' : ''}`}
-      onMouseDown={beginClose}
+      onPointerDown={beginClose}
     >
       <div
         ref={dialogRef}
@@ -54,7 +58,7 @@ export default function PoolModal({ pool, onClose, blurQuote, heading }: Props) 
         role="dialog"
         aria-modal="true"
         aria-label={heading ?? "Card pool"}
-        onMouseDown={(e) => e.stopPropagation()}
+        onPointerDown={(e) => e.stopPropagation()}
       >
         <div className="modal-head">
           <h2>{heading ?? 'Card pool'} · {pool.length} commanders (Includes partner cards)</h2>

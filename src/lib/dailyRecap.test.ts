@@ -31,7 +31,7 @@ describe('buildDailyRecap', () => {
   it('renders a win line with the attempt count', () => {
     seed('classic', { answerName: 'Atraxa', guessNames: ['Krenko', 'Atraxa'] })
     const recap = buildDailyRecap()!
-    expect(recap).toContain(`Commandle #${puzzleNumber()} — Daily recap`)
+    expect(recap).toContain(`Commandle #${puzzleNumber()} Daily recap`)
     expect(recap).toContain('🟩 Classic 2/6')
   })
 

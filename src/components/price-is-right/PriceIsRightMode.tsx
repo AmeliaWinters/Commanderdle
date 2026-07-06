@@ -11,6 +11,7 @@ import { navigateToPath, GAMES_PATH } from "../../lib/router";
 import { playSound } from "../../lib/sounds";
 import CardBackdrop from "../CardBackdrop";
 import LogoTitle from "../layout/LogoTitle";
+import GameSettingsMenu from "../layout/GameSettingsMenu";
 import CardZoom from "../CardZoom";
 import AppFooter from "../layout/AppFooter";
 import PirGuesses from "./PirGuesses";
@@ -120,9 +121,11 @@ export default function PriceIsRightMode() {
         <button className="hl-back" onClick={() => navigateToPath(GAMES_PATH)}>
           ← All games
         </button>
-        <LogoTitle ariaLabel="Price Is Right">
-          Price <span className="accent">Is</span> Right
+        <GameSettingsMenu />
+        <LogoTitle ariaLabel="commandle">
+          Comman<span className="accent">dle</span>
         </LogoTitle>
+        <p className="mode-subtitle">Price Is Right</p>
         <p className="tagline">
           How much does this commander cost? Guess the market price in{" "}
           {PIR_MAX_GUESSES} tries.

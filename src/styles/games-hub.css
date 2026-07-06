@@ -179,19 +179,19 @@
 
 /* Colour-pie accents per daily mode (official pie hues, darkened for the UI). */
 .hub-tile-w {
-  --tile-accent: #f8f6d8;
+  --tile-accent: var(--mW);
 }
 .hub-tile-u {
-  --tile-accent: #c1d7e9;
+  --tile-accent: var(--mU);
 }
 .hub-tile-b {
-  --tile-accent: #cac5c0;
+  --tile-accent: var(--mB)  ;
 }
 .hub-tile-r {
-  --tile-accent: #e49977;
+  --tile-accent: var(--mR);
 }
 .hub-tile-g {
-  --tile-accent: #a3c095;
+  --tile-accent: var(--mG)  ;
 }
 
 /* The Binder gets its own panel below the two columns, not lumped in with games. */

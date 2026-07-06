@@ -76,7 +76,7 @@ export default function HowToPlay({ mode, onClose }: Props) {
   return createPortal(
     <div
       className={`modal-backdrop${closing ? " is-closing" : ""}`}
-      onMouseDown={beginClose}
+      onPointerDown={beginClose}
     >
       <div
         ref={dialogRef}
@@ -84,7 +84,7 @@ export default function HowToPlay({ mode, onClose }: Props) {
         role="dialog"
         aria-modal="true"
         aria-label={guide.title}
-        onMouseDown={(e) => e.stopPropagation()}
+        onPointerDown={(e) => e.stopPropagation()}
       >
         <div className="modal-head">
           <h2>{guide.title}</h2>

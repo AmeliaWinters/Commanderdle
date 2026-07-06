@@ -104,7 +104,7 @@ function BinderSection() {
   }, []);
   return (
     <section className="hub-col hub-col-binder" aria-labelledby="hub-binder">
-      <h2 id="hub-binder">The Binder</h2>
+      <h2 id="hub-binder">Miscellaneous</h2>
 
       <a
         href={BINDER_PATH}

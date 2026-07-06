@@ -18,6 +18,16 @@
   width: min(100%, 620px);
 }
 
+/* Small phones: the fixed column minimums (64 + 3×84 + gaps ≈ 340px) overflow the
+   padded viewport and cause a horizontal scroll. Let the cells share whatever width
+   is left instead — the aspect-ratio keeps them well-proportioned. */
+@media (max-width: 420px) {
+  .grid-board {
+    grid-template-columns: minmax(56px, 96px) repeat(3, minmax(0, 1fr));
+    gap: 4px;
+  }
+}
+
 /* Scope every board class under .grid-board: the classic deduction table uses the
    same `.grid-row` / `.grid-cell` / `.grid-head` names, and these rules must not leak
    into it (a bare `.grid-row { display: contents }` flattens the classic rows). */
@@ -100,13 +110,51 @@
 
 .grid-board .grid-cell-name {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
   width: 100%;
-  padding: 0.9rem 0.25rem 0.25rem;
-  font-size: clamp(0.6rem, 2.2vw, 0.75rem);
+  padding: 0.9rem 0.5rem 0.25rem;
+  font-size: clamp(0.6rem, 2.2vw, 0.7rem);
   font-weight: 600;
   line-height: 1.15;
   text-align: center;
   background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
+}
+
+/* --- Rarity gem (MTG set-symbol, Keyrune) ------------------------------------------- */
+
+.rarity-gem {
+  flex-shrink: 0;
+  line-height: 1;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.5));
+}
+
+/* --- Rarity treatment on a filled cell ---------------------------------------------- */
+
+/* Coloured frame per rarity — subtle for common, brightest for mythic. */
+.grid-board .grid-cell-common {
+  border-color: rgba(150, 140, 128, 0.5);
+}
+
+.grid-board .grid-cell-uncommon {
+  border-color: #aab4bd;
+}
+
+.grid-board .grid-cell-rare {
+  border-color: #d5a439;
+  box-shadow: 0 0 0 1px rgba(213, 164, 57, 0.4);
+}
+
+.grid-board .grid-cell-mythic {
+  border-color: #e8621f;
+  box-shadow: 0 0 10px rgba(232, 98, 31, 0.45);
+}
+
+/* In a grid cell the gem sits inline just to the left of the commander's name. */
+.grid-board .grid-cell-gem {
+  font-size: 0.85em;
 }
 
 .grid-board .grid-cell-pct {
@@ -129,6 +177,34 @@
   margin: 0.75rem 0 0;
   font-size: 0.9rem;
   color: #e07a6a;
+}
+
+/* Correct-pick feedback, tinted by the MTG rarity the guess earned. */
+.grid-hit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  margin: 0.75rem 0 0;
+  font-size: 0.9rem;
+  color: #9ecf8f;
+}
+
+.grid-hit-common {
+  color: #cfcfcf;
+}
+
+.grid-hit-uncommon {
+  color: #b8c8d0; /* uncommon silver */
+}
+
+.grid-hit-rare {
+  color: #e8c34b; /* rare gold */
+}
+
+.grid-hit-mythic {
+  color: #f26b3a; /* mythic orange */
+  text-shadow: 0 0 10px rgba(242, 107, 58, 0.4);
 }
 
 /* --- Cell-fill search dialog ------------------------------------------------------- */
@@ -202,6 +278,48 @@
   margin: 0.25rem 0;
 }
 
+.grid-result-score {
+  margin: 0.5rem 0 0.25rem;
+  font-size: 1.05rem;
+}
+
+.grid-result-tiers {
+  list-style: none;
+  margin: 0 0 0.25rem;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.grid-result-tier {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.grid-result-tier-rare {
+  border-color: rgba(213, 164, 57, 0.5);
+}
+
+.grid-result-tier-mythic {
+  border-color: rgba(232, 98, 31, 0.55);
+  color: #f5a24a;
+}
+
+.grid-result-hint {
+  margin: 0.6rem 0 0;
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
 .grid-result-share {
   display: flex;
   justify-content: center;
@@ -264,6 +382,34 @@
   text-transform: uppercase;
   letter-spacing: 0.03em;
   color: var(--accent, #e8b34b);
+}
+
+/* Rarity badge in the answers modal: gem + label, tinted by tier. */
+.grid-detail-tier {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-shrink: 0;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--text-dim);
+}
+
+.grid-detail-tier-rare .grid-detail-tier-label {
+  color: #e6c463;
+}
+
+.grid-detail-tier-mythic .grid-detail-tier-label {
+  color: #f5a24a;
+}
+
+/* Hide the wordy label on narrow screens; the gem alone carries the rarity. */
+@media (max-width: 420px) {
+  .grid-detail-tier-label {
+    display: none;
+  }
 }
 
 .grid-detail-pct {

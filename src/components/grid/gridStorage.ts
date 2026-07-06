@@ -1,5 +1,6 @@
 import { todayKey } from "../../lib/dailyAnswer";
 import { GRID_CELLS, GRID_SIZE } from "../../lib/gridGame";
+import type { GuessTier } from "../../lib/gridRarity";
 
 /**
  * Persisted daily Grid run. The criteria are stored as ids (not regenerated) so a game in
@@ -10,6 +11,12 @@ export interface GridRun {
   colIds: string[];
   /** Commander name per cell (row-major), null while unfilled. */
   picks: Array<string | null>;
+  /**
+   * Rarity tier each correct pick earned at guess time (vs community picks then);
+   * null for unfilled cells or when no community data was available. Optional so
+   * runs saved before tiers existed still load.
+   */
+  tiers?: Array<GuessTier | null>;
   guessesUsed: number;
   done: boolean;
 }

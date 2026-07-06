@@ -161,6 +161,16 @@
   max-width: 560px;
 }
 
+/* Mode name shown just below the Commandle wordmark on each game's masthead. */
+.mode-subtitle {
+  margin: 2px auto 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent, var(--text-dim));
+}
+
 /* ---------- Mode tabs ---------- */
 .mode-tabs {
   display: flex;
@@ -417,6 +427,12 @@
 @media (max-width: 560px) {
   .app-header {
     margin-bottom: var(--s3);
+    /* Keep the centered wordmark clear of the absolutely-positioned cog (44px
+       button top-right) — pad both sides so it stays centered. */
+    padding: 0 48px;
+  }
+  .app-header h1 {
+    font-size: clamp(2rem, 9vw, 2.8rem);
   }
   .tagline {
     font-size: 0.85rem;

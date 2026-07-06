@@ -44,5 +44,5 @@ export function buildDailyRecap(): string | null {
     (l): l is string => l !== null,
   );
   if (lines.length === 0) return null;
-  return `Commandle #${puzzleNumber()} — Daily recap\n${lines.join("\n")}`;
+  return `Commandle #${puzzleNumber()} Daily recap\n${lines.join("\n")}`;
 }

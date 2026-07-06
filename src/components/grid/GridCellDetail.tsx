@@ -1,8 +1,15 @@
 import { useMemo } from "react";
 import { cellCriteria, cellAnswers, type GridPuzzle } from "../../lib/gridGame";
-import { pickPct, type GridPicks } from "../../lib/gridRarity";
+import {
+  pickPct,
+  tierForPct,
+  TIER_LABELS,
+  type GridPicks,
+  type GuessTier,
+} from "../../lib/gridRarity";
 import { gridPool } from "../../lib/commanders";
 import CardZoom from "../CardZoom";
+import RarityGem from "./RarityGem";
 
 interface Props {
   puzzle: GridPuzzle;
@@ -22,6 +29,8 @@ interface AnswerRow {
   rank: number;
   /** % of all players who put this commander here (out of everyone who played). */
   pct: number | null;
+  /** MTG rarity this answer's pick rate maps to (null when there's no community data). */
+  tier: GuessTier | null;
 }
 
 /**
@@ -39,13 +48,17 @@ export default function GridCellDetail({
   const [row, col] = cellCriteria(puzzle, cell);
 
   const answers = useMemo<AnswerRow[]>(() => {
-    const rows = cellAnswers(puzzle, cell, gridPool()).map((c) => ({
-      name: c.name,
-      artCrop: c.artCrop,
-      image: c.normalImage ?? c.artCrop,
-      rank: c.rank,
-      pct: pickPct(community, cell, c.name),
-    }));
+    const rows = cellAnswers(puzzle, cell, gridPool()).map((c) => {
+      const pct = pickPct(community, cell, c.name);
+      return {
+        name: c.name,
+        artCrop: c.artCrop,
+        image: c.normalImage ?? c.artCrop,
+        rank: c.rank,
+        pct,
+        tier: pct == null ? null : tierForPct(pct),
+      };
+    });
     // Most-picked first; ties (and the no-data case) fall back to popularity rank.
     rows.sort((a, b) => (b.pct ?? -1) - (a.pct ?? -1) || a.rank - b.rank);
     return rows;
@@ -106,6 +119,17 @@ export default function GridCellDetail({
                 <span className="ac-name">{a.name}</span>
                 {a.name === pick && (
                   <span className="grid-detail-you">your pick</span>
+                )}
+                {a.tier && (
+                  <span
+                    className={`grid-detail-tier grid-detail-tier-${a.tier}`}
+                    title={`${TIER_LABELS[a.tier]} — ${a.pct}% of players picked this`}
+                  >
+                    <RarityGem tier={a.tier} size={13} />
+                    <span className="grid-detail-tier-label">
+                      {TIER_LABELS[a.tier]}
+                    </span>
+                  </span>
                 )}
                 {a.pct != null && (
                   <span

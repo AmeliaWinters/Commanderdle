@@ -10,6 +10,21 @@
   padding: 0 var(--s3) var(--s5);
 }
 
+/* What-is-this blurb (the header tagline is hidden on mobile, so this carries
+   the explanation everywhere). */
+.binder-about {
+  max-width: 560px;
+  margin: var(--s3) auto 0;
+  text-align: center;
+}
+
+.binder-about p {
+  margin: 0;
+  color: var(--text-dim);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
 /* Progress */
 .binder-progress {
   margin: var(--s3) auto var(--s3);
@@ -156,54 +171,12 @@
   background: var(--panel-2);
 }
 
-/* Gilt "found" seal in the corner of the art */
-.binder-card-seal {
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #1a1204;
-  background: radial-gradient(circle at 35% 30%, #ffe9a8, var(--flame) 70%);
-  border-radius: 999px;
-  box-shadow:
-    0 0 0 1.5px rgba(0, 0, 0, 0.45),
-    0 2px 6px rgba(0, 0, 0, 0.5);
-  transition: transform 0.18s ease;
-}
-
-.binder-card-found:hover .binder-card-seal {
-  transform: scale(1.12);
-}
-
 .binder-card-found-on {
   font-size: 0.62rem;
   line-height: 1.1;
   color: var(--text-dim);
   text-align: center;
 }
-
-.binder-card-modes {
-  display: flex;
-  gap: 4px;
-  justify-content: center;
-}
-
-.binder-card-mode-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 999px;
-  background: var(--flame);
-  opacity: 0.85;
-}
-
-.binder-card-mode-dot.mode-silhouette { background: #8b9bb4; }
-.binder-card-mode-dot.mode-zoom { background: #5db0a8; }
-.binder-card-mode-dot.mode-synergy { background: #b07fd0; }
-.binder-card-mode-dot.mode-quote { background: #d0a24a; }
 
 .binder-card-found .binder-card-img {
   box-shadow:
@@ -222,12 +195,11 @@
 }
 
 .binder-card-missing .binder-card-img {
-  opacity: 0.45;
-  filter: grayscale(0.4);
+  filter: grayscale(1);
 }
 
 .binder-card-missing:hover .binder-card-img {
-  opacity: 0.7;
+  filter: grayscale(0.6);
 }
 
 .binder-card-name {

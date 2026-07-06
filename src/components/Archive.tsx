@@ -1,9 +1,10 @@
 import { useEffect } from "react";
-import { FaCheck } from "react-icons/fa6";
+import { FaCheck, FaArrowLeft } from "react-icons/fa6";
 import { todayKey, puzzleNumber } from "../lib/dailyAnswer";
 import { archivePlayPath, navigateToPath } from "../lib/router";
 import { archiveResult } from "../lib/archive";
 import { MODE_LIST } from "./modeList";
+import LogoTitle from "./layout/LogoTitle";
 
 /** Every past puzzle date, most recent first (today is live, so it's excluded). */
 function pastDates(): string[] {
@@ -38,12 +39,21 @@ export default function Archive() {
   return (
     <div className="app archive-page">
       <header className="app-header">
-        <button className="archive-back" onClick={() => navigateToPath("/")}>
-          ← Back to today
+        <button
+          className="archive-back"
+          onClick={() => navigateToPath("/")}
+          aria-label="Back to today"
+        >
+          <FaArrowLeft />
+          <span>Back to today</span>
         </button>
-        <h1>
-          Comman<span className="accent">dle</span> Archive
-        </h1>
+        <LogoTitle
+          to="/"
+          ariaLabel="Back to today"
+          after={<span className="practice-badge">Archive</span>}
+        >
+          Comman<span className="accent">dle</span>
+        </LogoTitle>
         <p className="tagline">
           Replay any past day. Archived plays don't affect your daily streak.
         </p>

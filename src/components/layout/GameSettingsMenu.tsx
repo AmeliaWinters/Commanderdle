@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import { navigateToPath, GAMES_PATH, ARCHIVE_PATH } from "../../lib/router";
+import { useEffect, useState } from "react";
 import {
   isReminderEnabled,
   toggleReminder,
@@ -20,41 +19,18 @@ import {
   FiBellOff,
 } from "react-icons/fi";
 
-/** Dev-only nuke: delete every commandle:* localStorage key and reload clean. */
-function clearAllCommandleStorage() {
-  try {
-    Object.keys(localStorage)
-      .filter((k) => k.toLowerCase().startsWith("commandle"))
-      .forEach((k) => localStorage.removeItem(k));
-  } catch {
-    /* ignore */
-  }
-  window.location.reload();
-}
-
-interface Props {
-  isDaily: boolean;
-  onHowTo: () => void;
-  onPractice: () => void;
-  onBackToDaily: () => void;
-  onReset: () => void;
-}
-
-/** The header cog: how-to, archive/practice navigation, sound + reminder toggles. */
-export default function SettingsMenu({
-  isDaily,
-  onHowTo,
-  onPractice,
-  onBackToDaily,
-  onReset,
-}: Props) {
+/**
+ * Compact settings cog for the side-game headers (Higher/Lower, Price Is Right,
+ * Binder, Grid). Unlike the main {@link SettingsMenu} it carries no navigation —
+ * just the sound-effect and daily-reminder toggles those games share.
+ */
+export default function GameSettingsMenu() {
   const [open, setOpen] = useState(false);
   const [closing, setClosing] = useState(false);
   const [muted, setMuted] = useState(isMuted);
   const [reminderOn, setReminderOn] = useState(isReminderEnabled);
 
-  // Play the collapse animation before unmounting the panel. Reduced-motion
-  // users skip straight to closed, matching the entrance animations.
+  // Play the collapse animation before unmounting; reduced-motion users skip it.
   const closeMenu = () => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setOpen(false);
@@ -67,8 +43,7 @@ export default function SettingsMenu({
     }, 150);
   };
 
-  // Keep the mute button in sync, and warm the audio cache on the first user gesture
-  // (not at mount) so the effect files don't compete with LCP-critical resources.
+  // Keep the mute button in sync and warm the audio cache on first gesture.
   useEffect(() => {
     const stopPreload = preloadSoundsOnFirstGesture();
     const stopMute = onMuteChange(setMuted);
@@ -98,11 +73,6 @@ export default function SettingsMenu({
     closeMenu();
   }
 
-  const pick = (action: () => void) => () => {
-    action();
-    closeMenu();
-  };
-
   return (
     <div className="menu-wrap">
       <button
@@ -122,21 +92,6 @@ export default function SettingsMenu({
           className={`menu-pop${closing ? " is-closing" : ""}`}
           onClick={(e) => e.stopPropagation()}
         >
-          <button onClick={pick(onHowTo)}>How to play</button>
-          <button onClick={pick(() => navigateToPath(ARCHIVE_PATH))}>
-            Archive ↗
-          </button>
-          {isDaily ? (
-            <button onClick={pick(onPractice)}>Practice (random)</button>
-          ) : (
-            <>
-              <button onClick={pick(onPractice)}>New random</button>
-              <button onClick={pick(onBackToDaily)}>Back to daily</button>
-            </>
-          )}
-          <button onClick={pick(() => navigateToPath(GAMES_PATH))}>
-            All games ↗
-          </button>
           <button aria-pressed={!muted} onClick={() => toggleMuted()}>
             {muted ? (
               <FiVolumeX className="menu-icon" aria-hidden="true" />
@@ -158,24 +113,6 @@ export default function SettingsMenu({
               )}
               Daily reminder: {reminderOn ? "On" : "Off"}
             </button>
-          )}
-          {import.meta.env.DEV && (
-            <>
-              <button
-                className="menu-reset"
-                onClick={pick(onReset)}
-                title="Clear saved progress (debug)"
-              >
-                Reset (dev)
-              </button>
-              <button
-                className="menu-reset"
-                onClick={pick(clearAllCommandleStorage)}
-                title="Delete every commandle:* localStorage key and reload (debug)"
-              >
-                Clear all data (dev)
-              </button>
-            </>
           )}
         </div>
       )}

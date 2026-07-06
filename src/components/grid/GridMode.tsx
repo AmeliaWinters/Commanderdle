@@ -13,21 +13,29 @@ import {
 import {
   fetchGridPicks,
   submitGridPicks,
+  guessTier,
+  tierScore,
+  TIER_LABELS,
+  TIER_POINTS,
   type GridPicks,
+  type GuessTier,
 } from "../../lib/gridRarity";
 import { puzzleNumber } from "../../lib/dailyAnswer";
 import { navigateToPath, GAMES_PATH } from "../../lib/router";
 import { playSound } from "../../lib/sounds";
 import CardBackdrop from "../CardBackdrop";
 import LogoTitle from "../layout/LogoTitle";
+import GameSettingsMenu from "../layout/GameSettingsMenu";
 import AppFooter from "../layout/AppFooter";
 import GridBoard from "./GridBoard";
 import GridSearch from "./GridSearch";
 import GridCellDetail from "./GridCellDetail";
 import GridResult from "./GridResult";
+import RarityGem from "./RarityGem";
 import { loadGridDaily, saveGridDaily } from "./gridStorage";
 
 const EMPTY_PICKS: Array<string | null> = Array(GRID_CELLS).fill(null);
+const EMPTY_TIERS: Array<GuessTier | null> = Array(GRID_CELLS).fill(null);
 
 /** Rebuild a saved puzzle from its criterion ids; null if any id no longer exists. */
 function puzzleFromIds(rowIds: string[], colIds: string[]): GridPuzzle | null {
@@ -65,19 +73,37 @@ export default function GridMode() {
   const [picks, setPicks] = useState<Array<string | null>>(
     () => saved?.picks ?? EMPTY_PICKS,
   );
+  const [tiers, setTiers] = useState<Array<GuessTier | null>>(
+    () => saved?.tiers ?? EMPTY_TIERS,
+  );
   const [guessesUsed, setGuessesUsed] = useState(saved?.guessesUsed ?? 0);
   const [selected, setSelected] = useState<number | null>(null);
   // Brief "doesn't fit" feedback after a wrong pick: [cell, commander name].
   const [miss, setMiss] = useState<[number, string] | null>(null);
+  // Feedback after a correct pick: what tier the guess earned.
+  const [hit, setHit] = useState<{ name: string; tier: GuessTier } | null>(null);
   const [community, setCommunity] = useState<GridPicks | null>(null);
+  // Community picks fetched up-front so each guess can be rated the moment it lands.
+  const [live, setLive] = useState<GridPicks | null>(null);
 
   // Saved state is loaded lazily (after the pool), so sync it in when it lands.
   useEffect(() => {
     if (saved) {
       setPicks(saved.picks);
+      setTiers(saved.tiers ?? EMPTY_TIERS);
       setGuessesUsed(saved.guessesUsed);
     }
   }, [saved]);
+
+  // Pull today's community picks right away so guesses can be rated live.
+  useEffect(() => {
+    if (!ready) return;
+    let alive = true;
+    void fetchGridPicks(puzzleNumber()).then((data) => alive && setLive(data));
+    return () => {
+      alive = false;
+    };
+  }, [ready]);
 
   const filled = picks.filter((p) => p != null).length;
   const done =
@@ -91,10 +117,11 @@ export default function GridMode() {
       rowIds: puzzle.rows.map((r) => r.id),
       colIds: puzzle.cols.map((c) => c.id),
       picks,
+      tiers,
       guessesUsed,
       done,
     });
-  }, [puzzle, picks, guessesUsed, done]);
+  }, [puzzle, picks, tiers, guessesUsed, done]);
 
   useEffect(() => {
     if (!done) return;
@@ -113,11 +140,15 @@ export default function GridMode() {
     if (selected == null || !puzzle || done) return;
     const ok = isValidForCell(puzzle, selected, c);
     if (ok) {
+      const tier = guessTier(live, selected, c.name);
       setPicks((prev) => prev.map((p, i) => (i === selected ? c.name : p)));
+      setTiers((prev) => prev.map((t, i) => (i === selected ? tier : t)));
       setMiss(null);
-      playSound("guess");
+      setHit({ name: c.name, tier });
+      playSound("correct");
     } else {
       setMiss([selected, c.name]);
+      setHit(null);
       playSound("lose");
     }
     setGuessesUsed((g) => g + 1);
@@ -136,12 +167,14 @@ export default function GridMode() {
         <button className="hl-back" onClick={() => navigateToPath(GAMES_PATH)}>
           ← All games
         </button>
+        <GameSettingsMenu />
         <LogoTitle ariaLabel="commandle">
           Comman<span className="accent">dle</span>
         </LogoTitle>
+        <p className="mode-subtitle">Grid</p>
         <p className="tagline">
           Fill every cell with a commander matching its row and column.{" "}
-          {GRID_MAX_GUESSES} guesses — right or wrong, each one counts. Rarer
+          {GRID_MAX_GUESSES} guesses, and right or wrong, each one counts. Rarer
           answers score better.
         </p>
       </header>
@@ -165,12 +198,13 @@ export default function GridMode() {
             <div className="grid-status">
               {done ? (
                 <span>
-                  Grid #{puzzleNo} — {filled}/{GRID_CELLS} filled
+                  Grid #{puzzleNo}: {filled}/{GRID_CELLS} filled
                 </span>
               ) : (
                 <span>
                   Guesses left:{" "}
                   <strong>{GRID_MAX_GUESSES - guessesUsed}</strong>
+                  {" · "}Score: <strong>{tierScore(tiers)}</strong> pts
                 </span>
               )}
             </div>
@@ -178,6 +212,7 @@ export default function GridMode() {
             <GridBoard
               puzzle={puzzle}
               picks={picks}
+              tiers={tiers}
               done={done}
               community={community}
               selected={selected}
@@ -191,11 +226,22 @@ export default function GridMode() {
               </p>
             )}
 
+            {hit && !done && !miss && (
+              <p className={`grid-hit grid-hit-${hit.tier}`} role="status">
+                <RarityGem tier={hit.tier} size={18} />
+                <span>
+                  <strong>{TIER_LABELS[hit.tier]}!</strong> {hit.name},{" "}
+                  +{TIER_POINTS[hit.tier]} pts
+                </span>
+              </p>
+            )}
+
             {done && (
               <GridResult
                 puzzle={puzzle}
                 puzzleNo={puzzleNo}
                 picks={picks}
+                tiers={tiers}
                 community={community}
               />
             )}

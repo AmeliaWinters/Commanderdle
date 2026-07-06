@@ -1,5 +1,6 @@
 import { navigateToPath, GAMES_PATH } from "../../lib/router";
 import LogoTitle from "../layout/LogoTitle";
+import GameSettingsMenu from "../layout/GameSettingsMenu";
 
 type Mode = "daily" | "endless";
 
@@ -18,9 +19,13 @@ export default function HlHeader({ mode, onSwitchMode }: Props) {
       >
         ← All games
       </button>
-      <LogoTitle ariaLabel="Higher / Lower">
-        Higher <span className="accent">/</span> Lower
+      <GameSettingsMenu />
+      <LogoTitle ariaLabel="commandle">
+        Comman<span className="accent">dle</span>
       </LogoTitle>
+      <p className="mode-subtitle">
+        Higher <span className="accent">/</span> Lower
+      </p>
       <p className="tagline">
         Which commander is in more EDHREC decks? Keep the chain going as far
         as you can.

@@ -76,6 +76,48 @@ export function pickPct(picks: GridPicks | null, cell: number, name: string): nu
 }
 
 /**
+ * MTG-rarity tier for one correct guess, judged against everyone else's picks:
+ * nobody (or ≤2%) picked it = mythic, ≤5% = rare, ≤10% = uncommon, else common.
+ */
+export type GuessTier = 'mythic' | 'rare' | 'uncommon' | 'common'
+
+export const TIER_POINTS: Record<GuessTier, number> = {
+  mythic: 10,
+  rare: 5,
+  uncommon: 3,
+  common: 1,
+}
+
+export const TIER_LABELS: Record<GuessTier, string> = {
+  mythic: 'Mythic Rare',
+  rare: 'Rare',
+  uncommon: 'Uncommon',
+  common: 'Common',
+}
+
+export function tierForPct(pct: number): GuessTier {
+  if (pct <= 2) return 'mythic'
+  if (pct <= 5) return 'rare'
+  if (pct <= 10) return 'uncommon'
+  return 'common'
+}
+
+/**
+ * Tier for a correct guess against the community pick rates available right now.
+ * A card nobody has picked yet — including when there's no community data at all
+ * (offline, or you're the first player of the day) — counts as a first guess and
+ * scores Mythic Rare, so a correct pick always earns a rating and points.
+ */
+export function guessTier(picks: GridPicks | null, cell: number, name: string): GuessTier {
+  return tierForPct(pickPct(picks, cell, name) ?? 0)
+}
+
+/** Total points for a run's recorded tiers. */
+export function tierScore(tiers: ReadonlyArray<GuessTier | null>): number {
+  return tiers.reduce((sum, t) => sum + (t ? TIER_POINTS[t] : 0), 0)
+}
+
+/**
  * Immaculate-Grid-style rarity score: the sum over all nine cells of the pick percentage
  * (an empty cell costs 100). 900 is the worst possible; lower = rarer = better.
  */

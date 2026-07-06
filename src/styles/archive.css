@@ -11,23 +11,40 @@
   color: var(--text-dim);
 }
 .archive-back {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  color: var(--text);
-  font-family: inherit;
-  font-size: 0.85rem;
-  padding: 6px 12px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-.archive-back:hover {
-  border-color: var(--flame-2);
-  color: var(--flame-1);
-}
-.archive-page .app-header .archive-back {
   position: absolute;
   left: 0;
-  top: 0;
+  top: 6px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: none;
+  border: none;
+  padding: 4px 2px;
+  color: var(--flame-1);
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.15s ease;
+}
+.archive-back svg {
+  transition: transform 0.15s ease;
+}
+.archive-back:hover {
+  filter: drop-shadow(0 0 8px rgba(236, 90, 28, 0.55));
+}
+.archive-back:hover svg {
+  transform: translateX(-3px);
+}
+@media (max-width: 560px) {
+  .archive-back span {
+    display: none;
+  }
+  .archive-back svg {
+    font-size: 1.25rem;
+  }
 }
 .archive-list {
   display: flex;
@@ -76,20 +93,40 @@
   align-items: center;
   gap: 4px;
   padding: 10px 4px;
-  border: 1px solid var(--line);
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
   border-radius: 10px;
-  background: var(--panel-2);
+  background: color-mix(in srgb, var(--accent) 8%, var(--panel-2));
   color: var(--text);
-  font-family: "Inter", system-ui, sans-serif;
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  letter-spacing: 0.02em;
   font-size: 0.72rem;
   cursor: pointer;
   transition:
     transform 0.1s ease,
-    border-color 0.15s ease;
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+/* Per-mode accent, drawn from the MTG mana palette so each mode reads distinctly. */
+.archive-modes .archive-mode-btn:nth-child(1) {
+  --accent: var(--mW);
+}
+.archive-modes .archive-mode-btn:nth-child(2) {
+  --accent: var(--mU);
+}
+.archive-modes .archive-mode-btn:nth-child(3) {
+  --accent: var(--mB);
+}
+.archive-modes .archive-mode-btn:nth-child(4) {
+  --accent: var(--mR);
+}
+.archive-modes .archive-mode-btn:nth-child(5) {
+  --accent: var(--mG);
 }
 .archive-mode-btn:hover {
-  transform: translateY(-1px);
-  border-color: var(--flame-2);
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--accent) 30%, transparent);
 }
 .archive-mode-btn.won {
   border-color: var(--exact-bd);
@@ -98,15 +135,17 @@
   border-color: var(--far-bd);
 }
 .archive-mode-icon {
-  font-size: 1.15rem;
+  font-size: 1.3rem;
   display: flex;
+  color: var(--accent);
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--accent) 45%, transparent));
 }
 .archive-mode-check {
   position: absolute;
   top: 4px;
   right: 5px;
   font-size: 0.62rem;
-  color: var(--flame-1);
+  color: var(--accent);
 }
 .archive-mode-btn.won .archive-mode-check {
   color: var(--exact-bd);

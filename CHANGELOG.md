@@ -6,6 +6,39 @@ a change that a player could notice.
 
 ## 2026-07-06
 
+- In The Binder, found cards now read "Found {date} in {mode}" and no longer show the
+  colored mode dots or the corner tick on the art. Undiscovered commanders now show in
+  full-opacity grayscale instead of dimmed.
+- Higher/Lower, Price Is Right, The Binder and Grid now share the "Commandle" wordmark
+  in their header, with the game's name shown as a subtitle just beneath it.
+- Higher/Lower, Price Is Right, The Binder and Grid now have their own settings cog
+  in the header, so you can toggle sound effects (and the daily reminder) from any game.
+- Grid rarity gems now use authentic MTG set-symbol icons (via the Keyrune font),
+  and in a grid cell the gem sits just to the left of the commander's name.
+- The Archive page now matches the rest of the site: the animated flame wordmark,
+  an "Archive" badge and a tidier "Back to today" button.
+- Grid guesses are now graded like MTG rarities: a correct pick almost nobody else
+  made is a Mythic Rare (10 pts), 5% or fewer is a Rare (5 pts), 10% or fewer an
+  Uncommon (3 pts), everything else a Common (1 pt). Each pick gets a rarity-coloured
+  frame and set-symbol gem right on the grid, a running score shows while you play,
+  every correct guess announces its rarity and points, and the final score with a
+  rarity breakdown appears in results and shares. The "who else fit here" modal now
+  shows each answer's rarity gem and the share of players who picked it.
+- Correct guesses in Higher/Lower and Grid now play a bright victory chime instead
+  of the generic guess sound.
+- Fixed the grid spilling off the right edge of the screen on small phones.
+- Fixed the Card pool (and How to play) popup instantly closing itself when opened
+  on a touch screen — tapping the button now reliably opens it.
+- Fixed the settings cog overlapping the title on mobile.
+- The Binder page now explains what the binder actually is: a lifetime collection
+  where every commander you've ever guessed correctly flips face-up.
+- Added a hint on the grid results screen that you can tap any cell to see every
+  commander that fit.
+- Tidied the settings menu: removed the Higher/Lower and Price Is Right shortcuts
+  (they live in All games), and the debug Reset — plus a new "clear all data"
+  wipe — now only appear in dev builds.
+- Reworded grid mode text and share/recap messages to drop em dashes in favour of
+  plainer punctuation, and removed a stray emoji from the grid results hint.
 - Fixed the zoomed card preview on mobile flickering closed then back open when you
   tap the same commander a second time — a second tap now just dismisses it.
 - Fixed the card preview not appearing when you hover or tap a commander in the

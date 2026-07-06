@@ -5,9 +5,11 @@
 // so the game never breaks over a missing sound. A mute preference is persisted
 // in localStorage.
 
-export type SoundName = 'guess' | 'win' | 'lose'
+export type SoundName = 'guess' | 'win' | 'lose' | 'correct'
 
-const FILES: Record<SoundName, string> = {
+// 'correct' has no file: it's synthesized with WebAudio (see playChime) so a
+// bright "ding" can ship without another audio asset.
+const FILES: Record<Exclude<SoundName, 'correct'>, string> = {
   guess: '/sounds/guess.mp3',
   win: '/sounds/win.mp3',
   lose: '/sounds/lose.mp3',
@@ -22,6 +24,41 @@ const MUTE_EVENT = 'commandle:mute-change'
 let muted = readMuted()
 const cache = new Map<SoundName, HTMLAudioElement>()
 
+let audioCtx: AudioContext | null = null
+
+/**
+ * A short two-note major-third chime for correct answers. Synthesized rather than
+ * an mp3: it stays crisp at any playback rate and adds zero bytes to the bundle.
+ */
+function playChime() {
+  try {
+    const Ctx =
+      window.AudioContext ??
+      (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext
+    if (!Ctx) return
+    audioCtx ??= new Ctx()
+    if (audioCtx.state === 'suspended') void audioCtx.resume()
+    const t0 = audioCtx.currentTime
+    ;[
+      { freq: 659.25, at: 0 }, // E5
+      { freq: 830.61, at: 0.09 }, // G#5
+    ].forEach(({ freq, at }) => {
+      const osc = audioCtx!.createOscillator()
+      const gain = audioCtx!.createGain()
+      osc.type = 'sine'
+      osc.frequency.value = freq
+      gain.gain.setValueAtTime(0, t0 + at)
+      gain.gain.linearRampToValueAtTime(VOLUME * 0.6, t0 + at + 0.015)
+      gain.gain.exponentialRampToValueAtTime(0.001, t0 + at + 0.35)
+      osc.connect(gain).connect(audioCtx!.destination)
+      osc.start(t0 + at)
+      osc.stop(t0 + at + 0.4)
+    })
+  } catch {
+    /* ignore — sound is decorative */
+  }
+}
+
 function readMuted(): boolean {
   try {
     return localStorage.getItem(MUTE_KEY) === '1'
@@ -30,7 +67,7 @@ function readMuted(): boolean {
   }
 }
 
-function element(name: SoundName): HTMLAudioElement | null {
+function element(name: Exclude<SoundName, 'correct'>): HTMLAudioElement | null {
   if (typeof Audio === 'undefined') return null
   let el = cache.get(name)
   if (!el) {
@@ -44,7 +81,7 @@ function element(name: SoundName): HTMLAudioElement | null {
 
 /** Warm the audio cache so the first real play has no fetch latency. */
 export function preloadSounds() {
-  ;(Object.keys(FILES) as SoundName[]).forEach(element)
+  ;(Object.keys(FILES) as Array<Exclude<SoundName, 'correct'>>).forEach(element)
 }
 
 /**
@@ -69,6 +106,10 @@ export function preloadSoundsOnFirstGesture(): () => void {
 /** Play a sound effect. No-op when muted or when playback is blocked. */
 export function playSound(name: SoundName) {
   if (muted) return
+  if (name === 'correct') {
+    playChime()
+    return
+  }
   const el = element(name)
   if (!el) return
   try {

@@ -5,6 +5,7 @@ import { colorIdentityName } from "../../lib/colorNames";
 import { navigateToPath, GAMES_PATH } from "../../lib/router";
 import CardBackdrop from "../CardBackdrop";
 import LogoTitle from "../layout/LogoTitle";
+import GameSettingsMenu from "../layout/GameSettingsMenu";
 import AppFooter from "../layout/AppFooter";
 import BinderCard from "./BinderCard";
 
@@ -87,15 +88,27 @@ export default function BinderPage() {
         >
           ← All games
         </button>
-        <LogoTitle ariaLabel="The Binder">
-          The <span className="accent">Binder</span>
+        <GameSettingsMenu />
+        <LogoTitle ariaLabel="commandle">
+          Comman<span className="accent">dle</span>
         </LogoTitle>
+        <p className="mode-subtitle">The Binder</p>
         <p className="tagline">
           Every commander you've named goes in the binder. Gotta guess 'em all.
         </p>
       </header>
 
       <main className="play-area binder-area">
+        <section className="binder-about">
+          <p>
+            The Binder is your lifetime collection. Every commander in the
+            Commandle pool has a slot here, face-down. Guess a commander
+            correctly in any game — daily or practice, any mode — and its card
+            flips face-up in your binder for good. Fill every slot to complete
+            the collection.
+          </p>
+        </section>
+
         <section className="binder-progress" aria-label="Collection progress">
           <div className="binder-progress-line">
             <span className="binder-progress-count">

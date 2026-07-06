@@ -45,9 +45,10 @@ function BinderCard({ commander: c, entry }: Props) {
       </div>
     );
   }
-  const title = `${c.name} · ${identity ?? ""}\nFirst found ${entry.firstFound} · ${entry.modes
-    .map((m) => MODE_LABEL[m] ?? m)
-    .join(", ")}`;
+  const modeLabels = entry.modes.map((m) => MODE_LABEL[m] ?? m).join(", ");
+  const title = `${c.name} · ${identity ?? ""}\nFound ${formatFound(
+    entry.firstFound,
+  )} in ${modeLabels}`;
   return (
     <div className="binder-card binder-card-found" title={title}>
       <div className="binder-card-frame">
@@ -61,29 +62,10 @@ function BinderCard({ commander: c, entry }: Props) {
         ) : (
           <span className="binder-card-noart">{c.name}</span>
         )}
-        <span className="binder-card-seal" aria-label="Found" title="Found">
-          <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
-            <path
-              d="M5 12.5l4.2 4.2L19 7"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="3"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </span>
       </div>
       <span className="binder-card-name">{c.name}</span>
-      <span className="binder-card-found-on">Found {formatFound(entry.firstFound)}</span>
-      <span className="binder-card-modes" aria-hidden="true">
-        {entry.modes.map((m) => (
-          <span
-            key={m}
-            className={`binder-card-mode-dot mode-${m}`}
-            title={MODE_LABEL[m] ?? m}
-          />
-        ))}
+      <span className="binder-card-found-on">
+        Found {formatFound(entry.firstFound)} in {modeLabels}
       </span>
     </div>
   );
