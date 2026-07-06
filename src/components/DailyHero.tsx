@@ -50,7 +50,7 @@ const DATE_FMT = new Intl.DateTimeFormat(undefined, {
  * mystery card. Once the game is decided, the card is withdrawn (showCard goes
  * false) and the result banner performs the flip-to-answer reveal instead.
  */
-export default function DailyHero({ mode, showCard, started }: Props) {
+export default function DailyHero({ mode, showCard }: Props) {
   const countdown = useCountdown();
   const pulse = usePulse(mode);
 

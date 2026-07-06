@@ -83,7 +83,7 @@ describe('rarity scoring', () => {
   const picks: GridPicks = {
     total: 100,
     cells: Array.from({ length: GRID_CELLS }, (_, i) =>
-      i === 0 ? { 'Popular Pick': 50, 'Deep Cut': 1 } : {},
+      i === 0 ? { 'Popular Pick': 50, 'Deep Cut': 1 } : ({} as Record<string, number>),
     ),
   }
 
