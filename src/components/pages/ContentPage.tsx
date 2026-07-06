@@ -1,5 +1,6 @@
 import { useEffect, type ReactNode } from "react";
 import { navigateToPath } from "../../lib/router";
+import AppFooter from "../layout/AppFooter";
 
 interface Props {
   /** Full document + og title, e.g. "Commandle - About". */
@@ -73,43 +74,9 @@ export default function ContentPage({
 
       <article className="content-body">{children}</article>
 
-      <nav className="content-nav" aria-label="Site pages">
-        <a href="/" onClick={link("/")}>
-          Play
-        </a>
-        <a href="/how-to-play" onClick={link("/how-to-play")}>
-          How to play
-        </a>
-        <a href="/faq" onClick={link("/faq")}>
-          FAQ
-        </a>
-        <a href="/about" onClick={link("/about")}>
-          About
-        </a>
-        <a href="/contact" onClick={link("/contact")}>
-          Contact
-        </a>
-        <a href="/terms" onClick={link("/terms")}>
-          Terms
-        </a>
-        <a href="/privacy" onClick={link("/privacy")}>
-          Privacy
-        </a>
-      </nav>
+      <AppFooter isArchive={false} />
 
-      <footer className="app-footer">
-        <a href="/" onClick={link("/")}>
-          ← Back to the game
-        </a>
-      </footer>
+      <footer className="app-footer"></footer>
     </div>
   );
-}
-
-/** Intercept an in-app link so it routes client-side instead of reloading. */
-function link(path: string) {
-  return (e: React.MouseEvent) => {
-    e.preventDefault();
-    navigateToPath(path);
-  };
 }

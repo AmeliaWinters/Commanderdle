@@ -1,6 +1,12 @@
 import { cloneElement, useEffect, useRef, useState } from "react";
 import type { Commander } from "../../types/commander";
-import { deduce, type Deductions, type NumericClue } from "../../lib/deduce";
+import {
+  deduce,
+  type ColorClue,
+  type Deductions,
+  type NumericClue,
+  type TypeClue,
+} from "../../lib/deduce";
 import { COLUMNS, type ColumnId } from "../../lib/columns";
 import { prefersReducedMotion } from "../../lib/reducedMotion";
 import ManaCost from "../ManaSymbols";
@@ -42,12 +48,14 @@ export default function DeductionRow({
       return;
     }
     setColsShown(0);
-    // Cell i flips with delay (i+1)*0.5s and reads clearly ~0.75s into its 1.25s
-    // reveal; unmask each clue column at that moment.
+    // Column with reveal index r (= cell index r in the guess row) is unmasked
+    // when colsShown reaches r. Guess cell r flips with delay (r+1)*0.5s and reads
+    // clearly ~0.75s in, so unmask column r at (r+1)*500+250ms. Timer i pushes
+    // colsShown to i+1, so it fires at (i+2)*500+250.
     const timers = Array.from({ length: DED_COL_COUNT }, (_, i) =>
       setTimeout(
         () => setColsShown((n) => Math.max(n, i + 1)),
-        (i + 1) * 500 + 250,
+        (i + 2) * 500 + 250,
       ),
     );
     return () => timers.forEach(clearTimeout);
@@ -59,7 +67,7 @@ export default function DeductionRow({
   const full = deduce(guesses, answer);
   const base =
     colsShown < DED_COL_COUNT ? deduce(guesses.slice(0, -1), answer) : full;
-  const revealedFor = (i: number) => (i < colsShown ? full : base);
+  const revealedFor = (i: number) => (i <= colsShown ? full : base);
 
   if (!full.colors && !full.types && full.numerics.length === 0) return null;
 
@@ -82,9 +90,13 @@ export default function DeductionRow({
         </div>
       );
     }
+    // Amber (partial) whenever we've learned any colors are present or narrowed
+    // to a "maybe" - that's the yellow-guess case. Only drop to grey (match-none)
+    // when every clue is a ruled-out color and nothing positive is known.
+    const hasInfo = colors.present.length > 0 || colors.maybe.length > 0;
     return (
       <div
-        className={`deduction-cell ${colors.absent.length ? "match-none" : "match-partial"}`}
+        className={`deduction-cell ${hasInfo ? "match-partial" : "match-none"}`}
       >
         {colors.present.length > 0 && <ManaCost colors={colors.present} />}
         {colors.maybe.length > 0 && (
@@ -128,20 +140,41 @@ export default function DeductionRow({
     return <div className={`deduction-cell match-${n.tone}`}>{n.value}</div>;
   };
 
-  // Number of guesses a column currently reflects. An unrevealed column still
-  // shows the pre-guess deductions, so keying on this value only remounts (and
-  // thus replays the flip animation) at the moment the clue actually updates.
-  const reflectCount = (i: number) =>
-    i < colsShown ? guesses.length : guesses.length - 1;
+  // A stable signature of the clue a column currently displays. Keying each cell
+  // on this means it only remounts (and thus replays the flip animation) when the
+  // shown content actually changes - a newly revealed column whose clue is
+  // unchanged by the latest guess keeps its key and stays put.
+  const colorsSig = (c: ColorClue | null) =>
+    c
+      ? `c${c.exact ? "x" : ""}|${c.present.join("")}|${c.maybe.join("")}|${c.absent.join("")}`
+      : "-";
+  const typesSig = (t: TypeClue | null) =>
+    t ? `t${t.exact ? "x" : ""}|${t.present.join(",")}|${t.maybe.join(",")}` : "-";
+  const numSig = (d: Deductions, label: string) => {
+    const n = numFrom(d, label);
+    return n ? `n${n.tone}|${n.value}` : "-";
+  };
 
   // Reveal index for a column is its cell index in the guess row: position + 1,
   // since the name cell occupies index 0.
-  const cellFor: Record<ColumnId, (i: number) => React.ReactElement> = {
-    type: (i) => typeCell(i),
-    colors: (i) => colorsCell(i),
-    manaValue: (i) => numCell(i, "Mana value"),
-    price: (i) => numCell(i, "Price"),
-    popularity: (i) => numCell(i, "Popularity"),
+  const cellFor: Record<
+    ColumnId,
+    (i: number) => { cell: React.ReactElement; sig: string }
+  > = {
+    type: (i) => ({ cell: typeCell(i), sig: typesSig(typesFrom(revealedFor(i))) }),
+    colors: (i) => ({
+      cell: colorsCell(i),
+      sig: colorsSig(colorsFrom(revealedFor(i))),
+    }),
+    manaValue: (i) => ({
+      cell: numCell(i, "Mana value"),
+      sig: numSig(revealedFor(i), "Mana value"),
+    }),
+    price: (i) => ({ cell: numCell(i, "Price"), sig: numSig(revealedFor(i), "Price") }),
+    popularity: (i) => ({
+      cell: numCell(i, "Popularity"),
+      sig: numSig(revealedFor(i), "Popularity"),
+    }),
   };
   const cells = COLUMNS.map((c, pos) => cellFor[c.id](pos + 1));
 
@@ -154,8 +187,8 @@ export default function DeductionRow({
       <div className="deduction-cell deduction-title-cell" role="cell">
         Clues
       </div>
-      {cells.map((cell, i) =>
-        cloneElement(cell, { key: `${i}:${reflectCount(i)}`, role: "cell" }),
+      {cells.map(({ cell, sig }, i) =>
+        cloneElement(cell, { key: `${i}:${sig}`, role: "cell" }),
       )}
     </div>
   );

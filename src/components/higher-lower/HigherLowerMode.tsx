@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
 import type { Commander } from "../../types/commander";
 import {
   dailyChain,
@@ -10,6 +9,7 @@ import {
 } from "../../lib/higherLower";
 import { playSound } from "../../lib/sounds";
 import CardBackdrop from "../CardBackdrop";
+import AppFooter from "../layout/AppFooter";
 import CardSlot from "./HlCard";
 import HlHeader from "./HlHeader";
 import HlResult from "./HlResult";
@@ -55,18 +55,7 @@ export default function HigherLowerMode() {
     close: boolean;
   } | null>(null);
   const [milestone, setMilestone] = useState<number | null>(null);
-  const [zoom, setZoom] = useState<Commander | null>(null);
   const timers = useRef<number[]>([]);
-
-  // Close the zoom lightbox on Escape.
-  useEffect(() => {
-    if (!zoom) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setZoom(null);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [zoom]);
 
   const run = mode === "daily" ? daily : endless;
   const best = mode === "daily" ? dailyBest : endlessBest;
@@ -231,7 +220,6 @@ export default function HigherLowerMode() {
                         : null
                     }
                     showImage={Math.abs(i - score) <= 2}
-                    onZoom={setZoom}
                   />
                 ))}
               </div>
@@ -260,23 +248,7 @@ export default function HigherLowerMode() {
         )}
       </main>
 
-      {zoom &&
-        (zoom.normalImage ?? zoom.artCrop) &&
-        createPortal(
-          <div
-            className="hl-zoom-overlay"
-            role="dialog"
-            aria-label={zoom.name}
-            onClick={() => setZoom(null)}
-          >
-            <img
-              src={zoom.normalImage ?? zoom.artCrop ?? ""}
-              alt={zoom.name}
-              className="hl-zoom-img"
-            />
-          </div>,
-          document.body,
-        )}
+      <AppFooter isArchive={false} />
     </div>
   );
 }

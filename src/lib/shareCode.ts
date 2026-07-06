@@ -21,7 +21,7 @@ export const MODE_LABEL: Record<ShareMode, string> = {
 
 /** Client-side route for each mode's daily puzzle (where a shared link sends a human). */
 export const MODE_PATH: Record<ShareMode, string> = {
-  classic: '/',
+  classic: '/classic',
   silhouette: '/silhouette',
   zoom: '/zoom',
   synergy: '/synergy',

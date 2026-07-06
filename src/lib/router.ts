@@ -8,7 +8,7 @@ import type { Mode } from '../types/commander'
  * pages: each mode switch is a fresh impression opportunity.
  */
 export const MODE_PATHS: Record<Mode, string> = {
-  classic: '/',
+  classic: '/classic',
   silhouette: '/silhouette',
   zoom: '/zoom',
   synergy: '/synergy',
@@ -122,6 +122,36 @@ export function isHigherLowerPath(pathname: string): boolean {
   return normalize(pathname) === HIGHER_LOWER_PATH
 }
 
+/** Bonus "Price Is Right" game - guess the card's market price. Also outside the mode tabs. */
+export const PRICE_IS_RIGHT_PATH = '/price-is-right'
+
+export function isPriceIsRightPath(pathname: string): boolean {
+  return normalize(pathname) === PRICE_IS_RIGHT_PATH
+}
+
+/** Bonus "Grid" game - fill a 3×3 of criteria with commanders. Outside the mode tabs. */
+export const GRID_PATH = '/grid'
+
+export function isGridPath(pathname: string): boolean {
+  return normalize(pathname) === GRID_PATH
+}
+
+/** Title screen: the five daily modes on one side, the bonus games on the other.
+ * Lives at the site root; '/games' is kept as an alias for links already out there. */
+export const GAMES_PATH = '/'
+
+export function isGamesPath(pathname: string): boolean {
+  const n = normalize(pathname)
+  return n === GAMES_PATH || n === '/games'
+}
+
+/** The Binder - the player's collection of every commander they've found. */
+export const BINDER_PATH = '/binder'
+
+export function isBinderPath(pathname: string): boolean {
+  return normalize(pathname) === BINDER_PATH
+}
+
 /** Puzzle archive - browse past days. */
 export const ARCHIVE_PATH = '/archive'
 
@@ -182,6 +212,10 @@ function isStandalonePath(path: string): boolean {
     isTermsPath(path) ||
     isContactPath(path) ||
     isHigherLowerPath(path) ||
+    isPriceIsRightPath(path) ||
+    isGridPath(path) ||
+    isGamesPath(path) ||
+    isBinderPath(path) ||
     isArchiveBrowsePath(path) ||
     parseArchivePlay(path) !== null
   )

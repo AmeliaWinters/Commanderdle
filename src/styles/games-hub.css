@@ -1,0 +1,271 @@
+/* ---------- All-games title screen (site root) ---------- */
+.hub-header h1 {
+  margin-bottom: 2px;
+}
+
+/* WUBRG divider under the tagline - canonical colour order, always. */
+.hub-pips {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+.hub-pips img {
+  width: 22px;
+  height: 22px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+.hub-area {
+  align-items: center;
+}
+
+/* Mobile-first: one column; splits into the two panels on wide screens. */
+.hub-columns {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  width: 100%;
+  max-width: 920px;
+  margin: 0 auto;
+  animation: intro-rise 0.45s ease-out both;
+}
+.hub-col-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.hub-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px;
+}
+.hub-col h2 {
+  margin: 0;
+  font-family: "Cinzel", serif;
+  font-size: 1.2rem;
+  letter-spacing: 0.06em;
+  color: var(--flame-1);
+  text-align: center;
+}
+.hub-col-sub {
+  margin: 0 0 4px;
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+
+/* ── Tiles: little card frames ──────────────────────────────────────── */
+.hub-tile {
+  --tile-accent: var(--flame-1);
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 72px;
+  padding: 12px 14px;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--tile-accent);
+  border-radius: 12px;
+  overflow: hidden;
+  color: var(--text);
+  text-decoration: none;
+  text-align: left;
+  transition:
+    transform 0.1s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+.hub-tile:hover {
+  transform: translateY(-2px);
+  border-color: var(--tile-accent);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+}
+
+/* Card-frame hairline, matching the classic grid tiles (see mtg-theme.css). */
+.hub-tile::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 9px;
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Commander art wash behind each daily-mode tile, fading toward the text. */
+.hub-tile-art {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center 25%;
+  opacity: 0.5;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.9),
+    transparent 72%
+  );
+  mask-image: linear-gradient(to left, rgba(0, 0, 0, 0.9), transparent 72%);
+  transition: opacity 0.2s ease;
+}
+.hub-tile:hover .hub-tile-art {
+  opacity: 0.75;
+}
+
+.hub-tile-icon {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  color: var(--tile-accent);
+  flex: 0 0 32px;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.6));
+}
+.hub-tile-text {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+.hub-tile-label {
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  font-size: 1.02rem;
+}
+.hub-tile-blurb {
+  color: var(--text-dim);
+  font-size: 0.82rem;
+  line-height: 1.35;
+  /* Keep the blurb clear of the art-heavy right edge. */
+  max-width: 34ch;
+}
+
+/* Mode's mana pip, sitting like a cost in the frame's corner. */
+.hub-tile-pip {
+  position: relative;
+  z-index: 1;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.7));
+}
+
+/* Completed-today badge, anchored to the tile (not the page!). */
+.hub-tile-done {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  z-index: 3;
+  display: flex;
+  font-size: 0.75rem;
+  color: var(--exact-bd, #3a9a4e);
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8));
+}
+
+/* Colour-pie accents per daily mode (official pie hues, darkened for the UI). */
+.hub-tile-w {
+  --tile-accent: #f8f6d8;
+}
+.hub-tile-u {
+  --tile-accent: #c1d7e9;
+}
+.hub-tile-b {
+  --tile-accent: #cac5c0;
+}
+.hub-tile-r {
+  --tile-accent: #e49977;
+}
+.hub-tile-g {
+  --tile-accent: #a3c095;
+}
+
+/* The Binder gets its own panel below the two columns, not lumped in with games. */
+.hub-col-binder {
+  width: 100%;
+  max-width: 920px;
+  margin: 22px auto 0;
+  box-sizing: border-box;
+}
+
+/* ── Bonus-game tiles: the classic card back peeking out ────────────── */
+.hub-tile-back {
+  position: relative;
+  z-index: 1;
+  width: 40px;
+  border-radius: 4px;
+  transform: rotate(-6deg);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  flex: 0 0 auto;
+  transition: transform 0.15s ease;
+}
+.hub-tile:hover .hub-tile-back {
+  transform: rotate(-2deg) scale(1.05);
+}
+.hub-tile-back-soon {
+  filter: grayscale(0.8);
+}
+
+.hub-tile-soon {
+  opacity: 0.55;
+  cursor: default;
+}
+.hub-tile-soon:hover {
+  transform: none;
+  border-color: var(--line);
+  box-shadow: none;
+}
+
+/* Foil sweep across a tile on hover, same treatment as the classic grid. */
+@media (hover: hover) {
+  .hub-tile::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+    background: linear-gradient(
+      115deg,
+      transparent 25%,
+      rgba(169, 213, 240, 0.1) 42%,
+      rgba(255, 255, 255, 0.18) 48%,
+      rgba(255, 251, 213, 0.1) 54%,
+      rgba(241, 160, 129, 0.08) 60%,
+      transparent 75%
+    );
+    transform: translateX(-130%) skewX(-12deg);
+  }
+  .hub-tile:not(.hub-tile-soon):hover::after {
+    animation: foil-sweep 0.7s ease-out;
+  }
+}
+
+@media (min-width: 720px) {
+  .hub-columns {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hub-tile::after {
+    animation: none !important;
+  }
+  .hub-columns {
+    animation: none;
+  }
+}

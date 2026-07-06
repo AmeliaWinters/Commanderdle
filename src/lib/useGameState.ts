@@ -4,16 +4,22 @@ import { COMMANDERS_BY_NAME } from './commanders'
 import { dailyAnswer, randomAnswer, todayKey, puzzleNumber } from './dailyAnswer'
 import { recordDailyResult } from './stats'
 import { recordArchiveResult } from './archive'
+import { recordFound } from './collection'
 import { submitGlobalResult } from './api'
 import { MAX_GUESSES, type ShareMode } from './shareCode'
 import { playSound } from './sounds'
 
 const maxGuessesFor = (mode: Mode) => MAX_GUESSES[mode]
 
+/** One turn the player has spent: either a guess or a skip, in the order taken. */
+export type Turn = { kind: 'guess'; commander: Commander } | { kind: 'skip' }
+
 export interface GameState {
   answer: Commander
   guesses: Commander[]
   skips: number
+  /** Guesses and skips in the exact order they were taken (drives the guess list). */
+  history: Turn[]
   status: 'playing' | 'won' | 'lost'
   /** The date this game belongs to. Kept on the state itself so the persist/record
    * effects can never pair a stale game with the date of the puzzle being switched to. */
@@ -35,6 +41,8 @@ export interface PersistedDaily {
   answerName: string
   guessNames: string[]
   skips?: number
+  /** Ordered turn log: a commander name for a guess, null for a skip. */
+  timeline?: (string | null)[]
 }
 
 /** localStorage slot for a mode's live daily game. */
@@ -50,6 +58,7 @@ function loadGame(mode: Mode, dateKey: string, isArchive: boolean): GameState {
     answer,
     guesses: [],
     skips: 0,
+    history: [],
     dateKey,
     mode,
     isDaily: !isArchive,
@@ -61,17 +70,38 @@ function loadGame(mode: Mode, dateKey: string, isArchive: boolean): GameState {
     if (raw) {
       const saved = JSON.parse(raw) as PersistedDaily
       if (saved.date === dateKey && saved.answerName === answer.name) {
-        const guesses = saved.guessNames
-          .map((n) => COMMANDERS_BY_NAME.get(n))
-          .filter((c): c is Commander => Boolean(c))
-        const skips = saved.skips ?? 0
-        return { ...base, guesses, skips, status: deriveStatus(answer, guesses, skips, mode) }
+        const history = reconstructHistory(saved)
+        const { guesses, skips } = tallyHistory(history)
+        return { ...base, guesses, skips, history, status: deriveStatus(answer, guesses, skips, mode) }
       }
     }
   } catch {
     /* ignore corrupt storage */
   }
   return base
+}
+
+/** Rebuild the ordered turn log from a saved game, tolerating the pre-timeline
+ * format (guess names + a skip count) by placing skips after the guesses. */
+function reconstructHistory(saved: PersistedDaily): Turn[] {
+  const toGuess = (name: string): Turn | null => {
+    const commander = COMMANDERS_BY_NAME.get(name)
+    return commander ? { kind: 'guess', commander } : null
+  }
+  if (saved.timeline) {
+    return saved.timeline
+      .map((n) => (n === null ? ({ kind: 'skip' } as Turn) : toGuess(n)))
+      .filter((t): t is Turn => t !== null)
+  }
+  const guesses = saved.guessNames.map(toGuess).filter((t): t is Turn => t !== null)
+  const skips: Turn[] = Array.from({ length: saved.skips ?? 0 }, () => ({ kind: 'skip' }))
+  return [...guesses, ...skips]
+}
+
+function tallyHistory(history: Turn[]) {
+  const guesses = history.flatMap((t) => (t.kind === 'guess' ? [t.commander] : []))
+  const skips = history.filter((t) => t.kind === 'skip').length
+  return { guesses, skips }
 }
 
 function deriveStatus(answer: Commander, guesses: Commander[], skips: number, mode: Mode): GameState['status'] {
@@ -113,6 +143,9 @@ export function useGameState(mode: Mode, archiveDate?: string) {
     // Skips consume a turn like guesses, so the turn count used for stats is both.
     const attempts = state.guesses.length + state.skips
     recordResult(state, mode, won, attempts)
+    // Only a live-daily win adds the commander to the binder - archive replays and
+    // practice/unlimited don't count toward the collection.
+    if (won && state.isDaily && !state.isArchive) recordFound(state.answer.name, mode, state.dateKey)
     // Contribute to the anonymous community aggregate (live daily only; best-effort,
     // deduped server-side). A loss records the guess cap as guesses-used.
     if (state.isDaily && !state.isArchive) {
@@ -132,6 +165,7 @@ export function useGameState(mode: Mode, archiveDate?: string) {
       answerName: state.answer.name,
       guessNames: state.guesses.map((g) => g.name),
       skips: state.skips,
+      timeline: state.history.map((t) => (t.kind === 'skip' ? null : t.commander.name)),
     }
     try {
       localStorage.setItem(storageKey(mode, state.dateKey, state.isArchive), JSON.stringify(payload))
@@ -145,6 +179,7 @@ export function useGameState(mode: Mode, archiveDate?: string) {
       if (prev.status !== 'playing') return prev
       if (prev.guesses.some((g) => g.name === commander.name)) return prev
       const guesses = [...prev.guesses, commander]
+      const history: Turn[] = [...prev.history, { kind: 'guess', commander }]
       // Recording the finished result is handled by the status effect above
       // (idempotently), keeping this updater free of storage side effects.
       const status = deriveStatus(prev.answer, guesses, prev.skips, mode)
@@ -157,7 +192,7 @@ export function useGameState(mode: Mode, archiveDate?: string) {
       } else {
         playSound(status === 'won' ? 'win' : status === 'lost' ? 'lose' : 'guess')
       }
-      return { ...prev, guesses, status }
+      return { ...prev, guesses, history, status }
     })
   }, [mode, dateKey])
 
@@ -165,14 +200,15 @@ export function useGameState(mode: Mode, archiveDate?: string) {
     setState((prev) => {
       if (prev.status !== 'playing') return prev
       const skips = prev.skips + 1
+      const history: Turn[] = [...prev.history, { kind: 'skip' }]
       const status = deriveStatus(prev.answer, prev.guesses, skips, mode)
       playSound(status === 'lost' ? 'lose' : 'guess')
-      return { ...prev, skips, status }
+      return { ...prev, skips, history, status }
     })
   }, [mode, dateKey])
 
   const startPractice = useCallback(() => {
-    setState({ answer: randomAnswer(mode), guesses: [], skips: 0, dateKey: todayKey(), mode, isDaily: false, isArchive: false, status: 'playing' })
+    setState({ answer: randomAnswer(mode), guesses: [], skips: 0, history: [], dateKey: todayKey(), mode, isDaily: false, isArchive: false, status: 'playing' })
   }, [mode])
 
   const backToDaily = useCallback(() => {

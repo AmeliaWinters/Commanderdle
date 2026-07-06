@@ -1,6 +1,7 @@
 import { prefersReducedMotion } from "../../lib/reducedMotion";
 import type { Commander, Mode } from "../../types/commander";
 import { navigateToPath, HIGHER_LOWER_PATH } from "../../lib/router";
+import { edhrecUrl } from "../../lib/edhrec";
 import { useCountdown } from "../../lib/useCountdown";
 import { buildDots } from "../../lib/guessDots";
 import CardZoom from "../CardZoom";
@@ -94,8 +95,16 @@ export default function ResultBanner({
             The answer was <strong>{answer.name}</strong>
           </p>
           <p className="result-sub">
-            #{answer.rank} on EDHREC. In {answer.numDecks.toLocaleString()}{" "}
-            decks
+            #{answer.rank} on{" "}
+            <a
+              className="result-edhrec"
+              href={edhrecUrl(answer.name)}
+              target="_blank"
+              rel="noreferrer"
+            >
+              EDHREC
+            </a>
+            . In {answer.numDecks.toLocaleString()} decks
           </p>
           <div className="result-scoreline">
             <span className="result-score">{score}</span>

@@ -4,7 +4,9 @@
 }
 
 .card-zoom {
-  z-index: 40;
+  /* Portaled to <body>, so it must outrank any overlay it can appear over
+     (e.g. the grid cell-detail modal at z-index 50, modals at 1000). */
+  z-index: 1100;
   width: 300px;
   max-width: 70vw;
   pointer-events: none;

@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Mode } from "../types/commander";
-import {
-  puzzleNumber,
-  msUntilNextPuzzle,
-  formatCountdown,
-} from "../lib/dailyAnswer";
+import { puzzleNumber } from "../lib/dailyAnswer";
+import { useCountdown } from "../lib/useCountdown";
 import { fetchGlobalStats } from "../lib/api";
 import { summarize } from "../lib/globalStats";
 import { MODE_LABEL } from "../lib/shareCode";
@@ -16,16 +13,6 @@ interface Props {
   showCard: boolean;
   /** Any guess/skip made yet - hides the tagline to tighten the layout. */
   started: boolean;
-}
-
-/** Ticking HH:MM:SS until the next local-midnight rollover. */
-function useCountdown(): string {
-  const [ms, setMs] = useState(msUntilNextPuzzle);
-  useEffect(() => {
-    const id = window.setInterval(() => setMs(msUntilNextPuzzle()), 1000);
-    return () => window.clearInterval(id);
-  }, []);
-  return formatCountdown(ms);
 }
 
 /** "1,234 players solved today's Classic" - live community pulse for the landing view. */
@@ -78,9 +65,6 @@ export default function DailyHero({ mode, showCard, started }: Props) {
               <div className="hero-card-shine" />
             </div>
           </div>
-          {!started && (
-            <p className="hero-tagline">Today&rsquo;s commander awaits</p>
-          )}
         </div>
       )}
       <p className="hero-meta">

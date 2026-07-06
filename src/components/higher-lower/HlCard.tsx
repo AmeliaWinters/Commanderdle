@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import type { Commander } from "../../types/commander";
 import { hlValue, HL_STAT_LABEL } from "../../lib/higherLower";
 import { prefersReducedMotion } from "../../lib/reducedMotion";
+import CardZoom from "../CardZoom";
 
 /**
  * Animate a number from 0 up to `target` with an ease-out when `active`, so the
@@ -59,7 +60,6 @@ export default function CardSlot({
   counting,
   verdict,
   showImage,
-  onZoom,
 }: {
   card: Commander;
   revealed: boolean;
@@ -68,7 +68,6 @@ export default function CardSlot({
   /** Only cards near the current position load their image - an 80-card Endless
    * chain otherwise fetches every card at once. */
   showImage: boolean;
-  onZoom: (card: Commander) => void;
 }) {
   const image = card.normalImage ?? card.artCrop;
   const needsCaption = !card.normalImage;
@@ -76,17 +75,9 @@ export default function CardSlot({
     <div className="hl-slot">
       <div className="hl-card">
         {image && showImage ? (
-          <button
-            type="button"
-            className="hl-card-art-btn"
-            onClick={() => onZoom(card)}
-            aria-label={`Zoom ${card.name}`}
-          >
+          <CardZoom name={card.name} image={card.normalImage} className="hl-card-zoom">
             <img src={image} alt={card.name} className="hl-card-art" />
-            <span className="hl-zoom-hint" aria-hidden="true">
-              ⤢
-            </span>
-          </button>
+          </CardZoom>
         ) : (
           <div className="hl-card-art" />
         )}

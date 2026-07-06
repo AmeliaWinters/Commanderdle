@@ -1,0 +1,88 @@
+import type { GridPuzzle } from "../../lib/gridGame";
+import { GRID_SIZE } from "../../lib/gridGame";
+import { pickPct, type GridPicks } from "../../lib/gridRarity";
+import { COMMANDERS_BY_NAME, EXT_COMMANDERS } from "../../lib/commanders";
+
+interface Props {
+  puzzle: GridPuzzle;
+  picks: ReadonlyArray<string | null>;
+  done: boolean;
+  /** Community pick rates, once loaded (post-game only). */
+  community: GridPicks | null;
+  /** Cell index the player is currently filling, for the active highlight. */
+  selected: number | null;
+  onSelect: (cell: number) => void;
+}
+
+/** Resolve a picked name to its art, checking the extended tail too. */
+function artFor(name: string): string | null {
+  const core = COMMANDERS_BY_NAME.get(name);
+  if (core) return core.artCrop;
+  return EXT_COMMANDERS.find((c) => c.name === name)?.artCrop ?? null;
+}
+
+/** The 3×3 play surface: criteria headers on both axes, one button per cell. */
+export default function GridBoard({ puzzle, picks, done, community, selected, onSelect }: Props) {
+  return (
+    <div className="grid-board" role="grid" aria-label="Commander grid">
+      <div className="grid-corner" aria-hidden="true" />
+      {puzzle.cols.map((col) => (
+        <div key={col.id} className="grid-head grid-head-col" role="columnheader">
+          {col.label}
+        </div>
+      ))}
+      {puzzle.rows.map((row, r) => (
+        <div key={row.id} className="grid-row" role="row">
+          <div className="grid-head grid-head-row" role="rowheader">
+            {row.label}
+          </div>
+          {puzzle.cols.map((_, c) => {
+            const cell = r * GRID_SIZE + c;
+            const name = picks[cell];
+            const pct = name != null ? pickPct(community, cell, name) : null;
+            const art = name != null ? artFor(name) : null;
+            return (
+              <button
+                key={cell}
+                className={`grid-cell ${name ? "grid-cell-filled" : ""} ${
+                  selected === cell ? "grid-cell-active" : ""
+                } ${done && !name ? "grid-cell-missed" : ""}`}
+                role="gridcell"
+                // While playing, only empty cells are clickable (to fill them). Once the
+                // grid is done, every cell opens its "who else fit here" reveal.
+                disabled={!done && name != null}
+                onClick={() => onSelect(cell)}
+                aria-label={`${puzzle.rows[r].label} and ${puzzle.cols[c].label}${
+                  name ? `: ${name}` : ""
+                }${done ? " — show all answers" : ""}`}
+              >
+                {name ? (
+                  <>
+                    {art && <img src={art} alt="" className="grid-cell-art" />}
+                    <span className="grid-cell-name">{name}</span>
+                    {pct != null && (
+                      <span
+                        className={`grid-cell-pct ${pct <= 5 ? "grid-cell-pct-rare" : ""}`}
+                        title={`${pct}% of players picked this`}
+                      >
+                        {pct}%
+                      </span>
+                    )}
+                  </>
+                ) : done ? (
+                  <span className="grid-cell-x" aria-hidden="true">
+                    ✕
+                  </span>
+                ) : (
+                  <span className="grid-cell-plus" aria-hidden="true">
+                    +
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      ))}
+    </div>
+  );
+}

@@ -200,6 +200,18 @@
   margin: 0 0 14px;
 }
 
+.result-edhrec {
+  color: var(--flame);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-style: normal;
+  font-weight: 600;
+}
+
+.result-edhrec:hover {
+  text-decoration: none;
+}
+
 /* Secondary image-share action, styled like the recap companion button. */
 .share-image {
   background: transparent;

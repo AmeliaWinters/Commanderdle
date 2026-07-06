@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 
 interface Props {
@@ -26,6 +26,9 @@ export default function CardZoom({ name, image, children, className }: Props) {
   const [pos, setPos] = useState<
     { top: number; left: number; narrow: boolean; width?: number } | null
   >(null)
+  // Timestamp of the last document-pointerdown dismissal. Lets the anchor's own
+  // onClick tell "I just closed this popover" apart from "open me".
+  const dismissedAt = useRef(0)
 
   const placeFrom = (el: HTMLElement) => {
     const r = el.getBoundingClientRect()
@@ -66,8 +69,13 @@ export default function CardZoom({ name, image, children, className }: Props) {
   // Touch has no hover, so tapping toggles the preview; a second tap (or a tap
   // on the portaled image) dismisses it.
   const toggle = (e: React.MouseEvent<HTMLSpanElement>) => {
-    if (pos) setPos(null)
-    else placeFrom(e.currentTarget)
+    if (pos) {
+      setPos(null)
+    } else if (Date.now() - dismissedAt.current > 300) {
+      // Ignore the click from the same tap that the document pointerdown
+      // listener already used to dismiss the popover - otherwise it reopens.
+      placeFrom(e.currentTarget)
+    }
   }
 
   // While the popover is open, the next pointer down anywhere dismisses it - the
@@ -75,7 +83,10 @@ export default function CardZoom({ name, image, children, className }: Props) {
   // the opening tap has already resolved, so it only catches subsequent touches.
   useEffect(() => {
     if (!pos) return
-    const dismiss = () => setPos(null)
+    const dismiss = () => {
+      dismissedAt.current = Date.now()
+      setPos(null)
+    }
     document.addEventListener('pointerdown', dismiss)
     return () => document.removeEventListener('pointerdown', dismiss)
   }, [pos])

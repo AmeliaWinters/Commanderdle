@@ -9,6 +9,10 @@ import {
   isTermsPath,
   isContactPath,
   isHigherLowerPath,
+  isPriceIsRightPath,
+  isGridPath,
+  isGamesPath,
+  isBinderPath,
   isArchiveBrowsePath,
   archivePlayPath,
   navigateToPath,
@@ -51,6 +55,10 @@ const FaqPage = lazy(() => import("./pages/FaqPage"));
 const TermsPage = lazy(() => import("./pages/TermsPage"));
 const ContactPage = lazy(() => import("./pages/ContactPage"));
 const HigherLowerMode = lazy(() => import("./higher-lower/HigherLowerMode"));
+const PriceIsRightMode = lazy(() => import("./price-is-right/PriceIsRightMode"));
+const GridMode = lazy(() => import("./grid/GridMode"));
+const GamesHub = lazy(() => import("./games/GamesHub"));
+const BinderPage = lazy(() => import("./binder/BinderPage"));
 const Archive = lazy(() => import("./Archive"));
 const HowToPlay = lazy(() => import("./HowToPlay"));
 // Off the Classic first-paint path: the decorative backdrop (which only mounts its images
@@ -77,6 +85,10 @@ export default function App() {
   const isTerms = usePathMatch(isTermsPath);
   const isContact = usePathMatch(isContactPath);
   const isHigherLower = usePathMatch(isHigherLowerPath);
+  const isPriceIsRight = usePathMatch(isPriceIsRightPath);
+  const isGrid = usePathMatch(isGridPath);
+  const isGamesHub = usePathMatch(isGamesPath);
+  const isBinder = usePathMatch(isBinderPath);
   const isArchiveBrowse = usePathMatch(isArchiveBrowsePath);
   const archivePlay = useArchivePlay();
   const [routeMode, setMode] = useModeRoute();
@@ -121,7 +133,7 @@ export default function App() {
   const { state, guess, skip, startPractice, backToDaily, reset, maxGuesses } =
     useGameState(mode, archivePlay?.date);
 
-  const { answer, guesses, skips, status, isDaily, isArchive } = state;
+  const { answer, guesses, skips, history, status, isDaily, isArchive } = state;
   const archiveDate = archivePlay?.date;
 
   // The first real classic guess graduates the player past the teaching row.
@@ -200,6 +212,30 @@ export default function App() {
     return (
       <Suspense fallback={null}>
         <HigherLowerMode />
+      </Suspense>
+    );
+  if (isPriceIsRight)
+    return (
+      <Suspense fallback={null}>
+        <PriceIsRightMode />
+      </Suspense>
+    );
+  if (isGrid)
+    return (
+      <Suspense fallback={null}>
+        <GridMode />
+      </Suspense>
+    );
+  if (isGamesHub)
+    return (
+      <Suspense fallback={null}>
+        <GamesHub />
+      </Suspense>
+    );
+  if (isBinder)
+    return (
+      <Suspense fallback={null}>
+        <BinderPage />
       </Suspense>
     );
   if (isArchiveBrowse)
@@ -434,7 +470,7 @@ export default function App() {
                 showExample={classicIntro}
               />
             ) : (
-              <GuessList guesses={guesses} answer={answer} />
+              <GuessList history={history} answer={answer} />
             )}
               </>
             )}

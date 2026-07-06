@@ -1,4 +1,5 @@
-import { navigateToPath, MODE_PATHS } from "../../lib/router";
+import { navigateToPath, GAMES_PATH } from "../../lib/router";
+import LogoTitle from "../layout/LogoTitle";
 
 type Mode = "daily" | "endless";
 
@@ -13,13 +14,13 @@ export default function HlHeader({ mode, onSwitchMode }: Props) {
     <header className="app-header hl-header">
       <button
         className="hl-back"
-        onClick={() => navigateToPath(MODE_PATHS.classic)}
+        onClick={() => navigateToPath(GAMES_PATH)}
       >
-        ← Back to Commandle
+        ← All games
       </button>
-      <h1>
+      <LogoTitle ariaLabel="Higher / Lower">
         Higher <span className="accent">/</span> Lower
-      </h1>
+      </LogoTitle>
       <p className="tagline">
         Which commander is in more EDHREC decks? Keep the chain going as far
         as you can.

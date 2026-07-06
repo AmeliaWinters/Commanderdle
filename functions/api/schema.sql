@@ -21,6 +21,18 @@ CREATE TABLE IF NOT EXISTS results (
 -- Aggregate reads always scope to a single (mode, puzzle); the primary key already
 -- covers that prefix, so no extra index is needed.
 
+-- Grid mode community picks (drives the rarity score - "3% of players said this").
+-- One row per (puzzle, cell, anonymous client); same dedupe idea as `results`, so a
+-- resubmitted grid is a silent no-op and pick rates count distinct players.
+CREATE TABLE IF NOT EXISTS grid_picks (
+  puzzle     INTEGER NOT NULL,
+  cell       INTEGER NOT NULL,               -- 0..8, row-major
+  client_id  TEXT    NOT NULL,
+  name       TEXT    NOT NULL,               -- commander name as picked
+  created_at INTEGER NOT NULL DEFAULT (unixepoch()),
+  PRIMARY KEY (puzzle, cell, client_id)
+) WITHOUT ROWID;
+
 -- Fixed-window rate-limit buckets (see functions/api/rateLimit.ts). Keyed by
 -- "<endpoint>:<client-ip>"; each row holds the count in the current window and the unix
 -- second the window resets. Shared by the contact relay and the stats ingest endpoint to

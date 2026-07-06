@@ -1,8 +1,5 @@
 import ManaCost from "../ManaSymbols";
-import {
-  MdKeyboardArrowUp,
-  MdKeyboardDoubleArrowDown,
-} from "react-icons/md";
+import { MdKeyboardArrowUp, MdKeyboardDoubleArrowDown } from "react-icons/md";
 
 /** One hand-written demo cell; mirrors the markup GuessRow produces. */
 function DemoCell({
@@ -30,7 +27,7 @@ export default function ExampleRow() {
       <div className="grid-row example-row no-anim">
         <div className="grid-cell name-cell">
           <div className="cell-inner name-inner">
-            <span className="name-text">Exampie, the Great Clarity</span>
+            <span className="name-text">Exampie, the Clarifier</span>
           </div>
         </div>
         <DemoCell kind="exact">
@@ -65,9 +62,9 @@ export default function ExampleRow() {
         </DemoCell>
       </div>
       <p className="example-caption">
-        Example:  <b className="ex-green">green</b> matches the secret
-        commander, <b className="ex-yellow">yellow</b> is close, arrows point
-        toward the answer (double/gray = far off)
+        <b className="ex-green">green</b> matches the secret commander,{" "}
+        <b className="ex-yellow">yellow</b> is close, arrows point toward the
+        answer, <b className="ex-gray">double/gray</b> = far off
       </p>
     </div>
   );

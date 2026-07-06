@@ -8,7 +8,11 @@
 // it); loadCommanders() fetches and JSON.parses it - ~2x faster than evaluating a literal,
 // and in parallel with the JS download. See main.tsx, which gates React's mount on the load.
 import coreUrl from '../data/commanders.core.json?url'
+// Ranks 501-1000, used only by Grid mode. Same lazy `?url` treatment as the core file so
+// the deeper pool costs nothing on the initial page load.
+import extUrl from '../data/commanders.ext.json?url'
 import type { Commander, SynergyCard } from '../types/commander'
+import { aliasIdentityKey, identityMatchesKey } from './colorNames'
 
 // Images are self-hosted under public/cards/ as "cards/<file>" paths. Resolve them against
 // the deploy base (Vite's BASE_URL) so they work whether the app is served from the root or
@@ -64,6 +68,49 @@ export function loadCommanders(): Promise<void> {
   return corePromise
 }
 
+// The extended tail (ranks 501-1000) that build-data.ts splits into commanders.ext.json.
+// It omits flavor text and synergy - Grid mode is the only consumer and needs neither.
+type ExtCommander = Omit<CoreCommander, 'flavorText' | 'synergyCount'>
+
+/** Ranks 501-1000, hydrated by ensureExtendedLoaded(). Empty until Grid mode asks. */
+export const EXT_COMMANDERS: Commander[] = []
+
+let extPromise: Promise<void> | null = null
+/**
+ * Lazily fetch the extended commander tail for Grid mode. Best-effort: a hard failure
+ * (after one retry) resolves anyway with EXT_COMMANDERS left empty, so the grid still
+ * plays over the top-500 core pool offline.
+ */
+export function ensureExtendedLoaded(): Promise<void> {
+  if (!extPromise) {
+    const fetchExt = () => fetch(extUrl).then((r) => r.json() as Promise<ExtCommander[]>)
+    extPromise = fetchExt()
+      .catch(() => fetchExt())
+      .then((ext) => {
+        EXT_COMMANDERS.length = 0
+        for (const c of ext) {
+          EXT_COMMANDERS.push({
+            ...c,
+            flavorText: null,
+            synergyCount: 0,
+            artCrop: resolveAsset(c.artCrop),
+            normalImage: resolveAsset(c.normalImage),
+            synergyCards: [],
+          })
+        }
+        gridPoolCache = null
+      })
+      .catch(() => undefined)
+  }
+  return extPromise
+}
+
+let gridPoolCache: Commander[] | null = null
+/** Grid mode's answer pool: the top-500 core plus the extended tail once it has loaded. */
+export function gridPool(): Commander[] {
+  return (gridPoolCache ??= [...COMMANDERS, ...EXT_COMMANDERS])
+}
+
 let synergyPromise: Promise<void> | null = null
 /** True once the split synergy payload has been hydrated onto COMMANDERS. */
 export let synergyLoaded = false
@@ -94,6 +141,7 @@ export function ensureSynergyLoaded(): Promise<void> {
 // hydrateCommanders() so a pool queried before the data lands can't pin an empty result.
 const poolResetters: Array<() => void> = []
 function resetPools(): void {
+  gridPoolCache = null
   for (const reset of poolResetters) reset()
 }
 function memoPool(build: () => Commander[]): () => Commander[] {
@@ -115,17 +163,50 @@ export const synergyPool = memoPool(() => COMMANDERS.filter((c) => c.synergyCoun
 /** Commanders eligible as Zoom-mode answers (need an image to zoom into). */
 export const zoomPool = memoPool(() => COMMANDERS.filter((c) => c.normalImage ?? c.artCrop))
 
-/** Case-insensitive substring search over commander names, ranked by EDHREC popularity. */
-export function searchCommanders(query: string, limit = 8): Commander[] {
-  const q = query.trim().toLowerCase()
+/**
+ * Fold a name into a match key: lowercase, strip diacritics (Y'shtola -> yshtola),
+ * and drop punctuation/whitespace so queries like "yshtola" or "jacethemind"
+ * still match "Y'shtola" and "Jace, the Mind Sculptor".
+ */
+function foldName(s: string): string {
+  return s
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '') // combining diacritical marks
+    .replace(/[^a-z0-9]+/g, '')
+}
+
+/**
+ * Punctuation/diacritic-insensitive substring search over commander names, ranked by EDHREC
+ * popularity. Name matches always come first; if the query is a color-identity nickname
+ * ("Rakdos", "Temur", "Mono-White", "WUBRG") any leftover slots are filled with commanders
+ * of exactly that color identity — so an MTG player can search by guild/shard/wedge too.
+ */
+export function searchCommanders(
+  query: string,
+  limit = 8,
+  pool: readonly Commander[] = COMMANDERS,
+): Commander[] {
+  const q = foldName(query)
   if (!q) return []
   const starts: Commander[] = []
   const contains: Commander[] = []
-  for (const c of COMMANDERS) {
-    const name = c.name.toLowerCase()
+  for (const c of pool) {
+    const name = foldName(c.name)
     if (name.startsWith(q)) starts.push(c)
     else if (name.includes(q)) contains.push(c)
     if (starts.length >= limit) break
   }
-  return [...starts, ...contains].slice(0, limit)
+  const byName = [...starts, ...contains].slice(0, limit)
+
+  const identityKey = aliasIdentityKey(query)
+  if (identityKey && byName.length < limit) {
+    const seen = new Set(byName.map((c) => c.name))
+    for (const c of pool) {
+      if (byName.length >= limit) break
+      if (seen.has(c.name)) continue
+      if (identityMatchesKey(c.colorIdentity, identityKey)) byName.push(c)
+    }
+  }
+  return byName
 }

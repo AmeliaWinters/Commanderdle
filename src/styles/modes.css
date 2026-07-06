@@ -249,6 +249,17 @@
   color: #eafff0;
 }
 
+.guess-list li.skipped {
+  background: transparent;
+  border-style: dashed;
+  opacity: 0.65;
+}
+
+.guess-list li.skipped .guess-name {
+  font-style: italic;
+  color: var(--muted, #9aa0a6);
+}
+
 .guess-list-item {
   display: flex;
   align-items: center;

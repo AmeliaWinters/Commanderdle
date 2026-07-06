@@ -1,6 +1,6 @@
-import { useMemo } from "react";
+import { useEffect, useState } from "react";
 import type { Mode } from "../types/commander";
-import { loadStats } from "../lib/stats";
+import { loadStats, subscribeStats } from "../lib/stats";
 import { puzzleNumber } from "../lib/dailyAnswer";
 import type { ShareMode } from "../lib/shareCode";
 import GlobalStats from "./GlobalStats";
@@ -13,7 +13,13 @@ interface Props {
 }
 
 export default function StatsPanel({ mode, maxGuesses, highlight }: Props) {
-  const stats = useMemo(() => loadStats(mode), [mode]);
+  const [stats, setStats] = useState(() => loadStats(mode));
+  // This panel mounts in the same commit that finishes the game, one effect pass
+  // before useGameState records the result - so re-read whenever stats are saved.
+  useEffect(() => {
+    setStats(loadStats(mode));
+    return subscribeStats(() => setStats(loadStats(mode)));
+  }, [mode]);
 
   const winPct =
     stats.played > 0 ? Math.round((stats.wins / stats.played) * 100) : 0;

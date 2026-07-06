@@ -1,7 +1,7 @@
 /* ---------- Footer ---------- */
 .app-footer {
   text-align: center;
-  margin-top: var(--s5);
+  margin-top: var(--s4);
   color: var(--text-dim);
   font-size: 0.84rem;
   font-style: italic;
@@ -24,6 +24,20 @@
   color: var(--text);
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.04em;
+}
+
+.footer-data,
+.footer-fanpolicy {
+  display: block;
+  max-width: 46rem;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+.footer-fanpolicy {
+  margin-top: var(--s2, 6px);
+  font-size: 0.74rem;
+  opacity: 0.85;
 }
 
 /* Ad banner */
@@ -56,7 +70,7 @@
 }
 
 .bottom-bar {
-  margin: 36px 0 12px;
+  margin: 24px 0 30px;
 }
 
 /* ---------- Clock-ahead notice (anti time-travel) ---------- */

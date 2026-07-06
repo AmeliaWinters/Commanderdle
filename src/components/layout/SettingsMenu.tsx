@@ -1,5 +1,11 @@
 import { useState, useEffect } from "react";
-import { navigateToPath, HIGHER_LOWER_PATH, ARCHIVE_PATH } from "../../lib/router";
+import {
+  navigateToPath,
+  HIGHER_LOWER_PATH,
+  PRICE_IS_RIGHT_PATH,
+  GAMES_PATH,
+  ARCHIVE_PATH,
+} from "../../lib/router";
 import {
   isReminderEnabled,
   toggleReminder,
@@ -122,8 +128,14 @@ export default function SettingsMenu({
               <button onClick={pick(onBackToDaily)}>Back to daily</button>
             </>
           )}
+          <button onClick={pick(() => navigateToPath(GAMES_PATH))}>
+            All games ↗
+          </button>
           <button onClick={pick(() => navigateToPath(HIGHER_LOWER_PATH))}>
             Higher / Lower ↗
+          </button>
+          <button onClick={pick(() => navigateToPath(PRICE_IS_RIGHT_PATH))}>
+            Price Is Right ↗
           </button>
           <button aria-pressed={!muted} onClick={() => toggleMuted()}>
             {muted ? (

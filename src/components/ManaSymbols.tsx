@@ -1,4 +1,5 @@
 import type { MatchKind } from '../lib/compare'
+import { colorIdentityName } from '../lib/colorNames'
 
 const ORDER = ['W', 'U', 'B', 'R', 'G']
 
@@ -13,7 +14,8 @@ function Pip({ symbol, size }: { symbol: string; size?: string }) {
       className={`mana-pip mana-${symbol}`}
       src={`/mana/${symbol}.svg`}
       style={{ width: size, height: size }}
-      alt={symbol}
+      alt=""
+      aria-hidden="true"
       draggable={false}
     />
   )
@@ -30,8 +32,13 @@ interface ManaCostProps {
 /** Render a color-identity as a cluster of WUBRG mana pips (or a colorless pip). */
 export default function ManaCost({ colors, kind, size }: ManaCostProps) {
   const shown = colors.length ? sortColors(colors) : ['C']
+  const label = colorIdentityName(colors) ?? undefined
   return (
-    <span className={`mana-cost${kind ? ` match-${kind}` : ''}`}>
+    <span
+      className={`mana-cost${kind ? ` match-${kind}` : ''}`}
+      title={label}
+      aria-label={label}
+    >
       {shown.map((c, i) => (
         <Pip key={`${c}-${i}`} symbol={c} size={size} />
       ))}

@@ -13,6 +13,19 @@ export interface ModeStats {
 
 const statsKey = (mode: Mode) => `commandle:stats:${mode}`;
 
+/** Listeners notified whenever any mode's stats are saved, so panels that
+ * rendered before the record effect ran can re-read the fresh values. */
+const listeners = new Set<() => void>();
+
+export function subscribeStats(listener: () => void): () => void {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
+}
+
+function notifyStats() {
+  listeners.forEach((l) => l());
+}
+
 /** Has today's daily for `mode` been finished (won or lost)? */
 export function isModeCompletedToday(mode: Mode, today: string): boolean {
   return loadStats(mode).lastPlayedDate === today;
@@ -52,6 +65,7 @@ function saveStats(mode: Mode, stats: ModeStats) {
   } catch {
     /* ignore */
   }
+  notifyStats();
 }
 
 /** Is `date` exactly one calendar day after `prev`? (both YYYY-MM-DD) */

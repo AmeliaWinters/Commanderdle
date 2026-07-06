@@ -44,12 +44,19 @@ const OUT_FILE = join(__dirname, '..', 'src', 'data', 'commanders.json')
 // Derived splits consumed by the app (see the write near the end of main()).
 const CORE_FILE = join(__dirname, '..', 'src', 'data', 'commanders.core.json')
 const SYNERGY_FILE = join(__dirname, '..', 'src', 'data', 'synergy.json')
+// Small provenance sidecar (data freshness) shown in the app footer.
+const META_FILE = join(__dirname, '..', 'src', 'data', 'commanders.meta.json')
 // Vite serves public/ at the deploy root; images land here and ship as static assets.
 const CARDS_DIR = join(__dirname, '..', 'public', 'cards')
 // Last-good EDHREC payload, committed so the build survives json.edhrec.com going away.
 const CACHE_FILE = join(__dirname, '.cache', 'edhrec.json')
 
 const TARGET_COUNT = 500
+// Grid mode draws from a deeper pool (top GRID_COUNT). Ranks TARGET_COUNT+1..GRID_COUNT ship
+// as a separate lazily-loaded commanders.ext.json (no synergy fetch, no flavor) so the
+// initial page payload stays exactly the size of the top-TARGET_COUNT core file.
+const GRID_COUNT = 1000
+const EXT_FILE = join(__dirname, '..', 'src', 'data', 'commanders.ext.json')
 // A fresh EDHREC ranking shorter than this is treated as a failed/degraded fetch, and we
 // fall back to the cached list instead of trusting it.
 const MIN_VALID = Math.floor(TARGET_COUNT * 0.8)
@@ -484,11 +491,11 @@ async function main() {
   const cache = await loadCache()
 
   console.log('Fetching EDHREC top commanders...')
-  // Pull the top TARGET_COUNT ranked entries. Partner pairs later expand into two commanders
-  // each (and some entries fail enrichment), so the final count is trimmed to TARGET_COUNT.
+  // Pull the top GRID_COUNT ranked entries. Partner pairs later expand into two commanders
+  // each (and some entries fail enrichment), so the final count is trimmed by rank below.
   let edhList: EdhrecCardView[] = []
   try {
-    edhList = await fetchEdhrecTop(TARGET_COUNT)
+    edhList = await fetchEdhrecTop(GRID_COUNT)
   } catch (e) {
     console.warn(`EDHREC ranking fetch threw: ${(e as Error).message}`)
   }
@@ -524,6 +531,9 @@ async function main() {
   const synergyNamesByCommander = new Map<string, SynergyRef[]>()
   for (let i = 0; i < edhList.length; i++) {
     const edh = edhList[i]
+    // Only the top TARGET_COUNT (the Synergy-mode pool) need synergy cards; fetching pages
+    // for the extended grid-only tail would double the EDHREC crawl for data nothing reads.
+    if ((edh.rank ?? Infinity) > TARGET_COUNT) continue
     const slug = edh.sanitized
     if (!slug) continue
     let names: SynergyRef[] = []
@@ -590,16 +600,20 @@ async function main() {
     seenNames.add(c.name)
     commanders.push(c)
   }
-  // Keep every commander within the top TARGET_COUNT ranking spots (so e.g. the #500 single
-  // is still included). Partner pairs share a spot — two commanders at one rank — so the
-  // final list can exceed TARGET_COUNT entries even though ranks only span 1..TARGET_COUNT.
-  commanders = commanders.filter((c) => c.rank <= TARGET_COUNT)
+  // Keep every commander within the top GRID_COUNT ranking spots. Partner pairs share a
+  // spot — two commanders at one rank — so a slice can exceed its count in entries even
+  // though ranks only span 1..GRID_COUNT.
+  commanders = commanders.filter((c) => c.rank <= GRID_COUNT)
+  // The main dataset (all five daily modes) stays the top TARGET_COUNT; the tail ships
+  // separately for Grid mode only.
+  const mainCommanders = commanders.filter((c) => c.rank <= TARGET_COUNT)
+  const extCommanders = commanders.filter((c) => c.rank > TARGET_COUNT)
 
   // Guard: refuse to overwrite a good dataset with a degenerate one (e.g. Scryfall
   // enrichment mostly failed). Keep the existing committed commanders.json instead.
-  if (commanders.length < MIN_VALID) {
+  if (mainCommanders.length < MIN_VALID) {
     throw new Error(
-      `Only built ${commanders.length} commanders (< ${MIN_VALID}); refusing to overwrite commanders.json.`,
+      `Only built ${mainCommanders.length} commanders (< ${MIN_VALID}); refusing to overwrite commanders.json.`,
     )
   }
 
@@ -607,25 +621,33 @@ async function main() {
   await localizeImages(commanders)
 
   await mkdir(dirname(OUT_FILE), { recursive: true })
-  await writeFile(OUT_FILE, JSON.stringify(commanders, null, 2), 'utf-8')
-  console.log(`Wrote ${commanders.length} commanders to ${OUT_FILE}`)
+  await writeFile(OUT_FILE, JSON.stringify(mainCommanders, null, 2), 'utf-8')
+  console.log(`Wrote ${mainCommanders.length} commanders to ${OUT_FILE}`)
+
+  // Extended tail for Grid mode: same core shape minus the fields only other modes use
+  // (flavor text, synergy). Loaded on demand by /grid, never in the initial bundle.
+  const ext = extCommanders.map(({ synergyCards, flavorText, ...rest }) => rest)
+  await writeFile(EXT_FILE, JSON.stringify(ext), 'utf-8')
+  console.log(`Wrote ${ext.length} extended commanders to ${EXT_FILE}`)
 
   // Derived, app-facing splits (keep in sync with src/lib/commanders.ts):
   //  - commanders.core.json: every field except the heavy `synergyCards` arrays,
   //    plus a `synergyCount`, so it loads in the initial bundle.
   //  - synergy.json: name -> SynergyCard[], loaded on demand by Synergy mode only.
-  const core = commanders.map(({ synergyCards, ...rest }) => ({
+  const core = mainCommanders.map(({ synergyCards, ...rest }) => ({
     ...rest,
     synergyCount: synergyCards.length,
   }))
   const synergy: Record<string, (typeof commanders)[number]['synergyCards']> = {}
-  for (const c of commanders) synergy[c.name] = c.synergyCards
+  for (const c of mainCommanders) synergy[c.name] = c.synergyCards
   await writeFile(CORE_FILE, JSON.stringify(core), 'utf-8')
   await writeFile(SYNERGY_FILE, JSON.stringify(synergy), 'utf-8')
+  // Provenance sidecar: when this dataset was last refreshed, for the footer freshness line.
+  await writeFile(META_FILE, JSON.stringify({ generatedAt: newCache.fetchedAt }) + '\n', 'utf-8')
   console.log(`Wrote core -> ${CORE_FILE} and synergy -> ${SYNERGY_FILE}`)
-  const withFlavor = commanders.filter((c) => c.flavorText).length
-  const withArt = commanders.filter((c) => c.artCrop).length
-  const withSynergy = commanders.filter((c) => c.synergyCards.length >= 4).length
+  const withFlavor = mainCommanders.filter((c) => c.flavorText).length
+  const withArt = mainCommanders.filter((c) => c.artCrop).length
+  const withSynergy = mainCommanders.filter((c) => c.synergyCards.length >= 4).length
   console.log(`  with flavor text: ${withFlavor}`)
   console.log(`  with art: ${withArt}`)
   console.log(`  with >=4 synergy cards: ${withSynergy}`)

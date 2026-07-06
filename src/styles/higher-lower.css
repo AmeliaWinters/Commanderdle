@@ -4,6 +4,17 @@
   text-align: center;
 }
 
+/* Keep the two-word title on a single line; the base header clamp keeps a 3rem
+   floor that otherwise wraps "Higher / Lower" on phones. */
+.hl-header h1 {
+  white-space: nowrap;
+}
+@media (max-width: 560px) {
+  .hl-header h1 {
+    font-size: clamp(1.9rem, 9vw, 3rem);
+  }
+}
+
 .hl-back {
   background: none;
   border: none;
@@ -130,34 +141,12 @@
   object-fit: contain;
   background: var(--panel-2);
 }
-/* Tap/click the card to open the zoom lightbox. */
-.hl-card-art-btn {
-  position: relative;
+/* Hover (or tap on touch) the card art to pop up the full-size card, matching
+   the CardZoom behaviour used by every other mode. */
+.hl-card-zoom {
   display: block;
-  width: 100%;
-  padding: 0;
-  border: none;
-  background: none;
   cursor: zoom-in;
 }
-.hl-zoom-hint {
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  width: 26px;
-  height: 26px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 6px;
-  background: rgba(0, 0, 0, 0.55);
-  color: #fff;
-  font-size: 0.95rem;
-  opacity: 0;
-  transition: opacity 0.15s ease;
-  pointer-events: none;
-}
-.hl-card-art-btn:hover .hl-zoom-hint,
-.hl-card-art-btn:focus-visible .hl-zoom-hint {
-  opacity: 1;
+.hl-card-zoom .hl-card-art {
+  cursor: zoom-in;
 }

@@ -124,7 +124,7 @@ export default function HowToPlayPage() {
         </p>
         <p>
           Alright, enough readingggg{"       "}{" "}
-          <a href="/">go play today's puzzle.</a>
+          <a href="/classic">go play today's puzzle.</a>
         </p>
       </section>
     </ContentPage>

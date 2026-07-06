@@ -4,19 +4,38 @@ import { searchCommanders } from '../lib/commanders'
 
 interface Props {
   onGuess: (c: Commander) => void
-  disabledNames: Set<string>
+  disabledNames: Set<string> | ReadonlySet<string>
   disabled?: boolean
   /** In quote mode, blur the bottom of the preview so its flavor text can't be read. */
   blurQuote?: boolean
+  /** Search a custom commander pool (e.g. Grid's deeper top-1000) instead of the default. */
+  pool?: readonly Commander[]
+  /** Placeholder text for the input. */
+  placeholder?: string
+  /** Focus the input on mount (used inside the Grid cell-fill dialog). */
+  autoFocus?: boolean
 }
 
-export default function GuessInput({ onGuess, disabledNames, disabled, blurQuote }: Props) {
+export default function GuessInput({
+  onGuess,
+  disabledNames,
+  disabled,
+  blurQuote,
+  pool,
+  placeholder = 'Type a commander name...',
+  autoFocus,
+}: Props) {
   const [query, setQuery] = useState('')
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState(0)
   const wrapRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
 
-  const results = query ? searchCommanders(query, 8) : []
+  useEffect(() => {
+    if (autoFocus) inputRef.current?.focus()
+  }, [autoFocus])
+
+  const results = query ? searchCommanders(query, 8, pool) : []
   const preview = open ? results[active] : undefined
 
   useEffect(() => {
@@ -59,9 +78,10 @@ export default function GuessInput({ onGuess, disabledNames, disabled, blurQuote
   return (
     <div className="guess-input" ref={wrapRef}>
       <input
+        ref={inputRef}
         type="text"
         value={query}
-        placeholder="Type a commander name..."
+        placeholder={placeholder}
         disabled={disabled}
         autoComplete="off"
         autoCapitalize="off"

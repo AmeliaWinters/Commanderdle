@@ -1,0 +1,300 @@
+/* Grid mode (/grid): the 3×3 criteria board, cell-fill search dialog and result panel.
+   Mobile-first: the board scales down to ~360px wide; headers shrink before cells do. */
+
+.grid-area {
+  align-items: center;
+}
+
+.grid-status {
+  margin: 0.25rem 0 0.75rem;
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.grid-board {
+  display: grid;
+  grid-template-columns: minmax(64px, 110px) repeat(3, minmax(84px, 150px));
+  gap: 6px;
+  width: min(100%, 620px);
+}
+
+/* Scope every board class under .grid-board: the classic deduction table uses the
+   same `.grid-row` / `.grid-cell` / `.grid-head` names, and these rules must not leak
+   into it (a bare `.grid-row { display: contents }` flattens the classic rows). */
+.grid-board .grid-row {
+  display: contents;
+}
+
+.grid-board .grid-head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0.35rem 0.3rem;
+  font-size: clamp(0.68rem, 2.4vw, 0.85rem);
+  font-weight: 600;
+  line-height: 1.2;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.grid-board .grid-cell {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.35);
+  color: inherit;
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+  transition:
+    border-color 0.15s,
+    transform 0.1s;
+}
+
+.grid-board .grid-cell:not(:disabled):hover {
+  border-color: var(--accent, #e8b34b);
+  transform: translateY(-1px);
+}
+
+.grid-board .grid-cell-active {
+  border-color: var(--accent, #e8b34b);
+  box-shadow: 0 0 0 2px rgba(232, 179, 75, 0.35);
+}
+
+.grid-board .grid-cell-filled {
+  cursor: default;
+}
+
+/* Once the grid is done, filled cells become clickable (open the answers reveal). */
+.grid-board .grid-cell-filled:not(:disabled) {
+  cursor: pointer;
+}
+
+.grid-board .grid-cell-missed {
+  opacity: 0.55;
+}
+
+.grid-board .grid-cell-plus,
+.grid-board .grid-cell-x {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  opacity: 0.45;
+}
+
+.grid-board .grid-cell-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.grid-board .grid-cell-name {
+  position: relative;
+  width: 100%;
+  padding: 0.9rem 0.25rem 0.25rem;
+  font-size: clamp(0.6rem, 2.2vw, 0.75rem);
+  font-weight: 600;
+  line-height: 1.15;
+  text-align: center;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
+}
+
+.grid-board .grid-cell-pct {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  padding: 0.1rem 0.35rem;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.grid-board .grid-cell-pct-rare {
+  background: var(--accent, #e8b34b);
+  color: #1a1408;
+}
+
+.grid-miss {
+  margin: 0.75rem 0 0;
+  font-size: 0.9rem;
+  color: #e07a6a;
+}
+
+/* --- Cell-fill search dialog ------------------------------------------------------- */
+
+.grid-search-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 12vh 1rem 1rem;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.grid-search {
+  width: min(100%, 420px);
+  border-radius: 12px;
+  background: var(--panel, #1d1a24);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 0.75rem;
+}
+
+.grid-search-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.grid-search-prompt {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.grid-search-close {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+/* The dialog wraps the shared GuessInput; let it fill the dialog width. */
+.grid-search .guess-input {
+  flex: none;
+  max-width: none;
+}
+
+/* --- Result ------------------------------------------------------------------------ */
+
+.grid-result {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.grid-result-line {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem;
+}
+
+.grid-result-rarity {
+  margin: 0.25rem 0;
+}
+
+.grid-result-sub {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  margin: 0.25rem 0;
+}
+
+.grid-result-share {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.75rem;
+}
+
+/* --- Post-game cell reveal (all valid answers + pick rates) ------------------------- */
+
+.grid-detail {
+  width: min(100%, 440px);
+  max-height: 76vh;
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  background: var(--panel, #1d1a24);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 0.75rem;
+}
+
+.grid-detail-count {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+  opacity: 0.65;
+}
+
+.grid-detail-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+}
+
+.grid-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.35rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  width: 100%;
+}
+
+.grid-detail-item + .grid-detail-item {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.grid-detail-item-mine {
+  width: 100%;
+  background: rgba(232, 179, 75, 0.14);
+}
+
+.grid-detail-item .ac-name {
+  flex: 1;
+  min-width: 0;
+}
+
+.grid-detail-you {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--accent, #e8b34b);
+}
+
+.grid-detail-pct {
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
+}
+
+.grid-detail-pct-rare {
+  background: var(--accent, #e8b34b);
+  color: #1a1408;
+}
+
+.grid-detail-zoom {
+  cursor: zoom-in;
+  display: flex;
+  align-items: center;
+}
+
+.grid-detail-thumb {
+  display: block;
+  width: 34px;
+  height: 34px;
+  border-radius: 5px;
+  object-fit: cover;
+  border: 1px solid var(--line);
+}
+
+.grid-detail-thumb-blank {
+  background: rgba(255, 255, 255, 0.08);
+}

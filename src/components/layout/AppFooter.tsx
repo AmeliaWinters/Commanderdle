@@ -1,7 +1,17 @@
-import { puzzleNumber } from "../../lib/dailyAnswer";
 import { navigateToPath, ARCHIVE_PATH } from "../../lib/router";
-import { useCountdown } from "../../lib/useCountdown";
 import AdBanner from "../AdBanner";
+import meta from "../../data/commanders.meta.json";
+
+/** "Jul 5, 2026" for the data-freshness line; empty string if the timestamp is unusable. */
+function formatRefreshed(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "";
+  return d.toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
 
 interface Props {
   isArchive: boolean;
@@ -9,8 +19,8 @@ interface Props {
 }
 
 /** Bottom bar: ad slot, puzzle number/countdown line, credits and privacy link. */
-export default function AppFooter({ isArchive, archiveDate }: Props) {
-  const countdown = useCountdown();
+export default function AppFooter({ isArchive }: Props) {
+  const refreshed = formatRefreshed(meta.generatedAt);
 
   function navTo(path: string) {
     return (e: React.MouseEvent) => {
@@ -24,7 +34,6 @@ export default function AppFooter({ isArchive, archiveDate }: Props) {
       <AdBanner />
       <footer className="app-footer">
         <p className="footer-meta">
-          Commandle No. {puzzleNumber(archiveDate)}
           {isArchive ? (
             <>
               {" "}
@@ -40,25 +49,35 @@ export default function AppFooter({ isArchive, archiveDate }: Props) {
               </a>
             </>
           ) : (
-            <>
-              {" "}
-              · Next commander in <strong>{countdown}</strong>
-            </>
+            <></>
           )}
         </p>
-        Data from{" "}
-        <a
-          href="https://edhrec.com/commanders"
-          target="_blank"
-          rel="noreferrer"
-        >
-          EDHREC
-        </a>{" "}
-        &amp;{" "}
-        <a href="https://scryfall.com" target="_blank" rel="noreferrer">
-          Scryfall
-        </a>
-        . Card images © Wizards of the Coast. Unofficial fan project.
+        <span className="footer-data">
+          Commander rankings from{" "}
+          <a
+            href="https://edhrec.com/commanders"
+            target="_blank"
+            rel="noreferrer"
+          >
+            EDHREC
+          </a>
+          , card data from{" "}
+          <a href="https://scryfall.com" target="_blank" rel="noreferrer">
+            Scryfall
+          </a>
+          .{refreshed ? ` Refreshed daily. Last updated ${refreshed}.` : ""}
+        </span>
+        <span className="footer-fanpolicy">
+          Commandle is unofficial Fan Content permitted under the{" "}
+          <a
+            href="https://company.wizards.com/en/legal/fancontentpolicy"
+            target="_blank"
+            rel="noreferrer"
+          >
+            WotC Fan Content Policy
+          </a>
+          . Not approved or endorsed by WotC. © Wizards of the Coast LLC.
+        </span>
         <nav className="footer-links" aria-label="Site pages">
           <a href="/about" onClick={navTo("/about")}>
             About
