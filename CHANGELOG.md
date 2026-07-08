@@ -8,6 +8,13 @@ _Last updated: 2026-07-08 — currently on v0.10.1._
 
 ## 2026-07-08
 
+- **XP bar on the account button** — the account button in the top corner now shows an XP bar
+  beneath your level so you can see how close you are to the next level and watch it fill as
+  you play. The bar is coloured in your flare colour.
+
+- **Guess the cost accepts prices like `.50`** — you can now leave off the leading zero when
+  entering an amount under a dollar.
+
 - **Player profiles now show much more** — visiting another player's profile now shows their
   bonus-game streaks (Grid, Guess the cost, Higher / Lower) and a link to browse their Binder,
   alongside their flare colour and supporter badge. Signed-in players' bonus-game results now

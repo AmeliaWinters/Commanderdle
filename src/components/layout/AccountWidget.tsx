@@ -107,9 +107,20 @@ export default function AccountWidget() {
                 )}
               </span>
               {level && (
-                <span className="account-widget-level">
-                  Level {level.level}
-                </span>
+                <>
+                  <span className="account-widget-level">
+                    Level {level.level}
+                  </span>
+                  <span
+                    className="account-widget-xpbar"
+                    title={`${level.into}/${level.span} XP to level ${level.level + 1}`}
+                  >
+                    <span
+                      className="account-widget-xpfill"
+                      style={{ width: `${Math.round(level.progress * 100)}%` }}
+                    />
+                  </span>
+                </>
               )}
             </span>
           </>

@@ -13,7 +13,7 @@ const GAP = 5; // clear space between avatar edge and the ring
 
 /**
  * A circular XP gauge wrapped around the hero avatar, with the player's level pinned
- * to the bottom. 
+ * to the bottom.
  */
 export default function AvatarRing({ progress, level, size, children }: Props) {
   const ringSize = size + (GAP + STROKE) * 2;
@@ -46,7 +46,11 @@ export default function AvatarRing({ progress, level, size, children }: Props) {
       >
         <defs>
           <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="var(--flame-2)" />
+            {/* The XP ring is coloured in the player's flare/tier colour. */}
+            <stop
+              offset="0%"
+              stopColor="color-mix(in srgb, var(--tier-color, var(--flame-1)) 65%, #000)"
+            />
             <stop offset="100%" stopColor="var(--tier-color, var(--flame-1))" />
           </linearGradient>
         </defs>

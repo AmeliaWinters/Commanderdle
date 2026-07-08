@@ -81,7 +81,7 @@ export function formatPrice(value: number): string {
  */
 export function parsePrice(raw: string): number | null {
   const cleaned = raw.replace(/[$\s]/g, "").replace(",", ".");
-  if (!/^\d+(\.\d{0,2})?$/.test(cleaned)) return null;
+  if (!/^(\d+(\.\d{0,2})?|\.\d{1,2})$/.test(cleaned)) return null;
   const value = Number(cleaned);
   if (!Number.isFinite(value) || value <= 0) return null;
   return value;

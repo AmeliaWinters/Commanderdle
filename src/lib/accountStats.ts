@@ -6,13 +6,14 @@
  *
  * Metrics (as specced with the owner):
  *  - playStreak     — consecutive days with any completed daily (a loss keeps it alive)
- *  - winStreak      — consecutive days where all 5 daily modes were won
+ *  - winStreak      — consecutive individual daily wins in a row across all modes
+ *                     (win Classic then Synergy = 2); any loss resets it to 0
  *  - totalWins      — total daily wins across all modes
  *  - xp             — cumulative, weighted by how few guesses each win took, plus a
  *                     bonus for clearing all 5 modes in a day
  */
 
-import { MAX_GUESSES } from './shareCode'
+import { MAX_GUESSES } from "./shareCode";
 
 /**
  * Per-mode play stats for a single daily mode. Shared between the anonymous localStorage
@@ -20,41 +21,54 @@ import { MAX_GUESSES } from './shareCode'
  * it lives here in a DOM-free module the Worker can import too.
  */
 export interface ModeStats {
-  played: number
-  wins: number
-  currentStreak: number
-  maxStreak: number
+  played: number;
+  wins: number;
+  currentStreak: number;
+  maxStreak: number;
   /** YYYY-MM-DD of the most recent daily result recorded (win or loss). */
-  lastPlayedDate: string | null
+  lastPlayedDate: string | null;
   /** distribution[n] = number of daily wins solved in n guesses. */
-  distribution: Record<number, number>
+  distribution: Record<number, number>;
 }
 
 /** The five daily guessing modes (a "full clear" is winning all of these in one day). */
-export const DAILY_MODES = ['classic', 'synergy', 'silhouette', 'zoom', 'quote'] as const
-export const FULL_CLEAR = DAILY_MODES.length
+export const DAILY_MODES = [
+  "classic",
+  "synergy",
+  "silhouette",
+  "zoom",
+  "quote",
+] as const;
+export const FULL_CLEAR = DAILY_MODES.length;
+
+/** Deterministic ordering of modes within a single day, for sequencing wins into a
+ *  streak when no per-game timestamp exists. Unknown modes sort after the known five. */
+function modeOrder(mode: string): number {
+  const i = (DAILY_MODES as readonly string[]).indexOf(mode);
+  return i === -1 ? DAILY_MODES.length : i;
+}
 
 /** A mode's guess limit (defaults to 6 for anything unknown). */
 function modeMaxGuesses(mode: string): number {
-  return (MAX_GUESSES as Record<string, number>)[mode] ?? 6
+  return (MAX_GUESSES as Record<string, number>)[mode] ?? 6;
 }
 
 export interface DailyResult {
-  mode: string
+  mode: string;
   /** YYYY-MM-DD. */
-  date: string
-  won: boolean
+  date: string;
+  won: boolean;
   /** Guesses used (winning guess included). */
-  guesses: number
+  guesses: number;
 }
 
 export interface AccountStats {
-  playStreak: number
-  maxPlayStreak: number
-  winStreak: number
-  maxWinStreak: number
-  totalWins: number
-  xp: number
+  playStreak: number;
+  maxPlayStreak: number;
+  winStreak: number;
+  maxWinStreak: number;
+  totalWins: number;
+  xp: number;
 }
 
 export const emptyAccountStats = (): AccountStats => ({
@@ -64,29 +78,29 @@ export const emptyAccountStats = (): AccountStats => ({
   maxWinStreak: 0,
   totalWins: 0,
   xp: 0,
-})
+});
 
 /** Integer day index (UTC) so date arithmetic is timezone-independent. */
 function dayNumber(date: string): number {
-  return Math.round(Date.parse(date + 'T00:00:00Z') / 86_400_000)
+  return Math.round(Date.parse(date + "T00:00:00Z") / 86_400_000);
 }
 
 /** Longest run of consecutive days, and the run that ends on the most recent day. */
 function streaks(days: number[]): { current: number; max: number } {
-  const sorted = [...new Set(days)].sort((a, b) => a - b)
-  if (sorted.length === 0) return { current: 0, max: 0 }
-  let max = 1
-  let run = 1
+  const sorted = [...new Set(days)].sort((a, b) => a - b);
+  if (sorted.length === 0) return { current: 0, max: 0 };
+  let max = 1;
+  let run = 1;
   for (let i = 1; i < sorted.length; i++) {
-    run = sorted[i] === sorted[i - 1] + 1 ? run + 1 : 1
-    if (run > max) max = run
+    run = sorted[i] === sorted[i - 1] + 1 ? run + 1 : 1;
+    if (run > max) max = run;
   }
-  let current = 1
+  let current = 1;
   for (let i = sorted.length - 1; i > 0; i--) {
-    if (sorted[i] === sorted[i - 1] + 1) current++
-    else break
+    if (sorted[i] === sorted[i - 1] + 1) current++;
+    else break;
   }
-  return { current, max }
+  return { current, max };
 }
 
 /**
@@ -97,17 +111,17 @@ function streaks(days: number[]): { current: number; max: number } {
  * mode's own limit means the worst possible win earns the flat base in every mode.
  */
 export function winXp(guesses: number, maxGuesses = 6): number {
-  return 10 + Math.max(0, maxGuesses - guesses) * 2
+  return 10 + Math.max(0, maxGuesses - guesses) * 2;
 }
 
 /** Flat participation XP for finishing a puzzle without solving it. */
-export const LOSS_XP = 5
+export const LOSS_XP = 5;
 
 /** XP earned for a single finished game — used both server-side and for the
  *  result screen's "+N XP" chip. Wins scale with how few guesses it took; a loss
  *  still earns a little something for showing up. */
 export function gameXp(won: boolean, guesses: number, maxGuesses = 6): number {
-  return won ? winXp(guesses, maxGuesses) : LOSS_XP
+  return won ? winXp(guesses, maxGuesses) : LOSS_XP;
 }
 
 /**
@@ -116,27 +130,39 @@ export function gameXp(won: boolean, guesses: number, maxGuesses = 6): number {
  * quickly and later ones are a grind — the usual satisfying curve.
  */
 export function levelFromXp(xp: number): {
-  level: number
-  into: number
-  span: number
-  progress: number
+  level: number;
+  into: number;
+  span: number;
+  progress: number;
 } {
-  const cumulativeFor = (l: number) => 50 * l * (l - 1)
-  let level = 1
-  while (cumulativeFor(level + 1) <= xp) level++
-  const base = cumulativeFor(level)
-  const next = cumulativeFor(level + 1)
-  const span = next - base
-  return { level, into: xp - base, span, progress: span > 0 ? (xp - base) / span : 0 }
+  const c = 19; // or whatever constant you choose
+  const cumulativeFor = (targetLevel: number) => {
+    let total = 0;
+    for (let l = 1; l < targetLevel; l++) {
+      total += c + Math.pow(l, 1.1);
+    }
+    return Math.floor(total);
+  };
+  
+  let level = 1;
+  while (cumulativeFor(level + 1) <= xp) level++;
+  const base = cumulativeFor(level);
+  const next = cumulativeFor(level + 1);
+  const span = next - base;
+  return {
+    level,
+    into: xp - base,
+    span,
+    progress: span > 0 ? (xp - base) / span : 0,
+  };
 }
-
 /** Bonus XP for clearing all five daily modes on the same day. */
-const FULL_CLEAR_BONUS = 25
+const FULL_CLEAR_BONUS = 50;
 
 /** How many consecutive-day play streaks get an XP bump before it caps out. */
-const STREAK_XP_CAP_DAYS = 20
+const STREAK_XP_CAP_DAYS = 25;
 /** Extra XP per consecutive day beyond the first, at the cap. */
-const STREAK_XP_STEP = 0.01
+const STREAK_XP_STEP = 0.01;
 
 /**
  * A day's raw XP (wins + full-clear bonus) is multiplied by this, based on the
@@ -145,7 +171,11 @@ const STREAK_XP_STEP = 0.01
  * day (streak of 1) gets no bonus.
  */
 export function streakXpMultiplier(currentStreak: number): number {
-  return 1 + Math.min(Math.max(currentStreak - 1, 0), STREAK_XP_CAP_DAYS) * STREAK_XP_STEP
+  return (
+    1 +
+    Math.min(Math.max(currentStreak - 1, 0), STREAK_XP_CAP_DAYS) *
+      STREAK_XP_STEP
+  );
 }
 
 /**
@@ -155,17 +185,19 @@ export function streakXpMultiplier(currentStreak: number): number {
  * their real account numbers instead of whatever this browser happens to have. Mirrors
  * `recordDailyResult`'s folding rules exactly so the two stay consistent.
  */
-export function computeModeStats(results: DailyResult[]): Record<string, ModeStats> {
-  const byMode = new Map<string, DailyResult[]>()
+export function computeModeStats(
+  results: DailyResult[],
+): Record<string, ModeStats> {
+  const byMode = new Map<string, DailyResult[]>();
   for (const r of results) {
-    const list = byMode.get(r.mode)
-    if (list) list.push(r)
-    else byMode.set(r.mode, [r])
+    const list = byMode.get(r.mode);
+    if (list) list.push(r);
+    else byMode.set(r.mode, [r]);
   }
 
-  const out: Record<string, ModeStats> = {}
+  const out: Record<string, ModeStats> = {};
   for (const [mode, list] of byMode) {
-    const sorted = [...list].sort((a, b) => a.date.localeCompare(b.date))
+    const sorted = [...list].sort((a, b) => a.date.localeCompare(b.date));
     const stats: ModeStats = {
       played: 0,
       wins: 0,
@@ -173,88 +205,101 @@ export function computeModeStats(results: DailyResult[]): Record<string, ModeSta
       maxStreak: 0,
       lastPlayedDate: null,
       distribution: {},
-    }
+    };
     for (const r of sorted) {
       // One row per (mode, date) server-side, but guard against a stray duplicate.
-      if (stats.lastPlayedDate === r.date) continue
-      stats.played += 1
+      if (stats.lastPlayedDate === r.date) continue;
+      stats.played += 1;
       if (r.won) {
-        stats.wins += 1
+        stats.wins += 1;
         const consecutive =
           stats.lastPlayedDate !== null &&
-          dayNumber(r.date) === dayNumber(stats.lastPlayedDate) + 1
-        stats.currentStreak = consecutive ? stats.currentStreak + 1 : 1
-        stats.maxStreak = Math.max(stats.maxStreak, stats.currentStreak)
-        stats.distribution[r.guesses] = (stats.distribution[r.guesses] ?? 0) + 1
+          dayNumber(r.date) === dayNumber(stats.lastPlayedDate) + 1;
+        stats.currentStreak = consecutive ? stats.currentStreak + 1 : 1;
+        stats.maxStreak = Math.max(stats.maxStreak, stats.currentStreak);
+        stats.distribution[r.guesses] =
+          (stats.distribution[r.guesses] ?? 0) + 1;
       } else {
-        stats.currentStreak = 0
+        stats.currentStreak = 0;
       }
-      stats.lastPlayedDate = r.date
+      stats.lastPlayedDate = r.date;
     }
-    out[mode] = stats
+    out[mode] = stats;
   }
-  return out
+  return out;
 }
 
 /** Recompute every leaderboard stat from a player's full result history. */
 export function computeStats(results: DailyResult[]): AccountStats {
-  const stats = emptyAccountStats()
+  const stats = emptyAccountStats();
   // Group by date: which modes were won (with guesses), and how many were completed at all.
   const byDate = new Map<
     string,
     { wonModes: Set<string>; any: boolean; winXps: number[]; losses: number }
-  >()
+  >();
   for (const r of results) {
-    let day = byDate.get(r.date)
-    if (!day) byDate.set(r.date, (day = { wonModes: new Set(), any: false, winXps: [], losses: 0 }))
-    day.any = true
+    let day = byDate.get(r.date);
+    if (!day)
+      byDate.set(
+        r.date,
+        (day = { wonModes: new Set(), any: false, winXps: [], losses: 0 }),
+      );
+    day.any = true;
     if (r.won) {
-      day.wonModes.add(r.mode)
-      stats.totalWins += 1
-      day.winXps.push(winXp(r.guesses, modeMaxGuesses(r.mode)))
+      day.wonModes.add(r.mode);
+      stats.totalWins += 1;
+      day.winXps.push(winXp(r.guesses, modeMaxGuesses(r.mode)));
     } else {
-      day.losses += 1
+      day.losses += 1;
     }
   }
 
-  const playDays: number[] = []
-  const winDays: number[] = []
+  const playDays: number[] = [];
 
   // Walk dates chronologically so each day's XP can be scaled by the running play
   // streak *as of that day* — the streak has to be built up in date order, not the
   // (arbitrary) order results were submitted in.
-  const orderedDates = [...byDate.keys()].sort()
-  let runningPlayStreak = 0
-  let prevDayNum: number | null = null
+  const orderedDates = [...byDate.keys()].sort();
+  let runningPlayStreak = 0;
+  let prevDayNum: number | null = null;
   for (const date of orderedDates) {
-    const day = byDate.get(date)!
-    const dNum = dayNumber(date)
-    playDays.push(dNum)
-    runningPlayStreak = prevDayNum !== null && dNum === prevDayNum + 1 ? runningPlayStreak + 1 : 1
-    prevDayNum = dNum
+    const day = byDate.get(date)!;
+    const dNum = dayNumber(date);
+    playDays.push(dNum);
+    runningPlayStreak =
+      prevDayNum !== null && dNum === prevDayNum + 1
+        ? runningPlayStreak + 1
+        : 1;
+    prevDayNum = dNum;
 
-    let dayXp = day.winXps.reduce((sum, xp) => sum + xp, 0)
-    dayXp += day.losses * LOSS_XP
+    let dayXp = day.winXps.reduce((sum, xp) => sum + xp, 0);
+    dayXp += day.losses * LOSS_XP;
     if (day.wonModes.size >= FULL_CLEAR) {
-      winDays.push(dNum)
-      dayXp += FULL_CLEAR_BONUS
+      dayXp += FULL_CLEAR_BONUS;
     }
-    stats.xp += Math.round(dayXp * streakXpMultiplier(runningPlayStreak))
+    stats.xp += Math.round(dayXp * streakXpMultiplier(runningPlayStreak));
   }
 
-  const play = streaks(playDays)
-  stats.playStreak = play.current
-  stats.maxPlayStreak = play.max
-  stats.maxWinStreak = streaks(winDays).max
+  const play = streaks(playDays);
+  stats.playStreak = play.current;
+  stats.maxPlayStreak = play.max;
 
-  // Current win streak is anchored to the most recent day the player *engaged*: if
-  // their latest play day wasn't a full 5/5, the current win streak is broken (0),
-  // even if an earlier run of full clears exists.
-  if (playDays.length > 0) {
-    const winDaySet = new Set(winDays)
-    let cur = 0
-    for (let d = Math.max(...playDays); winDaySet.has(d); d--) cur++
-    stats.winStreak = cur
+  // Win streak = individual daily wins in a row across every mode (win Classic then
+  // Synergy = 2), any loss resetting it to 0. We have no per-game timestamp, so games
+  // are walked in a deterministic order — by date, then by the fixed mode order — and
+  // `winStreak` is the run still alive at the end of that sequence.
+  const orderedResults = [...results].sort(
+    (a, b) => a.date.localeCompare(b.date) || modeOrder(a.mode) - modeOrder(b.mode),
+  );
+  let run = 0;
+  for (const r of orderedResults) {
+    if (r.won) {
+      run += 1;
+      if (run > stats.maxWinStreak) stats.maxWinStreak = run;
+    } else {
+      run = 0;
+    }
   }
-  return stats
+  stats.winStreak = run;
+  return stats;
 }

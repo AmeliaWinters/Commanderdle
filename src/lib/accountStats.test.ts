@@ -54,27 +54,39 @@ describe('computeStats', () => {
     expect(s.totalWins).toBe(3)
   })
 
-  it('win streak needs all five modes on consecutive days', () => {
+  it('counts consecutive individual wins across modes, not full-clear days', () => {
+    // Win Classic then Synergy (no loss between) → a win streak of 2.
     const s = computeStats([
-      ...fullClear('2026-07-01'),
-      ...fullClear('2026-07-02'),
-      // 3rd: only four modes won → not a full clear, breaks the win streak
-      ...DAILY_MODES.slice(0, 4).map((mode) => ({
+      { mode: 'classic', date: '2026-07-01', won: true, guesses: 3 },
+      { mode: 'synergy', date: '2026-07-01', won: true, guesses: 3 },
+    ])
+    expect(s.winStreak).toBe(2)
+    expect(s.maxWinStreak).toBe(2)
+  })
+
+  it('resets the win streak on a loss and reports the run still alive', () => {
+    const s = computeStats([
+      ...fullClear('2026-07-01'), // 5 wins
+      // 2nd: lose Classic, then win the other four
+      { mode: 'classic', date: '2026-07-02', won: false, guesses: 6 },
+      ...DAILY_MODES.slice(1).map((mode) => ({
         mode,
-        date: '2026-07-03',
+        date: '2026-07-02',
         won: true,
         guesses: 3,
       })),
     ])
-    expect(s.winStreak).toBe(0) // most recent day isn't a full clear
-    expect(s.maxWinStreak).toBe(2)
-    expect(s.playStreak).toBe(3) // still played all three days
+    // Best run is the first day's five wins; the loss cut it before the next four.
+    expect(s.maxWinStreak).toBe(5)
+    // Current run is the four wins after the loss (ordered classic→synergy→…).
+    expect(s.winStreak).toBe(4)
+    expect(s.playStreak).toBe(2)
   })
 
-  it('crosses a month boundary as consecutive', () => {
+  it('carries the win streak across day and month boundaries', () => {
     const s = computeStats([...fullClear('2026-07-31'), ...fullClear('2026-08-01')])
-    expect(s.winStreak).toBe(2)
-    expect(s.maxWinStreak).toBe(2)
+    expect(s.winStreak).toBe(10) // five wins each day, unbroken
+    expect(s.maxWinStreak).toBe(10)
   })
 
   it('awards fewer-guess wins more XP, plus a full-clear bonus', () => {
