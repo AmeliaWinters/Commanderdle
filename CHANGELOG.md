@@ -6,6 +6,9 @@ a change that a player could notice.
 
 ## 2026-07-08
 
+- **Support on Ko-fi from your account** — the Support panel now has a direct Ko-fi
+  button so you can tip in one tap.
+
 - **Supporter tiers now renew** — a Ko-fi tip keeps your supporter tier (coloured name,
   gem and avatar ring) for 31 days; tip again any time to refresh it. If it lapses the
   cosmetics switch off, but you keep whatever avatar you'd equipped.

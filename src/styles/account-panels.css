@@ -92,6 +92,14 @@
   color: var(--text-dim);
 }
 
+/* Ko-fi support button in the supporter panel. It's an <a>, so the .content-body
+   link colour would otherwise win over .account-btn-primary and make the label
+   flame-on-flame; the compound selector restores the dark button text. */
+.account-kofi.account-btn-primary {
+  margin-top: var(--s3);
+  color: #10100f;
+}
+
 /* Action row (view profile / share / sign out / edit). */
 .account-actions {
   display: flex;

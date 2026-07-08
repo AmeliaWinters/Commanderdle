@@ -50,6 +50,15 @@ export default function SupporterPanel({
           supporter. Thank you for keeping the lights on! {"<"}3
         </p>
       )}
+      <a
+        className="account-btn account-btn-primary account-kofi"
+        href="https://ko-fi.com/commandle"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <span aria-hidden="true">☕</span>
+        {TIER_RANK[user.tier] === 0 ? "Support on Ko-fi" : "Support again on Ko-fi"}
+      </a>
     </div>
   );
 }

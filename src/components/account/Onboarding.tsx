@@ -81,8 +81,7 @@ export default function Onboarding({ onDone }: { onDone: () => void }) {
           <>
             <h2 className="onboarding-title">Welcome, planeswalker</h2>
             <p className="onboarding-sub">
-              Every legend needs a name. Choose one that'll be revered atop the
-              leaderboards.
+              Every legend needs a name. What's yours?
             </p>
             <input
               className="onboarding-input"
