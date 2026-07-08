@@ -1,4 +1,5 @@
 import type { Mode } from '../types/commander'
+import { COMMANDERS } from './commanders'
 import type { PersistedDaily } from './useGameState'
 
 /**
@@ -26,6 +27,19 @@ export function subscribeCollection(listener: () => void): () => void {
 
 function notify() {
   listeners.forEach((l) => l())
+}
+
+/**
+ * Binder progress: how many of the pool's commanders the player has unlocked, out of
+ * the total. Counts only commanders that are actually in the binder pool (found entries
+ * for cards no longer in the pool don't inflate it), matching the /binder page's tally.
+ */
+export function collectionProgress(): { found: number; total: number } {
+  const col = loadCollection()
+  return {
+    found: COMMANDERS.filter((c) => col[c.name]).length,
+    total: COMMANDERS.length,
+  }
 }
 
 export function loadCollection(): Collection {

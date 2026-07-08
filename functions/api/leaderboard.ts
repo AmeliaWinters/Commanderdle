@@ -21,6 +21,7 @@ import {
   type LeaderboardEntry,
   type LeaderboardYou,
 } from '../../src/lib/leaderboard'
+import { EFFECTIVE_TIER_SQL } from './webhooks/kofi'
 
 const UUID_RE = /^[0-9a-fA-F-]{36}$/
 
@@ -47,7 +48,7 @@ export async function onLeaderboard(
   // `col` is one of a small fixed set (never user text), so interpolating it is safe.
   const col = metric.column
   const { results } = await env.STATS_DB.prepare(
-    `SELECT u.uuid, u.username, u.avatar, u.tier, s.${col} AS value
+    `SELECT u.uuid, u.username, u.avatar, ${EFFECTIVE_TIER_SQL} AS tier, s.${col} AS value
      FROM user_stats s JOIN users u ON u.id = s.user_id
      WHERE u.leaderboard_opt_in = 1 AND u.username IS NOT NULL AND s.${col} > 0
      ORDER BY s.${col} DESC, s.updated_at ASC
@@ -78,7 +79,7 @@ export async function onLeaderboard(
   let you: LeaderboardYou | undefined
   if (UUID_RE.test(uuidParam)) {
     const meRow = await env.STATS_DB.prepare(
-      `SELECT u.uuid, u.username, u.avatar, u.tier, s.${col} AS value
+      `SELECT u.uuid, u.username, u.avatar, ${EFFECTIVE_TIER_SQL} AS tier, s.${col} AS value
        FROM user_stats s JOIN users u ON u.id = s.user_id
        WHERE u.uuid = ? AND u.leaderboard_opt_in = 1 AND u.username IS NOT NULL AND s.${col} > 0`,
     )

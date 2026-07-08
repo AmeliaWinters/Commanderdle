@@ -6,6 +6,22 @@ a change that a player could notice.
 
 ## 2026-07-08
 
+- **Supporter tiers now renew** — a Ko-fi tip keeps your supporter tier (coloured name,
+  gem and avatar ring) for 31 days; tip again any time to refresh it. If it lapses the
+  cosmetics switch off, but you keep whatever avatar you'd equipped.
+
+- **Binder count on your account** — your account page now shows how many commanders
+  you've unlocked in the Binder, and links straight to it.
+
+- **About page covers more** — the About page now explains the Binder, signing in with
+  Google or Discord, and the leaderboards.
+
+- **Fairer XP in 5-guess modes** — win XP is now measured against each mode's own guess
+  limit, so the modes with five guesses are scored on the same footing as Classic's six.
+
+- **Fewer wrongly-blocked usernames** — the username filter no longer rejects innocent
+  names that happen to contain a rude substring (Scunthorpe, Raccoon, Cockpit and friends).
+
 - **Refreshed legal pages** — the About, Privacy Policy and Terms pages now cover optional
   accounts, sign-in and Ko-fi supporter cosmetics, and make clear the daily game stays free.
 

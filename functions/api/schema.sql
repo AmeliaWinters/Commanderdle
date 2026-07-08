@@ -56,19 +56,28 @@ CREATE TABLE IF NOT EXISTS users (
   username           TEXT,                                 -- player-chosen; null until set
   username_lc        TEXT    UNIQUE,                       -- case-insensitive uniqueness (null ok)
   avatar             TEXT    NOT NULL DEFAULT 'Atraxa, Praetors'' Voice',  -- commander name (see src/lib/avatars.ts)
-  tier               TEXT    NOT NULL DEFAULT 'none',      -- none|uncommon|rare|mythic
+  tier               TEXT    NOT NULL DEFAULT 'none',      -- none|common|uncommon|rare|mythic
+  -- Unix second the current supporter tier lapses (a donation buys 31 days; paying
+  -- again pushes it out). NULL = never a supporter / already lapsed. Reads treat a
+  -- past/NULL value as 'none' (see EFFECTIVE_TIER_SQL) so a lapsed member loses the
+  -- coloured cosmetics with no cron sweep. The avatar is deliberately left untouched,
+  -- so they keep whatever they equipped while supporting.
+  tier_expires_at    INTEGER,
   leaderboard_opt_in INTEGER NOT NULL DEFAULT 1,           -- 0|1
   created_at         INTEGER NOT NULL DEFAULT (unixepoch()),
   UNIQUE (provider, provider_id)
 );
 -- Donation reconciliation looks accounts up by email.
 CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+-- Migrating an existing DB (the column is new): run once, ignore "duplicate column".
+--   ALTER TABLE users ADD COLUMN tier_expires_at INTEGER;
 
 -- Ko-fi supporter donations (Phase 3, item 4). The Ko-fi webhook upserts one row per
--- payment; we then sum a payer's payments by email and grant the matching tier to any
--- account signed in with that email (and re-reconcile on every login, so a donation
--- made *before* signing up still lands). Keyed by Ko-fi's own transaction id so a
--- replayed webhook is a silent no-op and totals can't be inflated.
+-- payment; each payment grants 31 days of the tier its amount unlocks. We reconcile a
+-- payer's tier + expiry from their donations (highest still-active tier wins) on every
+-- webhook and on every login, so a donation made *before* signing up still lands and a
+-- lapsed membership is picked up next time they're seen. Keyed by Ko-fi's own
+-- transaction id so a replayed webhook is a silent no-op and can't extend a membership.
 CREATE TABLE IF NOT EXISTS donations (
   kofi_txn_id TEXT    PRIMARY KEY,             -- Ko-fi kofi_transaction_id (dedupe)
   email       TEXT    NOT NULL,                -- payer email, lower-cased

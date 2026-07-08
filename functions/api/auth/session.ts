@@ -6,6 +6,7 @@
  * if OAuth secrets are unset the auth routes never run, and if `STATS_DB` is absent
  * `currentUser` simply returns null so the client shows the logged-out UI.
  */
+import { EFFECTIVE_TIER_SQL } from '../webhooks/kofi'
 
 export interface AuthEnv {
   STATS_DB?: D1Database
@@ -142,7 +143,7 @@ export async function currentUserRow(env: AuthEnv, request: Request): Promise<Us
   if (!token) return null
   try {
     const row = await env.STATS_DB.prepare(
-      `SELECT u.id, u.uuid, u.username, u.avatar, u.tier, u.leaderboard_opt_in
+      `SELECT u.id, u.uuid, u.username, u.avatar, ${EFFECTIVE_TIER_SQL} AS tier, u.leaderboard_opt_in
        FROM sessions s JOIN users u ON u.id = s.user_id
        WHERE s.token_hash = ? AND s.expires_at > ?`,
     )

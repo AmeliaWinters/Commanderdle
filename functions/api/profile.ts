@@ -8,6 +8,7 @@
  * (unnamed/first-login accounts 404). Degradable: 503 without D1.
  */
 import type { PublicProfile } from '../../src/lib/leaderboard'
+import { EFFECTIVE_TIER_SQL } from './webhooks/kofi'
 
 interface Env {
   STATS_DB?: D1Database
@@ -22,7 +23,7 @@ export async function onProfile(_request: Request, env: Env, uuid: string): Prom
   if (!/^[0-9a-fA-F-]{36}$/.test(uuid)) return json({ error: 'bad id' }, 400)
 
   const row = await env.STATS_DB.prepare(
-    `SELECT u.uuid, u.username, u.avatar, u.tier, u.created_at,
+    `SELECT u.uuid, u.username, u.avatar, ${EFFECTIVE_TIER_SQL} AS tier, u.created_at,
             s.play_streak, s.max_play_streak, s.win_streak, s.max_win_streak, s.total_wins, s.xp
      FROM users u LEFT JOIN user_stats s ON s.user_id = u.id
      WHERE u.uuid = ? AND u.username IS NOT NULL`,

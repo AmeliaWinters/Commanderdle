@@ -13,6 +13,32 @@
   color: var(--tier-color);
 }
 
+/* Binder progress: a tappable panel linking through to the full binder. */
+.account-binder {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s2);
+  text-decoration: none;
+  color: inherit;
+}
+.account-binder:hover {
+  border-color: var(--tier-color, var(--line));
+}
+.account-binder-label {
+  font-weight: 700;
+  color: var(--tier-color);
+}
+.account-binder-count {
+  color: var(--muted, #aaa);
+  font-size: 0.95rem;
+  text-align: right;
+}
+.account-binder-count strong {
+  color: inherit;
+  font-variant-numeric: tabular-nums;
+}
+
 .account-toggle {
   display: flex;
   align-items: center;

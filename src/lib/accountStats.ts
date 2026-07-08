@@ -12,9 +12,16 @@
  *                     bonus for clearing all 5 modes in a day
  */
 
+import { MAX_GUESSES } from './shareCode'
+
 /** The five daily guessing modes (a "full clear" is winning all of these in one day). */
 export const DAILY_MODES = ['classic', 'synergy', 'silhouette', 'zoom', 'quote'] as const
 export const FULL_CLEAR = DAILY_MODES.length
+
+/** A mode's guess limit (defaults to 6 for anything unknown). */
+function modeMaxGuesses(mode: string): number {
+  return (MAX_GUESSES as Record<string, number>)[mode] ?? 6
+}
 
 export interface DailyResult {
   mode: string
@@ -66,9 +73,15 @@ function streaks(days: number[]): { current: number; max: number } {
   return { current, max }
 }
 
-/** XP awarded for a single win: base + a bonus that rewards solving in fewer guesses. */
-export function winXp(guesses: number): number {
-  return 10 + Math.max(0, 6 - guesses) * 2
+/**
+ * XP awarded for a single win: a flat base plus an efficiency bonus for guesses to
+ * spare. The bonus is measured against *that mode's* guess limit, not a fixed 6 —
+ * otherwise the four 5-guess modes could never spend their last guess without
+ * scoring above the base floor a 6-guess Classic solve can hit. Anchoring to the
+ * mode's own limit means the worst possible win earns the flat base in every mode.
+ */
+export function winXp(guesses: number, maxGuesses = 6): number {
+  return 10 + Math.max(0, maxGuesses - guesses) * 2
 }
 
 /** Flat participation XP for finishing a puzzle without solving it. */
@@ -77,8 +90,8 @@ export const LOSS_XP = 5
 /** XP earned for a single finished game — used both server-side and for the
  *  result screen's "+N XP" chip. Wins scale with how few guesses it took; a loss
  *  still earns a little something for showing up. */
-export function gameXp(won: boolean, guesses: number): number {
-  return won ? winXp(guesses) : LOSS_XP
+export function gameXp(won: boolean, guesses: number, maxGuesses = 6): number {
+  return won ? winXp(guesses, maxGuesses) : LOSS_XP
 }
 
 /**
@@ -125,16 +138,16 @@ export function computeStats(results: DailyResult[]): AccountStats {
   // Group by date: which modes were won (with guesses), and how many were completed at all.
   const byDate = new Map<
     string,
-    { wonModes: Set<string>; any: boolean; winGuesses: number[]; losses: number }
+    { wonModes: Set<string>; any: boolean; winXps: number[]; losses: number }
   >()
   for (const r of results) {
     let day = byDate.get(r.date)
-    if (!day) byDate.set(r.date, (day = { wonModes: new Set(), any: false, winGuesses: [], losses: 0 }))
+    if (!day) byDate.set(r.date, (day = { wonModes: new Set(), any: false, winXps: [], losses: 0 }))
     day.any = true
     if (r.won) {
       day.wonModes.add(r.mode)
       stats.totalWins += 1
-      day.winGuesses.push(r.guesses)
+      day.winXps.push(winXp(r.guesses, modeMaxGuesses(r.mode)))
     } else {
       day.losses += 1
     }
@@ -156,7 +169,7 @@ export function computeStats(results: DailyResult[]): AccountStats {
     runningPlayStreak = prevDayNum !== null && dNum === prevDayNum + 1 ? runningPlayStreak + 1 : 1
     prevDayNum = dNum
 
-    let dayXp = day.winGuesses.reduce((sum, guesses) => sum + winXp(guesses), 0)
+    let dayXp = day.winXps.reduce((sum, xp) => sum + xp, 0)
     dayXp += day.losses * LOSS_XP
     if (day.wonModes.size >= FULL_CLEAR) {
       winDays.push(dNum)

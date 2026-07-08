@@ -18,6 +18,8 @@ import {
   GAMES_PATH,
 } from "../../lib/router";
 import { containsProfanity } from "../../lib/profanity";
+import { collectionProgress, subscribeCollection } from "../../lib/collection";
+import { BINDER_PATH } from "../../lib/router";
 
 type Props = {
   user: AccountUser;
@@ -34,6 +36,13 @@ export default function AccountView({ user, stats, setUser, logout }: Props) {
   );
   const [busy, setBusy] = useState(false);
   const [avatarOpen, setAvatarOpen] = useState(false);
+
+  // Binder progress (commanders unlocked / total), kept live with the collection store.
+  const [binder, setBinder] = useState(() => collectionProgress());
+  useEffect(
+    () => subscribeCollection(() => setBinder(collectionProgress())),
+    [],
+  );
 
   // Transient inline confirmation, shared by every save path (username, avatar,
   // leaderboard toggle). Success messages auto-dismiss after a beat; errors linger
@@ -206,6 +215,21 @@ export default function AccountView({ user, stats, setUser, logout }: Props) {
       {stats && <StatCards stats={stats} />}
 
       <BonusStatCards />
+
+      <a
+        className="account-panel account-binder"
+        href={BINDER_PATH}
+        onClick={(e) => {
+          e.preventDefault();
+          navigateToPath(BINDER_PATH);
+        }}
+      >
+        <span className="account-binder-label">Binder</span>
+        <span className="account-binder-count">
+          <strong>{binder.found.toLocaleString()}</strong> /{" "}
+          {binder.total.toLocaleString()} commanders unlocked
+        </span>
+      </a>
 
       <div className="account-panel">
         <label className="account-toggle">

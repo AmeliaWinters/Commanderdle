@@ -52,7 +52,7 @@ export default function ResultBanner({
 
   // XP earned for this game — more for solving in fewer guesses, a little even on
   // a loss. Mirrors the server-side award so the chip matches the account total.
-  const xp = gameXp(status === "won", attempts);
+  const xp = gameXp(status === "won", attempts, maxGuesses);
 
   const shareOptions = useShareOptions({
     status,

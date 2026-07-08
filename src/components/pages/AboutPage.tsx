@@ -73,6 +73,34 @@ export default function AboutPage() {
       </section>
 
       <section>
+        <h3>The Binder</h3>
+        <p>
+          Every commander you guess correctly in a real daily puzzle gets added
+          to your <a href="/binder">Binder</a> - a collection page laid out like
+          a trade binder, with the ones you've found face-up and the rest still
+          face-down as card backs. Search it, filter by colour, and watch it
+          fill up as you play. It lives on your device, so you don't need an
+          account to start collecting (archive replays and the bonus games don't
+          count - only the live daily).
+        </p>
+      </section>
+
+      <section>
+        <h3>Accounts &amp; leaderboards</h3>
+        <p>
+          Signing in is completely optional - the whole game, and your Binder,
+          work without one. If you do want in, you can log in with{" "}
+          <strong>Google</strong> or <strong>Discord</strong> (I only take a
+          stable id to recognise you and your email to match Ko-fi donations - no
+          provider usernames or avatars). An account gets you a personal profile
+          with a chosen username and commander-art avatar, and puts you on the{" "}
+          <a href="/leaderboard">leaderboards</a>: day streaks, win streaks, total
+          wins and XP, ranked against everyone else who's opted in. You can leave
+          the boards any time from your account page.
+        </p>
+      </section>
+
+      <section>
         <h3>Where the data comes from</h3>
         <p>
           Card images and details come from{" "}
@@ -89,16 +117,15 @@ export default function AboutPage() {
       </section>
 
       <section>
-        <h3>Accounts &amp; supporters</h3>
+        <h3>Supporters</h3>
         <p>
-          Signing in (with Google or Discord) is entirely optional and unlocks a
-          personal profile and the leaderboards. If you'd like to chuck a few
-          coins in the tip jar, there's a{" "}
+          If you'd like to chuck a few coins in the tip jar, there's a{" "}
           <a href="https://ko-fi.com" target="_blank" rel="noreferrer">
             Ko-fi
           </a>{" "}
           - supporters get some cosmetic bits and bobs (fancy avatars, a shiny
-          badge, coloured profile, that sort of thing) as a thank-you. Purely
+          badge, coloured profile, that sort of thing) as a thank-you. Each tip
+          keeps your tier for 31 days; tip again whenever to keep it going. Purely
           cosmetic. The games are free forever and always will be.
         </p>
       </section>

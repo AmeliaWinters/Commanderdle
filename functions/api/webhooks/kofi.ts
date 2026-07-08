@@ -10,7 +10,19 @@
  * from their cumulative total. Degradable: with no D1 or no configured token the route
  * returns a 2xx/503 and writes nothing, so a misconfigured deploy never 500s Ko-fi.
  */
-import { tierForTotal, type Tier } from '../../../src/lib/avatars'
+import { tierForTotal, TIER_RANK, type Tier } from '../../../src/lib/avatars'
+
+/** A single donation buys this many seconds of its tier; paying again pushes it out. */
+export const TIER_WINDOW_SEC = 31 * 24 * 60 * 60
+
+/**
+ * SQL fragment for a user's *effective* supporter tier: the stored tier while the
+ * membership is live, else 'none'. Assumes the `users` table is aliased `u`. Self-
+ * expiring on read (like sessions), so a lapsed supporter loses their colour/gem with
+ * no background job. Select it as `... AS tier` in place of a bare `u.tier`.
+ */
+export const EFFECTIVE_TIER_SQL =
+  "CASE WHEN u.tier_expires_at IS NOT NULL AND u.tier_expires_at > unixepoch() THEN u.tier ELSE 'none' END"
 
 export interface KofiEnv {
   STATS_DB?: D1Database
@@ -31,21 +43,44 @@ const text = (body: string, status = 200) =>
   new Response(body, { status, headers: { 'content-type': 'text/plain; charset=utf-8' } })
 
 /**
- * Sum a payer's donations by email and set any matching account to the tier that total
- * unlocks (cumulative → highest wins). Safe to call with an unmatched email — it simply
- * updates zero rows. Shared with the auth callback so a login reconciles too. Never throws.
+ * Reconcile a payer's supporter tier + expiry from their donation history and write it
+ * to any account signed in with that email. Each donation independently grants 31 days
+ * of the tier its amount unlocks; the account's live tier is the highest tier among
+ * donations still inside their 31-day window, and the expiry is the latest such window's
+ * end. Once every window has lapsed the account drops to 'none' (loses the coloured
+ * cosmetics) while its avatar is left as-is. Safe to call with an unmatched email — it
+ * simply updates zero rows. Shared with the auth callback so a login reconciles too.
+ * Never throws.
  */
-export async function reconcileTier(db: D1Database, email: string | null | undefined): Promise<Tier> {
+export async function reconcileTier(
+  db: D1Database,
+  email: string | null | undefined,
+): Promise<Tier | 'none'> {
   const key = (email ?? '').trim().toLowerCase()
   if (!key) return 'none'
   try {
-    const row = await db
-      .prepare('SELECT COALESCE(SUM(amount), 0) AS total FROM donations WHERE email = ?')
+    const { results } = await db
+      .prepare('SELECT amount, created_at FROM donations WHERE email = ?')
       .bind(key)
-      .first<{ total: number }>()
-    const tier = tierForTotal(row?.total ?? 0)
-    // Only touch a matching account; no-op if they haven't signed up yet.
-    await db.prepare('UPDATE users SET tier = ? WHERE lower(email) = ?').bind(tier, key).run()
+      .all<{ amount: number; created_at: number }>()
+
+    const now = Math.floor(Date.now() / 1000)
+    let tier: Tier | 'none' = 'none'
+    let expires = 0
+    for (const d of results ?? []) {
+      const ends = d.created_at + TIER_WINDOW_SEC
+      if (ends <= now) continue // this donation's 31 days are up
+      const t = tierForTotal(d.amount) // a single payment's amount → its tier
+      if (tier === 'none' || TIER_RANK[t] > TIER_RANK[tier]) tier = t
+      if (ends > expires) expires = ends
+    }
+
+    // Only touch a matching account; no-op if they haven't signed up yet. A lapsed
+    // member is written back as 'none' with a null expiry so reads show no colour.
+    await db
+      .prepare('UPDATE users SET tier = ?, tier_expires_at = ? WHERE lower(email) = ?')
+      .bind(tier, tier === 'none' ? null : expires, key)
+      .run()
     return tier
   } catch {
     return 'none'

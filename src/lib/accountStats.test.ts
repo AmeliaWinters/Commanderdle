@@ -14,6 +14,11 @@ function fullClear(date: string, guesses = 3): DailyResult[] {
   return DAILY_MODES.map((mode) => ({ mode, date, won: true, guesses }))
 }
 
+/** Raw XP for a full clear at `guesses`: Classic allows 6 guesses, the other four 5. */
+function fullClearXp(guesses: number): number {
+  return winXp(guesses, 6) + 4 * winXp(guesses, 5)
+}
+
 describe('computeStats', () => {
   it('is all-zero for no results', () => {
     expect(computeStats([])).toEqual({
@@ -73,9 +78,11 @@ describe('computeStats', () => {
 
   it('awards fewer-guess wins more XP, plus a full-clear bonus', () => {
     const oneDayFast = computeStats(fullClear('2026-07-01', 1))
-    // 5 wins * winXp(1) + 25 full-clear bonus, no streak bonus on day one of a streak
-    expect(oneDayFast.xp).toBe(5 * winXp(1) + 25)
+    // full-clear win XP + 25 full-clear bonus, no streak bonus on day one of a streak
+    expect(oneDayFast.xp).toBe(fullClearXp(1) + 25)
     expect(winXp(1)).toBeGreaterThan(winXp(5))
+    // A last-guess win scores the flat base regardless of the mode's guess limit.
+    expect(winXp(5, 5)).toBe(winXp(6, 6))
     expect(streakXpMultiplier(1)).toBe(1)
   })
 
@@ -94,7 +101,7 @@ describe('computeStats', () => {
       ...fullClear('2026-07-02', 3),
       ...fullClear('2026-07-03', 3),
     ])
-    const dayXp = 5 * winXp(3) + 25
+    const dayXp = fullClearXp(3) + 25
     const expected =
       Math.round(dayXp * streakXpMultiplier(1)) +
       Math.round(dayXp * streakXpMultiplier(2)) +
@@ -109,7 +116,7 @@ describe('computeStats', () => {
       ...fullClear('2026-07-02', 3),
       ...fullClear('2026-07-05', 3), // gap: streak restarts at 1
     ])
-    const dayXp = 5 * winXp(3) + 25
+    const dayXp = fullClearXp(3) + 25
     const expected =
       Math.round(dayXp * streakXpMultiplier(1)) +
       Math.round(dayXp * streakXpMultiplier(2)) +
