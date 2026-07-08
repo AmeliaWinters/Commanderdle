@@ -155,6 +155,10 @@
   flex-direction: column;
   align-items: center;
   gap: var(--s1);
+  /* Skip layout/paint for off-screen cards; keep box size stable so the
+     scrollbar doesn't jump. Height ≈ image (170*88/63) + name + meta lines. */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 320px;
 }
 
 .binder-card-frame {

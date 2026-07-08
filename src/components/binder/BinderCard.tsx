@@ -40,6 +40,7 @@ function BinderCard({ commander: c, entry }: Props) {
           src={c.normalImage ?? "/images/card-back.png"}
           alt={c.name}
           loading="lazy"
+          decoding="async"
         />
         <span className="binder-card-name binder-card-name-dim">{c.name}</span>
       </div>
@@ -58,6 +59,7 @@ function BinderCard({ commander: c, entry }: Props) {
             src={c.normalImage}
             alt={c.name}
             loading="lazy"
+            decoding="async"
           />
         ) : (
           <span className="binder-card-noart">{c.name}</span>

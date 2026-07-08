@@ -9,6 +9,14 @@ interface Release {
 
 export const RELEASES: Release[] = [
   {
+    version: "1.0.4",
+    date: "2026-07-08",
+    notes: [
+      "Improved the load times and performance of the binder page",
+      "Improved deduce clues in classic",
+    ],
+  },
+  {
     version: "1.0.3",
     date: "2026-07-08",
     notes: ["Zoom and silhouette mode balance changes"],

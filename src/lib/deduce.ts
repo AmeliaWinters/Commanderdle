@@ -158,9 +158,10 @@ function numericClue(
 
   let value: string;
   if (hasGt && gt == lt) value = `${spec.fmt(gt)}`;
-  else if (hasGt && hasLt) value = `${spec.fmt(gt)}-${lt}`;
-  else if (hasGt) value = `${spec.fmt(gt)}-...`;
-  else value = `...-${spec.fmt(lt)}`;
+  else if (hasGt && hasLt)
+    value = `${spec.fmt(changeConditionally(gt, "plus"))}-${changeConditionally(lt, "minus")}`;
+  else if (hasGt) value = `${spec.fmt(changeConditionally(gt, "plus"))}-...`;
+  else value = `...-${spec.fmt(changeConditionally(lt, "plus"))}`;
 
   // The bound reads as "close" (amber) only if one of the tightest bounding
   // guesses actually landed within tolerance of the answer; otherwise the answer
@@ -169,6 +170,17 @@ function numericClue(
     (hasGt && a - gt <= spec.tol) || (hasLt && lt - a <= spec.tol);
 
   return { label: spec.label, tone: closeBounded ? "partial" : "none", value };
+}
+
+function changeConditionally(num: number, operation: "minus" | "plus"): number {
+  const adjustment = Number.isInteger(num)
+    ? operation
+      ? 1
+      : -1
+    : operation
+      ? 0.01
+      : -0.01;
+  return num + adjustment;
 }
 
 interface SetClue {

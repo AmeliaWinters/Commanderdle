@@ -9,7 +9,7 @@ import GameSettingsMenu from "../layout/GameSettingsMenu";
 import BackButton from "../layout/BackButton";
 import AppFooter from "../layout/AppFooter";
 import AccountWidget from "../layout/AccountWidget";
-import BinderCard from "./BinderCard";
+import VirtualBinderGrid from "./VirtualBinderGrid";
 
 const WUBRG = ["W", "U", "B", "R", "G"] as const;
 
@@ -167,11 +167,7 @@ export default function BinderPage() {
           </div>
         </div>
 
-        <div className="binder-grid">
-          {cards.map((c) => (
-            <BinderCard key={c.name} commander={c} entry={collection[c.name]} />
-          ))}
-        </div>
+        <VirtualBinderGrid cards={cards} collection={collection} />
         {cards.length === 0 && (
           <p className="binder-empty">No commanders match those filters.</p>
         )}

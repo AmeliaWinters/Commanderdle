@@ -8,6 +8,9 @@ _Last updated: 2026-07-08 — currently on v0.10.1._
 
 ## 2026-07-08
 
+- **The Binder loads faster** — it now only renders the cards near your screen as you scroll,
+  so large collections stay smooth to open and browse.
+
 - **"Share as text" no longer opens your email app** — on desktop it now reliably copies your
   result to the clipboard instead of launching the Windows share sheet (which some players saw
   jump straight into Outlook).
