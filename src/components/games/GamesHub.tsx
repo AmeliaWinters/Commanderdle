@@ -23,6 +23,7 @@ import LogoTitle from "../layout/LogoTitle";
 import AppFooter from "../layout/AppFooter";
 import AccountWidget from "../layout/AccountWidget";
 import LeaderboardWidget from "../leaderboard/LeaderboardWidget";
+import KofiButton from "./KofiButton";
 
 const MODE_BLURBS: Record<Mode, string> = {
   classic: "Deduce the commander from clues",
@@ -159,55 +160,59 @@ export default function GamesHub() {
         <LogoTitle ariaLabel="commandle">
           Comman<span className="accent">dle</span>
         </LogoTitle>
-        <p className="tagline">Pick your battlefield, planeswalker</p>
       </header>
 
       <main className="play-area hub-area">
         <div className="hub-columns">
-          <section className="hub-col" aria-labelledby="hub-daily">
-            <h2 id="hub-daily">Daily Games</h2>
-            {MODE_LIST.map((m) => {
-              const completed = isModeCompletedToday(m.id, today);
-              return (
-                <a
-                  key={m.id}
-                  href={MODE_PATHS[m.id]}
-                  className={`hub-tile hub-tile-${MODE_PIP[m.id].toLowerCase()}`}
-                  onClick={tileClick(MODE_PATHS[m.id])}
-                >
-                  {art[m.id] && (
-                    <span
-                      className="hub-tile-art"
-                      style={{ backgroundImage: `url("${art[m.id]}")` }}
+          <div className="hub-col-container">
+            <section className="hub-col" aria-labelledby="hub-daily">
+              <h2 id="hub-daily">Daily Games</h2>
+              {MODE_LIST.map((m) => {
+                const completed = isModeCompletedToday(m.id, today);
+                return (
+                  <a
+                    key={m.id}
+                    href={MODE_PATHS[m.id]}
+                    className={`hub-tile hub-tile-${MODE_PIP[m.id].toLowerCase()}`}
+                    onClick={tileClick(MODE_PATHS[m.id])}
+                  >
+                    {art[m.id] && (
+                      <span
+                        className="hub-tile-art"
+                        style={{ backgroundImage: `url("${art[m.id]}")` }}
+                        aria-hidden="true"
+                      />
+                    )}
+                    <span className="hub-tile-icon" aria-hidden="true">
+                      <m.Icon />
+                    </span>
+                    <span className="hub-tile-text">
+                      <span className="hub-tile-label">{m.label}</span>
+                      <span className="hub-tile-blurb">
+                        {MODE_BLURBS[m.id]}
+                      </span>
+                    </span>
+                    <img
+                      className="hub-tile-pip"
+                      src={`/mana/${MODE_PIP[m.id]}.svg`}
+                      alt=""
                       aria-hidden="true"
                     />
-                  )}
-                  <span className="hub-tile-icon" aria-hidden="true">
-                    <m.Icon />
-                  </span>
-                  <span className="hub-tile-text">
-                    <span className="hub-tile-label">{m.label}</span>
-                    <span className="hub-tile-blurb">{MODE_BLURBS[m.id]}</span>
-                  </span>
-                  <img
-                    className="hub-tile-pip"
-                    src={`/mana/${MODE_PIP[m.id]}.svg`}
-                    alt=""
-                    aria-hidden="true"
-                  />
-                  {completed && (
-                    <span
-                      className="hub-tile-done"
-                      title="Completed today"
-                      aria-label="Completed today"
-                    >
-                      <FaCheck />
-                    </span>
-                  )}
-                </a>
-              );
-            })}
-          </section>
+                    {completed && (
+                      <span
+                        className="hub-tile-done"
+                        title="Completed today"
+                        aria-label="Completed today"
+                      >
+                        <FaCheck />
+                      </span>
+                    )}
+                  </a>
+                );
+              })}
+            </section>
+            <KofiButton />
+          </div>
           <div className="hub-col-container">
             <section className="hub-col" aria-labelledby="hub-games">
               <h2 id="hub-games">Bonus Games</h2>

@@ -9,6 +9,20 @@ interface Release {
 
 const RELEASES: Release[] = [
   {
+    title: "Ko-Fi and supporters",
+    version: "0.10.0",
+    date: "2026-07-08",
+    notes: [
+      "Integration with Ko-Fi for automatic account tier upgrades",
+      "Added supporter tiers explanations",
+      "Added Ko-Fi buttons on main hub and account page",
+      "Creator Tier added",
+      "Added binder collection to account",
+      "About page covers more",
+      "Small redesign tweaks",
+    ],
+  },
+  {
     version: "0.9.3",
     date: "2026-07-08",
     notes: [
@@ -68,7 +82,7 @@ const RELEASES: Release[] = [
   {
     version: "0.8.0",
     date: "2026-07-06",
-    title: "Even more modes",
+    title: "Bonus modes and binder",
     notes: [
       "Added the grid mode",
       "Added the binder",
@@ -87,7 +101,7 @@ const RELEASES: Release[] = [
   },
   {
     version: "0.6.0",
-    title: "Loadin faster",
+    title: "Performance upgrades",
     date: "2026-07-01",
     notes: [
       "Global solve stats",
@@ -97,11 +111,13 @@ const RELEASES: Release[] = [
   },
   {
     version: "0.5.0",
+    title: "Mobile-friendly",
     date: "2026-06-30",
     notes: ["Smoother animations", "Better mobile layout"],
   },
   {
     version: "0.4.0",
+    title: "New results screen",
     date: "2026-06-29",
     notes: [
       "Reworked results screen and the synergy-percentage popover",
@@ -110,6 +126,7 @@ const RELEASES: Release[] = [
   },
   {
     version: "0.3.0",
+    title: "Polish and archive",
     date: "2026-06-26",
     notes: [
       "Added puzzle archive",
@@ -123,12 +140,17 @@ const RELEASES: Release[] = [
   },
   {
     version: "0.2.0",
+    title: "4 new daily modes",
     date: "2026-06-20",
     notes: [
       "Mana pips for colour identity instead of text",
       "Self-hosting card art",
       "Added skipping",
       "Guesses trimmed from six to five",
+      "Added synergy mode",
+      "Added zoom mode",
+      "Added silhouette mode",
+      "Added quote mode",
     ],
   },
   {

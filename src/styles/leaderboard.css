@@ -4,7 +4,7 @@
 /* ── Home widget ─────────────────────────────────────────────────────── */
 .lb-widget {
   width: 100%;
-  margin: var(--s4) auto 0;
+  margin: var(--s1) auto 0;
   padding: var(--s3);
   border: 1px solid var(--line);
   border-radius: 16px;

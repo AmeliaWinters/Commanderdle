@@ -56,40 +56,73 @@
     rgba(22, 22, 25, 0.66);
 }
 
-/* The three purchasable frames shown as rarity chips. Each chip themes itself off
-   its own inline --tier-color. */
-.tier-chips {
+/* The three purchasable tiers, each a card listing its perks. Every card themes
+   itself off its own inline --tier-color. */
+.tier-cards {
   display: flex;
   flex-wrap: wrap;
   gap: var(--s2);
   margin-top: var(--s2);
 }
-.tier-chip {
-  flex: 1 1 7rem;
+.tier-card {
+  flex: 1 1 12rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0.15rem;
-  padding: var(--s2) var(--s2) calc(var(--s2) - 2px);
+  position: relative;
+  gap: 0.5rem;
+  padding: var(--s3) var(--s2) var(--s2) var(--s2);
   border: 1px solid color-mix(in srgb, var(--tier-color) 45%, var(--line));
   border-radius: 12px;
   background: color-mix(in srgb, var(--tier-color) 8%, transparent);
 }
-.tier-chip-gem {
+.tier-card-head {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.tier-card-gem {
   font-size: 1.35rem;
   line-height: 1;
 }
-.tier-chip-price {
-  font-family: "Cinzel", serif;
+.tier-card-name {
   font-weight: 700;
-  font-size: 1.05rem;
   color: var(--tier-color);
 }
-.tier-chip-label {
-  font-size: 0.72rem;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
+.tier-card-price {
+  margin-left: auto;
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: var(--tier-color);
+  white-space: nowrap;
+  position: absolute;
+  top: 5px;
+  right: 10px;
+}
+.tier-card-price small {
+  font-size: 0.62em;
   color: var(--text-dim);
+}
+.tier-card-perks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0rem;
+  padding-left:0.5rem !important;
+}
+.tier-card-perks li {
+  position: relative;
+  padding-left: 1.1rem;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+.tier-card-perks li::before {
+  content: "✦";
+  position: absolute;
+  left: 0;
+  color: var(--tier-color);
 }
 
 /* Ko-fi support button in the supporter panel. It's an <a>, so the .content-body

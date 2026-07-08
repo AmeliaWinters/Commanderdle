@@ -1,9 +1,35 @@
 import type { CSSProperties } from "react";
 import { TIER_META, type AccountUser } from "../../lib/auth";
 import { TIER_RANK, TIER_THRESHOLDS_GBP } from "../../lib/avatars";
+import KofiButton from "../games/KofiButton";
 
-/** The "Support commandle" panel on the account page: a Ko-fi pitch with tier chips
- *  for non-supporters, or a thank-you once a supporter tier is unlocked. */
+/** The purchasable supporter tiers and what each one unlocks. Player-facing copy —
+ *  kept in step with the Ko-fi membership tiers. */
+const TIER_PERKS: Record<"uncommon" | "rare" | "mythic", string[]> = {
+  uncommon: [
+    "Access to top 100 avatars",
+    "Uncommon supporter badge",
+    "Uncommon supporter flare",
+    "No ads",
+  ],
+  rare: [
+    "Access to all avatars",
+    "Rare supporter badge",
+    "Rare supporter account flare",
+    "No ads",
+  ],
+  mythic: [
+    "Access to all avatars",
+    "Mythic Rare account badge",
+    "Custom account flare colour",
+    "Foil animation on profile, avatar, and name",
+    "No ads",
+  ],
+};
+
+/** The "Support commandle" panel on the account page: a Ko-fi pitch with a
+ *  per-tier breakdown of perks for non-supporters, or a thank-you once a
+ *  supporter tier is unlocked. */
 export default function SupporterPanel({
   user,
   tierColor,
@@ -17,35 +43,45 @@ export default function SupporterPanel({
       {TIER_RANK[user.tier] === 0 ? (
         <>
           <p>
-            If Commandle has become part of your morning, a tip on Ko-fi would
-            mean a lot. You will also get supporter cosmetics. Simply use the
-            email linked with your OAuth account (Google/Discord) to donate and
-            the benefits will appear on your next visit.
+            If Commandle has become part of your morning, a membership on Ko-fi
+            would mean a lot and it unlocks supporter cosmetics. Commandle is
+            integrated with the Ko-fi API, so just use the email linked with
+            your OAuth account (Google/Discord) to join and your tier appears on
+            your next visit.
           </p>
-          <div className="tier-chips">
+          <div className="tier-cards">
             {(["uncommon", "rare", "mythic"] as const).map((t) => (
               <div
                 key={t}
-                className="tier-chip"
+                className="tier-card"
                 style={{ "--tier-color": TIER_META[t].color } as CSSProperties}
               >
-                <i
-                  className={`${TIER_META[t].keyrune} tier-chip-gem`}
-                  aria-hidden="true"
-                />
-                <span className="tier-chip-price">
-                  £{TIER_THRESHOLDS_GBP[t]}
-                </span>
-                <span className="tier-chip-label">{TIER_META[t].label}</span>
+                <div className="tier-card-head">
+                  <i
+                    className={`${TIER_META[t].keyrune} tier-card-gem`}
+                    aria-hidden="true"
+                  />
+                  <span className="tier-card-name">
+                    {TIER_META[t].label} Supporter
+                  </span>
+                  <span className="tier-card-price">
+                    £{TIER_THRESHOLDS_GBP[t]}
+                    <small>/mo</small>
+                  </span>
+                </div>
+                <ul className="tier-card-perks">
+                  {TIER_PERKS[t].map((perk) => (
+                    <li key={perk}>{perk}</li>
+                  ))}
+                </ul>
               </div>
             ))}
           </div>
         </>
       ) : user.tier === "creator" ? (
         <p>
-          You have the{" "}
-          <strong style={{ color: tierColor }}>Creator</strong> tier — every
-          cosmetic is unlocked, always. {"<"}3
+          You have the <strong style={{ color: tierColor }}>Creator</strong>{" "}
+          tier. Hello, mother.
         </p>
       ) : (
         <p>
@@ -56,15 +92,9 @@ export default function SupporterPanel({
           supporter. Thank you for keeping the lights on! {"<"}3
         </p>
       )}
-      <a
-        className="account-btn account-btn-primary account-kofi"
-        href="https://ko-fi.com/commandle"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <span aria-hidden="true">☕</span>
-        {TIER_RANK[user.tier] === 0 ? "Support on Ko-fi" : "Support again on Ko-fi"}
-      </a>
+      <div style={{ marginTop: "1rem" }}>
+        <KofiButton />
+      </div>
     </div>
   );
 }

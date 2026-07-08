@@ -6,6 +6,13 @@ a change that a player could notice.
 
 ## 2026-07-08
 
+- **Ko-fi support button** — the home page now shows the official Ko-fi "Support me
+  on Ko-FI" button instead of the plain coffee image link.
+
+- **Supporter tier perks, spelled out** — the Support panel on your account now lists
+  exactly what each tier (Uncommon, Rare, Mythic Rare) unlocks, with monthly prices.
+  A quiet "Support Commandle" link also sits on the home page.
+
 - **New Creator tier** — a special tier with every cosmetic unlocked, always. It's
   granted by hand to the team, so its purple gem marks an official account.
 
