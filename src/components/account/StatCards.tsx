@@ -13,7 +13,7 @@ interface Card {
 /** The two "live" streaks get the large, glowing hero treatment. */
 const FEATURED: Card[] = [
   { key: "playStreak", label: "Day streak", Icon: FaFire },
-  { key: "winStreak", label: "Win streak (5/5)", Icon: FaCrown },
+  { key: "winStreak", label: "Win streak", Icon: FaCrown },
 ];
 
 /** Career totals + bests fill the smaller secondary row. */

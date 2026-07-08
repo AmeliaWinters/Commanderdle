@@ -8,6 +8,10 @@ _Last updated: 2026-07-08 — currently on v0.10.1._
 
 ## 2026-07-08
 
+- **Win streak now counts individual wins** — your win streak is the number of daily wins
+  you've strung together in a row across every mode (win Classic then Synergy and you're on a
+  streak of 2), rather than the number of days you cleared all five modes. Any loss resets it.
+
 - **XP bar on the account button** — the account button in the top corner now shows an XP bar
   beneath your level so you can see how close you are to the next level and watch it fill as
   you play. The bar is coloured in your flare colour.
