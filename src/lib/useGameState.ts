@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import type { Commander, Mode } from '../types/commander'
 import { commanderByName } from './commanders'
 import { dailyAnswer, randomAnswer, todayKey, puzzleNumber } from './dailyAnswer'
@@ -152,12 +152,24 @@ export function useGameState(mode: Mode, archiveDate?: string) {
     }
   }, [mode, dateKey, isArchive])
 
+  // Track the last status we saw per (mode, date) so we can tell a fresh finish
+  // (playing -> won/lost this session) from a game that simply loaded already
+  // finished from storage. Only a fresh finish should hit the network - otherwise
+  // every visit to an already-solved mode re-submits the same result.
+  const lastStatusRef = useRef<Map<string, GameState['status']>>(new Map())
+
   // Record a finished result (idempotent per date+mode / archive cell).
   useEffect(() => {
     // Ignore the stale frame right after a mode switch, where `mode` has updated but
     // `state` still belongs to the previous mode (would record it under the wrong mode).
     if (state.mode !== mode) return
+    const statusKey = `${mode}:${state.dateKey}`
+    const prevStatus = lastStatusRef.current.get(statusKey)
+    lastStatusRef.current.set(statusKey, state.status)
     if (state.status === 'playing') return
+    // A finish counts as "fresh" only if we watched it transition out of `playing`
+    // in this session; a game loaded already-finished has no prior `playing` frame.
+    const freshlyFinished = prevStatus === 'playing'
     const won = state.status === 'won'
     // Skips consume a turn like guesses, so the turn count used for stats is both.
     const attempts = state.guesses.length + state.skips
@@ -166,8 +178,9 @@ export function useGameState(mode: Mode, archiveDate?: string) {
     // practice/unlimited don't count toward the collection.
     if (won && state.isDaily && !state.isArchive) recordFound(state.answer.name, mode, state.dateKey)
     // Contribute to the anonymous community aggregate (live daily only; best-effort,
-    // deduped server-side). A loss records the guess cap as guesses-used.
-    if (state.isDaily && !state.isArchive) {
+    // deduped server-side). A loss records the guess cap as guesses-used. Only on a
+    // fresh finish so navigating back to a solved mode doesn't re-submit.
+    if (freshlyFinished && state.isDaily && !state.isArchive) {
       const guesses = won ? attempts : maxGuessesFor(mode)
       const puzzle = puzzleNumber(state.dateKey)
       void submitGlobalResult(mode as ShareMode, puzzle, won, guesses)
