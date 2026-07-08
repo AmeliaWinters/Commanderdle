@@ -36,3 +36,7 @@ database_id = "ac4ef84f-8b4a-40c2-8cc9-e4a2feb2471a"
 # CONTACT_FROM must be a Resend-verified sender on a domain you control.
 [vars]
 CONTACT_FROM = "Commandle <contact@commandle.app>"
+VITE_SITE_URL=https://commandle.app
+VITE_ADSENSE_PUB_ID=ca-pub-8490154467445019
+DISCORD_CLIENT_ID=1523719602440503406
+GOOGLE_CLIENT_ID=866641111605-hens5qp1d5thuu8f4fokkq0vjocblrdb.apps.googleusercontent.com
