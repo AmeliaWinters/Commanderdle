@@ -1,5 +1,9 @@
 import { useState, useEffect } from "react";
-import { parseArchivePlay, parseProfilePath } from "./router";
+import {
+  parseArchivePlay,
+  parseProfilePath,
+  parseProfileBinderPath,
+} from "./router";
 
 /** Tracks whether the URL matches one of the standalone (non-mode) pages. */
 export function usePathMatch(match: (pathname: string) => boolean) {
@@ -32,6 +36,20 @@ export function useProfileUuid() {
   );
   useEffect(() => {
     const onPop = () => setUuid(parseProfilePath(window.location.pathname));
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
+  return uuid;
+}
+
+/** Reactive public-binder uuid parsed from /u/{uuid}/binder, or null. */
+export function useProfileBinderUuid() {
+  const [uuid, setUuid] = useState(() =>
+    parseProfileBinderPath(window.location.pathname),
+  );
+  useEffect(() => {
+    const onPop = () =>
+      setUuid(parseProfileBinderPath(window.location.pathname));
     window.addEventListener("popstate", onPop);
     return () => window.removeEventListener("popstate", onPop);
   }, []);

@@ -8,6 +8,23 @@ _Last updated: 2026-07-08 — currently on v0.10.1._
 
 ## 2026-07-08
 
+- **Player profiles now show much more** — visiting another player's profile now shows their
+  bonus-game streaks (Grid, Guess the cost, Higher / Lower) and a link to browse their Binder,
+  alongside their flare colour and supporter badge. Signed-in players' bonus-game results now
+  sync to their account so these stats can appear on their public profile.
+
+- **Your result-screen stats are now correct when signed in** — the Played / Win % / streak /
+  guess-distribution numbers come straight from your account instead of this device's local
+  copy, so a win recorded elsewhere no longer shows as "0% wins" here.
+
+- **Community stats no longer read over 100%** — the result screen now compares you against the
+  *other* players ("0% of 3 other players solved this — you beat 100%") instead of a confusing
+  "beat 150%".
+
+- **The Binder no longer flickers when you're signed in** — while logged in it now shows only
+  your account's collection and ignores this device's local copy, so the "commanders found"
+  count stays put instead of briefly showing a stale number.
+
 - **The Binder loads faster** — it now only renders the cards near your screen as you scroll,
   so large collections stay smooth to open and browse.
 

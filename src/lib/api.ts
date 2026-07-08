@@ -43,6 +43,18 @@ function statsUrl(mode: ShareMode, puzzle: number): string {
   return `${apiBase()}/api/stats/${mode}/${puzzle}`
 }
 
+/**
+ * The aggregate echoed by the player's *own* submission — it counts them, unlike a plain
+ * fetch that may have raced ahead of the write. Cached per puzzle so the community panel
+ * can render an accurate "other players" view (subtracting the player) right after a finish.
+ */
+const echoedStats = new Map<string, GlobalStats>()
+const echoKey = (mode: ShareMode, puzzle: number) => `${mode}:${puzzle}`
+
+export function echoedGlobalStats(mode: ShareMode, puzzle: number): GlobalStats | undefined {
+  return echoedStats.get(echoKey(mode, puzzle))
+}
+
 /** Fetch community aggregates for a puzzle. Resolves null when the backend is unavailable. */
 export async function fetchGlobalStats(
   mode: ShareMode,
@@ -75,7 +87,10 @@ export async function submitGlobalResult(
       body: JSON.stringify({ clientId: clientId(), won, guesses }),
     })
     if (!res.ok) return null
-    return (await res.json()) as GlobalStats
+    const data = (await res.json()) as GlobalStats
+    // Remember the self-inclusive aggregate so the community panel can exclude the player.
+    echoedStats.set(echoKey(mode, puzzle), data)
+    return data
   } catch {
     return null
   }

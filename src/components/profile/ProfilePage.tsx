@@ -3,13 +3,19 @@ import ContentPage from "../pages/ContentPage";
 import AvatarImage from "../AvatarImage";
 import CardBackdrop from "../CardBackdrop";
 import StatCards from "../account/StatCards";
+import BonusStatCards from "../account/BonusStatCards";
 import AvatarRing from "../account/AvatarRing";
 import { fetchProfile } from "../../lib/leaderboardApi";
 import type { PublicProfile } from "../../lib/leaderboard";
 import { TIER_META, effectiveTierColor, tierNameDisplay } from "../../lib/auth";
 import { levelFromXp } from "../../lib/accountStats";
 import { useAuth } from "../../lib/useAuth";
-import { ACCOUNT_PATH, navigateToPath } from "../../lib/router";
+import {
+  ACCOUNT_PATH,
+  navigateToPath,
+  profileBinderPath,
+} from "../../lib/router";
+import { COMMANDERS } from "../../lib/commanders";
 
 function joinedLabel(unix: number): string {
   const d = new Date(unix * 1000);
@@ -133,6 +139,25 @@ export default function ProfilePage({ uuid }: { uuid: string }) {
           </div>
 
           <StatCards stats={profile.stats} />
+
+          {profile.bonusStats && <BonusStatCards data={profile.bonusStats} />}
+
+          {profile.binderCount != null && (
+            <a
+              className="account-panel account-binder"
+              href={profileBinderPath(uuid)}
+              onClick={(e) => {
+                e.preventDefault();
+                navigateToPath(profileBinderPath(uuid));
+              }}
+            >
+              <span className="account-binder-label">Binder</span>
+              <span className="account-binder-count">
+                <strong>{profile.binderCount.toLocaleString()}</strong> /{" "}
+                {COMMANDERS.length.toLocaleString()} commanders unlocked
+              </span>
+            </a>
+          )}
 
           <div className="account-actions">
             <button className="account-btn account-btn-primary" onClick={share}>

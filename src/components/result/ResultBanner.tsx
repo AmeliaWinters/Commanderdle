@@ -172,6 +172,10 @@ export default function ResultBanner({
           mode={mode}
           maxGuesses={maxGuesses}
           highlight={status === "won" ? attempts : undefined}
+          self={{
+            won: status === "won",
+            guesses: status === "won" ? attempts : maxGuesses,
+          }}
         />
       )}
     </div>

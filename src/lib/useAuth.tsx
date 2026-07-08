@@ -20,7 +20,7 @@ import {
   type AccountStats,
   type AccountUser,
 } from './auth'
-import { setAccountBinder, type Collection } from './collection'
+import { beginAccountBinder, setAccountBinder, type Collection } from './collection'
 
 interface AuthState {
   user: AccountUser | null
@@ -52,6 +52,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setAccountBinder(null)
       return
     }
+    // Logged in: disregard localStorage immediately, even before the server binder
+    // resolves, so a stale local binder never flashes over the account's real one.
+    beginAccountBinder()
     let alive = true
     const controller = new AbortController()
     void fetchBinder(controller.signal).then((binder) => {

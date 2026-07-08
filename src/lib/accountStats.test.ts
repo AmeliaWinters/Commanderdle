@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import {
   computeStats,
+  computeModeStats,
   winXp,
   gameXp,
   LOSS_XP,
@@ -122,5 +123,28 @@ describe('computeStats', () => {
       Math.round(dayXp * streakXpMultiplier(2)) +
       Math.round(dayXp * streakXpMultiplier(1))
     expect(s.xp).toBe(expected)
+  })
+})
+
+describe('computeModeStats', () => {
+  it('folds per-mode played/wins/streaks/distribution like the local ledger', () => {
+    const results: DailyResult[] = [
+      { mode: 'classic', date: '2026-07-01', won: true, guesses: 3 },
+      { mode: 'classic', date: '2026-07-02', won: true, guesses: 2 },
+      { mode: 'classic', date: '2026-07-03', won: false, guesses: 6 },
+      { mode: 'classic', date: '2026-07-04', won: true, guesses: 4 },
+      { mode: 'zoom', date: '2026-07-04', won: true, guesses: 1 },
+    ]
+    const stats = computeModeStats(results)
+    expect(stats.classic).toEqual({
+      played: 4,
+      wins: 3,
+      currentStreak: 1, // reset by the 07-03 loss, then one win on 07-04
+      maxStreak: 2,
+      lastPlayedDate: '2026-07-04',
+      distribution: { 2: 1, 3: 1, 4: 1 },
+    })
+    expect(stats.zoom.wins).toBe(1)
+    expect(stats.zoom.distribution).toEqual({ 1: 1 })
   })
 })

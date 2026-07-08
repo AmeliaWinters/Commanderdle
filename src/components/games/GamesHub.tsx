@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { ComponentType, CSSProperties } from "react";
 import { FaCheck } from "react-icons/fa6";
 import { TbArrowsUpDown, TbCoin, TbBook, TbHistory } from "react-icons/tb";
@@ -16,7 +16,7 @@ import {
 } from "../../lib/router";
 import { LATEST_RELEASE, formatReleaseDate } from "../pages/ChangelogPage";
 import { COMMANDERS } from "../../lib/commanders";
-import { loadCollection } from "../../lib/collection";
+import { loadCollection, subscribeCollection } from "../../lib/collection";
 import { isModeCompletedToday } from "../../lib/stats";
 import { todayKey, hashString, dailyAnswer } from "../../lib/dailyAnswer";
 import CardBackdrop from "../CardBackdrop";
@@ -94,10 +94,14 @@ function tileClick(path: string) {
 }
 
 function BinderSection() {
-  const found = useMemo(() => {
+  const countFound = () => {
     const col = loadCollection();
     return COMMANDERS.filter((c) => col[c.name]).length;
-  }, []);
+  };
+  const [found, setFound] = useState(countFound);
+  // Re-count when the binder swaps (e.g. the server copy landing after login), so the
+  // tip doesn't stay stuck on whatever was counted at mount.
+  useEffect(() => subscribeCollection(() => setFound(countFound())), []);
   return (
     <section className="hub-col hub-col-binder" aria-labelledby="hub-binder">
       <h2 id="hub-binder">Miscellaneous</h2>

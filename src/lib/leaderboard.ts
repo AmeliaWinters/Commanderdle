@@ -57,4 +57,12 @@ export interface PublicProfile {
   nameColor: string | null;
   joinedAt: number;
   stats: import("./accountStats").AccountStats;
+  /** Bonus-game streaks (Grid / Guess the cost / Higher-Lower), server-derived.
+   *  Optional so a cached/older backend response still renders the profile. */
+  bonusStats?: Record<
+    import("./bonusStreakMath").BonusMode,
+    import("./bonusStreakMath").BonusStreaks
+  >;
+  /** Commanders unlocked in their binder (see /api/profile/:uuid/binder). */
+  binderCount?: number;
 }

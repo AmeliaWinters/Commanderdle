@@ -123,6 +123,30 @@ CREATE TABLE IF NOT EXISTS user_results (
 -- Migrating an existing DB (the column is new): run once, ignore "duplicate column".
 --   ALTER TABLE user_results ADD COLUMN answer TEXT;
 
+-- Server-side bonus-game results for signed-in players (Grid / Guess the cost /
+-- Higher-Lower dailies). One row per (user, mode, date), mirrored best-effort from the
+-- client when a bonus daily is completed; a win is never downgraded by a resubmitted
+-- loss. Powers the bonus-streak tiles on public profiles.
+CREATE TABLE IF NOT EXISTS user_bonus_results (
+  user_id    INTEGER NOT NULL,
+  mode       TEXT    NOT NULL,               -- 'grid' | 'guess-the-cost' | 'higher-lower'
+  date       TEXT    NOT NULL,               -- YYYY-MM-DD (streaks are day-based)
+  won        INTEGER NOT NULL,               -- 0 | 1
+  created_at INTEGER NOT NULL DEFAULT (unixepoch()),
+  PRIMARY KEY (user_id, mode, date)
+) WITHOUT ROWID;
+
+-- A bonus mode's best single run (the endless/practice record for Higher-Lower and
+-- Guess the cost). Monotonic: updates only ever raise it. Grid's "highest" is derived
+-- from user_bonus_results instead (its best run of consecutive daily wins).
+CREATE TABLE IF NOT EXISTS user_bonus_best (
+  user_id    INTEGER NOT NULL,
+  mode       TEXT    NOT NULL,
+  best       INTEGER NOT NULL DEFAULT 0,
+  updated_at INTEGER NOT NULL DEFAULT (unixepoch()),
+  PRIMARY KEY (user_id, mode)
+) WITHOUT ROWID;
+
 -- Cached, recomputed-on-write leaderboard stats (so the board is a cheap indexed
 -- read rather than a per-request aggregation over user_results). Recomputed from
 -- user_results by the results endpoint on every submit.

@@ -1,15 +1,9 @@
 import type { Mode } from "../types/commander";
+// ModeStats lives in the DOM-free accountStats module so the Cloudflare Worker (which
+// computes the server-truth version) can share the type without dragging in localStorage.
+import type { ModeStats } from "./accountStats";
 
-export interface ModeStats {
-  played: number;
-  wins: number;
-  currentStreak: number;
-  maxStreak: number;
-  /** YYYY-MM-DD of the most recent daily result recorded (win or loss). */
-  lastPlayedDate: string | null;
-  /** distribution[n] = number of daily wins solved in n guesses. */
-  distribution: Record<number, number>;
-}
+export type { ModeStats };
 
 const statsKey = (mode: Mode) => `commandle:stats:${mode}`;
 

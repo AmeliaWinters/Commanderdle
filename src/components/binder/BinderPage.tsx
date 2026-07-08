@@ -1,8 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { COMMANDERS } from "../../lib/commanders";
-import { loadCollection, subscribeCollection } from "../../lib/collection";
+import {
+  loadCollection,
+  subscribeCollection,
+  type Collection,
+} from "../../lib/collection";
 import { colorIdentityName } from "../../lib/colorNames";
-import { GAMES_PATH } from "../../lib/router";
+import { GAMES_PATH, profilePath } from "../../lib/router";
+import { fetchProfile, fetchProfileBinder } from "../../lib/leaderboardApi";
 import CardBackdrop from "../CardBackdrop";
 import LogoTitle from "../layout/LogoTitle";
 import GameSettingsMenu from "../layout/GameSettingsMenu";
@@ -28,17 +33,40 @@ function fold(s: string): string {
  * The Binder: every commander in the pool laid out like a trade binder.
  * Found ones sit face-up; the rest stay face-down as card backs until the
  * player guesses them correctly in any mode.
+ *
+ * With a `profileUuid`, this is instead a read-only view of that player's public
+ * binder (fetched from the server), linked from their profile page.
  */
-export default function BinderPage() {
-  useEffect(() => {
-    document.title = "Commandle - The Binder";
-  }, []);
-
-  const [collection, setCollection] = useState(() => loadCollection());
-  useEffect(
-    () => subscribeCollection(() => setCollection(loadCollection())),
-    [],
+export default function BinderPage({ profileUuid }: { profileUuid?: string }) {
+  const [collection, setCollection] = useState<Collection>(() =>
+    profileUuid ? {} : loadCollection(),
   );
+  const [ownerName, setOwnerName] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (profileUuid) return;
+    setCollection(loadCollection());
+    return subscribeCollection(() => setCollection(loadCollection()));
+  }, [profileUuid]);
+
+  // Public view: pull the named player's server binder + username.
+  useEffect(() => {
+    if (!profileUuid) return;
+    const controller = new AbortController();
+    fetchProfileBinder(profileUuid, controller.signal).then((binder) => {
+      if (binder) setCollection(binder as Collection);
+    });
+    fetchProfile(profileUuid, controller.signal).then((p) => {
+      if (p) setOwnerName(p.username);
+    });
+    return () => controller.abort();
+  }, [profileUuid]);
+
+  useEffect(() => {
+    document.title = ownerName
+      ? `Commandle - ${ownerName}'s Binder`
+      : "Commandle - The Binder";
+  }, [ownerName]);
 
   const [query, setQuery] = useState("");
   const [pips, setPips] = useState<Set<string>>(new Set());
@@ -88,23 +116,31 @@ export default function BinderPage() {
       <CardBackdrop />
       <header className="app-header binder-header">
         <AccountWidget />
-        <BackButton to={GAMES_PATH} label="All games" />
+        {profileUuid ? (
+          <BackButton to={profilePath(profileUuid)} label="Back to profile" />
+        ) : (
+          <BackButton to={GAMES_PATH} label="All games" />
+        )}
         <GameSettingsMenu />
         <LogoTitle ariaLabel="commandle">
           Comman<span className="accent">dle</span>
         </LogoTitle>
-        <p className="mode-subtitle">The Binder</p>
+        <p className="mode-subtitle">
+          {ownerName ? `${ownerName}'s Binder` : "The Binder"}
+        </p>
       </header>
 
       <main className="play-area binder-area">
-        <section className="binder-about">
-          <p>
-            The Binder is your lifetime collection. Every commander in the
-            Commandle pool is in here. Guess a commander correctly in any
-            daily game, and its card will appear in your binder. Fill every slot
-            to complete the collection! {":)"}
-          </p>
-        </section>
+        {!profileUuid && (
+          <section className="binder-about">
+            <p>
+              The Binder is your lifetime collection. Every commander in the
+              Commandle pool is in here. Guess a commander correctly in any
+              daily game, and its card will appear in your binder. Fill every
+              slot to complete the collection! {":)"}
+            </p>
+          </section>
+        )}
 
         <section className="binder-progress" aria-label="Collection progress">
           <div className="binder-progress-line">

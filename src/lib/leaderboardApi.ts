@@ -42,6 +42,26 @@ export async function fetchLeaderboard(
   }
 }
 
+/**
+ * A named player's public binder (commander name → first-found info). Resolves null
+ * when the profile is missing or the backend is down.
+ */
+export async function fetchProfileBinder(
+  uuid: string,
+  signal?: AbortSignal,
+): Promise<Record<string, { firstFound: string; modes: string[] }> | null> {
+  try {
+    const res = await fetch(`${apiBase()}/api/profile/${uuid}/binder`, { signal })
+    if (!res.ok) return null
+    const data = (await res.json()) as {
+      binder?: Record<string, { firstFound: string; modes: string[] }>
+    }
+    return data.binder ?? {}
+  } catch {
+    return null
+  }
+}
+
 /** A public profile by uuid. Resolves null when missing or the backend is down. */
 export async function fetchProfile(
   uuid: string,

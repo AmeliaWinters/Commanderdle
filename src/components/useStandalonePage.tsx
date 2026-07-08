@@ -1,5 +1,9 @@
 import { lazy, Suspense, type ReactNode } from "react";
-import { usePathMatch, useProfileUuid } from "../lib/routeHooks";
+import {
+  usePathMatch,
+  useProfileUuid,
+  useProfileBinderUuid,
+} from "../lib/routeHooks";
 import {
   isPrivacyPath,
   isAboutPath,
@@ -55,6 +59,7 @@ export function useStandalonePage(): ReactNode | null {
   const isAccount = usePathMatch(isAccountPath);
   const isLeaderboard = usePathMatch(isLeaderboardPath);
   const profileUuid = useProfileUuid();
+  const profileBinderUuid = useProfileBinderUuid();
   const isHigherLower = usePathMatch(isHigherLowerPath);
   const isPriceIsRight = usePathMatch(isPriceIsRightPath);
   const isGrid = usePathMatch(isGridPath);
@@ -72,6 +77,10 @@ export function useStandalonePage(): ReactNode | null {
     [isChangelog, <ChangelogPage />],
     [isAccount, <AccountPage />],
     [isLeaderboard, <LeaderboardPage />],
+    [
+      profileBinderUuid != null,
+      profileBinderUuid ? <BinderPage profileUuid={profileBinderUuid} /> : null,
+    ],
     [
       profileUuid != null,
       profileUuid ? <ProfilePage uuid={profileUuid} /> : null,

@@ -14,6 +14,22 @@
 
 import { MAX_GUESSES } from './shareCode'
 
+/**
+ * Per-mode play stats for a single daily mode. Shared between the anonymous localStorage
+ * ledger (`src/lib/stats.ts`) and the server-truth computation for signed-in players, so
+ * it lives here in a DOM-free module the Worker can import too.
+ */
+export interface ModeStats {
+  played: number
+  wins: number
+  currentStreak: number
+  maxStreak: number
+  /** YYYY-MM-DD of the most recent daily result recorded (win or loss). */
+  lastPlayedDate: string | null
+  /** distribution[n] = number of daily wins solved in n guesses. */
+  distribution: Record<number, number>
+}
+
 /** The five daily guessing modes (a "full clear" is winning all of these in one day). */
 export const DAILY_MODES = ['classic', 'synergy', 'silhouette', 'zoom', 'quote'] as const
 export const FULL_CLEAR = DAILY_MODES.length
@@ -130,6 +146,54 @@ const STREAK_XP_STEP = 0.01
  */
 export function streakXpMultiplier(currentStreak: number): number {
   return 1 + Math.min(Math.max(currentStreak - 1, 0), STREAK_XP_CAP_DAYS) * STREAK_XP_STEP
+}
+
+/**
+ * Per-mode play stats (played / wins / streaks / guess distribution) derived from a
+ * signed-in player's stored results. This is the server-truth version of the localStorage
+ * `ModeStats` the anonymous game keeps, so a logged-in player's result screen can show
+ * their real account numbers instead of whatever this browser happens to have. Mirrors
+ * `recordDailyResult`'s folding rules exactly so the two stay consistent.
+ */
+export function computeModeStats(results: DailyResult[]): Record<string, ModeStats> {
+  const byMode = new Map<string, DailyResult[]>()
+  for (const r of results) {
+    const list = byMode.get(r.mode)
+    if (list) list.push(r)
+    else byMode.set(r.mode, [r])
+  }
+
+  const out: Record<string, ModeStats> = {}
+  for (const [mode, list] of byMode) {
+    const sorted = [...list].sort((a, b) => a.date.localeCompare(b.date))
+    const stats: ModeStats = {
+      played: 0,
+      wins: 0,
+      currentStreak: 0,
+      maxStreak: 0,
+      lastPlayedDate: null,
+      distribution: {},
+    }
+    for (const r of sorted) {
+      // One row per (mode, date) server-side, but guard against a stray duplicate.
+      if (stats.lastPlayedDate === r.date) continue
+      stats.played += 1
+      if (r.won) {
+        stats.wins += 1
+        const consecutive =
+          stats.lastPlayedDate !== null &&
+          dayNumber(r.date) === dayNumber(stats.lastPlayedDate) + 1
+        stats.currentStreak = consecutive ? stats.currentStreak + 1 : 1
+        stats.maxStreak = Math.max(stats.maxStreak, stats.currentStreak)
+        stats.distribution[r.guesses] = (stats.distribution[r.guesses] ?? 0) + 1
+      } else {
+        stats.currentStreak = 0
+      }
+      stats.lastPlayedDate = r.date
+    }
+    out[mode] = stats
+  }
+  return out
 }
 
 /** Recompute every leaderboard stat from a player's full result history. */

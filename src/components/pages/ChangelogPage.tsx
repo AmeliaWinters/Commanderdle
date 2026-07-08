@@ -9,6 +9,15 @@ interface Release {
 
 export const RELEASES: Release[] = [
   {
+    version: "1.0.6",
+    date: "2026-07-08",
+    notes: [
+      "Fixed community scores showing up with wrong stats",
+      "Fixed local storage being preferred when logged in",
+      "Public profiles now have viewable bonus stats and binders",
+    ],
+  },
+  {
     version: "1.0.5",
     date: "2026-07-08",
     notes: [

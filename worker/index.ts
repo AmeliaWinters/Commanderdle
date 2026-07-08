@@ -25,8 +25,10 @@ import {
 import type { AuthEnv } from '../functions/api/auth/session'
 import { onResults } from '../functions/api/account/results'
 import { onBinder } from '../functions/api/account/binder'
+import { onModeStats } from '../functions/api/account/modeStats'
 import { onLeaderboard } from '../functions/api/leaderboard'
-import { onProfile } from '../functions/api/profile'
+import { onBonus } from '../functions/api/account/bonus'
+import { onProfile, onProfileBinder } from '../functions/api/profile'
 import { onKofiWebhook, type KofiEnv } from '../functions/api/webhooks/kofi'
 
 interface Env extends AuthEnv, KofiEnv {
@@ -50,9 +52,12 @@ const AUTH_LOGOUT = /^\/api\/auth\/logout\/?$/
 const AUTH_ME = /^\/api\/auth\/me\/?$/
 const ACCOUNT_RESULTS = /^\/api\/account\/results\/?$/
 const ACCOUNT_BINDER = /^\/api\/account\/binder\/?$/
+const ACCOUNT_MODE_STATS = /^\/api\/account\/mode-stats\/?$/
 const KOFI_WEBHOOK = /^\/api\/webhooks\/kofi\/?$/
 const LEADERBOARD = /^\/api\/leaderboard\/([^/]+)\/?$/
+const ACCOUNT_BONUS = /^\/api\/account\/bonus\/?$/
 const PROFILE = /^\/api\/profile\/([^/]+)\/?$/
+const PROFILE_BINDER = /^\/api\/profile\/([^/]+)\/binder\/?$/
 
 const dec = (s: string) => decodeURIComponent(s)
 
@@ -81,11 +86,20 @@ export default {
     if (ACCOUNT_BINDER.test(pathname)) {
       return onBinder(request, env)
     }
+    if (ACCOUNT_MODE_STATS.test(pathname)) {
+      return onModeStats(request, env)
+    }
     if (KOFI_WEBHOOK.test(pathname)) {
       return onKofiWebhook(request, env)
     }
     if ((m = pathname.match(LEADERBOARD))) {
       return onLeaderboard(request, env, dec(m[1]))
+    }
+    if (ACCOUNT_BONUS.test(pathname)) {
+      return onBonus(request, env)
+    }
+    if ((m = pathname.match(PROFILE_BINDER))) {
+      return onProfileBinder(request, env, dec(m[1]))
     }
     if ((m = pathname.match(PROFILE))) {
       return onProfile(request, env, dec(m[1]))

@@ -9,6 +9,7 @@
  * `uuid` + their own `username`/`avatar`.
  */
 import type { AccountStats } from "./accountStats";
+import type { ModeStats } from "./stats";
 import { canChooseNameColor, type Tier } from "./avatars";
 
 export type { Tier };
@@ -61,7 +62,7 @@ export function setLoggedInHint(on: boolean): void {
   }
 }
 
-function loggedInHint(): boolean {
+export function loggedInHint(): boolean {
   if (inMemoryLoggedIn) return true;
   try {
     return localStorage.getItem(HINT_KEY) === "1";
@@ -179,6 +180,31 @@ export async function submitAccountResult(
   }
 }
 
+/**
+ * Mirror a finished bonus-game daily (Grid / Guess the cost / Higher-Lower) to the
+ * signed-in account, so bonus streaks can show on the public profile. `best` is the
+ * mode's endless/practice record; the server only ever raises it. No-op for anonymous
+ * players, fire-and-forget otherwise.
+ */
+export async function submitBonusResult(
+  mode: string,
+  date: string,
+  won: boolean,
+  best: number,
+): Promise<void> {
+  if (!loggedInHint()) return;
+  try {
+    await fetch(`${apiBase()}/api/account/bonus`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ mode, date, won, best }),
+    });
+  } catch {
+    /* best-effort */
+  }
+}
+
 /** One binder entry from the server: when a commander was first found + in which modes. */
 export interface BinderEntry {
   firstFound: string;
@@ -203,6 +229,28 @@ export async function fetchBinder(
     if (!res.ok) return null;
     const data = (await res.json()) as { binder?: ServerBinder };
     return data.binder ?? {};
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Fetch the signed-in player's per-mode play stats (server-side source of truth). Returns
+ * null for anonymous players or on any failure, so the result screen falls back to the
+ * local (localStorage) stats.
+ */
+export async function fetchModeStats(
+  signal?: AbortSignal,
+): Promise<Record<string, ModeStats> | null> {
+  if (!loggedInHint()) return null;
+  try {
+    const res = await fetch(`${apiBase()}/api/account/mode-stats`, {
+      credentials: "include",
+      signal,
+    });
+    if (!res.ok) return null;
+    const data = (await res.json()) as { modeStats?: Record<string, ModeStats> };
+    return data.modeStats ?? {};
   } catch {
     return null;
   }

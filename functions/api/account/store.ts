@@ -5,10 +5,20 @@
  */
 import {
   computeStats,
+  computeModeStats,
   emptyAccountStats,
   type AccountStats,
   type DailyResult,
+  type ModeStats,
 } from '../../../src/lib/accountStats'
+import {
+  computeBonusStreaks,
+  maxWinRun,
+  BONUS_MODES,
+  type BonusHistory,
+  type BonusMode,
+  type BonusStreaks,
+} from '../../../src/lib/bonusStreakMath'
 
 /** One binder entry: when a commander was first found and in which modes. */
 export interface BinderEntry {
@@ -69,6 +79,68 @@ export async function getStats(db: D1Database, userId: number): Promise<AccountS
     totalWins: row.total_wins,
     xp: row.xp,
   }
+}
+
+/**
+ * Per-mode play stats (played / wins / streaks / distribution) for a signed-in player,
+ * derived from `user_results` — the source of truth the result screen prefers over this
+ * browser's localStorage once the player is logged in.
+ */
+export async function getModeStats(
+  db: D1Database,
+  userId: number,
+): Promise<Record<string, ModeStats>> {
+  const { results } = await db
+    .prepare('SELECT mode, date, won, guesses FROM user_results WHERE user_id = ?')
+    .bind(userId)
+    .all<{ mode: string; date: string; won: number; guesses: number }>()
+
+  const history: DailyResult[] = (results ?? []).map((r) => ({
+    mode: r.mode,
+    date: r.date,
+    won: r.won === 1,
+    guesses: r.guesses,
+  }))
+  return computeModeStats(history)
+}
+
+/**
+ * Bonus-game streaks (Grid / Guess the cost / Higher-Lower) for a player, derived from
+ * their mirrored `user_bonus_results` + `user_bonus_best` rows using the same math as
+ * the client's localStorage version (`src/lib/bonusStreakMath.ts`). Shown on public
+ * profiles. Modes with no recorded play still return zeroed tiles.
+ */
+export async function getBonusStats(
+  db: D1Database,
+  userId: number,
+): Promise<Record<BonusMode, BonusStreaks>> {
+  const [{ results: rows }, { results: bests }] = await Promise.all([
+    db
+      .prepare('SELECT mode, date, won FROM user_bonus_results WHERE user_id = ?')
+      .bind(userId)
+      .all<{ mode: string; date: string; won: number }>(),
+    db
+      .prepare('SELECT mode, best FROM user_bonus_best WHERE user_id = ?')
+      .bind(userId)
+      .all<{ mode: string; best: number }>(),
+  ])
+
+  const histories = new Map<string, BonusHistory>()
+  for (const r of rows ?? []) {
+    let h = histories.get(r.mode)
+    if (!h) histories.set(r.mode, (h = {}))
+    h[r.date] = r.won === 1
+  }
+  const bestByMode = new Map((bests ?? []).map((b) => [b.mode, b.best]))
+
+  const out = {} as Record<BonusMode, BonusStreaks>
+  for (const mode of BONUS_MODES) {
+    const history = histories.get(mode) ?? {}
+    // Grid has no endless record; its best is the longest run of daily wins.
+    const highest = mode === 'grid' ? maxWinRun(history) : (bestByMode.get(mode) ?? 0)
+    out[mode] = computeBonusStreaks(history, highest)
+  }
+  return out
 }
 
 /** Recompute a user's stats from user_results and persist to user_stats. */

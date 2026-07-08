@@ -8,7 +8,7 @@ import {
   FaCoins,
   FaArrowsUpDown,
 } from "react-icons/fa6";
-import { bonusStreaks, type BonusMode } from "../../lib/bonusStats";
+import { bonusStreaks, type BonusMode, type BonusStreaks } from "../../lib/bonusStats";
 import { useCountUp } from "../../lib/useCountUp";
 
 interface ModeMeta {
@@ -53,11 +53,22 @@ function StreakCard({
 }
 
 /** "Bonus game stats" — a mode toggle over three streak tiles for the selected game.
- *  These come from local play history, so they reflect this device's runs. */
-export default function BonusStatCards() {
+ *  With no `data`, values come from this device's local play history; a public profile
+ *  passes the server-derived streaks for the player being viewed instead. */
+export default function BonusStatCards({
+  data,
+}: {
+  data?: Partial<Record<BonusMode, BonusStreaks>>;
+}) {
   const [mode, setMode] = useState<BonusMode>("grid");
   // Recompute whenever the selected mode changes; the values are read from localStorage.
-  const streaks = useMemo(() => bonusStreaks(mode), [mode]);
+  const streaks = useMemo(
+    () =>
+      data
+        ? (data[mode] ?? { dayStreak: 0, winStreak: 0, highestStreak: 0 })
+        : bonusStreaks(mode),
+    [mode, data],
+  );
 
   return (
     <div className="account-panel bonus-stats">

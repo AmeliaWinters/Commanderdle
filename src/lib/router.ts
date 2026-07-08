@@ -148,6 +148,20 @@ export function parseProfilePath(pathname: string): string | null {
   return /^[0-9a-fA-F-]{36}$/.test(uuid) ? uuid : null;
 }
 
+/** A named player's public binder: /u/{uuid}/binder. */
+export function profileBinderPath(uuid: string): string {
+  return `/u/${uuid}/binder`;
+}
+
+/** Parse a /u/{uuid}/binder path into the uuid, or null if it isn't one. */
+export function parseProfileBinderPath(pathname: string): string | null {
+  const parts = normalize(pathname).split("/"); // ['', 'u', uuid, 'binder']
+  if (parts.length !== 4 || parts[1] !== "u" || parts[3] !== "binder")
+    return null;
+  const uuid = parts[2];
+  return /^[0-9a-fA-F-]{36}$/.test(uuid) ? uuid : null;
+}
+
 /** Bonus "Higher / Lower" game - its own page, deliberately outside the mode tabs. */
 export const HIGHER_LOWER_PATH = "/higher-lower";
 
@@ -255,6 +269,7 @@ function isStandalonePath(path: string): boolean {
     isAccountPath(path) ||
     isLeaderboardPath(path) ||
     parseProfilePath(path) !== null ||
+    parseProfileBinderPath(path) !== null ||
     isHigherLowerPath(path) ||
     isPriceIsRightPath(path) ||
     isGridPath(path) ||

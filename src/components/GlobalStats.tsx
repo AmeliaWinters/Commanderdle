@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import type { ShareMode } from "../lib/shareCode";
-import { fetchGlobalStats } from "../lib/api";
-import { summarize, type GlobalStats } from "../lib/globalStats";
+import { fetchGlobalStats, echoedGlobalStats } from "../lib/api";
+import {
+  excludeSelf,
+  summarizeOthers,
+  type GlobalStats,
+} from "../lib/globalStats";
 
 interface Props {
   mode: ShareMode;
@@ -9,6 +13,8 @@ interface Props {
   maxGuesses: number;
   /** The player's own winning guess count, to highlight in the community histogram. */
   highlight?: number;
+  /** The player's own finished result, so the panel can talk about the *other* players. */
+  self?: { won: boolean; guesses: number };
 }
 
 
@@ -17,16 +23,26 @@ export default function GlobalStats({
   puzzle,
   maxGuesses,
   highlight,
+  self,
 }: Props) {
-  const [stats, setStats] = useState<GlobalStats | null>(null);
+  // Whether the aggregate we're holding already counts the player (came from their own
+  // submission echo) — drives whether we subtract them to get the "other players" view.
+  const [raw, setRaw] = useState<{ stats: GlobalStats; selfIncluded: boolean } | null>(
+    null,
+  );
 
   useEffect(() => {
     const ctrl = new AbortController();
-    // Small delay lets this puzzle's own submission (fired on finish) land first, so the
-    // player is usually included in the count they see.
+    // Small delay lets this puzzle's own submission (fired on finish) land first, so we
+    // can prefer the self-inclusive echo and cleanly exclude the player from the count.
     const timer = setTimeout(() => {
+      const echo = echoedGlobalStats(mode, puzzle);
+      if (echo && echo.total > 0) {
+        setRaw({ stats: echo, selfIncluded: true });
+        return;
+      }
       fetchGlobalStats(mode, puzzle, ctrl.signal).then((data) => {
-        if (data && data.total > 0) setStats(data);
+        if (data && data.total > 0) setRaw({ stats: data, selfIncluded: false });
       });
     }, 400);
     return () => {
@@ -35,46 +51,56 @@ export default function GlobalStats({
     };
   }, [mode, puzzle]);
 
-  if (!stats) return null;
+  if (!raw) return null;
 
-  const s = summarize(stats);
+  const others = excludeSelf(raw.stats, self, raw.selfIncluded);
+  const s = summarizeOthers(others);
   const rows = Array.from({ length: maxGuesses }, (_, i) => i + 1);
-  const maxCount = Math.max(1, ...rows.map((n) => stats.dist[n] ?? 0));
+  const maxCount = Math.max(1, ...rows.map((n) => others.dist[n] ?? 0));
+  const beaten = highlight !== undefined ? s.beatenPct(highlight) : null;
 
   return (
     <div className="global-stats">
       <h3 className="global-stats-title">Community</h3>
       <p className="global-stats-lead">
-        <strong>{s.winPct}%</strong> of{" "}
-        {stats.total.toLocaleString()}{" "}
-        {stats.total === 1 ? "player" : "players"} solved this puzzle
-        {highlight !== undefined && s.beatenPct(highlight) !== null && (
+        {s.total === 0 ? (
+          "You're the first to finish this puzzle!"
+        ) : (
           <>
-            {" - you beat "}
-            <strong>{s.beatenPct(highlight)}%</strong> of them
+            <strong>{s.winPct}%</strong> of {s.total.toLocaleString()}{" "}
+            {s.total === 1 ? "other player" : "other players"} solved this puzzle
+            {beaten !== null && (
+              <>
+                {" - you beat "}
+                <strong>{beaten}%</strong> of them
+              </>
+            )}
+            .
           </>
         )}
-        .
       </p>
-      <div className="global-dist">
-        {rows.map((n) => {
-          const count = stats.dist[n] ?? 0;
-          const pct = stats.total > 0 ? Math.round((count / stats.total) * 100) : 0;
-          return (
-            <div className="dist-row" key={n}>
-              <span className="dist-label">{n}</span>
-              <div className="dist-bar-track">
-                <div
-                  className={`dist-bar global${n === highlight ? " current" : ""}`}
-                  style={{ width: `${(count / maxCount) * 100}%` }}
-                >
-                  <span className="dist-count">{pct}%</span>
+      {s.total > 0 && (
+        <div className="global-dist">
+          {rows.map((n) => {
+            const count = others.dist[n] ?? 0;
+            const pct =
+              others.total > 0 ? Math.round((count / others.total) * 100) : 0;
+            return (
+              <div className="dist-row" key={n}>
+                <span className="dist-label">{n}</span>
+                <div className="dist-bar-track">
+                  <div
+                    className={`dist-bar global${n === highlight ? " current" : ""}`}
+                    style={{ width: `${(count / maxCount) * 100}%` }}
+                  >
+                    <span className="dist-count">{pct}%</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

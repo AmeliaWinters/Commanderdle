@@ -71,6 +71,55 @@ export function summarize(stats: GlobalStats): GlobalStatsSummary {
   }
 }
 
+/**
+ * The community aggregate with the current player removed, so the result screen can talk
+ * about the *other* finishers ("0% of 3 other players solved this — you beat 100%").
+ * `selfIncluded` says whether `self` is already part of `stats`: true when the aggregate
+ * came from the player's own submission echo (which counts them), false for a plain fetch
+ * that may have raced ahead of their write. Clamped so it stays valid either way.
+ */
+export function excludeSelf(
+  stats: GlobalStats,
+  self: { won: boolean; guesses: number } | undefined,
+  selfIncluded: boolean,
+): GlobalStats {
+  if (!self || !selfIncluded) return stats
+  const dist = { ...stats.dist }
+  if (self.won && dist[self.guesses]) dist[self.guesses] -= 1
+  return {
+    total: Math.max(0, stats.total - 1),
+    wins: Math.max(0, stats.wins - (self.won ? 1 : 0)),
+    dist,
+  }
+}
+
+/** Human-facing derivations for an "other players" aggregate (self already removed). */
+export interface OthersSummary {
+  total: number
+  winPct: number
+  /**
+   * Of these other finishers, the percentage the player beat by winning in `n` guesses:
+   * every loser plus every winner who took more than `n`. Null when there are no others.
+   */
+  beatenPct: (n: number) => number | null
+}
+
+export function summarizeOthers(others: GlobalStats): OthersSummary {
+  const { total, wins, dist } = others
+  return {
+    total,
+    winPct: total > 0 ? Math.round((wins / total) * 100) : 0,
+    beatenPct: (n: number) => {
+      if (total <= 0) return null
+      let within = 0
+      for (const [k, v] of Object.entries(dist)) {
+        if (Number(k) <= n) within += v
+      }
+      return Math.round(((total - within) / total) * 100)
+    },
+  }
+}
+
 /** Validate an inbound submission before it touches the store. Returns null when invalid. */
 export function validateSubmission(
   mode: ShareMode,

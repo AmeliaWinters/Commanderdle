@@ -3,13 +3,17 @@
  *
  *   GET /api/profile/:uuid   → { profile }  |  404
  *
- * A shareable, read-only view of a named account: username, avatar, supporter tier,
- * join date and leaderboard stats. Only accounts that have set a username are visible
- * (unnamed/first-login accounts 404). Degradable: 503 without D1.
+ *   GET /api/profile/:uuid/binder → { binder }   |  404
+ *
+ * A shareable, read-only view of a named account: username, avatar, supporter tier +
+ * flare, join date, leaderboard stats, bonus-game streaks and binder progress. Only
+ * accounts that have set a username are visible (unnamed/first-login accounts 404).
+ * Degradable: 503 without D1.
  */
 import type { PublicProfile } from "../../src/lib/leaderboard";
 import { EFFECTIVE_TIER_SQL } from "./webhooks/kofi";
 import { canChooseNameColor } from "../../src/lib/avatars";
+import { getBinder, getBonusStats } from "./account/store";
 
 interface Env {
   STATS_DB?: D1Database;
@@ -35,13 +39,14 @@ export async function onProfile(
   if (!/^[0-9a-fA-F-]{36}$/.test(uuid)) return json({ error: "bad id" }, 400);
 
   const row = await env.STATS_DB.prepare(
-    `SELECT u.uuid, u.username, u.avatar, ${EFFECTIVE_TIER_SQL} AS tier, u.name_color, u.created_at,
+    `SELECT u.id, u.uuid, u.username, u.avatar, ${EFFECTIVE_TIER_SQL} AS tier, u.name_color, u.created_at,
             s.play_streak, s.max_play_streak, s.win_streak, s.max_win_streak, s.total_wins, s.xp
      FROM users u LEFT JOIN user_stats s ON s.user_id = u.id
      WHERE u.uuid = ? AND u.username IS NOT NULL`,
   )
     .bind(uuid)
     .first<{
+      id: number;
       uuid: string;
       username: string;
       avatar: string;
@@ -64,6 +69,13 @@ export async function onProfile(
       : "common"
   ) as PublicProfile["tier"];
 
+  // Bonus streaks + binder size in one round of parallel reads; both are derived from
+  // the player's own recorded results, so there's nothing private here.
+  const [bonusStats, binder] = await Promise.all([
+    getBonusStats(env.STATS_DB, row.id),
+    getBinder(env.STATS_DB, row.id),
+  ]);
+
   const profile: PublicProfile = {
     uuid: row.uuid,
     username: row.username,
@@ -80,6 +92,32 @@ export async function onProfile(
       totalWins: row.total_wins ?? 0,
       xp: row.xp ?? 0,
     },
+    bonusStats,
+    binderCount: Object.keys(binder).length,
   };
   return json({ profile }, 200, { "cache-control": "public, max-age=30" });
+}
+
+/**
+ * A named player's public binder — the same server-derived collection their own
+ * /binder page shows, keyed by commander name. Read-only and derived purely from
+ * recorded daily wins, so it's safe to expose alongside the profile.
+ */
+export async function onProfileBinder(
+  _request: Request,
+  env: Env,
+  uuid: string,
+): Promise<Response> {
+  if (!env.STATS_DB) return json({ error: "profiles unavailable" }, 503);
+  if (!/^[0-9a-fA-F-]{36}$/.test(uuid)) return json({ error: "bad id" }, 400);
+
+  const row = await env.STATS_DB.prepare(
+    `SELECT id FROM users WHERE uuid = ? AND username IS NOT NULL`,
+  )
+    .bind(uuid)
+    .first<{ id: number }>();
+  if (!row) return json({ error: "not found" }, 404);
+
+  const binder = await getBinder(env.STATS_DB, row.id);
+  return json({ binder }, 200, { "cache-control": "public, max-age=60" });
 }

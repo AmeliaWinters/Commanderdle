@@ -217,6 +217,22 @@ export function devAuthMock(): Plugin {
           return sendJson(res, 200, { stats });
         }
 
+        // --- account: per-mode play stats (server-truth) ---
+        if (path === "/api/account/mode-stats" && method === "GET") {
+          if (!user) return sendJson(res, 401, { error: "not signed in" });
+          const modeStats = {
+            classic: {
+              played: 12,
+              wins: 9,
+              currentStreak: 3,
+              maxStreak: 5,
+              lastPlayedDate: null,
+              distribution: { 2: 2, 3: 4, 4: 2, 5: 1 },
+            },
+          };
+          return sendJson(res, 200, { modeStats });
+        }
+
         // --- leaderboard ---
         const lbMatch = path.match(/^\/api\/leaderboard\/([\w-]+)$/);
         if (lbMatch && method === "GET") {
@@ -243,6 +259,31 @@ export function devAuthMock(): Plugin {
           return sendJson(res, 200, { entries: base, you });
         }
 
+        // --- account: bonus daily mirror ---
+        if (path === "/api/account/bonus" && method === "POST") {
+          if (!user) return sendJson(res, 401, { error: "not signed in" });
+          await readBody(req);
+          return sendJson(res, 200, { ok: true });
+        }
+
+        // --- public binder ---
+        const binderMatch = path.match(/^\/api\/profile\/([\w-]+)\/binder$/);
+        if (binderMatch && method === "GET") {
+          return sendJson(res, 200, {
+            binder: {
+              "The Ur-Dragon": { firstFound: "2025-06-01", modes: ["classic"] },
+              "Edgar Markov": {
+                firstFound: "2025-06-02",
+                modes: ["classic", "zoom"],
+              },
+              "Krenko, Mob Boss": {
+                firstFound: "2025-06-03",
+                modes: ["silhouette"],
+              },
+            },
+          });
+        }
+
         // --- public profile ---
         const profMatch = path.match(/^\/api\/profile\/([\w-]+)$/);
         if (profMatch && method === "GET") {
@@ -254,9 +295,25 @@ export function devAuthMock(): Plugin {
                 isSelf && user?.username ? user.username : "PlaneswalkerPat",
               avatar: isSelf ? user!.avatar : "The Ur-Dragon",
               tier: isSelf ? user!.tier : ("mythic" as Tier),
-              nameColor: isSelf ? user!.nameColor : null,
+              // Another player's profile carries their chosen flare, so the page's
+              // themed rendering can be exercised in dev too.
+              nameColor: isSelf ? user!.nameColor : "#3fd0ff",
               joinedAt: Math.floor(Date.parse("2025-01-15T00:00:00Z") / 1000),
               stats,
+              bonusStats: {
+                grid: { dayStreak: 4, winStreak: 2, highestStreak: 6 },
+                "guess-the-cost": {
+                  dayStreak: 2,
+                  winStreak: 1,
+                  highestStreak: 11,
+                },
+                "higher-lower": {
+                  dayStreak: 7,
+                  winStreak: 5,
+                  highestStreak: 23,
+                },
+              },
+              binderCount: 3,
             },
           });
         }
