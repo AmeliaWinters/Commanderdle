@@ -9,6 +9,39 @@ interface Release {
 
 const RELEASES: Release[] = [
   {
+    version: "0.9.2",
+    date: "2026-07-08",
+    notes: [
+      "Added filters on usernames",
+      "Added clearer deduction bounds fron x<3 to x-2",
+      "Fixed unstyled archive button",
+      "Fixed archive being broken if a commander goes out of top 500",
+      "Account page now stores bonus game stats",
+      "Added smoother loading",
+      "Added colour pips for colour identities in grid (simic etc)",
+      "Added giving up in grid",
+    ],
+  },
+  {
+    version: "0.9.1",
+    date: "2026-07-08",
+    notes: [
+      "Fixed a leaderboard injection vulnerability",
+      "Tidied up the game headers",
+      "Added more space to leaderboards",
+      "Made username choosing mandatory",
+      "Fixed long-username bug",
+      "Account page redesign",
+      "Mythic supporters now have foil effects",
+      "More free avatars for common users",
+      "Tier colours are now used everywhere",
+      "Fixed logging in on mobile",
+      "Results screen shows XP earned",
+      "Faster avatar picker doesn't load all 500 commander pictures at once",
+      "Added disabling leaderboard visibility",
+    ],
+  },
+  {
     title: "Welcome players!",
     version: "0.9.0",
     date: "2026-07-08",
@@ -17,7 +50,6 @@ const RELEASES: Release[] = [
       "Added leaderboards",
       "Added cosmetic unlockables",
       "Design upgrades",
-      "Fixed archive being broken if a commander goes out of top 500",
     ],
   },
   {

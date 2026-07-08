@@ -72,9 +72,9 @@ export function isAvatarUnlocked(name: string, tier: Tier): boolean {
  * Mothly donation for each tier
  */
 export const TIER_THRESHOLDS_GBP: Record<Exclude<Tier, "common">, number> = {
-  uncommon: 2,
-  rare: 5,
-  mythic: 10,
+  uncommon: 5,
+  rare: 10,
+  mythic: 20,
 };
 
 /** Map a cumulative donation total (GBP) to the highest tier it unlocks. */
