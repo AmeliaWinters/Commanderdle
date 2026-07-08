@@ -97,9 +97,6 @@ export default function AppFooter({ isArchive }: Props) {
           <a href="/contact" onClick={navTo("/contact")}>
             Contact
           </a>
-          <a href="/leaderboard" onClick={navTo("/leaderboard")}>
-            Leaderboard
-          </a>
         </nav>
       </footer>
     </div>
