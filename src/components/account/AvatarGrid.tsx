@@ -89,24 +89,6 @@ export default function AvatarGrid({ current, tier, onSelect }: Props) {
 
   const hasMore = !q && visibleCount < COMMANDERS.length;
 
-  // Grow the window when the sentinel at the bottom of the scroll area comes into view.
-  useEffect(() => {
-    if (!hasMore) return;
-    const root = gridRef.current;
-    const sentinel = sentinelRef.current;
-    if (!root || !sentinel) return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
-          setVisibleCount((n) => Math.min(n + PAGE_STEP, COMMANDERS.length));
-        }
-      },
-      { root, rootMargin: "300px" },
-    );
-    io.observe(sentinel);
-    return () => io.disconnect();
-  }, [hasMore, cellsLength]);
-
   // Expand each commander into its default cell plus (for Mythic+) its alternate-art cells.
   const cells = useMemo<Cell[]>(() => {
     const out: Cell[] = [];
@@ -125,8 +107,23 @@ export default function AvatarGrid({ current, tier, onSelect }: Props) {
     // variantsReady is a dependency so the list re-expands once variants finish loading.
   }, [commanders, showVariants, variantsReady]);
 
-  const hiddenCount =
-    !q && !showAll ? COMMANDERS.length - commanders.length : 0;
+  // Grow the window when the sentinel at the bottom of the scroll area comes into view.
+  useEffect(() => {
+    if (!hasMore) return;
+    const root = gridRef.current;
+    const sentinel = sentinelRef.current;
+    if (!root || !sentinel) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setVisibleCount((n) => Math.min(n + PAGE_STEP, COMMANDERS.length));
+        }
+      },
+      { root, rootMargin: "300px" },
+    );
+    io.observe(sentinel);
+    return () => io.disconnect();
+  }, [hasMore, cells.length]);
 
   return (
     <div className="avatar-grid-wrap">
@@ -144,7 +141,12 @@ export default function AvatarGrid({ current, tier, onSelect }: Props) {
           avatars
         </p>
       )}
-      <div className="avatar-grid" role="listbox" aria-label="Choose an avatar">
+      <div
+        className="avatar-grid"
+        role="listbox"
+        aria-label="Choose an avatar"
+        ref={gridRef}
+      >
         {cells.map((cell) => {
           const selected = cell.avatar === current;
           const locked = !isAvatarUnlocked(cell.avatar, tier);
@@ -175,16 +177,14 @@ export default function AvatarGrid({ current, tier, onSelect }: Props) {
         {cells.length === 0 && (
           <p className="avatar-grid-empty">No commanders match.</p>
         )}
+        {hasMore && (
+          <div
+            ref={sentinelRef}
+            className="avatar-grid-sentinel"
+            aria-hidden="true"
+          />
+        )}
       </div>
-      {hiddenCount > 0 && (
-        <button
-          type="button"
-          className="avatar-grid-more"
-          onClick={() => setShowAll(true)}
-        >
-          Show all {COMMANDERS.length} commanders
-        </button>
-      )}
 
       {lockedPick && (
         <div
