@@ -17,7 +17,7 @@ export const TIER_WINDOW_SEC = 31 * 24 * 60 * 60
 
 /**
  * SQL fragment for a user's *effective* supporter tier: the stored tier while the
- * membership is live, else 'none'. Assumes the `users` table is aliased `u`. Self-
+ * membership is live, else 'common'. Assumes the `users` table is aliased `u`. Self-
  * expiring on read (like sessions), so a lapsed supporter loses their colour/gem with
  * no background job. Select it as `... AS tier` in place of a bare `u.tier`.
  *
@@ -27,7 +27,7 @@ export const TIER_WINDOW_SEC = 31 * 24 * 60 * 60
 export const EFFECTIVE_TIER_SQL =
   "CASE WHEN u.tier = 'creator' THEN 'creator' " +
   'WHEN u.tier_expires_at IS NOT NULL AND u.tier_expires_at > unixepoch() THEN u.tier ' +
-  "ELSE 'none' END"
+  "ELSE 'common' END"
 
 export interface KofiEnv {
   STATS_DB?: D1Database
@@ -52,7 +52,7 @@ const text = (body: string, status = 200) =>
  * to any account signed in with that email. Each donation independently grants 31 days
  * of the tier its amount unlocks; the account's live tier is the highest tier among
  * donations still inside their 31-day window, and the expiry is the latest such window's
- * end. Once every window has lapsed the account drops to 'none' (loses the coloured
+ * end. Once every window has lapsed the account drops to 'common' (loses the coloured
  * cosmetics) while its avatar is left as-is. Safe to call with an unmatched email — it
  * simply updates zero rows. Shared with the auth callback so a login reconciles too.
  * Never throws.
@@ -60,9 +60,9 @@ const text = (body: string, status = 200) =>
 export async function reconcileTier(
   db: D1Database,
   email: string | null | undefined,
-): Promise<Tier | 'none'> {
+): Promise<Tier> {
   const key = (email ?? '').trim().toLowerCase()
-  if (!key) return 'none'
+  if (!key) return 'common'
   try {
     // Never touch a manually-granted creator account — it's permanent and outside the
     // donation-driven lifecycle, so a login/webhook reconcile must leave it as-is.
@@ -78,25 +78,25 @@ export async function reconcileTier(
       .all<{ amount: number; created_at: number }>()
 
     const now = Math.floor(Date.now() / 1000)
-    let tier: Tier | 'none' = 'none'
+    let tier: Tier = 'common'
     let expires = 0
     for (const d of results ?? []) {
       const ends = d.created_at + TIER_WINDOW_SEC
       if (ends <= now) continue // this donation's 31 days are up
       const t = tierForTotal(d.amount) // a single payment's amount → its tier
-      if (tier === 'none' || TIER_RANK[t] > TIER_RANK[tier]) tier = t
+      if (TIER_RANK[t] > TIER_RANK[tier]) tier = t
       if (ends > expires) expires = ends
     }
 
     // Only touch a matching account; no-op if they haven't signed up yet. A lapsed
-    // member is written back as 'none' with a null expiry so reads show no colour.
+    // member is written back as 'common' with a null expiry so reads show no colour.
     await db
       .prepare('UPDATE users SET tier = ?, tier_expires_at = ? WHERE lower(email) = ?')
-      .bind(tier, tier === 'none' ? null : expires, key)
+      .bind(tier, tier === 'common' ? null : expires, key)
       .run()
     return tier
   } catch {
-    return 'none'
+    return 'common'
   }
 }
 

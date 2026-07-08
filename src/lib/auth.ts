@@ -40,16 +40,24 @@ function apiBase(): string {
 // POSTs. Kept in sync with the real session by the auth context.
 const HINT_KEY = "commandle:loggedIn";
 
+// In-memory mirror of the real session, kept in sync by the auth context. This is the
+// primary source of truth so a signed-in player with storage disabled/cleared (private
+// mode, cookie-only) still records results; localStorage just lets the hint survive a
+// reload before the session re-resolves.
+let inMemoryLoggedIn = false;
+
 export function setLoggedInHint(on: boolean): void {
+  inMemoryLoggedIn = on;
   try {
     if (on) localStorage.setItem(HINT_KEY, "1");
     else localStorage.removeItem(HINT_KEY);
   } catch {
-    /* storage disabled — hint is only an optimisation */
+    /* storage disabled — the in-memory flag still carries the hint */
   }
 }
 
 function loggedInHint(): boolean {
+  if (inMemoryLoggedIn) return true;
   try {
     return localStorage.getItem(HINT_KEY) === "1";
   } catch {

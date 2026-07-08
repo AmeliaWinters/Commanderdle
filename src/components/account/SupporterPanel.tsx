@@ -13,14 +13,14 @@ const TIER_PERKS: Record<"uncommon" | "rare" | "mythic", string[]> = {
     "No ads",
   ],
   rare: [
-    "Access to all avatars",
+    "Access to top 500 commander standard printing avatars",
     "Rare supporter badge",
     "Rare supporter account flare",
     "No ads",
   ],
   mythic: [
-    "Access to all avatars",
-    "Mythic Rare account badge",
+    "Access to all commander printings as avatars",
+    "Mythic rare account badge",
     "Custom account flare colour",
     "Foil animation on profile, avatar, and name",
     "No ads",

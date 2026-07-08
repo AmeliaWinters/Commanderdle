@@ -6,6 +6,10 @@ a change that a player could notice.
 
 ## 2026-07-08
 
+- **Leaderboard results record reliably** — signed-in players with browser storage
+  disabled or cleared (private mode, cookie-only) now have their daily results recorded
+  to their account instead of silently stopping.
+
 - **Ko-fi support button** — the home page now shows the official Ko-fi "Support me
   on Ko-FI" button instead of the plain coffee image link.
 

@@ -56,13 +56,13 @@ CREATE TABLE IF NOT EXISTS users (
   username           TEXT,                                 -- player-chosen; null until set
   username_lc        TEXT    UNIQUE,                       -- case-insensitive uniqueness (null ok)
   avatar             TEXT    NOT NULL DEFAULT 'Atraxa, Praetors'' Voice',  -- commander name (see src/lib/avatars.ts)
-  tier               TEXT    NOT NULL DEFAULT 'none',      -- none|common|uncommon|rare|mythic|creator
+  tier               TEXT    NOT NULL DEFAULT 'common',    -- common|uncommon|rare|mythic|creator
   -- 'creator' is a manually-granted, never-expiring owner/collaborator tier that unlocks
   -- every cosmetic. Grant it by hand (it's never sold and reconcileTier leaves it alone):
   --   UPDATE users SET tier = 'creator', tier_expires_at = NULL WHERE lower(email) = lower('you@example.com');
   -- Unix second the current supporter tier lapses (a donation buys 31 days; paying
   -- again pushes it out). NULL = never a supporter / already lapsed. Reads treat a
-  -- past/NULL value as 'none' (see EFFECTIVE_TIER_SQL) so a lapsed member loses the
+  -- past/NULL value as 'common' (see EFFECTIVE_TIER_SQL) so a lapsed member loses the
   -- coloured cosmetics with no cron sweep. The avatar is deliberately left untouched,
   -- so they keep whatever they equipped while supporting.
   tier_expires_at    INTEGER,

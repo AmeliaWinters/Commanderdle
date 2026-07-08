@@ -60,7 +60,11 @@ export async function onLogin(request: Request, env: AuthEnv, provider: string):
   if (!url) return json({ error: 'auth unavailable' }, 503)
 
   // Bind the nonce (and return target) to the browser via a signed, short-lived cookie.
-  const stateCookie = await sign(`${provider}|${nonce}|${returnTo}`, env.SESSION_SECRET)
+  // returnTo is URL-encoded so a '|' in the path can't truncate the pipe-split state.
+  const stateCookie = await sign(
+    `${provider}|${nonce}|${encodeURIComponent(returnTo)}`,
+    env.SESSION_SECRET,
+  )
   return new Response(null, {
     status: 302,
     headers: { Location: url, 'Set-Cookie': cookie(STATE_COOKIE, stateCookie, 600) },
@@ -85,7 +89,13 @@ export async function onCallback(
   const value = raw ? await unsign(raw, env.SESSION_SECRET) : null
   const [cookieProvider, nonce, returnToRaw] = (value ?? '').split('|')
   if (cookieProvider !== provider || !nonce || nonce !== state) return fail('login expired, try again')
-  const returnTo = safeReturnTo(returnToRaw ?? null)
+  let returnToDecoded: string | null = null
+  try {
+    returnToDecoded = returnToRaw != null ? decodeURIComponent(returnToRaw) : null
+  } catch {
+    returnToDecoded = null
+  }
+  const returnTo = safeReturnTo(returnToDecoded)
 
   const accessToken = await exchangeCode(provider, env, code, redirectUriFor(request, provider))
   if (!accessToken) return fail('could not reach the sign-in provider')

@@ -43,8 +43,10 @@ const PROVIDERS: Record<ProviderId, Provider> = {
         headers: { Authorization: `Bearer ${accessToken}` },
       })
       if (!res.ok) throw new Error(`google userinfo ${res.status}`)
-      const u = (await res.json()) as { sub: string; email?: string }
-      return { providerId: u.sub, email: u.email ?? null }
+      const u = (await res.json()) as { sub: string; email?: string; email_verified?: boolean }
+      // Only trust the email for donation matching if the provider vouches it's verified.
+      const email = u.email && u.email_verified ? u.email : null
+      return { providerId: u.sub, email }
     },
   },
   discord: {
@@ -60,8 +62,10 @@ const PROVIDERS: Record<ProviderId, Provider> = {
         headers: { Authorization: `Bearer ${accessToken}` },
       })
       if (!res.ok) throw new Error(`discord user ${res.status}`)
-      const u = (await res.json()) as { id: string; email?: string | null }
-      return { providerId: u.id, email: u.email ?? null }
+      const u = (await res.json()) as { id: string; email?: string | null; verified?: boolean }
+      // Discord will hand back an unverified email; only trust a verified one.
+      const email = u.email && u.verified ? u.email : null
+      return { providerId: u.id, email }
     },
   },
 }
