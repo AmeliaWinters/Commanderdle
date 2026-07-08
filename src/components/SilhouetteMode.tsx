@@ -13,7 +13,7 @@ interface Props {
   onSkip?: () => void;
 }
 
-const MAX_BLUR = 28;
+const MAX_BLUR = 40;
 
 export default function SilhouetteMode({
   answer,
@@ -26,13 +26,13 @@ export default function SilhouetteMode({
 }: Props) {
   // Blur starts heavy and clears as wrong guesses accumulate, reaching 0 in time
   // for the final allowed guess (i.e. after maxGuesses - 1 wrong guesses).
-  const guessesToClear = Math.max(1, maxGuesses - 1);
+  const guessesToClear = Math.max(1, maxGuesses);
   const blur = solved
     ? 0
     : Math.max(0, MAX_BLUR - wrongGuesses * (MAX_BLUR / guessesToClear));
   const darken = solved
     ? 0
-    : Math.max(0, 0.25 - wrongGuesses * (0.55 / guessesToClear));
+    : Math.max(0, 0.55 - wrongGuesses * (0.55 / guessesToClear));
   const src = answer.artCrop ?? answer.normalImage ?? "";
 
   const dots = buildDots(guesses, answer, skips, maxGuesses);

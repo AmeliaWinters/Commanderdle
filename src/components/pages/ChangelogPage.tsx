@@ -9,6 +9,11 @@ interface Release {
 
 export const RELEASES: Release[] = [
   {
+    version: "1.0.3",
+    date: "2026-07-08",
+    notes: ["Zoom and silhouette mode balance changes"],
+  },
+  {
     version: "1.0.2",
     date: "2026-07-08",
     notes: ["Classic visual clarity changes"],

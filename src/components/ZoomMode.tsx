@@ -14,7 +14,7 @@ interface Props {
   onSkip?: () => void;
 }
 
-const MAX_SCALE = 8;
+const MAX_SCALE = 10;
 
 export default function ZoomMode({
   answer,
@@ -27,7 +27,7 @@ export default function ZoomMode({
 }: Props) {
   const src = answer.artCrop ?? answer.normalImage ?? "";
 
-  const guessesToClear = Math.max(1, maxGuesses - 1);
+  const guessesToClear = Math.max(1, maxGuesses);
   const scale = solved
     ? 1
     : Math.max(
