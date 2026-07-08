@@ -22,9 +22,9 @@ export const PIR_WIN_RATIO = 0.05;
 export const PIR_WIN_ABS = 0.1;
 
 /** Hot when within this fraction of the real price (but not a win). */
-const HOT_RATIO = 0.2;
+const HOT_RATIO = 0.15;
 /** Warm when within this fraction (roughly "right ballpark, wrong shelf"). */
-const WARM_RATIO = 0.8;
+const WARM_RATIO = 0.3;
 
 export type PirHeat = "win" | "hot" | "warm" | "cold";
 
