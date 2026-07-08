@@ -1,4 +1,5 @@
-import { statDisplay } from "../lib/compare";
+import { statDisplay, formatPrice } from "../lib/compare";
+import { useCurrency } from "../lib/currency";
 import type { Commander } from "../types/commander";
 import GuessDots from "./GuessDots";
 import ManaCost from "./ManaSymbols";
@@ -23,7 +24,7 @@ function hints(answer: Commander): { label: string; value: string }[] {
         : "Colorless",
     },
     { label: "Year Released", value: String(answer.year) },
-    { label: "Price", value: String(answer.price) },
+    { label: "Price", value: formatPrice(answer.price) },
     { label: "Stat Total", value: statDisplay(answer) },
   ];
 }
@@ -36,6 +37,7 @@ export default function QuoteMode({
   maxGuesses,
   onSkip,
 }: Props) {
+  useCurrency();
   const all = hints(answer);
   const revealed = all.slice(0, wrongGuesses);
 

@@ -25,6 +25,7 @@ import {
   GAMES_PATH,
 } from "../../lib/router";
 import { containsProfanity } from "../../lib/profanity";
+import { CURRENCIES, useCurrency, setCurrency } from "../../lib/currency";
 import { collectionProgress, subscribeCollection } from "../../lib/collection";
 import { BINDER_PATH } from "../../lib/router";
 
@@ -126,6 +127,7 @@ export default function AccountView({ user, stats, setUser, logout }: Props) {
     }
   }
 
+  const currency = useCurrency();
   const level = stats ? levelFromXp(stats.xp) : null;
   const tierColor = effectiveTierColor(
     user.tier,
@@ -281,6 +283,30 @@ export default function AccountView({ user, stats, setUser, logout }: Props) {
             You'll show up once you've set a username above.
           </p>
         )}
+      </div>
+
+      <div className="account-panel account-currency">
+        <label className="account-currency-label" htmlFor="account-currency">
+          Preferred currency
+        </label>
+        <select
+          id="account-currency"
+          value={currency.code}
+          onChange={(e) => {
+            setCurrency(e.target.value);
+            flash(true, `Prices now shown in ${e.target.value}`);
+          }}
+        >
+          {CURRENCIES.map((c) => (
+            <option key={c.code} value={c.code}>
+              {c.code} ({c.symbol})
+            </option>
+          ))}
+        </select>
+        <p className="account-fineprint">
+          Card prices in the table and Guess the cost show in this currency
+          (approximate conversion from USD).
+        </p>
       </div>
 
       <SupporterPanel user={user} tierColor={tierColor} />

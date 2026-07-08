@@ -1,5 +1,6 @@
 import ManaCost from "../ManaSymbols";
 import { MdKeyboardArrowUp, MdKeyboardDoubleArrowDown } from "react-icons/md";
+import { formatMoney, useCurrency } from "../../lib/currency";
 
 function DemoCell({
   kind,
@@ -16,6 +17,7 @@ function DemoCell({
 }
 
 export default function ExampleRow() {
+  useCurrency();
   return (
     <div className="example-wrap" aria-hidden="true">
       <div className="grid-row example-row no-anim">
@@ -40,7 +42,7 @@ export default function ExampleRow() {
         </DemoCell>
         <DemoCell kind="partial">
           <span className="cell-text">
-            $4.11
+            {formatMoney(4.11)}
             <span className="cell-arrow">
               <MdKeyboardArrowUp size="20px" />
             </span>

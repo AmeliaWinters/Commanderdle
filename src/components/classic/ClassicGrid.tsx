@@ -5,6 +5,7 @@ import GuessRow from "./GuessRow";
 import DeductionRow from "./DeductionRow";
 import ExampleRow from "./ExampleRow";
 import { COLUMNS } from "../../lib/columns";
+import { useCurrency } from "../../lib/currency";
 
 interface Props {
   guesses: Commander[];
@@ -37,6 +38,9 @@ export default function ClassicGrid({
   showExample,
 }: Props) {
   const remaining = Math.max(0, maxGuesses - guesses.length);
+  // Re-render the whole table when the display currency changes so every price
+  // cell (computed via formatPrice) reformats.
+  useCurrency();
   const [rankTipOpen, setRankTipOpen] = useState(false);
   const rankBtnRef = useRef<HTMLButtonElement>(null);
   const [tipPos, setTipPos] = useState<{ left: number; top: number } | null>(

@@ -18,19 +18,21 @@ export interface Currency {
   rate: number;
   /** Fraction digits shown (0 for yen-style currencies). */
   decimals: number;
+  /** Where the symbol sits relative to the amount: "$5" vs "5 zł". */
+  position: "before" | "after";
 }
 
 export const CURRENCIES: readonly Currency[] = [
-  { code: "USD", symbol: "$", rate: 1, decimals: 2 },
-  { code: "EUR", symbol: "€", rate: 0.92, decimals: 2 },
-  { code: "GBP", symbol: "£", rate: 0.79, decimals: 2 },
-  { code: "CAD", symbol: "CA$", rate: 1.37, decimals: 2 },
-  { code: "AUD", symbol: "A$", rate: 1.52, decimals: 2 },
-  { code: "JPY", symbol: "¥", rate: 156, decimals: 0 },
-  { code: "BRL", symbol: "R$", rate: 5.5, decimals: 2 },
-  { code: "MXN", symbol: "MX$", rate: 18, decimals: 2 },
-  { code: "INR", symbol: "₹", rate: 84, decimals: 2 },
-  { code: "PLN", symbol: "zł", rate: 3.95, decimals: 2 },
+  { code: "USD", symbol: "$", rate: 1, decimals: 2, position: "before" },
+  { code: "EUR", symbol: "€", rate: 0.92, decimals: 2, position: "before" },
+  { code: "GBP", symbol: "£", rate: 0.79, decimals: 2, position: "before" },
+  { code: "CAD", symbol: "CA$", rate: 1.37, decimals: 2, position: "before" },
+  { code: "AUD", symbol: "A$", rate: 1.52, decimals: 2, position: "before" },
+  { code: "JPY", symbol: "¥", rate: 156, decimals: 0, position: "before" },
+  { code: "BRL", symbol: "R$", rate: 5.5, decimals: 2, position: "before" },
+  { code: "MXN", symbol: "MX$", rate: 18, decimals: 2, position: "before" },
+  { code: "INR", symbol: "₹", rate: 84, decimals: 2, position: "before" },
+  { code: "PLN", symbol: "zł", rate: 3.95, decimals: 2, position: "after" },
 ];
 
 const DEFAULT = CURRENCIES[0];
@@ -88,8 +90,9 @@ export function toUsd(amount: number): number {
   return amount / current.rate;
 }
 
-/** Format a USD amount in the current currency, e.g. 3.45 -> "€3.17" / "¥539". */
+/** Format a USD amount in the current currency, e.g. 3.45 -> "€3.17" / "13.62 zł". */
 export function formatMoney(usd: number): string {
   const c = current;
-  return `${c.symbol}${fromUsd(usd).toFixed(c.decimals)}`;
+  const amount = fromUsd(usd).toFixed(c.decimals);
+  return c.position === "after" ? `${amount} ${c.symbol}` : `${c.symbol}${amount}`;
 }

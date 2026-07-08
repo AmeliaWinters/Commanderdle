@@ -71,19 +71,29 @@ export function randomPriceCard(exclude?: ReadonlySet<string>): Commander {
   return pool[Math.floor(Math.random() * pool.length)];
 }
 
-/** "$12.34" / "$0.42" - always two decimals, always a dollar sign. */
+/** A USD amount formatted in the player's chosen currency, e.g. "$12.34" / "€11.35". */
 export function formatPrice(value: number): string {
-  return `$${value.toFixed(2)}`;
+  return formatMoney(value);
 }
 
 /**
- * Parse a user-typed price ("4", "$3.50", "3,50") into dollars, or null when
- * it isn't a usable positive amount.
+ * Parse a user-typed price ("4", "$3.50", "3,50") in the player's currency into
+ * a positive number in that currency, or null when it isn't usable. The value
+ * is still in the display currency — convert with `parsePriceUsd` for judging.
  */
 export function parsePrice(raw: string): number | null {
-  const cleaned = raw.replace(/[$\s]/g, "").replace(",", ".");
+  const cleaned = raw.replace(/[^\d.,-]/g, "").replace(",", ".");
   if (!/^(\d+(\.\d{0,2})?|\.\d{1,2})$/.test(cleaned)) return null;
   const value = Number(cleaned);
   if (!Number.isFinite(value) || value <= 0) return null;
   return value;
+}
+
+/**
+ * Parse a user-typed price and convert it to USD (the unit prices are judged
+ * in), or null when it isn't a usable amount.
+ */
+export function parsePriceUsd(raw: string): number | null {
+  const value = parsePrice(raw);
+  return value == null ? null : toUsd(value);
 }

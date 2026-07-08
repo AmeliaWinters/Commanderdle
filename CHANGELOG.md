@@ -8,6 +8,10 @@ _Last updated: 2026-07-08 — currently on v0.10.1._
 
 ## 2026-07-08
 
+- **Choose your currency** — a new "Preferred currency" setting on your account page converts
+  every card price (in the classic clue table and in Guess the cost) from USD into your pick,
+  from EUR and GBP to JPY, BRL, INR and more.
+
 - **Share menu is keyboard-friendly** — the Share dropdown now moves focus into its options
   when opened and supports arrow-key navigation for keyboard and screen-reader users.
 

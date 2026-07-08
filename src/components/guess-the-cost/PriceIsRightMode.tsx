@@ -4,9 +4,10 @@ import {
   dailyPriceCard,
   randomPriceCard,
   judgePrice,
-  parsePrice,
+  parsePriceUsd,
   PIR_MAX_GUESSES,
 } from "../../lib/priceIsRight";
+import { useCurrency } from "../../lib/currency";
 import { GAMES_PATH } from "../../lib/router";
 import { playSound } from "../../lib/sounds";
 import { recordBonusDaily } from "../../lib/bonusStats";
@@ -34,6 +35,7 @@ export default function PriceIsRightMode() {
     document.title = "Commandle Guess the cost";
   }, []);
   const [mode, setMode] = useState<Mode>("daily");
+  const currency = useCurrency();
 
   // Daily state persists across reloads; endless is per-session.
   const [daily, setDaily] = useState(loadPirDaily);
@@ -79,7 +81,7 @@ export default function PriceIsRightMode() {
 
   function submit() {
     if (done) return;
-    const value = parsePrice(input);
+    const value = parsePriceUsd(input);
     if (value == null) {
       setInputError(true);
       return;
@@ -204,18 +206,23 @@ export default function PriceIsRightMode() {
                 <label
                   className={`pir-input ${inputError ? "pir-input-bad" : ""}`}
                 >
-                  <span aria-hidden="true">$</span>
+                  {currency.position === "before" && (
+                    <span aria-hidden="true">{currency.symbol}</span>
+                  )}
                   <input
                     type="text"
                     inputMode="decimal"
-                    placeholder="0.00"
-                    aria-label="Your price guess in US dollars"
+                    placeholder={currency.decimals ? "0.00" : "0"}
+                    aria-label={`Your price guess in ${currency.code}`}
                     value={input}
                     onChange={(e) => {
                       setInput(e.target.value);
                       setInputError(false);
                     }}
                   />
+                  {currency.position === "after" && (
+                    <span aria-hidden="true">{currency.symbol}</span>
+                  )}
                 </label>
                 <button type="submit" className="pir-submit">
                   Guess ({PIR_MAX_GUESSES - guesses.length} left)

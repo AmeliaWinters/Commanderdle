@@ -7,19 +7,19 @@ import KofiButton from "../games/KofiButton";
  *  kept in step with the Ko-fi membership tiers. */
 const TIER_PERKS: Record<"uncommon" | "rare" | "mythic", string[]> = {
   uncommon: [
-    "Access to top 100 avatars",
+    "Access to top 100 standard printing avatars",
     "Uncommon supporter badge",
     "Uncommon supporter flare",
     "No ads",
   ],
   rare: [
-    "Access to top 500 commander standard printing avatars",
+    "Access to top 500 standard printing avatars",
     "Rare supporter badge",
     "Rare supporter account flare",
     "No ads",
   ],
   mythic: [
-    "Access to all commander printings as avatars",
+    "Access to alternative printings as avatars",
     "Mythic rare account badge",
     "Custom account flare colour",
     "Foil animation on profile, avatar, and name",
