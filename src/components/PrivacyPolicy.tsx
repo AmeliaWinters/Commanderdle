@@ -8,7 +8,7 @@ export default function PrivacyPolicy() {
       canonical="https://commandle.app/privacy"
     >
       <h2>Privacy Policy</h2>
-      <p className="privacy-date">Last updated: 5 July 2026</p>
+      <p className="privacy-date">Last updated: 8 July 2026</p>
 
       <section>
         <h3>Who I am</h3>
@@ -24,10 +24,9 @@ export default function PrivacyPolicy() {
       <section>
         <h3>Information I collect</h3>
         <p>
-          I do not ask you to create an account and I do not collect data that
-          directly identifies you (such as your name or email) unless you choose
-          to email me. The information involved in running the site falls into
-          three categories:
+          You can play the whole game without an account or handing over anything
+          that identifies you. The information involved in running the site falls
+          into these categories:
         </p>
         <ul>
           <li>
@@ -43,6 +42,24 @@ export default function PrivacyPolicy() {
             records are not linked to you or your device.
           </li>
           <li>
+            <strong>Account data (only if you sign in).</strong> Signing in is
+            optional. If you do, I use Google or Discord's sign-in (OAuth) and
+            deliberately take the bare minimum: a stable account id so I can
+            recognise you when you return, and your email address (used only to
+            match up any Ko-fi support you've given). I do <em>not</em> store your
+            Google/Discord username or avatar. Your public identity on the site is
+            a nickname you choose and a commander-art avatar you pick. Once signed
+            in, your daily results are also saved to my server so streaks and
+            leaderboards work across devices.
+          </li>
+          <li>
+            <strong>Supporter payments.</strong> If you support the game on Ko-fi,
+            the payment itself is handled by Ko-fi, not me — I never see your card
+            details. Ko-fi tells me the payment amount and the email you used, so I
+            can unlock the matching supporter cosmetics on any account with that
+            email.
+          </li>
+          <li>
             <strong>Technical data.</strong> Like most websites, my hosting
             provider automatically processes standard technical information
             (such as IP address, browser type and requested pages) to deliver
@@ -55,10 +72,12 @@ export default function PrivacyPolicy() {
         <h3>Cookies and similar technologies</h3>
         <p>
           Cookies are small files stored on your device. I use{" "}
-          <code>localStorage</code> to remember your game progress, and my
-          advertising and analytics partners may set cookies as described below.
-          You can clear or block cookies through your browser settings, though
-          doing so may reset your saved progress.
+          <code>localStorage</code> to remember your game progress, and if you
+          sign in I set a single essential cookie to keep you logged in (it holds
+          a random token, not your details). My advertising and analytics partners
+          may set cookies as described below. You can clear or block cookies
+          through your browser settings, though doing so may reset your saved
+          progress or sign you out.
         </p>
       </section>
 
@@ -191,7 +210,11 @@ export default function PrivacyPolicy() {
         <p>
           Game progress stored in your browser remains until you clear it.
           Anonymous, aggregate puzzle statistics may be retained indefinitely
-          because they cannot be linked back to an individual.
+          because they cannot be linked back to an individual. If you have an
+          account, your account data is kept until you ask me to delete it — get
+          in touch through my <a href="/contact">contact page</a> and I'll remove
+          it. Records of Ko-fi payments may be kept as long as needed for
+          accounting.
         </p>
       </section>
 

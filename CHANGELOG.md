@@ -6,6 +6,9 @@ a change that a player could notice.
 
 ## 2026-07-08
 
+- **Refreshed legal pages** — the About, Privacy Policy and Terms pages now cover optional
+  accounts, sign-in and Ko-fi supporter cosmetics, and make clear the daily game stays free.
+
 - **Ko-fi nudge on locked avatars** — tapping a supporter-only avatar in the picker now
   opens a friendly popup explaining how to unlock the whole gallery by supporting on Ko-fi,
   instead of doing nothing.

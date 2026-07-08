@@ -15,7 +15,9 @@ export default function AboutPage() {
           <em>Magic: The Gathering</em> Commander (EDH) 'dle' game. A different
           commander drops in each mode every day, and your job is to figure out
           who it is. No download, no login required, no catch-22. Open the page,
-          take a few guesses, and get on with your day.
+          take a few guesses, and get on with your day. Want to climb a
+          leaderboard? There's an optional account for that, but the whole game
+          plays fine without one.
         </p>
         <p>
           I play a few 'dle' games myself, and picked up MTG not long ago
@@ -87,14 +89,28 @@ export default function AboutPage() {
       </section>
 
       <section>
+        <h3>Accounts &amp; supporters</h3>
+        <p>
+          Signing in (with Google or Discord) is entirely optional and unlocks a
+          personal profile and the leaderboards. If you'd like to chuck a few
+          coins in the tip jar, there's a{" "}
+          <a href="https://ko-fi.com" target="_blank" rel="noreferrer">
+            Ko-fi
+          </a>{" "}
+          - supporters get some cosmetic bits and bobs (fancy avatars, a shiny
+          badge, coloured profile, that sort of thing) as a thank-you. Purely
+          cosmetic. The games are free forever and always will be.
+        </p>
+      </section>
+
+      <section>
         <h3>An unofficial fan project</h3>
         <p>
-          Commandle is an independent, non-commercial fan project made by me, a
-          person who doesn't have an active enough pod. It's not produced,
-          endorsed, or affiliated with Wizards of the Coast. Magic: The
-          Gathering, Commander, and all card names and images are trademarks of
-          and &copy; Wizards of the Coast LLC, used here under WOTC's Fan
-          Content Policy.
+          Commandle is an independent fan project made by me, a person who
+          doesn't have an active enough pod. It's not produced, endorsed, or
+          affiliated with Wizards of the Coast. Magic: The Gathering, Commander,
+          and all card names and images are trademarks of and &copy; Wizards of
+          the Coast LLC, used here under WOTC's Fan Content Policy.
         </p>
         <p>
           Got feedback, found a bug, or have a big-brain feature idea? Go to{" "}
