@@ -61,7 +61,7 @@ export async function onLeaderboard(
     uuid: r.uuid,
     username: r.username,
     avatar: r.avatar,
-    tier: (['uncommon', 'rare', 'mythic'].includes(r.tier)
+    tier: (['uncommon', 'rare', 'mythic', 'creator'].includes(r.tier)
       ? r.tier
       : 'common') as LeaderboardEntry['tier'],
     value: r.value,

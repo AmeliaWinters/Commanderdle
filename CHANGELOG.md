@@ -6,6 +6,9 @@ a change that a player could notice.
 
 ## 2026-07-08
 
+- **New Creator tier** — a special tier with every cosmetic unlocked, always. It's
+  granted by hand to the team, so its purple gem marks an official account.
+
 - **Support on Ko-fi from your account** — the Support panel now has a direct Ko-fi
   button so you can tip in one tap.
 

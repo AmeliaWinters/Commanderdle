@@ -9,18 +9,29 @@
  * lightly validate an incoming avatar.
  */
 
-export type Tier = "common" | "uncommon" | "rare" | "mythic";
+export type Tier = "common" | "uncommon" | "rare" | "mythic" | "creator";
 
-/** Ascending rank so `>=` comparisons gate higher tiers. */
+/**
+ * Ascending rank so `>=` comparisons gate higher tiers. `creator` sits above every
+ * purchasable tier: it's the owner/collaborator tier, granted manually and never
+ * bought or expired, so it always outranks (and therefore unlocks) everything.
+ */
 export const TIER_RANK: Record<Tier, number> = {
   common: 0,
   uncommon: 1,
   rare: 2,
   mythic: 3,
+  creator: 4,
 };
 
 export function isTier(v: unknown): v is Tier {
-  return v === "common" || v === "uncommon" || v === "rare" || v === "mythic";
+  return (
+    v === "common" ||
+    v === "uncommon" ||
+    v === "rare" ||
+    v === "mythic" ||
+    v === "creator"
+  );
 }
 
 /** Short capitalised tier names (for supporter copy). */
@@ -29,6 +40,7 @@ export const TIER_META_MIN: Record<Tier, string> = {
   uncommon: "Uncommon",
   rare: "Rare",
   mythic: "Mythic",
+  creator: "Creator",
 };
 
 /** The avatar new accounts start with (a well-known top commander). */
@@ -71,7 +83,10 @@ export function isAvatarUnlocked(name: string, tier: Tier): boolean {
 /**
  * Mothly donation for each tier
  */
-export const TIER_THRESHOLDS_GBP: Record<Exclude<Tier, "common">, number> = {
+export const TIER_THRESHOLDS_GBP: Record<
+  "uncommon" | "rare" | "mythic",
+  number
+> = {
   uncommon: 5,
   rare: 10,
   mythic: 20,

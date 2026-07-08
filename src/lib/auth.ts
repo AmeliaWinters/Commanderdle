@@ -174,4 +174,9 @@ export const TIER_META: Record<
     color: "#F07E01",
     keyrune: "ss ss-mythic ss-grad",
   },
+  creator: {
+    label: "Creator",
+    color: "#fd7aacff",
+    keyrune: "ss ss-timeshifted ss-grad",
+  },
 };

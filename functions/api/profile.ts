@@ -49,7 +49,7 @@ export async function onProfile(_request: Request, env: Env, uuid: string): Prom
     uuid: row.uuid,
     username: row.username,
     avatar: row.avatar,
-    tier: (['uncommon', 'rare', 'mythic'].includes(row.tier)
+    tier: (['uncommon', 'rare', 'mythic', 'creator'].includes(row.tier)
       ? row.tier
       : 'common') as PublicProfile['tier'],
     joinedAt: row.created_at,

@@ -83,7 +83,7 @@ export default function AccountWidget() {
                 </span>
                 {user.tier !== "common" && (
                   <i
-                    className={`${TIER_META[user.tier].keyrune} account-gem${user.tier === "mythic" ? " gem-foil" : ""}`}
+                    className={`${TIER_META[user.tier].keyrune} account-gem${user.tier === "mythic" || user.tier === "creator" ? " gem-foil" : ""}`}
                     role="img"
                     aria-label={TIER_META[user.tier].label}
                     title={TIER_META[user.tier].label}
@@ -131,7 +131,7 @@ export default function AccountWidget() {
                   </span>
                   {user.tier !== "common" && (
                     <i
-                      className={`${TIER_META[user.tier].keyrune} account-gem${user.tier === "mythic" ? " gem-foil" : ""}`}
+                      className={`${TIER_META[user.tier].keyrune} account-gem${user.tier === "mythic" || user.tier === "creator" ? " gem-foil" : ""}`}
                       role="img"
                       aria-label={TIER_META[user.tier].label}
                       title={TIER_META[user.tier].label}

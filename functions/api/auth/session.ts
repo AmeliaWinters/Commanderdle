@@ -29,7 +29,7 @@ export interface User {
   username: string | null
   /** Avatar id from src/lib/avatars.ts. */
   avatar: string
-  tier: 'common' | 'uncommon' | 'rare' | 'mythic'
+  tier: 'common' | 'uncommon' | 'rare' | 'mythic' | 'creator'
   leaderboardOptIn: boolean
 }
 
@@ -162,7 +162,7 @@ export async function currentUserRow(env: AuthEnv, request: Request): Promise<Us
       uuid: row.uuid,
       username: row.username,
       avatar: row.avatar,
-      tier: (['uncommon', 'rare', 'mythic'].includes(row.tier) ? row.tier : 'common') as User['tier'],
+      tier: (['uncommon', 'rare', 'mythic', 'creator'].includes(row.tier) ? row.tier : 'common') as User['tier'],
       leaderboardOptIn: row.leaderboard_opt_in === 1,
     }
   } catch {

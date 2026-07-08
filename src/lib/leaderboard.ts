@@ -29,7 +29,7 @@ export function metricByKey(key: string): MetricDef | undefined {
   return LEADERBOARD_METRICS.find((m) => m.key === key);
 }
 
-export type Tier = "common" | "uncommon" | "rare" | "mythic";
+export type Tier = "common" | "uncommon" | "rare" | "mythic" | "creator";
 
 /** One ranked row on the board. */
 export interface LeaderboardEntry {

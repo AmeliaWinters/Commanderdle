@@ -41,6 +41,12 @@ export default function SupporterPanel({
             ))}
           </div>
         </>
+      ) : user.tier === "creator" ? (
+        <p>
+          You have the{" "}
+          <strong style={{ color: tierColor }}>Creator</strong> tier — every
+          cosmetic is unlocked, always. {"<"}3
+        </p>
       ) : (
         <p>
           You're a{" "}

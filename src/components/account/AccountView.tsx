@@ -198,7 +198,9 @@ export default function AccountView({ user, stats, setUser, logout }: Props) {
           </div>
           {user.tier !== "common" && (
             <span className="account-tier-badge" style={{ color: tierColor }}>
-              {TIER_META[user.tier].label} Supporter
+              {user.tier === "creator"
+                ? "Creator"
+                : `${TIER_META[user.tier].label} Supporter`}
             </span>
           )}
         </div>

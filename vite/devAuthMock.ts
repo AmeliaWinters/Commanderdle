@@ -22,13 +22,13 @@
  *   GET   /api/profile/:uuid             → a fake public profile
  *
  * Handy query params on the login route to exercise cosmetics / states:
- *   ?tier=mythic        → sign in as a supporter (common | uncommon | rare | mythic)
+ *   ?tier=mythic        → sign in as a supporter (common | uncommon | rare | mythic | creator)
  *   ?named=1            → skip the "choose a username" step (starts with a username set)
  */
 import type { Connect, Plugin } from "vite";
 import type { ServerResponse } from "node:http";
 
-type Tier = "common" | "uncommon" | "rare" | "mythic";
+type Tier = "common" | "uncommon" | "rare" | "mythic" | "creator";
 
 interface MockUser {
   uuid: string;
@@ -54,7 +54,11 @@ const stats = {
 };
 
 const isTier = (v: string): v is Tier =>
-  v === "common" || v === "uncommon" || v === "rare" || v === "mythic";
+  v === "common" ||
+  v === "uncommon" ||
+  v === "rare" ||
+  v === "mythic" ||
+  v === "creator";
 
 function sendJson(res: ServerResponse, status: number, body: unknown): void {
   const payload = JSON.stringify(body);

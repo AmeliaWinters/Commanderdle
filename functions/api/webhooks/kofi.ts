@@ -20,9 +20,14 @@ export const TIER_WINDOW_SEC = 31 * 24 * 60 * 60
  * membership is live, else 'none'. Assumes the `users` table is aliased `u`. Self-
  * expiring on read (like sessions), so a lapsed supporter loses their colour/gem with
  * no background job. Select it as `... AS tier` in place of a bare `u.tier`.
+ *
+ * `creator` is the exception: it's granted manually (never bought) and never expires, so
+ * it's always effective regardless of `tier_expires_at`.
  */
 export const EFFECTIVE_TIER_SQL =
-  "CASE WHEN u.tier_expires_at IS NOT NULL AND u.tier_expires_at > unixepoch() THEN u.tier ELSE 'none' END"
+  "CASE WHEN u.tier = 'creator' THEN 'creator' " +
+  'WHEN u.tier_expires_at IS NOT NULL AND u.tier_expires_at > unixepoch() THEN u.tier ' +
+  "ELSE 'none' END"
 
 export interface KofiEnv {
   STATS_DB?: D1Database
@@ -59,6 +64,14 @@ export async function reconcileTier(
   const key = (email ?? '').trim().toLowerCase()
   if (!key) return 'none'
   try {
+    // Never touch a manually-granted creator account — it's permanent and outside the
+    // donation-driven lifecycle, so a login/webhook reconcile must leave it as-is.
+    const existing = await db
+      .prepare('SELECT tier FROM users WHERE lower(email) = ?')
+      .bind(key)
+      .first<{ tier: string }>()
+    if (existing?.tier === 'creator') return 'creator'
+
     const { results } = await db
       .prepare('SELECT amount, created_at FROM donations WHERE email = ?')
       .bind(key)
