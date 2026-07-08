@@ -1,0 +1,122 @@
+/* ── Avatar image (also reused on the leaderboard) ───────────────────── */
+.avatar-img {
+  display: inline-block;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--panel-2);
+  flex: none;
+}
+.avatar-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 28%;
+}
+
+/* ── Mythic Rare foil: the same holographic band that sweeps across a card when
+   it's guessed (see result.css .foil-sweep), tuned with a touch more colour and
+   set to fire only occasionally so it's a subtle flourish, not a distraction.
+   Only Mythic supporters carry this (see AvatarImage `foil` / .foil-text). ── */
+.avatar-foil {
+  position: relative;
+  border-color: var(--rarity-mythic);
+  box-shadow: 0 0 6px rgba(240, 126, 1, 0.45);
+}
+.avatar-foil::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  background: linear-gradient(
+    115deg,
+    transparent 34%,
+    rgba(120, 190, 255, 0.4) 43%,
+    rgba(255, 255, 255, 0.6) 50%,
+    rgba(255, 120, 200, 0.4) 57%,
+    transparent 66%
+  );
+  background-size: 300% 300%;
+  /* Long cycle: the band only crosses during the first slice, then rests. */
+  animation: foil-sweep-idle 20s ease-in-out infinite;
+}
+
+/* Foil sweep on Mythic usernames: a bright band slides across text kept in its
+   mythic-orange base colour, rather than recolouring the whole word. */
+.foil-text {
+  background: linear-gradient(
+    115deg,
+    var(--rarity-mythic) 40%,
+    rgba(120, 190, 255, 0.95) 47%,
+    #ffffff 50%,
+    rgba(255, 120, 200, 0.95) 53%,
+    var(--rarity-mythic) 60%
+  );
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: var(--rarity-mythic);
+  animation: foil-sweep-text 20s ease-in-out infinite;
+}
+
+/* One quick diagonal pass near the start of the cycle, then a long hold. */
+@keyframes foil-sweep-idle {
+  0% {
+    background-position: 130% 130%;
+  }
+  6% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+@keyframes foil-sweep-text {
+  0% {
+    background-position: 130% 50%;
+  }
+  6% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+/* Mythic rarity gem: a quick foil glint on the same 20s cadence as the sweep, so
+   the gem catches the light in time with the avatar/name rather than sitting flat. */
+.account-gem.gem-foil {
+  animation: gem-foil-glint 20s ease-in-out infinite;
+}
+@keyframes gem-foil-glint {
+  0%,
+  2% {
+    filter: none;
+  }
+  6% {
+    filter: brightness(1.7) drop-shadow(0 0 5px rgba(255, 200, 120, 0.9));
+  }
+  12%,
+  100% {
+    filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .avatar-foil::after {
+    animation: none;
+    opacity: 0;
+  }
+  .foil-text {
+    animation: none;
+    background-position: 200% 50%;
+  }
+  .account-gem.gem-foil {
+    animation: none;
+  }
+}
+

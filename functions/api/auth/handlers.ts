@@ -33,6 +33,7 @@ import {
   type User,
 } from './session'
 import { isValidAvatar, isAvatarUnlocked } from '../../../src/lib/avatars'
+import { containsProfanity } from '../../../src/lib/profanity'
 import { getStats } from '../account/store'
 import { reconcileTier } from '../webhooks/kofi'
 
@@ -163,6 +164,8 @@ export async function onUpdateMe(request: Request, env: AuthEnv): Promise<Respon
     const name = body.username.trim()
     if (!USERNAME_RE.test(name))
       return json({ error: 'username must be 3–20 letters, numbers or underscores' }, 400)
+    if (containsProfanity(name))
+      return json({ error: 'please choose a username without profanity or slurs' }, 400)
     sets.push(`username = ?${binds.length + 1}`)
     binds.push(name)
     sets.push(`username_lc = ?${binds.length + 1}`)

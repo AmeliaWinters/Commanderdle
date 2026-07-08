@@ -7,9 +7,7 @@ import { useModalFocus } from '../lib/useModalFocus'
 interface Props {
   pool: Commander[]
   onClose: () => void
-  /** In quote mode, blur the bottom of each card so its printed flavor text can't be read. */
   blurQuote?: boolean
-  /** Override the leading noun in the modal title (e.g. "Possible commanders" for a filtered pool). */
   heading?: string
 }
 
@@ -17,7 +15,6 @@ interface Props {
 // unmounting when closed, and is restored next time it opens.
 const persisted = { query: '', scrollTop: 0 }
 
-/** Searchable list of every commander that can be the answer in the current mode. */
 export default function PoolModal({ pool, onClose, blurQuote, heading }: Props) {
   const [query, setQuery] = useState(persisted.query)
   const gridRef = useRef<HTMLUListElement>(null)
@@ -32,7 +29,6 @@ export default function PoolModal({ pool, onClose, blurQuote, heading }: Props) 
     if (gridRef.current) gridRef.current.scrollTop = persisted.scrollTop
   }, [])
 
-  // Keep the persisted query in sync so it's there on reopen.
   useEffect(() => {
     persisted.query = query
   }, [query])
@@ -44,10 +40,6 @@ export default function PoolModal({ pool, onClose, blurQuote, heading }: Props) 
   }, [pool, query])
 
   return createPortal(
-    // Pointer (not mouse) events: after a tap, mobile browsers replay a synthetic
-    // mousedown at the tap point once the modal has mounted — it hits the backdrop
-    // and instantly closes it ("nothing pops up"). pointerdown fires at touch time,
-    // before the modal exists, so it can't ghost-close.
     <div
       className={`modal-backdrop${closing ? ' is-closing' : ''}`}
       onPointerDown={beginClose}

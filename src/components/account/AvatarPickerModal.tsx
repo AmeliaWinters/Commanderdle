@@ -11,10 +11,6 @@ interface Props {
   onClose: () => void;
 }
 
-/**
- * Discord-style avatar chooser: a searchable gallery of every top-500 commander.
- * Picking one applies it and closes.
- */
 export default function AvatarPickerModal({ current, tier, onSelect, onClose }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   useModalFocus(ref, onClose);

@@ -13,16 +13,10 @@ interface Props {
 
 const VERDICT_TEXT: Record<GhostVerdict, string> = {
   player: "You beat the ghost!",
-  ghost: "The ghost takes this one…",
-  tie: "Dead heat - same result!",
+  ghost: "The ghost takes this one...",
+  tie: "Dead heat - draw!",
 };
 
-/**
- * The challenger's finished run, replayed as a "ghost" beside the live game.
- * Each of the ghost's pips is revealed only once the player has spent that
- * turn themselves (all of them once the game ends), so the race stays spoiler
- * -free: you learn how your rival's turn N went when your own turn N is done.
- */
 export default function GhostRace({
   ghost,
   playerTurns,

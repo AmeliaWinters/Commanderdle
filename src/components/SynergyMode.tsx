@@ -15,10 +15,6 @@ interface Props {
   onSkip?: () => void;
 }
 
-/**
- * Guess the commander from its most synergistic cards (per EDHREC). One card
- * shows immediately; each wrong guess reveals another, strongest signal first.
- */
 export default function SynergyMode({
   answer,
   guesses,

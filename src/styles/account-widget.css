@@ -1,0 +1,267 @@
+/* Account / sign-in page (src/components/pages/AccountPage.tsx) + onboarding and the
+   avatar picker modal. Reuses the ContentPage shell + design tokens; supporter
+   cosmetics colour by MTG rarity. MTG-flavoured "character sheet" styling. */
+
+/* ── Account widget (top-right of the masthead on every page) ─────────────
+   Absolutely positioned inside the page header (.app-header, which is
+   position:relative and spans the content column), mirroring the settings cog
+   that sits top-left. Living in the header keeps it aligned with the app column
+   instead of floating at the viewport corner. */
+.account-widget-wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 30;
+}
+
+.account-widget {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px 6px 6px;
+  color: var(--text);
+  font: inherit;
+  background: rgba(22, 22, 25, 0.72);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  backdrop-filter: blur(7px);
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    transform 0.1s ease;
+}
+.account-widget:hover {
+  border-color: var(--flame-2);
+}
+.account-widget:active {
+  transform: translateY(1px);
+}
+
+.account-widget .avatar-img {
+  border-color: var(--flame-2);
+}
+
+.account-widget-id {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.1;
+}
+
+.account-widget-nrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.account-widget-name {
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  font-size: 1rem;
+  /* A long username must not run past the widget and collide with the centered
+     wordmark — cap it and ellipsize. */
+  max-width: 9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.account-widget-level {
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  color: var(--flame-1);
+}
+
+.account-widget-signedout {
+  gap: 6px;
+  padding: 7px 12px;
+  color: var(--text-dim);
+}
+.account-widget-signedout:hover {
+  color: var(--flame-1);
+}
+
+.account-widget-caret {
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  transition: transform 0.15s ease;
+}
+.account-widget[aria-expanded="true"] .account-widget-caret {
+  transform: rotate(180deg);
+  color: var(--flame-1);
+}
+
+/* ── Dropdown popover (opens under the widget on any page) ────────────── */
+.account-pop {
+  position: absolute;
+  top: calc(100% + 6px);
+  /* The widget lives at the left edge of the masthead, so open the menu rightward.
+     Mobile-first: cap the width to the viewport (minus a gutter) so it can never spill
+     off-screen on a phone; it grows to its natural width only where there's room. */
+  left: 0;
+  right: auto;
+  width: max-content;
+  max-width: min(19rem, calc(100vw - 16px));
+  padding: 8px;
+  background: rgba(22, 22, 25, 0.94);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(9px);
+  animation: account-pop-in 0.14s ease;
+  /* On short viewports (landscape phones) the signed-in menu can run past the fold;
+     cap it to what's below the widget and let it scroll rather than clip. */
+  max-height: calc(100vh - 100% - 16px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+@keyframes account-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .account-pop {
+    animation: none;
+  }
+}
+
+/* Signed-in: mini profile header */
+.account-pop-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px 10px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 6px;
+}
+.account-pop-profile .avatar-img {
+  border: 2px solid var(--tier-color, var(--flame-2));
+}
+.account-pop-idcol {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.account-pop-nrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+.account-pop-name {
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  font-size: 0.98rem;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.account-pop-nrow .account-gem {
+  flex: none;
+}
+.account-pop-level {
+  font-size: 0.72rem;
+  color: var(--flame-1);
+  letter-spacing: 0.02em;
+}
+.account-pop-bar {
+  display: block;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+.account-pop-fill {
+  display: block;
+  height: 100%;
+  background: var(--xp-gradient);
+}
+
+.account-pop-links {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.account-pop-links button {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  background: none;
+  border: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 0.92rem;
+  text-align: left;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.account-pop-links button:hover {
+  background: var(--panel-2);
+  color: var(--flame-1);
+}
+.account-pop-signout {
+  margin-top: 4px;
+  border-top: 1px solid var(--line) !important;
+  border-radius: 0 0 8px 8px !important;
+  color: var(--text-dim) !important;
+}
+.account-pop-signout:hover {
+  color: #ff8a8a !important;
+  background: rgba(255, 138, 138, 0.08) !important;
+}
+
+/* Signed-out: inline sign-in */
+.account-pop-signin {
+  width: min(18rem, calc(100vw - 20px));
+}
+.account-pop-head {
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  margin: 4px 4px 8px;
+  color: var(--text);
+}
+.account-pop-signin .account-oauth {
+  margin: 0;
+}
+.account-pop-signin .oauth-btn {
+  padding: 0.6rem 0.9rem;
+}
+.account-pop-note {
+  margin: 8px 4px 2px;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+.account-pop-note .link-btn {
+  font-size: 0.78rem;
+}
+
+/* On phones the name/level would crowd the centered wordmark, so show just the
+   avatar (or the sign-in glyph) — still a clear, tappable entry point. Mirrors the
+   settings cog on the opposite (left) corner. */
+@media (max-width: 960px) {
+  .account-widget {
+    padding: 5px;
+    gap: 5px;
+  }
+  .account-widget .account-widget-id {
+    display: none;
+  }
+  .account-widget-signedout {
+    padding: 8px 10px;
+  }
+  .account-widget-signedout .account-widget-name {
+    display: none;
+  }
+  .account-widget-caret {
+    display: none;
+  }
+}
+

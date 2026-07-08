@@ -50,7 +50,7 @@ export default function ContactForm() {
   if (status === "ok") {
     return (
       <p className="contact-status ok">
-        Thanks - your message is on its way. I'll *try* get back to you soon.
+        Thank you! Your message is on its way. I'll *try* get back to you soon.
       </p>
     );
   }

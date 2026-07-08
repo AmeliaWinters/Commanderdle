@@ -9,9 +9,7 @@ interface Props {
 
 /**
  * Wrong/right guesses for the image & quote modes: each turn shows as a row in
- * the order it was taken (newest first). Guesses show the card art and name with
- * the full-card hover popover (same as the classic grid); skips show a plain
- * "Skipped" row so a skipped turn is still visible in the list.
+ * the order it was taken (newest first).
  */
 export default function GuessList({ history, answer }: Props) {
   if (history.length === 0) return null

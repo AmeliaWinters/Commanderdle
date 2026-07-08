@@ -57,8 +57,10 @@ export default function AdBanner() {
   const [refreshKey, setRefreshKey] = useState(0)
   const [consented, setConsented] = useState(hasAdConsent)
 
-  // Ads may only load once the visitor has granted cookie consent.
-  const adsActive = ADS_CONFIGURED && consented
+  // Ads always run once configured. Consent only decides whether they're
+  // *personalised*: without it we request non-personalised (contextual) ads,
+  // which don't need consent to serve.
+  const adsActive = ADS_CONFIGURED
 
   // Track toggle events from the footer button.
   useEffect(() => {
@@ -85,7 +87,12 @@ export default function AdBanner() {
 
     function pushAd() {
       try {
-        ;(window.adsbygoogle = window.adsbygoogle || []).push({})
+        const q = (window.adsbygoogle = window.adsbygoogle || [])
+        // Without ad-personalisation consent, ask Google for non-personalised
+        // (contextual) ads so they can still serve.
+        ;(q as unknown as { requestNonPersonalizedAds?: number }).requestNonPersonalizedAds =
+          consented ? 0 : 1
+        q.push({})
       } catch { /* not loaded yet */ }
     }
 
@@ -100,6 +107,8 @@ export default function AdBanner() {
       ins.dataset.adSlot = SLOT_ID
       ins.dataset.adFormat = 'auto'
       ins.dataset.fullWidthResponsive = 'true'
+      // Tag the slot non-personalised until the visitor consents to ad personalisation.
+      if (!consented) ins.dataset.npa = '1'
       container.appendChild(ins)
       pushAd()
     }
@@ -112,7 +121,7 @@ export default function AdBanner() {
       window.removeEventListener('commandle:pageview', onPageview)
       if (containerRef.current) containerRef.current.innerHTML = ''
     }
-  }, [testMode, adsActive])
+  }, [testMode, adsActive, consented])
 
   // Test mode, or no real ad config / no consent yet: show a labelled placeholder instead of
   // an empty gap. The detailed debug label (slot id, refresh count) is test-mode only, so it

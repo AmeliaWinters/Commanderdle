@@ -127,12 +127,10 @@ export default function SettingsMenu({
             Archive ↗
           </button>
           {isDaily ? (
-            <button onClick={pick(onPractice)}>Practice (random)</button>
+            //<button onClick={pick(onPractice)}>Practice (random)</button>
+            <></>
           ) : (
-            <>
-              <button onClick={pick(onPractice)}>New random</button>
-              <button onClick={pick(onBackToDaily)}>Back to daily</button>
-            </>
+            <button onClick={pick(onBackToDaily)}>Back to daily</button>
           )}
           <button onClick={pick(() => navigateToPath(GAMES_PATH))}>
             All games ↗

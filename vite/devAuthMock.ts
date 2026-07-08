@@ -102,6 +102,21 @@ const FAKE_BOARD = [
     avatar: "Atraxa, Praetors' Voice",
     tier: "rare" as Tier,
   },
+  {
+    username: "RakdosRiot",
+    avatar: "Atraxa, Praetors' Voice",
+    tier: "rare" as Tier,
+  },
+  {
+    username: "RakdosRiot",
+    avatar: "Atraxa, Praetors' Voice",
+    tier: "rare" as Tier,
+  },
+  {
+    username: "RakdosRiot",
+    avatar: "Atraxa, Praetors' Voice",
+    tier: "rare" as Tier,
+  },
 ];
 
 export function devAuthMock(): Plugin {
@@ -123,7 +138,7 @@ export function devAuthMock(): Plugin {
         if (loginMatch) {
           const tierParam = url.searchParams.get("tier");
           const tier: Tier =
-            tierParam && isTier(tierParam) ? tierParam : "mythic";
+            tierParam && isTier(tierParam) ? tierParam : "common";
           const named = url.searchParams.get("named") === "1";
           user = {
             uuid: "dev-0000-0000-0000-000000000001",
@@ -155,7 +170,7 @@ export function devAuthMock(): Plugin {
             const name = body.username.trim();
             if (!USERNAME_RE.test(name))
               return sendJson(res, 400, {
-                error: "username must be 3–20 letters, numbers or underscores",
+                error: "username must be 3-20 letters, numbers or underscores",
               });
             if (name.toLowerCase() === "taken")
               return sendJson(res, 409, { error: "that username is taken" });

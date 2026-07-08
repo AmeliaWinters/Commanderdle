@@ -47,6 +47,35 @@
     font-size: 1.25rem;
   }
 }
+/* "← Archive" button in the archive-play bar (App.tsx). */
+.archive-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border: 1px solid color-mix(in srgb, var(--flame-1) 40%, var(--line));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--flame-1) 10%, var(--panel-2));
+  color: var(--flame-1);
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    transform 0.1s ease;
+}
+.archive-back:hover {
+  border-color: var(--flame-1);
+  background: color-mix(in srgb, var(--flame-1) 18%, var(--panel-2));
+  transform: translateY(-1px);
+}
+.archive-back:active {
+  transform: translateY(0);
+}
+
 .archive-list {
   display: flex;
   flex-direction: column;

@@ -3,7 +3,6 @@ import { colorIdentityName } from '../lib/colorNames'
 
 const ORDER = ['W', 'U', 'B', 'R', 'G']
 
-/** Order color-identity letters in canonical WUBRG order for display. */
 export function sortColors(colors: string[]): string[] {
   return [...colors].sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b))
 }
@@ -25,11 +24,9 @@ interface ManaCostProps {
   colors: string[]
   /** Optional match feedback to ring the pip cluster (exact/partial/none). */
   kind?: MatchKind
-  /** Optional size for the mana pips. */
   size?: string
 }
 
-/** Render a color-identity as a cluster of WUBRG mana pips (or a colorless pip). */
 export default function ManaCost({ colors, kind, size }: ManaCostProps) {
   const shown = colors.length ? sortColors(colors) : ['C']
   const label = colorIdentityName(colors) ?? undefined

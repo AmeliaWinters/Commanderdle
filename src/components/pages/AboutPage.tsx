@@ -11,16 +11,16 @@ export default function AboutPage() {
 
       <section>
         <p>
-          <strong>Commandle</strong> is your free daily{" "}
-          <em>Magic: The Gathering</em> Commander (EDH) dle game. One commander
-          drops every day, and your job is to figure out who it is. No download,
-          no login, no catch. Open the page, take a few guesses, and get on with
-          your day.
+          <strong>Commandle</strong> is a free daily{" "}
+          <em>Magic: The Gathering</em> Commander (EDH) 'dle' game. A different
+          commander drops in each mode every day, and your job is to figure out
+          who it is. No download, no login required, no catch-22. Open the page,
+          take a few guesses, and get on with your day.
         </p>
         <p>
-          Yes, it's another "-dle". I play a few 'dle' games myself, and picked
-          up MTG not long ago, and didn't find the current mtg dle games fun, so
-          I decided to create this
+          I play a few 'dle' games myself, and picked up MTG not long ago
+          through my partner. I had a look at the available daily MTG games and
+          thought they could be more fun, so I decided to create this
         </p>
       </section>
 
@@ -38,26 +38,35 @@ export default function AboutPage() {
             Starts heavily blurred, gets clearer every time you miss.
           </li>
           <li>
-            <strong>Zoom</strong> - an extreme close-up of the art that slowly
-            pulls back with each wrong guess.
+            <strong>Zoom</strong> - figure out a commander from a close-up of
+            the art that slowly zooms back with each wrong guess.
           </li>
           <li>
             <strong>Synergy</strong> - work out the commander from the cards
-            that pair more often with it than other same-colored commanders,
-            revealed one at a time.
+            that pair more often with it than other commanders with the same
+            colour identity, revealed one at a time.
           </li>
           <li>
             <strong>Quote</strong> - recognise the commander from the flavour
             text printed on its card.
           </li>
           <li>
-            <strong>Higher / Lower</strong> - an endless bonus mode: which of
-            two commanders gets built more on EDHREC?
+            <strong>Higher / Lower</strong> - bonus game: which of two
+            commanders gets built more on EDHREC?
+          </li>
+          <li>
+            <strong>Guess the cost</strong> - bonus game: what is the current
+            market cost of this commander?{" "}
+          </li>
+          <li>
+            <strong>Grid</strong> - bonus game: columns and rows have criteria,
+            only a few commanders fit both. Answer with the one picked the least
+            for the most points
           </li>
         </ul>
         <p>
           Missed a day? No biggie cos the <a href="/archive">puzzle archive</a>{" "}
-          has every past puzzle in every mode, ready whenever you are.
+          has every past puzzle in every mode.
         </p>
       </section>
 
@@ -89,7 +98,7 @@ export default function AboutPage() {
         </p>
         <p>
           Got feedback, found a bug, or have a big-brain feature idea? Go to{" "}
-          <a href="/contact">contact page</a> and let me know.
+          <a href="/contact">contact page</a> and talk to me.
         </p>
       </section>
     </ContentPage>

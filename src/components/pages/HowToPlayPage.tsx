@@ -29,14 +29,14 @@ export default function HowToPlayPage() {
         </p>
         <ul>
           <li>
-            <strong>🟩 Green</strong> - nailed it, exact match.
+            <strong>🟩 Green</strong> - you got it, exact match.
           </li>
           <li>
             <strong>🟨 Amber</strong> - close. For colour identity you share
-            some colours but not all; for a number you're in the neighbourhood.
+            some colours but not all; for a number you're in the close neighbourhood.
           </li>
           <li>
-            <strong>⬛ Grey</strong> - nope, cold, no match, far away.
+            <strong>⬛ Grey</strong> - nope, cold, no bueno, no match, far away.
           </li>
           <li>
             <strong>▲ / ▼ arrows</strong> - on Mana Value, Popularity and Price,
@@ -48,7 +48,7 @@ export default function HowToPlayPage() {
           The five columns are <strong>colour identity</strong>,{" "}
           <strong>card type</strong>, <strong>mana value</strong>,{" "}
           <strong>popularity</strong> (the commander's EDHREC rank, where #1 is
-          the most-built commander of all time) and <strong>price</strong> (the
+          the most-built commander of the past 2 years) and <strong>price</strong> (the
           approximate market price of the card).
         </p>
       </section>
@@ -124,7 +124,7 @@ export default function HowToPlayPage() {
         </p>
         <p>
           Alright, enough readingggg{"       "}{" "}
-          <a href="/classic">go play today's puzzle.</a>
+          <a href="/classic">go play today's puzzle!</a>
         </p>
       </section>
     </ContentPage>

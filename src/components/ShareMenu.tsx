@@ -2,24 +2,13 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 
 export interface ShareOption {
   key: string;
-  /** Static label, e.g. "Share as text". */
   label: string;
-  /** Short helper line under the label. */
   hint: string;
-  /** Icon shown in the leading badge. */
   icon: ReactNode;
-  /** Transient label shown after the action fires (e.g. "Copied!"). */
   done?: string | null;
   onSelect: () => void;
 }
 
-/**
- * A single "Share" button that opens a small menu of share actions (text /
- * image / recap), à la the export menus in Wordle-likes. Keeps the result
- * screen from sprouting a wrapping row of buttons. The menu stays open after a
- * pick so its transient "Copied!" / "Shared!" feedback is visible, and closes
- * on outside-click or Escape.
- */
 export default function ShareMenu({ options }: { options: ShareOption[] }) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);

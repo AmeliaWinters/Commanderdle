@@ -69,13 +69,12 @@ export function isAvatarUnlocked(name: string, tier: Tier): boolean {
 }
 
 /**
- * Cumulative GBP a player must have donated (across all Ko-fi payments matched to
- * their email) to reach each tier. Cumulative → highest reached wins.
+ * Mothly donation for each tier
  */
 export const TIER_THRESHOLDS_GBP: Record<Exclude<Tier, "common">, number> = {
-  uncommon: 5,
-  rare: 15,
-  mythic: 20,
+  uncommon: 2,
+  rare: 5,
+  mythic: 10,
 };
 
 /** Map a cumulative donation total (GBP) to the highest tier it unlocks. */

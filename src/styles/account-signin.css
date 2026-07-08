@@ -1,0 +1,83 @@
+/* ── Signed-out ─────────────────────────────────────────────────────── */
+.account-signin {
+  max-width: 27rem;
+  padding: var(--s4);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: linear-gradient(
+    180deg,
+    rgba(31, 31, 37, 0.72),
+    rgba(22, 22, 25, 0.72)
+  );
+  backdrop-filter: blur(7px);
+}
+
+.account-signin-title {
+  font-family: "Cinzel", serif;
+  margin-top: 0;
+}
+
+.account-oauth {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+  margin: var(--s3) 0;
+}
+
+.oauth-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  font: inherit;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+  transition:
+    filter 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.1s ease;
+}
+
+.oauth-btn .oauth-logo {
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.oauth-btn:active {
+  transform: translateY(1px);
+}
+
+/* Google: white button with the 4-colour "G", per Google's brand guidance. */
+.oauth-google {
+  color: #1f1f1f;
+  background: #ffffff;
+  border: 1px solid #747775;
+}
+.oauth-google:hover {
+  box-shadow: 0 1px 3px rgba(60, 64, 67, 0.35);
+}
+
+/* Discord: their "blurple" button with the white Discord mark. */
+.oauth-discord {
+  color: #ffffff;
+  background: #5865f2;
+  border: 1px solid #5865f2;
+}
+.oauth-discord .oauth-logo {
+  color: #ffffff;
+}
+.oauth-discord:hover {
+  filter: brightness(1.08);
+}
+
+.account-error {
+  color: #ff8a8a;
+}
+.account-fineprint {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+}
+

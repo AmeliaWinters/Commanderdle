@@ -24,18 +24,28 @@ interface Props {
 }
 
 /** Post-game summary: rarity score (when the community backend answers) + share menu. */
-export default function GridResult({ puzzleNo, picks, tiers, community }: Props) {
+export default function GridResult({
+  puzzleNo,
+  picks,
+  tiers,
+  community,
+}: Props) {
   const [copied, setCopied] = useState(false);
   const [challenged, setChallenged] = useState(false);
   const countdown = useCountdown();
   const filled = picks.filter((p) => p != null).length;
-  const score = community && community.total > 0 ? rarityScore(community, picks) : null;
+  const score =
+    community && community.total > 0 ? rarityScore(community, picks) : null;
 
   // Prefer the final community pick-rate for the tier (so it matches the % shown on
   // the board); fall back to the tier locked in at guess time. Every filled cell
   // scores something — a card nobody else picked is a Mythic Rare.
   const finalTiers: Array<GuessTier | null> = picks.map((name, cell) =>
-    name == null ? null : community ? guessTier(community, cell, name) : tiers[cell] ?? guessTier(null, cell, name),
+    name == null
+      ? null
+      : community
+        ? guessTier(community, cell, name)
+        : (tiers[cell] ?? guessTier(null, cell, name)),
   );
   const points = tierScore(finalTiers);
   const tierCounts = (["mythic", "rare", "uncommon", "common"] as const)
@@ -71,7 +81,10 @@ export default function GridResult({ puzzleNo, picks, tiers, community }: Props)
       ...(score != null ? [`Rarity score: ${score}`] : []),
       link,
     ].join("\n");
-    shareOrCopy(text).then(() => flash(setCopied), () => {});
+    shareOrCopy(text).then(
+      () => flash(setCopied),
+      () => {},
+    );
   };
 
   const challenge = () => {
@@ -79,7 +92,10 @@ export default function GridResult({ puzzleNo, picks, tiers, community }: Props)
       `I filled ${filled}/9 on today's Commandle Grid #${puzzleNo}. Think you can do better?`,
       link,
     ].join("\n");
-    shareOrCopy(text).then(() => flash(setChallenged), () => {});
+    shareOrCopy(text).then(
+      () => flash(setChallenged),
+      () => {},
+    );
   };
 
   const options: ShareOption[] = [
@@ -104,7 +120,9 @@ export default function GridResult({ puzzleNo, picks, tiers, community }: Props)
   return (
     <div className="grid-result">
       <p className="grid-result-line">
-        {filled === 9 ? "Immaculate! All nine cells." : `You filled ${filled} of 9 cells.`}
+        {filled === 9
+          ? "Immaculate! All nine cells."
+          : `You filled ${filled} of 9 cells.`}
       </p>
       {tierCounts.length > 0 && (
         <>
@@ -131,11 +149,13 @@ export default function GridResult({ puzzleNo, picks, tiers, community }: Props)
           </span>
         </p>
       ) : (
-        <p className="grid-result-sub">Community pick rates unavailable right now.</p>
+        <p className="grid-result-sub">
+          Community pick rates unavailable right now.
+        </p>
       )}
       <p className="grid-result-hint">
-        Tap any cell above to see every commander that fit, and how rare
-        each pick was.
+        Tap any cell above to see every commander that fits the criteria, and
+        how rare each answer is.
       </p>
       <div className="grid-result-share">
         <ShareMenu options={options} />

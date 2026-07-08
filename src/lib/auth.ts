@@ -158,10 +158,10 @@ export const TIER_META: Record<
   Tier,
   { label: string; color: string; keyrune: string }
 > = {
-  common: { label: "Common user", color: "#333333", keyrune: "" },
+  common: { label: "Common user", color: "#ffffff", keyrune: "" },
   uncommon: {
     label: "Uncommon",
-    color: "#9d9d9d",
+    color: "#c0c0c0",
     keyrune: "ss ss-uncommon ss-grad",
   },
   rare: {

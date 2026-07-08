@@ -6,6 +6,22 @@ a change that a player could notice.
 
 ## 2026-07-08
 
+- **Ko-fi nudge on locked avatars** — tapping a supporter-only avatar in the picker now
+  opens a friendly popup explaining how to unlock the whole gallery by supporting on Ko-fi,
+  instead of doing nothing.
+
+- **Cleaner usernames** — usernames containing profanity or slurs are now rejected when you
+  set or change your name.
+
+- **Clearer deduction bounds** — the Clues row now writes numeric bounds as "8-" and "-62"
+  (at least 8 / at most 62) instead of ">8" and "<62".
+
+- **Ads for everyone, your choice on personalisation** — ads now always show to keep the
+  game free; the cookie banner now only controls whether they're personalised.
+
+- **Styled archive button** — the "← Archive" button while replaying a past puzzle is now
+  properly styled to match the rest of the game.
+
 - **Stable archive & lasting avatars** — past puzzles now always show the exact commander
   that was the answer that day, even after they slip out of the daily top-500 list — the
   archive no longer shifts as the rankings change. Likewise, a commander you've set as your

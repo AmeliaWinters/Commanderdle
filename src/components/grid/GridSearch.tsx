@@ -4,19 +4,12 @@ import { gridPool } from "../../lib/commanders";
 import GuessInput from "../GuessInput";
 
 interface Props {
-  /** "Golgari × Dragon" - what the selected cell wants, shown as the prompt. */
   prompt: string;
   disabledNames: ReadonlySet<string>;
   onPick: (c: Commander) => void;
   onClose: () => void;
 }
 
-/**
- * The cell-fill dialog: wraps the same autocomplete search the daily modes use
- * (art thumbnails on mobile, side card-zoom preview on desktop, arrow-key/Enter
- * navigation), pointed at Grid's deeper top-1000 pool. Deliberately shows no
- * fit/color hints beyond what's on the card - knowing whether a pick fits is the game.
- */
 export default function GridSearch({ prompt, disabledNames, onPick, onClose }: Props) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {

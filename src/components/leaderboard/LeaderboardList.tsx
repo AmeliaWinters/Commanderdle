@@ -7,7 +7,6 @@ interface Props {
   entries: LeaderboardEntry[];
   /** Rank number of the first entry (for paged lists). Defaults to 1. */
   startRank?: number;
-  /** Unit suffix (e.g. "xp"); omitted for plain counts. */
   unit?: string;
   /** Highlight the signed-in player's own row. */
   meUuid?: string | null;
@@ -91,14 +90,19 @@ export default function LeaderboardList({
       <ol className="lb-list" start={startRank}>
         {entries.map((e, i) => (
           <li key={e.uuid}>
-            <Row rank={startRank + i} entry={e} unit={unit} isMe={e.uuid === meUuid} />
+            <Row
+              rank={startRank + i}
+              entry={e}
+              unit={unit}
+              isMe={e.uuid === meUuid}
+            />
           </li>
         ))}
       </ol>
       {showYou && you && (
         <>
           <p className="lb-you-divider" aria-hidden="true">
-            ···
+            ...
           </p>
           <ol className="lb-list lb-you-list">
             <li>

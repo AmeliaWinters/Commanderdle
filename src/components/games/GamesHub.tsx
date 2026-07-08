@@ -32,8 +32,6 @@ const MODE_BLURBS: Record<Mode, string> = {
   quote: "Guess it from its flavor text",
 };
 
-/** One mana colour per daily mode, flavour-matched: order/rules = W, growth
- * and packs = G, shadow = B, scrying detail = U, passion and flavor = R. */
 const MODE_PIP: Record<Mode, string> = {
   classic: "W",
   synergy: "U",
@@ -42,7 +40,6 @@ const MODE_PIP: Record<Mode, string> = {
   quote: "G",
 };
 
-/** Bonus games: each gets a glyph that hints at how it plays and its own accent. */
 const GAMES: {
   path: string;
   label: string;
@@ -73,11 +70,6 @@ const GAMES: {
   },
 ];
 
-/**
- * A commander art-crop to decorate each daily-mode tile: seeded per mode per
- * day so everyone sees the same gallery, and never that mode's actual daily
- * answer (the art itself would spoil Silhouette/Zoom).
- */
 function tileArt(mode: Mode): string | null {
   if (COMMANDERS.length === 0) return null;
   const answer = dailyAnswer(mode).name;
@@ -99,7 +91,6 @@ function tileClick(path: string) {
   };
 }
 
-/** The Binder — its own panel, separate from the bonus games. */
 function BinderSection() {
   const found = useMemo(() => {
     const col = loadCollection();

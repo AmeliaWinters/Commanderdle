@@ -6,11 +6,9 @@ interface Props {
   onGuess: (c: Commander) => void
   disabledNames: Set<string> | ReadonlySet<string>
   disabled?: boolean
-  /** In quote mode, blur the bottom of the preview so its flavor text can't be read. */
   blurQuote?: boolean
   /** Search a custom commander pool (e.g. Grid's deeper top-1000) instead of the default. */
   pool?: readonly Commander[]
-  /** Placeholder text for the input. */
   placeholder?: string
   /** Focus the input on mount (used inside the Grid cell-fill dialog). */
   autoFocus?: boolean

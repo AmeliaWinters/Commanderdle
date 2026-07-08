@@ -18,13 +18,13 @@ export const PIR_MAX_GUESSES = 6;
  * floor matters for bulk commanders: 10% of a $0.40 card is 4 cents, which
  * no player could reasonably hit.
  */
-export const PIR_WIN_RATIO = 0.1;
-export const PIR_WIN_ABS = 0.2;
+export const PIR_WIN_RATIO = 0.05;
+export const PIR_WIN_ABS = 0.1;
 
 /** Hot when within this fraction of the real price (but not a win). */
-const HOT_RATIO = 0.25;
+const HOT_RATIO = 0.2;
 /** Warm when within this fraction (roughly "right ballpark, wrong shelf"). */
-const WARM_RATIO = 1.0;
+const WARM_RATIO = 0.8;
 
 export type PirHeat = "win" | "hot" | "warm" | "cold";
 

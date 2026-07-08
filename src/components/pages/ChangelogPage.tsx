@@ -7,21 +7,28 @@ interface Release {
   notes: string[];
 }
 
-/**
- * Player-facing release history. Versions are curated highlights rather than a
- * literal mirror of CHANGELOG.md - short, punchy, and grouped by the day the work
- * landed. Newest first; keep 1.0.0 pinned at the top.
- */
 const RELEASES: Release[] = [
   {
-    version: "1.0.1",
+    title: "Welcome players!",
+    version: "0.9.0",
+    date: "2026-07-08",
+    notes: [
+      "Added the account system",
+      "Added leaderboards",
+      "Added cosmetic unlockables",
+      "Design upgrades",
+      "Fixed archive being broken if a commander goes out of top 500",
+    ],
+  },
+  {
+    version: "0.8.1",
     date: "2026-07-06",
     notes: ["Nicer looking back button"],
   },
   {
-    version: "1.0.0",
+    version: "0.8.0",
     date: "2026-07-06",
-    title: "Proper release",
+    title: "Even more modes",
     notes: [
       "Added the grid mode",
       "Added the binder",

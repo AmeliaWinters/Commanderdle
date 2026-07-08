@@ -4,17 +4,13 @@ import AppFooter from "../layout/AppFooter";
 import BackButton from "../layout/BackButton";
 
 interface Props {
-  /** Full document + og title, e.g. "Commandle - About". */
   title: string;
-  /** Meta description for this page (SEO). */
   description: string;
-  /** Absolute canonical URL for this page. */
   canonical: string;
-  /** Back control override. Defaults to "Back to today" → "/". */
   back?: { label: string; to?: string; onClick?: () => void };
-  /** Suppress the header's back button (e.g. the account page renders its own below
-   *  the mode-tabs). */
   hideBack?: boolean;
+  /** Widen the shell for table-like pages (e.g. the leaderboard). */
+  wide?: boolean;
   children: ReactNode;
 }
 
@@ -53,6 +49,7 @@ export default function ContentPage({
   canonical,
   back,
   hideBack = false,
+  wide = false,
   children,
 }: Props) {
   useEffect(() => {
@@ -65,7 +62,7 @@ export default function ContentPage({
   }, [title, description, canonical]);
 
   return (
-    <div className="content-page">
+    <div className={`content-page${wide ? " content-page-wide" : ""}`}>
       <header className="app-header">
         {!hideBack && (
           <BackButton

@@ -1,6 +1,6 @@
 import { prefersReducedMotion } from "../../lib/reducedMotion";
 import type { Commander, Mode } from "../../types/commander";
-import { navigateToPath, HIGHER_LOWER_PATH } from "../../lib/router";
+import { navigateToPath, GRID_PATH } from "../../lib/router";
 import { edhrecUrl } from "../../lib/edhrec";
 import { useCountdown } from "../../lib/useCountdown";
 import { buildDots } from "../../lib/guessDots";
@@ -134,9 +134,9 @@ export default function ResultBanner({
             Also try:{" "}
             <button
               className="link-btn"
-              onClick={() => navigateToPath(HIGHER_LOWER_PATH)}
+              onClick={() => navigateToPath(GRID_PATH)}
             >
-              Higher / Lower ↗
+              Grid ↗
             </button>
           </p>
         </div>
@@ -158,7 +158,10 @@ export default function ResultBanner({
                 ) : (
                   <div className="result-synergy-noimg">{c.name}</div>
                 )}
-                <SynergyPct synergy={c.synergy} className="result-synergy-pct" />
+                <SynergyPct
+                  synergy={c.synergy}
+                  className="result-synergy-pct"
+                />
               </li>
             ))}
           </ul>

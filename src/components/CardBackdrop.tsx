@@ -1,12 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { zoomPool } from "../lib/commanders";
 
-/** Position + size of a single backdrop card, in the same units at any width. */
 interface Pos {
-  left?: number; // % from left edge
-  right?: number; // % from right edge
-  top: number; // % from top
-  size: number; // width in px (height derived from card aspect ratio)
+  left?: number; 
+  right?: number; 
+  top: number; 
+  size: number; 
 }
 
 interface CardSpec extends Pos {
@@ -17,11 +16,6 @@ interface CardSpec extends Pos {
   mobile: Pos;
 }
 
-/**
- * Cards interpolate linearly between their desktop spec (at >=DESKTOP_W) and
- * their `mobile` spec (at <=MOBILE_W). Between the two the position/size is a
- * straight lerp; outside the range it clamps to the nearest end.
- */
 const DESKTOP_W = 900;
 const MOBILE_W = 450;
 
@@ -169,10 +163,7 @@ function useIdleMount(): boolean {
 
 /**
  * Swap a full-size /cards/normal_*.webp URL for its downscaled, more-compressed
- * /cards-bg/ backdrop variant (see scripts/build-backdrop-images.ts). These render tiny and
- * at low opacity, and the largest is the LCP image, so the smaller file matters. Non-matching
- * URLs (legacy absolute links, art crops) are left as-is. Kept in sync with the same rewrite
- * in the backdrop-lcp-preload build plugin (vite.config.ts).
+ * /cards-bg/ backdrop variant (see scripts/build-backdrop-images.ts).
  */
 function toBackdropVariant(src: string): string {
   return src.replace(/\/cards\/(normal_[^/]+)$/, "/cards-bg/$1");
@@ -193,7 +184,6 @@ function pickRealImages(count: number): string[] {
   );
 }
 
-/** Decorative layer of real card images floating behind the page content. */
 export default function CardBackdrop() {
   const width = useViewportWidth();
   const t = Math.min(

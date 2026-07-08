@@ -2,21 +2,13 @@ import { useState, type ReactNode } from "react";
 import { navigateToPath, GAMES_PATH } from "../../lib/router";
 
 interface Props {
-  /** Title content (usually the wordmark with an <span className="accent">). */
   children: ReactNode;
-  /** Where clicking the title navigates. Defaults to the games hub. */
   to?: string;
   ariaLabel?: string;
   /** Extra content rendered after the title inside the <h1> (e.g. badges). */
   after?: ReactNode;
 }
 
-/**
- * The interactive, animated wordmark shared across every mode's masthead:
- * wobbles on hover, springs on click, and puffs a short ember burst before
- * navigating (to the games hub by default). Motion is skipped when the user
- * prefers reduced motion.
- */
 export default function LogoTitle({
   children,
   to = GAMES_PATH,

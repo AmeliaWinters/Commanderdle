@@ -41,7 +41,7 @@ export default function ContactPage() {
             accessibility.
           </li>
           <li>
-            <strong>Privacy requests</strong> - questions about your data or
+            <strong>Privacy requests</strong> - questions about your data, GDPR requests, or
             anything in the <a href="/privacy">privacy policy</a>.
           </li>
         </ul>

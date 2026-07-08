@@ -6,14 +6,10 @@ import { isModeCompletedToday } from "../lib/stats";
 import { todayKey } from "../lib/dailyAnswer";
 
 interface Props {
-  /** The active mode, or null on pages (e.g. account) where no mode is current. */
   mode: Mode | null;
   onNavigate: (m: Mode) => void;
-  /** Bumps whenever a game finishes, so completion badges recompute. */
   completedSignal?: unknown;
-  /** Override the completion check (e.g. for archive plays). Defaults to today's daily. */
   isCompleted?: (mode: Mode) => boolean;
-  /** Real-anchor href for a mode (defaults to the mode's daily path). */
   hrefFor?: (mode: Mode) => string;
 }
 

@@ -29,8 +29,9 @@ export default function ConsentBanner() {
     >
       <div className="consent-inner">
         <p className="consent-text">
-          Commandle uses cookies for ads and analytics to keep the game free. Accept
-          to allow them, or reject to keep only what's essential. See our{" "}
+          Commandle shows ads to keep the game free. Allow personalised ads
+          and analytics cookies for more relevant ads, or reject to keep only
+          non-personalised ads and what's essential. See our{" "}
           <a href="/privacy">Privacy Policy</a>.
         </p>
         <div className="consent-actions">
@@ -46,7 +47,7 @@ export default function ConsentBanner() {
             className="consent-btn consent-accept"
             onClick={() => choose("granted")}
           >
-            Accept
+            Allow personalised
           </button>
         </div>
       </div>

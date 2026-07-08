@@ -78,14 +78,14 @@ describe('deduce — numerics', () => {
   it('reports a strict lower bound from a smaller guess', () => {
     const guess = makeCommander({ manaValue: 3, power: '1', toughness: '1', rank: 50, year: 2020 })
     const mv = deduce([guess], answer).numerics.find((n) => n.label === 'Mana value')!
-    // answer 5 > guess 3 ⇒ ">3" (the guess itself is the strict bound), and never leaks the ±2 tolerance
-    expect(mv).toEqual({ label: 'Mana value', tone: 'partial', value: '>3' })
+    // answer 5 > guess 3 ⇒ "3-" (the guess itself is the strict bound), and never leaks the ±2 tolerance
+    expect(mv).toEqual({ label: 'Mana value', tone: 'partial', value: '3-' })
   })
 
   it('reports a strict upper bound from a larger guess', () => {
     const guess = makeCommander({ manaValue: 9, power: '3', toughness: '3', rank: 50, year: 2020 })
     const mv = deduce([guess], answer).numerics.find((n) => n.label === 'Mana value')!
-    expect(mv.value).toBe('<9')
+    expect(mv.value).toBe('-9')
   })
 
   it('greys a bound built only from far guesses', () => {
@@ -112,8 +112,8 @@ describe('deduce — numerics', () => {
   it('formats popularity bounds with a # prefix', () => {
     const guess = makeCommander({ manaValue: 5, power: '3', toughness: '3', rank: 10, year: 2020 })
     const pop = deduce([guess], answer).numerics.find((n) => n.label === 'Popularity')!
-    // answer rank 50 > guess rank 10 ⇒ ">#10" (the guess itself is the strict bound)
-    expect(pop.value).toBe('>#10')
+    // answer rank 50 > guess rank 10 ⇒ "#10-" (the guess itself is the strict bound)
+    expect(pop.value).toBe('#10-')
   })
 
   it('omits a numeric whose answer value is uncomparable', () => {

@@ -13,6 +13,10 @@
   flex-direction: column;
 }
 
+.content-page-wide {
+  max-width: 60rem;
+}
+
 .content-page .app-header h1 a {
   color: inherit;
   text-decoration: none;

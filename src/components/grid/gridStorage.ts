@@ -9,7 +9,6 @@ import type { GuessTier } from "../../lib/gridRarity";
 export interface GridRun {
   rowIds: string[];
   colIds: string[];
-  /** Commander name per cell (row-major), null while unfilled. */
   picks: Array<string | null>;
   /**
    * Rarity tier each correct pick earned at guess time (vs community picks then);

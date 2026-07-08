@@ -4,9 +4,7 @@ interface Props {
   /** XP progress toward the next level, 0–1. */
   progress: number;
   level: number;
-  /** Avatar diameter in px (the ring is drawn just outside this). */
   size: number;
-  /** The avatar node (image or edit-button) to centre inside the ring. */
   children: ReactNode;
 }
 
@@ -15,8 +13,7 @@ const GAP = 5; // clear space between avatar edge and the ring
 
 /**
  * A circular XP gauge wrapped around the hero avatar, with the player's level pinned
- * to the bottom. The ring stroke is a tier-tinted gradient; it fills on mount (unless
- * the player prefers reduced motion). Shared by the account + public-profile heroes.
+ * to the bottom. 
  */
 export default function AvatarRing({ progress, level, size, children }: Props) {
   const ringSize = size + (GAP + STROKE) * 2;
@@ -39,10 +36,7 @@ export default function AvatarRing({ progress, level, size, children }: Props) {
   }, [progress]);
 
   return (
-    <div
-      className="account-ring"
-      style={{ width: ringSize, height: ringSize }}
-    >
+    <div className="account-ring" style={{ width: ringSize, height: ringSize }}>
       <svg
         className="account-ring-svg"
         width={ringSize}
@@ -75,7 +69,7 @@ export default function AvatarRing({ progress, level, size, children }: Props) {
           stroke="url(#ringGrad)"
           strokeDasharray={circ}
           strokeDashoffset={circ * (1 - shown)}
-          transform={`rotate(-90 ${ringSize / 2} ${ringSize / 2})`}
+          transform={`rotate(90 ${ringSize / 2} ${ringSize / 2})`}
         />
       </svg>
       {children}

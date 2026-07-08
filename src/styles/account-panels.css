@@ -1,0 +1,131 @@
+/* ── Panels ──────────────────────────────────────────────────────────── */
+.account-panel {
+  padding: var(--s3);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(22, 22, 25, 0.66);
+  backdrop-filter: blur(7px);
+  margin-bottom: var(--s3);
+}
+.account-panel h3 {
+  margin-top: 0;
+  font-size: 1.2rem;
+  color: var(--tier-color);
+}
+
+.account-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+}
+
+.account-tier {
+  background:
+    radial-gradient(
+      130% 120% at 100% 0%,
+      rgba(240, 126, 1, 0.1),
+      transparent 60%
+    ),
+    rgba(22, 22, 25, 0.66);
+}
+
+/* The three purchasable frames shown as rarity chips. Each chip themes itself off
+   its own inline --tier-color. */
+.tier-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2);
+  margin-top: var(--s2);
+}
+.tier-chip {
+  flex: 1 1 7rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  padding: var(--s2) var(--s2) calc(var(--s2) - 2px);
+  border: 1px solid color-mix(in srgb, var(--tier-color) 45%, var(--line));
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--tier-color) 8%, transparent);
+}
+.tier-chip-gem {
+  font-size: 1.35rem;
+  line-height: 1;
+}
+.tier-chip-price {
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--tier-color);
+}
+.tier-chip-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+/* Action row (view profile / share / sign out / edit). */
+.account-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s2);
+  margin-top: var(--s3);
+}
+
+/* One shared button shape, three weights: primary (filled), ghost (outline),
+   quiet (borderless, sits back until hovered). */
+.account-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font: inherit;
+  font-weight: 600;
+  border-radius: 9px;
+  padding: 0.6rem 1.1rem;
+  cursor: pointer;
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition:
+    filter 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    transform 0.1s ease;
+}
+.account-btn:active {
+  transform: translateY(1px);
+}
+
+.account-btn-primary {
+  color: #10100f;
+  background: linear-gradient(90deg, var(--flame-2), var(--flame-1));
+  border: none;
+}
+.account-btn-primary:hover {
+  filter: brightness(1.08);
+}
+
+.account-btn-ghost {
+  color: var(--text);
+  background: rgba(31, 31, 37, 0.55);
+  border-color: var(--line);
+}
+.account-btn-ghost:hover {
+  border-color: var(--flame-1);
+  color: var(--flame-1);
+}
+
+.account-btn-quiet {
+  color: var(--text-dim);
+  background: none;
+  margin-left: auto;
+}
+.account-btn-quiet:hover {
+  color: #ff8a8a;
+}
+.profile-avatar {
+  border: 3px solid var(--tier-color, var(--flame-1));
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.5);
+}

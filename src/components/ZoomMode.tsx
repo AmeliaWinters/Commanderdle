@@ -16,11 +16,6 @@ interface Props {
 
 const MAX_SCALE = 8;
 
-/**
- * Extreme close-up of the card art that zooms out with each wrong guess, fully
- * framed by the final allowed guess. A per-answer focal point keeps the starting
- * crop varied (and away from any name text on the card).
- */
 export default function ZoomMode({
   answer,
   guesses,

@@ -100,7 +100,7 @@ export default function BinderPage() {
         <section className="binder-about">
           <p>
             The Binder is your lifetime collection. Every commander in the
-            Commandle pool has a slot here. Guess a commander correctly in any
+            Commandle pool is in here. Guess a commander correctly in any
             daily game, and its card will appear in your binder. Fill every slot
             to complete the collection! {":)"}
           </p>

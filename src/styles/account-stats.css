@@ -1,0 +1,171 @@
+/* ── Stat cards ──────────────────────────────────────────────────────── */
+.account-stats {
+  margin-bottom: var(--s3);
+}
+/* Two "live" streaks up top, four career totals below. */
+.account-stats-featured {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--s2);
+  margin-bottom: var(--s2);
+}
+.account-stats-secondary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--s2);
+}
+
+.account-stat {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  padding: var(--s3) var(--s2);
+  background: rgba(31, 31, 37, 0.6);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  backdrop-filter: blur(6px);
+  overflow: hidden;
+}
+.account-stat-icon {
+  display: flex;
+  font-size: 1rem;
+  color: var(--tier-color);
+  opacity: 0.85;
+}
+.account-stat-value {
+  font-family: "Cinzel", serif;
+  font-size: 1.5rem;
+  color: var(--tier-color);
+  line-height: 1.1;
+  position: relative;
+}
+.account-stat-label {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  text-align: center;
+  position: relative;
+}
+
+/* Featured streak tiles: taller, with a giant faded icon watermark and a warm glow
+   that grows with the streak (driven by the inline --glow custom property, 0–1). */
+.account-stat-featured {
+  padding: var(--s3) var(--s2) calc(var(--s3) + 2px);
+  border-color: color-mix(
+    in srgb,
+    var(--tier-color) calc(var(--glow, 0) * 55%),
+    var(--line)
+  );
+  background:
+    radial-gradient(
+      120% 120% at 50% 0%,
+      color-mix(
+        in srgb,
+        var(--tier-color) calc(var(--glow, 0) * 20%),
+        transparent
+      ),
+      transparent 70%
+    ),
+    rgba(31, 31, 37, 0.6);
+  box-shadow: 0 0 calc(var(--glow, 0) * 26px)
+    color-mix(
+      in srgb,
+      var(--tier-color) calc(var(--glow, 0) * 40%),
+      transparent
+    );
+}
+.account-stat-featured .account-stat-value {
+  font-size: 2.4rem;
+}
+.account-stat-featured .account-stat-icon {
+  font-size: 1.25rem;
+  color: var(--tier-color);
+  opacity: 1;
+}
+.account-stat-watermark {
+  position: absolute;
+  right: -10px;
+  bottom: -14px;
+  font-size: 5.5rem;
+  color: var(--tier-color);
+  opacity: 0.1;
+  pointer-events: none;
+}
+/* An active day/win streak makes its watermark flicker like a live flame. */
+.account-stat-featured.is-active .account-stat-watermark {
+  animation: stat-flicker 3.2s ease-in-out infinite;
+}
+@keyframes stat-flicker {
+  0%,
+  100% {
+    opacity: 0.1;
+  }
+  50% {
+    opacity: 0.18;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .account-stat-featured.is-active .account-stat-watermark {
+    animation: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .account-stats-secondary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ── Bonus game stats ────────────────────────────────────────────────── */
+.bonus-stats .bonus-stat-row {
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: var(--s3);
+}
+/* Triple toggle: one segmented control switching between the three bonus games. */
+.bonus-mode-toggle {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(12, 12, 15, 0.5);
+}
+.bonus-mode-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.55rem 0.4rem;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--text-dim);
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+.bonus-mode-tab svg {
+  flex-shrink: 0;
+}
+.bonus-mode-tab:hover {
+  color: var(--text);
+}
+.bonus-mode-tab.active {
+  background: color-mix(in srgb, var(--flame-1) 22%, rgba(31, 31, 37, 0.9));
+  color: var(--text);
+  box-shadow: inset 0 0 0 1px
+    color-mix(in srgb, var(--flame-1) 45%, transparent);
+}
+
+@media (max-width: 480px) {
+  .bonus-mode-tab span {
+    display: none;
+  }
+  .bonus-mode-tab svg {
+    font-size: 1.1rem;
+  }
+}

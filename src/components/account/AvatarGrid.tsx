@@ -25,6 +25,8 @@ const INITIAL_LIMIT = 60;
 export default function AvatarGrid({ current, tier, onSelect }: Props) {
   const [query, setQuery] = useState("");
   const [showAll, setShowAll] = useState(false);
+  // Name of the locked avatar the player just tried to pick — drives the Ko-fi nudge.
+  const [lockedPick, setLockedPick] = useState<string | null>(null);
 
   const q = query.trim();
   const list = useMemo(() => {
@@ -56,8 +58,7 @@ export default function AvatarGrid({ current, tier, onSelect }: Props) {
       />
       {tier === "common" && (
         <p className="avatar-grid-note">
-          Free accounts pick from five avatars. Become a supporter to unlock all
-          500.
+          Please consider a donation to the Commandle Ko-fi to unlock more avatars
         </p>
       )}
       <div className="avatar-grid" role="listbox" aria-label="Choose an avatar">
@@ -70,11 +71,10 @@ export default function AvatarGrid({ current, tier, onSelect }: Props) {
               role="option"
               aria-selected={selected}
               aria-disabled={locked}
-              disabled={locked}
               className={`avatar-cell${selected ? " selected" : ""}${
                 locked ? " locked" : ""
               }`}
-              onClick={() => !locked && onSelect(c.name)}
+              onClick={() => (locked ? setLockedPick(c.name) : onSelect(c.name))}
               title={locked ? `${c.name} — supporters only` : c.name}
             >
               <AvatarImage avatar={c.name} size={60} />
@@ -99,6 +99,45 @@ export default function AvatarGrid({ current, tier, onSelect }: Props) {
         >
           Show all {COMMANDERS.length} commanders
         </button>
+      )}
+
+      {lockedPick && (
+        <div
+          className="avatar-lock-backdrop"
+          onClick={() => setLockedPick(null)}
+        >
+          <div
+            className="avatar-lock-pop"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Avatar locked"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <span className="avatar-lock-pop-icon" aria-hidden="true">
+              <FaLock />
+            </span>
+            <h3 className="avatar-lock-pop-title">{lockedPick} is locked</h3>
+            <p className="avatar-lock-pop-text">
+              To unlock every commander avatar, please donate to the Commandle
+              Ko-fi. Supporter cosmetics appear on your next visit.
+            </p>
+            <a
+              className="avatar-lock-pop-cta"
+              href="https://ko-fi.com/commandle"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Support on Ko-fi
+            </a>
+            <button
+              type="button"
+              className="avatar-lock-pop-close"
+              onClick={() => setLockedPick(null)}
+            >
+              Maybe later
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );

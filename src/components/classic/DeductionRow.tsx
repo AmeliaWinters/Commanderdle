@@ -14,15 +14,9 @@ import ManaCost from "../ManaSymbols";
 interface Props {
   guesses: Commander[];
   answer: Commander;
-  /** Play the clue flip-in animation. False when the grid mounted with these
-   *  guesses already present (e.g. mode switch), so the reveal doesn't replay. */
   animate?: boolean;
 }
 
-// One clue column per data column in the results table. Their reveal indices line
-// up with the guess row's cells (the name cell is index 0, so a data column at
-// position `p` maps to cell index `p + 1`) so each clue waits for its matching
-// cell to flip open.
 const DED_COL_COUNT = COLUMNS.length;
 
 /** Deduction row aligned to the table columns, sitting just above the headers. */
@@ -31,10 +25,6 @@ export default function DeductionRow({
   answer,
   animate = true,
 }: Props) {
-  // When a new guess lands, hold each clue column on the deductions from the
-  // *previous* guesses until its matching cell has flipped open in the guess row
-  // below, so clues update in step with the reveal rather than all at once.
-  // `colsShown` counts how many columns already reflect the newest guess.
   const [colsShown, setColsShown] = useState(DED_COL_COUNT);
   const prevCount = useRef(guesses.length);
 
@@ -48,10 +38,6 @@ export default function DeductionRow({
       return;
     }
     setColsShown(0);
-    // Column with reveal index r (= cell index r in the guess row) is unmasked
-    // when colsShown reaches r. Guess cell r flips with delay (r+1)*0.5s and reads
-    // clearly ~0.75s in, so unmask column r at (r+1)*500+250ms. Timer i pushes
-    // colsShown to i+1, so it fires at (i+2)*500+250.
     const timers = Array.from({ length: DED_COL_COUNT }, (_, i) =>
       setTimeout(
         () => setColsShown((n) => Math.max(n, i + 1)),

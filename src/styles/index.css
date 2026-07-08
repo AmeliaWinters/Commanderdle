@@ -3,12 +3,15 @@
    restyle .menu-btn from header.css), so keep this order when adding files. */
 @import "./base.css";
 @import "./header.css";
+@import "./header-tabs.css";
 @import "./guess-input.css";
 @import "./card-zoom.css";
 @import "./deductions.css";
 @import "./classic-grid.css";
+@import "./classic-grid-anim.css";
 @import "./modes.css";
 @import "./result.css";
+@import "./result-synergy.css";
 @import "./share.css";
 @import "./stats.css";
 @import "./footer.css";
@@ -19,10 +22,17 @@
 @import "./guess-the-cost.css";
 @import "./games-hub.css";
 @import "./grid-game.css";
+@import "./grid-result.css";
 @import "./binder.css";
 @import "./archive.css";
 @import "./content.css";
-@import "./account.css";
+@import "./account-widget.css";
+@import "./account-signin.css";
+@import "./account-hero.css";
+@import "./account-stats.css";
+@import "./account-panels.css";
+@import "./account-avatar.css";
+@import "./account-picker.css";
 @import "./leaderboard.css";
 @import "./consent.css";
 @import "./landing.css";

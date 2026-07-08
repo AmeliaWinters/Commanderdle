@@ -63,10 +63,10 @@ export default function ProfilePage({ uuid }: { uuid: string }) {
     >
       <CardBackdrop />
       {loading ? (
-        <p>Loading…</p>
+        <p>Loading...</p>
       ) : !profile ? (
         <p className="lb-empty">
-          No such planeswalker — this profile doesn’t exist.
+          No such planeswalker. This profile doesn't exist.
         </p>
       ) : (
         <div
@@ -81,11 +81,11 @@ export default function ProfilePage({ uuid }: { uuid: string }) {
             <AvatarRing
               progress={level?.progress ?? 0}
               level={level?.level ?? 1}
-              size={104}
+              size={105}
             >
               <AvatarImage
                 avatar={profile.avatar}
-                size={104}
+                size={105}
                 className="profile-avatar"
                 foil={profile.tier === "mythic"}
               />

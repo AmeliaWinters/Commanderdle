@@ -104,8 +104,18 @@ const id = (n: number) => String(n);
 const NUMERIC_SPECS: NumericSpec[] = [
   { label: "Mana value", get: (c) => c.manaValue, fmt: id, tol: 2 },
   // Popularity is keyed on EDHREC rank (lower = more popular), shown as "#42".
-  { label: "Popularity", get: (c) => c.rank, fmt: (n) => `#${n}`, tol: POPULARITY_TOL },
-  { label: "Price", get: (c) => c.price, fmt: (n) => formatPrice(n), tol: PRICE_TOL },
+  {
+    label: "Popularity",
+    get: (c) => c.rank,
+    fmt: (n) => `#${n}`,
+    tol: POPULARITY_TOL,
+  },
+  {
+    label: "Price",
+    get: (c) => c.price,
+    fmt: (n) => formatPrice(n),
+    tol: PRICE_TOL,
+  },
 ];
 
 const WUBRG = ["W", "U", "B", "R", "G"];
@@ -116,7 +126,7 @@ const WUBRG = ["W", "U", "B", "R", "G"];
  * a guess it sits below a strict upper bound. We deliberately do NOT use the
  * comparison tolerance to tighten these: that would leak the tolerance and
  * hand the player a range they didn't actually earn (e.g. "≥ 11" off a guess
- * of 8). Instead the player only ever sees the bare ">8" / "<62" they can read
+ * of 8). Instead the player only ever sees the bare "8-" / "-62" they can read
  * straight off their own guesses.
  */
 function numericClue(
@@ -149,8 +159,8 @@ function numericClue(
   let value: string;
   if (hasGt && gt == lt) value = `${spec.fmt(gt)}`;
   else if (hasGt && hasLt) value = `${spec.fmt(gt)}-${lt}`;
-  else if (hasGt) value = `>${spec.fmt(gt)}`;
-  else value = `<${spec.fmt(lt)}`;
+  else if (hasGt) value = `${spec.fmt(gt)}-...`;
+  else value = `...-${spec.fmt(lt)}`;
 
   // The bound reads as "close" (amber) only if one of the tightest bounding
   // guesses actually landed within tolerance of the answer; otherwise the answer

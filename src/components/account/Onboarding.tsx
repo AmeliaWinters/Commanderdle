@@ -4,6 +4,7 @@ import AvatarGrid from "./AvatarGrid";
 import { useModalFocus } from "../../lib/useModalFocus";
 import { useAuth } from "../../lib/useAuth";
 import { updateMe } from "../../lib/auth";
+import { containsProfanity } from "../../lib/profanity";
 
 /**
  * First-login welcome. Shown once, when a signed-in account has no username yet.
@@ -34,6 +35,10 @@ export default function Onboarding({ onDone }: { onDone: () => void }) {
   async function claimName() {
     const trimmed = name.trim();
     if (busy) return;
+    if (containsProfanity(trimmed)) {
+      setError("Please choose a username without profanity or slurs.");
+      return;
+    }
     setBusy(true);
     setError(null);
     const res = await updateMe({ username: trimmed });
@@ -67,7 +72,7 @@ export default function Onboarding({ onDone }: { onDone: () => void }) {
         <div className="onboarding-crest">
           <AvatarImage
             avatar={user.avatar}
-            size={92}
+            size={100}
             foil={user.tier === "mythic"}
           />
         </div>
@@ -76,7 +81,7 @@ export default function Onboarding({ onDone }: { onDone: () => void }) {
           <>
             <h2 className="onboarding-title">Welcome, planeswalker</h2>
             <p className="onboarding-sub">
-              Every legend needs a name. Choose the one that&apos;ll sit atop the
+              Every legend needs a name. Choose one that'll be revered atop the
               leaderboards.
             </p>
             <input
@@ -88,24 +93,30 @@ export default function Onboarding({ onDone }: { onDone: () => void }) {
               onChange={(e) => setName(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && claimName()}
             />
-            <p className="onboarding-hint">3–20 letters, numbers or underscores.</p>
+            <p className="onboarding-hint">
+              3-20 letters, numbers or underscores.
+            </p>
             {error && <p className="account-error">{error}</p>}
             <button
               className="onboarding-next"
               onClick={claimName}
               disabled={busy || name.trim().length < 3}
             >
-              {busy ? "Claiming…" : "Continue"}
+              {busy ? "Claiming..." : "Continue"}
             </button>
           </>
         ) : (
           <>
-            <h2 className="onboarding-title">Pick your sigil</h2>
+            <h2 className="onboarding-title">Pick your commander</h2>
             <p className="onboarding-sub">
-              Pick the commander that represents you. You can change it whenever you like.
+              You can change your avatar whenever you like.
             </p>
             <div className="onboarding-avatars">
-              <AvatarGrid current={user.avatar} tier={user.tier} onSelect={chooseAvatar} />
+              <AvatarGrid
+                current={user.avatar}
+                tier={user.tier}
+                onSelect={chooseAvatar}
+              />
             </div>
             <button className="onboarding-next" onClick={onDone}>
               Enter Commandle

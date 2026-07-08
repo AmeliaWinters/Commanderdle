@@ -11,11 +11,7 @@ interface Props {
   highlight?: number;
 }
 
-/**
- * Anonymous community aggregate for today's puzzle ("42% of players solved Classic #128 in
- * ≤3"). Fully optional: while loading, on error, or when the backend is unconfigured it
- * renders nothing, so the result screen is unchanged when the API isn't available.
- */
+
 export default function GlobalStats({
   mode,
   puzzle,

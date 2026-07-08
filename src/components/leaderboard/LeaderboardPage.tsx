@@ -2,13 +2,17 @@ import { useEffect, useMemo, useState } from "react";
 import ContentPage from "../pages/ContentPage";
 import LeaderboardList from "./LeaderboardList";
 import { fetchLeaderboard } from "../../lib/leaderboardApi";
-import { LEADERBOARD_METRICS, DEFAULT_METRIC, metricByKey } from "../../lib/leaderboard";
+import {
+  LEADERBOARD_METRICS,
+  DEFAULT_METRIC,
+  metricByKey,
+} from "../../lib/leaderboard";
 import type { LeaderboardEntry, LeaderboardYou } from "../../lib/leaderboard";
 import { useAuth } from "../../lib/useAuth";
 import { ACCOUNT_PATH, navigateToPath } from "../../lib/router";
 
 /** How many ranks to show per page on the full leaderboard. */
-const PAGE_SIZE = 20;
+const PAGE_SIZE = 50;
 
 /** The full public leaderboard: metric tabs + up to the top 100 opted-in players. */
 export default function LeaderboardPage() {
@@ -41,7 +45,9 @@ export default function LeaderboardPage() {
   const optedOut = user && !user.leaderboardOptIn;
 
   // Page the top 100 in chunks so the list stays a single, readable column.
-  const pageCount = entries ? Math.max(1, Math.ceil(entries.length / PAGE_SIZE)) : 1;
+  const pageCount = entries
+    ? Math.max(1, Math.ceil(entries.length / PAGE_SIZE))
+    : 1;
   const start = page * PAGE_SIZE;
   const pageEntries = useMemo(
     () => entries?.slice(start, start + PAGE_SIZE) ?? [],
@@ -51,13 +57,13 @@ export default function LeaderboardPage() {
 
   return (
     <ContentPage
-      title="Commandle - Leaderboard"
-      description="The top Commandle players by streak, win streak, XP and total wins."
+      title="Commandle - Leaderboards"
+      description="The top Commandle players by streak, win streak, XP, and total wins."
       canonical="https://commandle.app/leaderboard"
       back={{ label: "Back", onClick: () => window.history.back() }}
       wide
     >
-      <h2>Leaderboard</h2>
+      <h2>Leaderboards</h2>
 
       <div className="lb-tabs lb-tabs-page" role="tablist">
         {LEADERBOARD_METRICS.map((m) => (
@@ -74,11 +80,15 @@ export default function LeaderboardPage() {
       </div>
 
       {loading ? (
-        <p>Loading…</p>
+        <p>Loading...</p>
       ) : !entries ? (
-        <p className="lb-empty">The leaderboard is having a rest — try again shortly.</p>
+        <p className="lb-empty">
+          The leaderboard is having a rest - try again shortly.
+        </p>
       ) : entries.length === 0 ? (
-        <p className="lb-empty">No one’s qualified yet. Play a daily to be the first!</p>
+        <p className="lb-empty">
+          No one has qualified yet. Play a daily to be the first!
+        </p>
       ) : (
         <>
           <div className="lb-board">
@@ -101,8 +111,8 @@ export default function LeaderboardPage() {
                 ← Prev
               </button>
               <span className="lb-pager-status">
-                Ranks {start + 1}–{Math.min(start + PAGE_SIZE, entries.length)} of{" "}
-                {entries.length}
+                Ranks {start + 1}–{Math.min(start + PAGE_SIZE, entries.length)}{" "}
+                of {entries.length}
               </span>
               <button
                 className="lb-pager-btn"

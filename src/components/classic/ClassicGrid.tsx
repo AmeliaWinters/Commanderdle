@@ -10,7 +10,6 @@ interface Props {
   guesses: Commander[];
   answer: Commander;
   maxGuesses: number;
-  /** Show the static teaching row for first-time players (empty grid only). */
   showExample?: boolean;
 }
 

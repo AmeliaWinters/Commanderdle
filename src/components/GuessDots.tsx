@@ -8,7 +8,6 @@ interface Props {
   onSkip?: () => void
 }
 
-/** The row of per-attempt pips shown under each mode, plus the optional skip button. */
 export default function GuessDots({ dots, onSkip, wrongGuesses, maxGuesses }: Props) {
   return (
     <div className="guess-dots-row">

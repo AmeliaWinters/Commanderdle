@@ -1,0 +1,189 @@
+/* --- Result ------------------------------------------------------------------------ */
+
+.grid-result {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.grid-result-line {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem;
+}
+
+.grid-result-rarity {
+  margin: 0.25rem 0;
+}
+
+.grid-result-sub {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  margin: 0.25rem 0;
+}
+
+.grid-result-score {
+  margin: 0.5rem 0 0.25rem;
+  font-size: 1.05rem;
+}
+
+.grid-result-tiers {
+  list-style: none;
+  margin: 0 0 0.25rem;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.grid-result-tier {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.grid-result-tier-rare {
+  border-color: rgba(221, 187, 102, 0.5);
+}
+
+.grid-result-tier-mythic {
+  border-color: rgba(240, 126, 1, 0.55);
+  color: var(--rarity-mythic);
+}
+
+.grid-result-hint {
+  margin: 0.6rem 0 0;
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+.grid-result-share {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.75rem;
+}
+
+/* --- Post-game cell reveal (all valid answers + pick rates) ------------------------- */
+
+.grid-detail {
+  width: min(100%, 440px);
+  max-height: 76vh;
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  background: var(--panel, #1d1a24);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 0.75rem;
+}
+
+.grid-detail-count {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+  opacity: 0.65;
+}
+
+.grid-detail-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+}
+
+.grid-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.35rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  width: 100%;
+}
+
+.grid-detail-item + .grid-detail-item {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.grid-detail-item-mine {
+  width: 100%;
+  background: rgba(232, 179, 75, 0.14);
+}
+
+.grid-detail-item .ac-name {
+  flex: 1;
+  min-width: 0;
+}
+
+.grid-detail-you {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--accent, #e8b34b);
+}
+
+/* Rarity badge in the answers modal: gem + label, tinted by tier. */
+.grid-detail-tier {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-shrink: 0;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--text-dim);
+}
+
+.grid-detail-tier-rare .grid-detail-tier-label {
+  color: var(--rarity-rare);
+}
+
+.grid-detail-tier-mythic .grid-detail-tier-label {
+  color: var(--rarity-mythic);
+}
+
+/* Hide the wordy label on narrow screens; the gem alone carries the rarity. */
+@media (max-width: 420px) {
+  .grid-detail-tier-label {
+    display: none;
+  }
+}
+
+.grid-detail-pct {
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
+}
+
+.grid-detail-pct-rare {
+  background: var(--accent, #e8b34b);
+  color: #1a1408;
+}
+
+.grid-detail-zoom {
+  cursor: zoom-in;
+  display: flex;
+  align-items: center;
+}
+
+.grid-detail-thumb {
+  display: block;
+  width: 34px;
+  height: 34px;
+  border-radius: 5px;
+  object-fit: cover;
+  border: 1px solid var(--line);
+}
+
+.grid-detail-thumb-blank {
+  background: rgba(255, 255, 255, 0.08);
+}

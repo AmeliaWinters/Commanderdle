@@ -2,9 +2,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 
 interface Props {
-  /** Card name (used as the popover's accessible label). */
   name: string
-  /** Full-size image shown in the popover; no popover renders when null. */
   image: string | null
   children: ReactNode
   className?: string
@@ -12,16 +10,10 @@ interface Props {
 
 const CARD_W = 300
 
-/** Below this viewport width there's no room beside a full-width row, so we center. */
 const NARROW_VW = 560
 /** Magic-card aspect ratio (h / w) used to size the popover vertically. */
 const CARD_ASPECT = 1.4
 
-/**
- * Wraps an element so the full card image pops up while hovered. The popover is
- * portaled to <body> so transformed/overflow-hidden ancestors (e.g. the animated
- * results table cells) can't clip it, and its fixed coords resolve to the viewport.
- */
 export default function CardZoom({ name, image, children, className }: Props) {
   const [pos, setPos] = useState<
     { top: number; left: number; narrow: boolean; width?: number } | null
@@ -66,8 +58,6 @@ export default function CardZoom({ name, image, children, className }: Props) {
     }
   }
 
-  // Touch has no hover, so tapping toggles the preview; a second tap (or a tap
-  // on the portaled image) dismisses it.
   const toggle = (e: React.MouseEvent<HTMLSpanElement>) => {
     if (pos) {
       setPos(null)

@@ -6,12 +6,6 @@ import type { LeaderboardEntry } from "../../lib/leaderboard";
 import { LEADERBOARD_PATH, navigateToPath } from "../../lib/router";
 import { useAuth } from "../../lib/useAuth";
 
-/**
- * Leaderboard for the home screen: a metric switcher and the top players (flowing into
- * columns of five on wide screens), linking through to the full board. Fully degradable —
- * renders nothing when the
- * backend is unavailable or no one has qualified yet, so the hub is unaffected.
- */
 export default function LeaderboardWidget() {
   const { user } = useAuth();
   const [metric, setMetric] = useState(DEFAULT_METRIC);
@@ -39,7 +33,7 @@ export default function LeaderboardWidget() {
   return (
     <section className="lb-widget" aria-labelledby="lb-widget-title">
       <div className="lb-widget-head">
-        <h2 id="lb-widget-title">Leaderboard</h2>
+        <h2 id="lb-widget-title">Leaderboards</h2>
         <a
           href={LEADERBOARD_PATH}
           className="lb-widget-all"

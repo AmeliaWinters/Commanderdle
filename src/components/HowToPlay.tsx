@@ -55,9 +55,7 @@ const GUIDES: Record<Mode, Guide> = {
   quote: {
     title: "How to play Quote",
     intro: "Guess the commander from its card's flavor text in 5 tries.",
-    bullets: [
-      "Extra hints (color identity, price, stat total, and release year) unlock as you miss.",
-    ],
+    bullets: ["Extra hints unlock as you miss."],
   },
 };
 

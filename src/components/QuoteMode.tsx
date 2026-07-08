@@ -14,7 +14,6 @@ interface Props {
   onSkip?: () => void;
 }
 
-/** Progressive hints revealed one per wrong guess. */
 function hints(answer: Commander): { label: string; value: string }[] {
   return [
     {

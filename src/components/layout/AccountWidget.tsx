@@ -21,25 +21,10 @@ import {
   isAccountPath,
 } from "../../lib/router";
 
-/**
- * Account entry point in the top-right of the masthead, mirroring the settings cog on the
- * top-left. Rendered inside each page's <header className="app-header"> (which is
- * position:relative and spans the content column) so it sits with the app rather than
- * floating at the viewport corner.
- *
- * Clicking opens a dropdown right where you are — jojodle-style — instead of bouncing you
- * to a whole page. Signed out: the two OAuth buttons inline, so you can sign in from
- * anywhere and land back where you were. Signed in: a mini profile plus quick links
- * (account, leaderboard, public profile, sign out). Hidden only on the account page
- * itself, where all of this is already on screen.
- */
 export default function AccountWidget() {
   const { user, stats, loading, logout } = useAuth();
   const [open, setOpen] = useState(false);
 
-  // Re-render on client-side navigation so the account-page guard below re-evaluates
-  // even when the enclosing header doesn't otherwise re-render. navigateToPath() and the
-  // browser back button both emit popstate.
   const [, setPath] = useState(window.location.pathname);
   useEffect(() => {
     const onPop = () => setPath(window.location.pathname);
@@ -198,7 +183,6 @@ export default function AccountWidget() {
           </div>
         ) : (
           <div className="account-pop account-pop-signin" role="menu">
-            <p className="account-pop-head">Sign in to Commandle</p>
             <div className="account-oauth">
               <button
                 className="oauth-btn oauth-google"
@@ -216,11 +200,8 @@ export default function AccountWidget() {
               </button>
             </div>
             <p className="account-pop-note">
-              Optional — claim a name, climb the leaderboards, keep your
-              streaks.{" "}
-              <button className="link-btn" onClick={go(ACCOUNT_PATH)}>
-                Learn more
-              </button>
+              <b>Optional!</b> Claim a name, climb the leaderboards, flex on
+              others.
             </p>
           </div>
         ))}

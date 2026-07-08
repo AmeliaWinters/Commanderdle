@@ -46,8 +46,7 @@ const FAQS: QA[] = [
           EDHREC
         </a>
         , based on how many decks the community has registered with it at the
-        helm. Rank #1 = the most-built commander out there. Basically its
-        popularity score.
+        helm. Rank #1 = the most-built commander.
       </>
     ),
   },
@@ -56,7 +55,8 @@ const FAQS: QA[] = [
     a: (
       <>
         Any legendary that can legally sit in the command zone in EDH. To keep
-        things fair, daily answers lean toward commanders people actually know.
+        things fair and accessible, daily answers lean toward commanders people
+        actually know.
       </>
     ),
   },
@@ -74,8 +74,9 @@ const FAQS: QA[] = [
     q: "Is Commandle free? How is it kept running?",
     a: (
       <>
-        100% free. I keep the lights on with (hopefully!) low-key ads through
-        Google AdSense. Check the <a href="/privacy">privacy policy</a> for how
+        Yes! I keep the lights on with (hopefully!) low-key ads through
+        Google AdSense and some cosmetics to accounts via Ko-fi
+        donations. Check the <a href="/privacy">privacy policy</a> for how
         advertising cookies work and how to opt out of personalised ads.
       </>
     ),
@@ -95,8 +96,7 @@ const FAQS: QA[] = [
     q: "I found a bug or have an idea. How do I reach you?",
     a: (
       <>
-        Go to my <a href="/contact">contact page</a> and send me your bugs,
-        feedback, or ideas.
+        Go to my <a href="/contact">contact page</a>.
       </>
     ),
   },

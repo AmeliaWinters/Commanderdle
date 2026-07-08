@@ -2,7 +2,7 @@ import { type MouseEvent, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
 const TOOLTIP =
-  "% in decks of this commander − % in same-colour commanders' decks";
+  "% in decks of this commander - % in same-colour commanders' decks";
 
 interface Props {
   synergy: number;

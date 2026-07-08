@@ -2,7 +2,6 @@ import { navigateToPath, ARCHIVE_PATH } from "../../lib/router";
 import AdBanner from "../AdBanner";
 import meta from "../../data/commanders.meta.json";
 
-/** "Jul 5, 2026" for the data-freshness line; empty string if the timestamp is unusable. */
 function formatRefreshed(iso: string): string {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return "";
@@ -53,7 +52,7 @@ export default function AppFooter({ isArchive }: Props) {
           )}
         </p>
         <span className="footer-data">
-          Commander rankings from{" "}
+          Rankings from{" "}
           <a
             href="https://edhrec.com/commanders"
             target="_blank"

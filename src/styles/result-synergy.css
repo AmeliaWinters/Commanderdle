@@ -1,0 +1,94 @@
+/* ---------- Result synergy cards ---------- */
+.result-synergy {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  z-index: 1;
+}
+
+.result-synergy-label {
+  font-family: "Cinzel", serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin: 0 0 12px;
+  text-align: center;
+}
+
+.result-synergy-cards {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.result-synergy-card {
+  position: relative;
+  width: 88px;
+  aspect-ratio: 488 / 680;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.45);
+}
+
+.result-synergy-zoom,
+.result-synergy-card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.result-synergy-card img {
+  object-fit: cover;
+  cursor: zoom-in;
+}
+
+.result-synergy-noimg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 6px;
+  font-size: 0.72rem;
+  text-align: center;
+  color: var(--text-dim);
+}
+
+.result-synergy-pct {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  padding: 1px 5px;
+  border-radius: 6px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: #1a0d02;
+  background: var(--flame);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  cursor: help;
+}
+
+@media (max-width: 560px) {
+  .result-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  .result-art {
+    width: 50vw;
+  }
+}
+
+/* ---------- "Also try" pointer on the result banner ---------- */
+.result-alsotry {
+  margin-top: 10px;
+  color: var(--text-dim);
+  font-size: 0.95rem;
+}

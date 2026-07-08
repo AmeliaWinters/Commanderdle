@@ -1,7 +1,6 @@
 import ManaCost from "../ManaSymbols";
 import { MdKeyboardArrowUp, MdKeyboardDoubleArrowDown } from "react-icons/md";
 
-/** One hand-written demo cell; mirrors the markup GuessRow produces. */
 function DemoCell({
   kind,
   children,
@@ -16,18 +15,13 @@ function DemoCell({
   );
 }
 
-/**
- * A static example guess shown to first-time players instead of the how-to
- * modal: teaches the green/yellow/grey + arrow language passively while
- * filling the otherwise-empty grid. Purely decorative - not a real guess.
- */
 export default function ExampleRow() {
   return (
     <div className="example-wrap" aria-hidden="true">
       <div className="grid-row example-row no-anim">
         <div className="grid-cell name-cell">
           <div className="cell-inner name-inner">
-            <span className="name-text">Exampie, the Clarifier</span>
+            <span className="name-text">Exampie, the Example</span>
           </div>
         </div>
         <DemoCell kind="exact">
@@ -46,7 +40,7 @@ export default function ExampleRow() {
         </DemoCell>
         <DemoCell kind="partial">
           <span className="cell-text">
-            $4
+            $4.11
             <span className="cell-arrow">
               <MdKeyboardArrowUp size="20px" />
             </span>
@@ -63,8 +57,8 @@ export default function ExampleRow() {
       </div>
       <p className="example-caption">
         <b className="ex-green">green</b> matches the secret commander,{" "}
-        <b className="ex-yellow">yellow</b> is close, arrows point toward the
-        answer, <b className="ex-gray">double/gray</b> = far off
+        <b className="ex-yellow">yellow</b> is close/shared colours, arrows point toward the
+        answer, <b className="ex-gray">double/gray</b> = far off/not shared
       </p>
     </div>
   );
