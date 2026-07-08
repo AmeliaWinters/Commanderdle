@@ -9,6 +9,13 @@ interface Release {
 
 const RELEASES: Release[] = [
   {
+    version: "0.10.1",
+    date: "2026-07-08",
+    notes: [
+      "Fixed an issue where disabling access to local storage meant logged in users weren't able to save results",
+    ],
+  },
+  {
     title: "Ko-Fi and supporters",
     version: "0.10.0",
     date: "2026-07-08",
