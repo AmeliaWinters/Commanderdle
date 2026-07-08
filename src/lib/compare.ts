@@ -1,5 +1,6 @@
 import type { Commander } from "../types/commander";
 import { COLUMNS, type ColumnId } from "./columns";
+import { formatMoney } from "./currency";
 
 export type MatchKind = "exact" | "partial" | "none";
 export type Direction = "up" | "down" | "equal";
@@ -10,10 +11,10 @@ export const POPULARITY_TOL = 20;
 /** Price distance (USD) counted as "close" for the Card Market Price column/clue. */
 export const PRICE_TOL = 3;
 
-/** Human-readable market price, e.g. 3.45 -> "$3.45"; null (unpriced) -> "-". */
+/** Human-readable market price in the player's currency; null (unpriced) -> "-". */
 export function formatPrice(price: number | null): string {
   if (price == null) return "-";
-  return `$${price.toFixed(2)}`;
+  return formatMoney(price);
 }
 
 /** Compare two sets: exact if identical, partial if they overlap, else none. */

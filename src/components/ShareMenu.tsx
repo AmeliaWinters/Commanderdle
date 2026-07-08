@@ -12,6 +12,8 @@ export interface ShareOption {
 export default function ShareMenu({ options }: { options: ShareOption[] }) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   useEffect(() => {
     if (!open) return;
@@ -19,7 +21,10 @@ export default function ShareMenu({ options }: { options: ShareOption[] }) {
       if (!rootRef.current?.contains(e.target as Node)) setOpen(false);
     };
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") {
+        setOpen(false);
+        triggerRef.current?.focus();
+      }
     };
     document.addEventListener("mousedown", onDown);
     document.addEventListener("keydown", onKey);
@@ -29,9 +34,31 @@ export default function ShareMenu({ options }: { options: ShareOption[] }) {
     };
   }, [open]);
 
+  // Move focus into the menu when it opens, so arrow keys have somewhere to start.
+  useEffect(() => {
+    if (open) itemRefs.current[0]?.focus();
+  }, [open]);
+
+  // Roving focus between menu items with the arrow/Home/End keys.
+  const onPanelKey = (e: React.KeyboardEvent) => {
+    const items = itemRefs.current.filter(Boolean) as HTMLButtonElement[];
+    if (!items.length) return;
+    const current = items.indexOf(document.activeElement as HTMLButtonElement);
+    let next = -1;
+    if (e.key === "ArrowDown") next = (current + 1) % items.length;
+    else if (e.key === "ArrowUp")
+      next = (current - 1 + items.length) % items.length;
+    else if (e.key === "Home") next = 0;
+    else if (e.key === "End") next = items.length - 1;
+    else return;
+    e.preventDefault();
+    items[next]?.focus();
+  };
+
   return (
     <div className="share-menu" ref={rootRef}>
       <button
+        ref={triggerRef}
         className="share-btn share-menu-trigger"
         onClick={() => setOpen((v) => !v)}
         aria-haspopup="menu"
@@ -43,10 +70,13 @@ export default function ShareMenu({ options }: { options: ShareOption[] }) {
         </span>
       </button>
       {open && (
-        <div className="share-menu-panel" role="menu">
-          {options.map((opt) => (
+        <div className="share-menu-panel" role="menu" onKeyDown={onPanelKey}>
+          {options.map((opt, i) => (
             <button
               key={opt.key}
+              ref={(el) => {
+                itemRefs.current[i] = el;
+              }}
               className="share-menu-item"
               role="menuitem"
               onClick={opt.onSelect}

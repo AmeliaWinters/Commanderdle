@@ -8,6 +8,14 @@ interface Release {
 }
 
 export const RELEASES: Release[] = [
+    {
+    version: "1.0.8",
+    date: "2026-07-08",
+    notes: [
+      "Fixed OAuth error lingering issue",
+      "Added accessible keyboard navigation for share menu"
+    ],
+  },
   {
     version: "1.0.7",
     date: "2026-07-08",

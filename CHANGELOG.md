@@ -8,6 +8,12 @@ _Last updated: 2026-07-08 — currently on v0.10.1._
 
 ## 2026-07-08
 
+- **Share menu is keyboard-friendly** — the Share dropdown now moves focus into its options
+  when opened and supports arrow-key navigation for keyboard and screen-reader users.
+
+- **Sign-in errors no longer stick in the address bar** — a failed sign-in shows its message
+  and then clears the `?error=` bit from the URL so it can't linger or be shared by accident.
+
 - **Win streak now counts individual wins** — your win streak is the number of daily wins
   you've strung together in a row across every mode (win Classic then Synergy and you're on a
   streak of 2), rather than the number of days you cleared all five modes. Any loss resets it.

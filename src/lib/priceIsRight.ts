@@ -1,6 +1,7 @@
 import type { Commander } from "../types/commander";
 import { COMMANDERS } from "./commanders";
 import { todayKey, hashString } from "./dailyAnswer";
+import { formatMoney, toUsd } from "./currency";
 
 /**
  * "Guess the cost" - a bonus daily that lives outside the main mode set
