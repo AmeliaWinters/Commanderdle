@@ -9,12 +9,14 @@ import {
 } from "../../lib/priceIsRight";
 import { GAMES_PATH } from "../../lib/router";
 import { playSound } from "../../lib/sounds";
+import { recordBonusDaily } from "../../lib/bonusStats";
 import CardBackdrop from "../CardBackdrop";
 import LogoTitle from "../layout/LogoTitle";
 import GameSettingsMenu from "../layout/GameSettingsMenu";
 import BackButton from "../layout/BackButton";
 import CardZoom from "../CardZoom";
 import AppFooter from "../layout/AppFooter";
+import AccountWidget from "../layout/AccountWidget";
 import PirGuesses from "./PirGuesses";
 import PirResult from "./PirResult";
 import {
@@ -29,7 +31,7 @@ type Mode = "daily" | "endless";
 
 export default function PriceIsRightMode() {
   useEffect(() => {
-    document.title = "Commandle Price Is Right";
+    document.title = "Commandle Guess the cost";
   }, []);
   const [mode, setMode] = useState<Mode>("daily");
 
@@ -61,6 +63,12 @@ export default function PriceIsRightMode() {
     savePirDaily(daily);
   }, [daily]);
 
+  // Log today's daily to local bonus-stat history once it finishes.
+  useEffect(() => {
+    if (daily.status !== "playing")
+      recordBonusDaily("guess-the-cost", daily.status === "won");
+  }, [daily.status]);
+
   // Lifetime endless best tracks the streak as it grows.
   useEffect(() => {
     if (streak > best) {
@@ -90,7 +98,11 @@ export default function PriceIsRightMode() {
       nextStatus === "won" ? "win" : nextStatus === "lost" ? "lose" : "guess",
     );
     if (mode === "daily") {
-      setDaily((prev) => ({ ...prev, guesses: nextGuesses, status: nextStatus }));
+      setDaily((prev) => ({
+        ...prev,
+        guesses: nextGuesses,
+        status: nextStatus,
+      }));
     } else {
       setEndlessGuesses(nextGuesses);
       setEndlessStatus(nextStatus);
@@ -119,14 +131,15 @@ export default function PriceIsRightMode() {
     <div className="app">
       <CardBackdrop />
       <header className="app-header hl-header">
+        <AccountWidget />
         <BackButton to={GAMES_PATH} label="All games" />
         <GameSettingsMenu />
         <LogoTitle ariaLabel="commandle">
           Comman<span className="accent">dle</span>
         </LogoTitle>
-        <p className="mode-subtitle">Price Is Right</p>
+        <p className="mode-subtitle">Guess the cost</p>
         <p className="tagline">
-          How much does this commander cost? Guess the market price in{" "}
+          How expensive is this Top 1000 commander? Guess the market price in{" "}
           {PIR_MAX_GUESSES} tries.
         </p>
         <div className="hl-mode-tabs" role="tablist">
@@ -188,7 +201,9 @@ export default function PriceIsRightMode() {
                   submit();
                 }}
               >
-                <label className={`pir-input ${inputError ? "pir-input-bad" : ""}`}>
+                <label
+                  className={`pir-input ${inputError ? "pir-input-bad" : ""}`}
+                >
                   <span aria-hidden="true">$</span>
                   <input
                     type="text"

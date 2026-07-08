@@ -23,11 +23,13 @@ import {
 import { puzzleNumber } from "../../lib/dailyAnswer";
 import { GAMES_PATH } from "../../lib/router";
 import { playSound } from "../../lib/sounds";
+import { recordBonusDaily } from "../../lib/bonusStats";
 import CardBackdrop from "../CardBackdrop";
 import LogoTitle from "../layout/LogoTitle";
 import BackButton from "../layout/BackButton";
 import GameSettingsMenu from "../layout/GameSettingsMenu";
 import AppFooter from "../layout/AppFooter";
+import AccountWidget from "../layout/AccountWidget";
 import GridBoard from "./GridBoard";
 import GridSearch from "./GridSearch";
 import GridCellDetail from "./GridCellDetail";
@@ -124,6 +126,11 @@ export default function GridMode() {
     });
   }, [puzzle, picks, tiers, guessesUsed, done]);
 
+  // Log today's daily to local bonus-stat history once it finishes (a full board wins).
+  useEffect(() => {
+    if (done) recordBonusDaily("grid", filled === GRID_CELLS);
+  }, [done, filled]);
+
   useEffect(() => {
     if (!done) return;
     let alive = true;
@@ -156,6 +163,14 @@ export default function GridMode() {
     setSelected(null);
   }
 
+  function giveUp() {
+    if (done) return;
+    setSelected(null);
+    setMiss(null);
+    setHit(null);
+    setGuessesUsed(GRID_MAX_GUESSES);
+  }
+
   const usedNames = useMemo(
     () => new Set(picks.filter((p): p is string => p != null)),
     [picks],
@@ -165,6 +180,7 @@ export default function GridMode() {
     <div className="app">
       <CardBackdrop />
       <header className="app-header hl-header">
+        <AccountWidget />
         <BackButton to={GAMES_PATH} label="All games" />
         <GameSettingsMenu />
         <LogoTitle ariaLabel="commandle">
@@ -233,6 +249,16 @@ export default function GridMode() {
                   +{TIER_POINTS[hit.tier]} pts
                 </span>
               </p>
+            )}
+
+            {!done && (
+              <button
+                type="button"
+                className="grid-give-up"
+                onClick={giveUp}
+              >
+                Give up
+              </button>
             )}
 
             {done && (

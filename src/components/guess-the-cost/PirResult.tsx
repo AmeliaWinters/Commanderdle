@@ -46,7 +46,7 @@ export default function PirResult({
   function share() {
     const score = won ? `${feedback.length}/${PIR_MAX_GUESSES}` : `X/${PIR_MAX_GUESSES}`;
     const text =
-      `Commandle Price Is Right #${puzzleNumber()} ${score}\n` +
+      `Commandle Guess the cost #${puzzleNumber()} ${score}\n` +
       `${shareLine(feedback)}\n` +
       shareOrigin() +
       PRICE_IS_RIGHT_PATH;

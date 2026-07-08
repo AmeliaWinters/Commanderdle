@@ -26,7 +26,6 @@
   flex-direction: column;
   gap: 22px;
   width: 100%;
-  max-width: 920px;
   margin: 0 auto;
   animation: intro-rise 0.45s ease-out both;
 }
@@ -185,13 +184,13 @@
   --tile-accent: var(--mU);
 }
 .hub-tile-b {
-  --tile-accent: var(--mB)  ;
+  --tile-accent: var(--mB);
 }
 .hub-tile-r {
   --tile-accent: var(--mR);
 }
 .hub-tile-g {
-  --tile-accent: var(--mG)  ;
+  --tile-accent: var(--mG);
 }
 
 /* The Binder gets its own panel below the two columns, not lumped in with games. */

@@ -6,7 +6,8 @@ import { isModeCompletedToday } from "../lib/stats";
 import { todayKey } from "../lib/dailyAnswer";
 
 interface Props {
-  mode: Mode;
+  /** The active mode, or null on pages (e.g. account) where no mode is current. */
+  mode: Mode | null;
   onNavigate: (m: Mode) => void;
   /** Bumps whenever a game finishes, so completion badges recompute. */
   completedSignal?: unknown;

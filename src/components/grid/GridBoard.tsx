@@ -8,6 +8,23 @@ import {
 } from "../../lib/gridRarity";
 import { COMMANDERS_BY_NAME, EXT_COMMANDERS } from "../../lib/commanders";
 import RarityGem from "./RarityGem";
+import ManaCost from "../ManaSymbols";
+import type { GridCriterion } from "../../lib/gridGame";
+
+/** Header content for a criterion: label, plus WUBRG mana pips for color identities. */
+function CriterionHead({ criterion }: { criterion: GridCriterion }) {
+  const colors = criterion.id.startsWith("color:")
+    ? criterion.id.slice("color:".length).split("")
+    : null;
+  return (
+    <>
+      {criterion.label}
+      {colors && (
+        <ManaCost colors={colors} size="0.9em" />
+      )}
+    </>
+  );
+}
 
 interface Props {
   puzzle: GridPuzzle;
@@ -44,13 +61,13 @@ export default function GridBoard({
       <div className="grid-corner" aria-hidden="true" />
       {puzzle.cols.map((col) => (
         <div key={col.id} className="grid-head grid-head-col" role="columnheader">
-          {col.label}
+          <CriterionHead criterion={col} />
         </div>
       ))}
       {puzzle.rows.map((row, r) => (
         <div key={row.id} className="grid-row" role="row">
           <div className="grid-head grid-head-row" role="rowheader">
-            {row.label}
+            <CriterionHead criterion={row} />
           </div>
           {puzzle.cols.map((_, c) => {
             const cell = r * GRID_SIZE + c;

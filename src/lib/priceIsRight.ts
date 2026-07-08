@@ -3,7 +3,7 @@ import { COMMANDERS } from "./commanders";
 import { todayKey, hashString } from "./dailyAnswer";
 
 /**
- * "Price Is Right" - a bonus daily that lives outside the main mode set
+ * "Guess the cost" - a bonus daily that lives outside the main mode set
  * (like Higher/Lower). Players see one commander's card and guess its
  * market price in USD. Each wrong guess answers with a direction arrow
  * (the real price is higher/lower) and a hot/warm/cold temperature, over
@@ -57,7 +57,7 @@ export function pricePool(): Commander[] {
 /** The shared daily card for a given date. Same for every player that day. */
 export function dailyPriceCard(dateKey = todayKey()): Commander {
   const pool = pricePool();
-  return pool[hashString(`price-is-right:${dateKey}`) % pool.length];
+  return pool[hashString(`guess-the-cost:${dateKey}`) % pool.length];
 }
 
 /** A fresh random card for Endless mode, avoiding the given names. */

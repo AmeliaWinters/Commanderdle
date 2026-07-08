@@ -11,6 +11,12 @@ import coreUrl from '../data/commanders.core.json?url'
 // Ranks 501-1000, used only by Grid mode. Same lazy `?url` treatment as the core file so
 // the deeper pool costs nothing on the initial page load.
 import extUrl from '../data/commanders.ext.json?url'
+// Append-only "vault" of every commander that has *ever* been in the top-500 core, with full
+// data (art, flavor, synergy) frozen from when it was last live. It exists so anything that
+// can outlive a commander's stay in the top-500 — a past archive answer, or a player's chosen
+// avatar — still resolves after that commander drops out of the daily dataset. Lazily loaded
+// (never in the initial bundle); only the archive and avatar-fallback paths ask for it.
+import vaultUrl from '../data/commanders.vault.json?url'
 import type { Commander, SynergyCard } from '../types/commander'
 import { aliasIdentityKey, identityMatchesKey } from './colorNames'
 
@@ -109,6 +115,50 @@ let gridPoolCache: Commander[] | null = null
 /** Grid mode's answer pool: the top-500 core plus the extended tail once it has loaded. */
 export function gridPool(): Commander[] {
   return (gridPoolCache ??= [...COMMANDERS, ...EXT_COMMANDERS])
+}
+
+// The vault (see vaultUrl above). Keyed by commander name; entries carry full data including
+// synergyCards, so a dropped-out commander is still fully playable as a past archive answer.
+export const VAULT_BY_NAME = new Map<string, Commander>()
+
+let vaultPromise: Promise<void> | null = null
+/**
+ * Lazily fetch + hydrate the retired-commander vault. Best-effort: a hard failure (after one
+ * retry) resolves anyway with VAULT_BY_NAME left as-is, so callers fall back to the fallback
+ * silhouette / a live-pool answer rather than breaking.
+ */
+export function ensureVaultLoaded(): Promise<void> {
+  if (!vaultPromise) {
+    const fetchVault = () =>
+      fetch(vaultUrl).then((r) => r.json() as Promise<Record<string, Commander>>)
+    vaultPromise = fetchVault()
+      .catch(() => fetchVault())
+      .then((vault) => {
+        for (const raw of Object.values(vault)) {
+          VAULT_BY_NAME.set(raw.name, {
+            ...raw,
+            artCrop: resolveAsset(raw.artCrop),
+            normalImage: resolveAsset(raw.normalImage),
+            synergyCount: raw.synergyCards?.length ?? raw.synergyCount ?? 0,
+            synergyCards: (raw.synergyCards ?? []).map((s) => ({
+              ...s,
+              image: resolveAsset(s.image),
+            })),
+          })
+        }
+      })
+      .catch(() => undefined)
+  }
+  return vaultPromise
+}
+
+/**
+ * Resolve a commander by name, preferring the live top-500 dataset and falling back to the
+ * vault of retired commanders. Returns null if neither has it (and, for the vault, only once
+ * ensureVaultLoaded() has resolved). Used by avatar rendering and archive answer resolution.
+ */
+export function commanderByName(name: string): Commander | null {
+  return COMMANDERS_BY_NAME.get(name) ?? VAULT_BY_NAME.get(name) ?? null
 }
 
 let synergyPromise: Promise<void> | null = null

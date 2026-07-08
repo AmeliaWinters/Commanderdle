@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { parseArchivePlay } from "./router";
+import { parseArchivePlay, parseProfilePath } from "./router";
 
 /** Tracks whether the URL matches one of the standalone (non-mode) pages. */
 export function usePathMatch(match: (pathname: string) => boolean) {
@@ -23,4 +23,17 @@ export function useArchivePlay() {
     return () => window.removeEventListener("popstate", onPop);
   }, []);
   return target;
+}
+
+/** Reactive public-profile uuid parsed from /u/{uuid}, or null. */
+export function useProfileUuid() {
+  const [uuid, setUuid] = useState(() =>
+    parseProfilePath(window.location.pathname),
+  );
+  useEffect(() => {
+    const onPop = () => setUuid(parseProfilePath(window.location.pathname));
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
+  return uuid;
 }

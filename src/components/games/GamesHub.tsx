@@ -21,6 +21,8 @@ import { todayKey, hashString, dailyAnswer } from "../../lib/dailyAnswer";
 import CardBackdrop from "../CardBackdrop";
 import LogoTitle from "../layout/LogoTitle";
 import AppFooter from "../layout/AppFooter";
+import AccountWidget from "../layout/AccountWidget";
+import LeaderboardWidget from "../leaderboard/LeaderboardWidget";
 
 const MODE_BLURBS: Record<Mode, string> = {
   classic: "Deduce the commander from clues",
@@ -57,7 +59,7 @@ const GAMES: {
   },
   {
     path: PRICE_IS_RIGHT_PATH,
-    label: "Price Is Right",
+    label: "Guess the cost",
     blurb: "Guess the card's market price",
     Icon: TbCoin,
     accent: "#d9a441",
@@ -119,7 +121,7 @@ function BinderSection() {
         <span className="hub-tile-text">
           <span className="hub-tile-label">The Binder </span>
           <span className="hub-tile-blurb">
-            Commanders you've found in the daily. You've collected {found} of{" "}
+            Commanders you've found in the dailies. You've collected {found} of{" "}
             {COMMANDERS.length} commanders
           </span>
         </span>
@@ -162,6 +164,7 @@ export default function GamesHub() {
     <div className="app">
       <CardBackdrop />
       <header className="app-header hub-header">
+        <AccountWidget />
         <LogoTitle ariaLabel="commandle">
           Comman<span className="accent">dle</span>
         </LogoTitle>
@@ -238,6 +241,8 @@ export default function GamesHub() {
             <BinderSection />
           </div>
         </div>
+
+        <LeaderboardWidget />
       </main>
 
       <AppFooter isArchive={false} />

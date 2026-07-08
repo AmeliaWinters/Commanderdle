@@ -1,6 +1,7 @@
 import { puzzleNumber } from "../../lib/dailyAnswer";
 import SettingsMenu from "./SettingsMenu";
 import LogoTitle from "./LogoTitle";
+import AccountWidget from "./AccountWidget";
 
 interface Props {
   isDaily: boolean;
@@ -24,6 +25,7 @@ export default function AppHeader({
 }: Props) {
   return (
     <header className="app-header">
+      <AccountWidget />
       <SettingsMenu
         isDaily={isDaily}
         onHowTo={onHowTo}

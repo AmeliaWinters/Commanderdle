@@ -1,59 +1,7 @@
 /// <reference types="vitest/config" />
-import { readFileSync } from 'node:fs'
-import { fileURLToPath } from 'node:url'
 import { defineConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
-
-/**
- * Bake the LCP backdrop card into the HTML so it paints before the app JS boots.
- *
- * The largest floating card (CardBackdrop CARDS[3]) is the page's Largest Contentful
- * Paint, but as a React-rendered <img> it can't appear until ~110KB of JS downloads and
- * executes — pinning LCP to ~6s on throttled mobile. This plugin reproduces
- * CardBackdrop.pickRealImages for that one slot at build time. The pick is a pure function
- * of the day-of-month (offset = getDate() % pool, slot 3), so there are only 31 possible
- * images; we bake all 31 and let a tiny inline head script choose today's at runtime,
- * preload it, and drop the <img> into #boot-backdrop on DOMContentLoaded. React later
- * renders the byte-identical card in the same slot, so nothing shifts and no larger LCP
- * candidate appears afterwards.
- */
-function backdropLcpPreload(): Plugin {
-  const SLOT = 3 // CARDS[3] is the largest card at every breakpoint → the LCP element.
-  return {
-    name: 'backdrop-lcp-preload',
-    transformIndexHtml: {
-      order: 'pre',
-      handler(html) {
-        const coreUrl = new URL('./src/data/commanders.core.json', import.meta.url)
-        const core = JSON.parse(readFileSync(fileURLToPath(coreUrl), 'utf8')) as Array<{
-          normalImage?: string | null
-          artCrop?: string | null
-        }>
-        // Same source list, order and resolution (base '/') as commanders.ts + zoomPool.
-        const imgs = core
-          .map((c) => c.normalImage ?? c.artCrop)
-          .filter((s): s is string => Boolean(s))
-          .map((p) => '/' + p.replace(/^\//, ''))
-          // Match CardBackdrop.toBackdropVariant: serve the smaller /cards-bg/ file.
-          .map((p) => p.replace(/\/cards\/(normal_[^/]+)$/, '/cards-bg/$1'))
-        const len = imgs.length
-        if (!len) return html
-        const step = Math.max(1, Math.floor(len / 6)) // mirrors pickRealImages
-        // manifest[d] = the LCP card for day-of-month d (1–31), matching pickRealImages.
-        const manifest: Record<number, string> = {}
-        for (let d = 1; d <= 31; d++) manifest[d] = imgs[((d % len) + SLOT * step) % len]
-
-        const script = `(function(){var M=${JSON.stringify(manifest)},s=M[new Date().getDate()];if(!s)return;var l=document.createElement("link");l.rel="preload";l.setAttribute("as","image");l.setAttribute("fetchpriority","high");l.href=s;document.head.appendChild(l);addEventListener("DOMContentLoaded",function(){var h=document.getElementById("boot-backdrop");if(!h)return;var t=Math.min(1,Math.max(0,((window.innerWidth||900)-450)/450)),i=new Image();i.className="bg-card bg-card-real";i.alt="";i.decoding="async";i.setAttribute("fetchpriority","high");i.style.cssText="left:0%;top:"+(50+20*t)+"%;width:250px;height:350px;--rot:-16deg;animation-duration:30s;animation-delay:-10s";i.src=s;h.appendChild(i)})})();`
-
-        return {
-          html,
-          // head-prepend so the preload fires as early as possible in document parse.
-          tags: [{ tag: 'script', injectTo: 'head-prepend', children: script }],
-        }
-      },
-    },
-  }
-}
+import { devAuthMock } from './vite/devAuthMock'
 
 /**
  * Take the main stylesheet off the critical render path.
@@ -84,8 +32,15 @@ function deferMainCss(): Plugin {
 }
 
 // https://vite.dev/config/
-export default defineConfig({
-  plugins: [react(), backdropLcpPreload(), deferMainCss()],
+export default defineConfig(({ mode }) => ({
+  // `npm run dev:auth` (mode `authmock`) serves a fake account backend from the dev
+  // server so the login / account / leaderboard screens can be iterated on with HMR,
+  // no `npm run build` + `wrangler dev` needed. Dev-only; never in the production build.
+  plugins: [
+    react(),
+    deferMainCss(),
+    ...(mode === 'authmock' ? [devAuthMock()] : []),
+  ],
   // Must be absolute: the SPA fallback serves index.html at nested routes like
   // /archive/classic/2026-07-01, where relative './assets/…' URLs would 404.
   base: '/',
@@ -117,4 +72,4 @@ export default defineConfig({
     setupFiles: ['src/test-setup.ts'],
     include: ['src/**/*.test.ts'],
   },
-})
+}))

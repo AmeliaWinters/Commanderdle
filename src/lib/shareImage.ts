@@ -18,7 +18,7 @@ export interface ShareCardOpts {
   /** Draw the cells as circles (visual modes' single pip row) rather than
    * rounded squares (classic's comparison grid). */
   round?: boolean;
-  /** Hostname printed at the bottom, e.g. "commandle.com". */
+  /** Hostname printed at the bottom, e.g. "commandle.app". */
   site: string;
 }
 
@@ -164,7 +164,11 @@ export async function renderShareCard(opts: ShareCardOpts): Promise<Blob> {
   const modeText = `${opts.modeLabel}${puzzleBit}`;
   ctx.fillText(modeText, left, 322);
   ctx.fillStyle = TEXT;
-  ctx.fillText(`  -  ${opts.score}`, left + ctx.measureText(modeText).width, 322);
+  ctx.fillText(
+    `  -  ${opts.score}`,
+    left + ctx.measureText(modeText).width,
+    322,
+  );
 
   // Result grid in a rounded panel, sized to fit between header and footer.
   const headerBottom = 356;

@@ -247,6 +247,19 @@
   border-left: 1px solid var(--line);
 }
 
+/* XP earned this game — a small badge to the right of the pips. */
+.result-xp {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #1a0d02;
+  background: var(--flame);
+  font-variant-numeric: tabular-nums;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
+}
+
 .share-row {
   display: flex;
   justify-content: center;

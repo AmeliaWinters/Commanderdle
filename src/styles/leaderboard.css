@@ -1,0 +1,219 @@
+/* Leaderboard: home widget (GamesHub), full page, and shared ranked rows.
+   MTG-flavoured to match the account "character sheet". */
+
+/* ── Home widget ─────────────────────────────────────────────────────── */
+.lb-widget {
+  width: 100%;
+  margin: var(--s4) auto 0;
+  padding: var(--s3);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: linear-gradient(180deg, var(--panel-2), var(--panel));
+}
+
+/* Wide screens: match the games-hub columns and flow the ranks into columns of
+   five (1-5, 6-10, 11-15 …), read top-to-bottom. Mobile keeps one column. */
+@media (min-width: 720px) {
+  .lb-widget .lb-list {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(5, auto);
+    grid-auto-columns: 1fr;
+    column-gap: 1.5rem;
+    row-gap: 4px;
+  }
+}
+
+.lb-widget-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--s2);
+}
+.lb-widget-head h2 {
+  margin: 0;
+  font-family: "Cinzel", serif;
+  color: var(--flame-1);
+  font-size: 1.2rem;
+}
+.lb-widget-all {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+.lb-widget-all:hover {
+  color: var(--flame-1);
+}
+
+/* ── Metric tabs ─────────────────────────────────────────────────────── */
+.lb-tabs {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: var(--s2);
+}
+.lb-tabs-page {
+  margin: var(--s2) 0 var(--s3);
+}
+.lb-tab {
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.35rem 0.8rem;
+  cursor: pointer;
+  transition: color 0.12s ease, border-color 0.12s ease;
+}
+.lb-tab:hover {
+  color: var(--text);
+}
+.lb-tab.active {
+  color: #10100f;
+  background: var(--flame-1);
+  border-color: var(--flame-1);
+  font-weight: 600;
+}
+
+/* ── Ranked rows ─────────────────────────────────────────────────────── */
+.lb-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.lb-row {
+  display: grid;
+  grid-template-columns: 2rem 36px 1fr auto;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.35rem 0.6rem;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--text);
+  transition: background 0.12s ease;
+}
+.lb-row:hover {
+  background: var(--panel-2);
+}
+.lb-me {
+  border-color: var(--flame-1);
+  background: rgba(236, 90, 28, 0.08);
+}
+
+.lb-rank {
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  text-align: center;
+  color: var(--text-dim);
+}
+.lb-rank-1 {
+  color: #f7c948;
+}
+.lb-rank-2 {
+  color: #cdd3d8;
+}
+.lb-rank-3 {
+  color: #d08b4e;
+}
+
+.lb-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 600;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lb-gem {
+  font-size: 0.85rem;
+  flex: none;
+}
+.lb-value {
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  color: var(--flame-1);
+  white-space: nowrap;
+}
+.lb-unit {
+  color: var(--text-dim);
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+
+.lb-empty {
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+.lb-you-divider {
+  margin: 0.2rem 0;
+  text-align: center;
+  color: var(--text-dim);
+  letter-spacing: 0.2em;
+}
+.lb-you-list {
+  margin-top: 0.2rem;
+}
+
+/* ── Full leaderboard page ───────────────────────────────────────────── */
+/* A panel behind the ranked list so names read clearly over the page art. */
+.lb-board {
+  padding: var(--s3);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: linear-gradient(180deg, var(--panel-2), var(--panel));
+}
+
+/* Rows are <a>s inside .content-body, which tints every link with the flame
+   accent — restore the row's own colours so common-tier names stay plain white
+   (named/mythic tiers set their own colour inline). */
+.content-body .lb-row {
+  color: var(--text);
+}
+
+/* Pager under the board. */
+.lb-pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s3);
+  margin-top: var(--s3);
+}
+.lb-pager-status {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  text-align: center;
+}
+.lb-pager-btn {
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--text);
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
+  cursor: pointer;
+  transition: color 0.12s ease, border-color 0.12s ease;
+}
+.lb-pager-btn:hover:not(:disabled) {
+  color: var(--flame-1);
+  border-color: var(--flame-1);
+}
+.lb-pager-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+@media (max-width: 420px) {
+  .lb-row {
+    grid-template-columns: 1.6rem 32px 1fr auto;
+    gap: 0.45rem;
+  }
+}

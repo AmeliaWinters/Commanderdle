@@ -13,12 +13,10 @@ interface Release {
  * landed. Newest first; keep 1.0.0 pinned at the top.
  */
 const RELEASES: Release[] = [
-    {
+  {
     version: "1.0.1",
     date: "2026-07-06",
-    notes: [
-      "Nicer looking back button"
-    ],
+    notes: ["Nicer looking back button"],
   },
   {
     version: "1.0.0",
@@ -32,10 +30,10 @@ const RELEASES: Release[] = [
   },
   {
     version: "0.7.0",
-    title: "Price is right",
+    title: "Guess the cost",
     date: "2026-07-03",
     notes: [
-      "Added the price is right",
+      "Added the Guess the cost",
       "Added the games hub",
       "Commanderdle => Commandle",
     ],
@@ -100,7 +98,7 @@ export default function ChangelogPage() {
     <ContentPage
       title="Commandle - Changelog"
       description="What's new in Commandle, the daily Magic: The Gathering commander guessing game. Release notes for every version, newest first."
-      canonical="https://commandle.com/changelog"
+      canonical="https://commandle.app/changelog"
     >
       <h2>Changelog</h2>
       {RELEASES.map((r) => (

@@ -11,8 +11,8 @@ export interface PirPersisted extends PirRun {
   date: string;
 }
 
-export const PIR_STORAGE_KEY = "commandle:price-is-right:daily";
-export const PIR_STREAK_KEY = "commandle:price-is-right:endless-best";
+export const PIR_STORAGE_KEY = "commandle:guess-the-cost:daily";
+export const PIR_STREAK_KEY = "commandle:guess-the-cost:endless-best";
 
 export function loadPirDaily(): PirPersisted {
   try {

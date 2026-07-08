@@ -9,6 +9,8 @@ import {
   isTermsPath,
   isContactPath,
   isChangelogPath,
+  isAccountPath,
+  isLeaderboardPath,
   isHigherLowerPath,
   isPriceIsRightPath,
   isGridPath,
@@ -20,7 +22,11 @@ import {
   ARCHIVE_PATH,
   MODE_PATHS,
 } from "../lib/router";
-import { usePathMatch, useArchivePlay } from "../lib/routeHooks";
+import {
+  usePathMatch,
+  useArchivePlay,
+  useProfileUuid,
+} from "../lib/routeHooks";
 import { poolFor, puzzleNumber, todayKey } from "../lib/dailyAnswer";
 import { buildDots } from "../lib/guessDots";
 import { syncServerTime, clockAheadPuzzles } from "../lib/serverTime";
@@ -56,8 +62,13 @@ const FaqPage = lazy(() => import("./pages/FaqPage"));
 const TermsPage = lazy(() => import("./pages/TermsPage"));
 const ContactPage = lazy(() => import("./pages/ContactPage"));
 const ChangelogPage = lazy(() => import("./pages/ChangelogPage"));
+const AccountPage = lazy(() => import("./pages/AccountPage"));
+const LeaderboardPage = lazy(() => import("./leaderboard/LeaderboardPage"));
+const ProfilePage = lazy(() => import("./profile/ProfilePage"));
 const HigherLowerMode = lazy(() => import("./higher-lower/HigherLowerMode"));
-const PriceIsRightMode = lazy(() => import("./price-is-right/PriceIsRightMode"));
+const PriceIsRightMode = lazy(
+  () => import("./guess-the-cost/PriceIsRightMode"),
+);
 const GridMode = lazy(() => import("./grid/GridMode"));
 const GamesHub = lazy(() => import("./games/GamesHub"));
 const BinderPage = lazy(() => import("./binder/BinderPage"));
@@ -87,6 +98,9 @@ export default function App() {
   const isTerms = usePathMatch(isTermsPath);
   const isContact = usePathMatch(isContactPath);
   const isChangelog = usePathMatch(isChangelogPath);
+  const isAccount = usePathMatch(isAccountPath);
+  const isLeaderboard = usePathMatch(isLeaderboardPath);
+  const profileUuid = useProfileUuid();
   const isHigherLower = usePathMatch(isHigherLowerPath);
   const isPriceIsRight = usePathMatch(isPriceIsRightPath);
   const isGrid = usePathMatch(isGridPath);
@@ -215,6 +229,24 @@ export default function App() {
     return (
       <Suspense fallback={null}>
         <ChangelogPage />
+      </Suspense>
+    );
+  if (isAccount)
+    return (
+      <Suspense fallback={null}>
+        <AccountPage />
+      </Suspense>
+    );
+  if (isLeaderboard)
+    return (
+      <Suspense fallback={null}>
+        <LeaderboardPage />
+      </Suspense>
+    );
+  if (profileUuid)
+    return (
+      <Suspense fallback={null}>
+        <ProfilePage uuid={profileUuid} />
       </Suspense>
     );
   if (isHigherLower)
@@ -369,118 +401,118 @@ export default function App() {
           <div className="mode-view" key={mode}>
             {state.mode === mode && (
               <>
-            {!done && ModeView && (
-              <Suspense
-                fallback={
-                  <div className="mode-view-loading">
-                    <span className="mana-loader" aria-label="Loading">
-                      {["W", "U", "B", "R", "G"].map((c, i) => (
-                        <img
-                          key={c}
-                          src={`/mana/${c}.svg`}
-                          alt=""
-                          style={{ animationDelay: `${i * 0.15}s` }}
-                        />
-                      ))}
-                    </span>
-                  </div>
-                }
-              >
-                <ModeView
-                  answer={answer}
-                  guesses={guesses}
-                  skips={skips}
-                  wrongGuesses={wrongGuesses}
-                  maxGuesses={maxGuesses}
-                  solved={solved}
-                  onSkip={skip}
-                />
-              </Suspense>
-            )}
-
-            {!done && (
-              <div className="input-row">
-                <div className="input-side input-side-left">
-                  {peek && (
-                    <button
-                      className="pool-peek-btn"
-                      onClick={() => peekUnlocked && setPoolOpen(true)}
-                      disabled={!peekUnlocked}
-                      title={peekUnlocked ? peek.hint : undefined}
-                    >
-                      {peekUnlocked
-                        ? `Card pool (${peek.pool.length})`
-                        : `View cards in ${peek.unlockAt - wrongGuesses}`}
-                    </button>
-                  )}
-                </div>
-                <GuessInput
-                  onGuess={guess}
-                  disabledNames={disabledNames}
-                  disabled={done}
-                  blurQuote={mode === "quote"}
-                />
-                <div className="input-side" />
-              </div>
-            )}
-
-            {!done && guesses.length === 0 && mode === "silhouette" && (
-              <p className="hint-line">Art clears with each wrong guess</p>
-            )}
-            {!done && guesses.length === 0 && mode === "zoom" && (
-              <p className="hint-line">Zooms out with each wrong guess</p>
-            )}
-
-            {done && !revealHeld && (
-              <Suspense fallback={null}>
-                <ResultBanner
-                  status={status as "won" | "lost"}
-                  answer={answer}
-                  guesses={guesses}
-                  mode={mode}
-                  maxGuesses={maxGuesses}
-                  isDaily={isDaily}
-                  skips={skips}
-                  celebrate={freshWin}
-                />
-              </Suspense>
-            )}
-
-            {mode === "classic" && (!done || revealHeld) && (
-              <GuessDots
-                // While the winning row is still flipping in, keep the final
-                // pip un-lit - it turns green only once the reveal completes.
-                dots={buildDots(
-                  revealHeld ? guesses.slice(0, -1) : guesses,
-                  answer,
-                  skips,
-                  maxGuesses,
+                {!done && ModeView && (
+                  <Suspense
+                    fallback={
+                      <div className="mode-view-loading">
+                        <span className="mana-loader" aria-label="Loading">
+                          {["W", "U", "B", "R", "G"].map((c, i) => (
+                            <img
+                              key={c}
+                              src={`/mana/${c}.svg`}
+                              alt=""
+                              style={{ animationDelay: `${i * 0.15}s` }}
+                            />
+                          ))}
+                        </span>
+                      </div>
+                    }
+                  >
+                    <ModeView
+                      answer={answer}
+                      guesses={guesses}
+                      skips={skips}
+                      wrongGuesses={wrongGuesses}
+                      maxGuesses={maxGuesses}
+                      solved={solved}
+                      onSkip={skip}
+                    />
+                  </Suspense>
                 )}
-                wrongGuesses={wrongGuesses}
-                maxGuesses={maxGuesses}
-              />
-            )}
 
-            {ghost && (
-              <GhostRace
-                ghost={ghost}
-                playerTurns={guesses.length + skips}
-                playerWon={solved}
-                done={done && !revealHeld}
-                maxGuesses={maxGuesses}
-              />
-            )}
+                {!done && (
+                  <div className="input-row">
+                    <div className="input-side input-side-left">
+                      {peek && (
+                        <button
+                          className="pool-peek-btn"
+                          onClick={() => peekUnlocked && setPoolOpen(true)}
+                          disabled={!peekUnlocked}
+                          title={peekUnlocked ? peek.hint : undefined}
+                        >
+                          {peekUnlocked
+                            ? `Card pool (${peek.pool.length})`
+                            : `View cards in ${peek.unlockAt - wrongGuesses}`}
+                        </button>
+                      )}
+                    </div>
+                    <GuessInput
+                      onGuess={guess}
+                      disabledNames={disabledNames}
+                      disabled={done}
+                      blurQuote={mode === "quote"}
+                    />
+                    <div className="input-side" />
+                  </div>
+                )}
 
-            {mode === "classic" ? (
-              <ClassicGrid
-                guesses={guesses}
-                answer={answer}
-                maxGuesses={maxGuesses}
-                showExample={classicIntro}
-              />
-            ) : (
-              <GuessList history={history} answer={answer} />
-            )}
+                {!done && guesses.length === 0 && mode === "silhouette" && (
+                  <p className="hint-line">Art clears with each wrong guess</p>
+                )}
+                {!done && guesses.length === 0 && mode === "zoom" && (
+                  <p className="hint-line">Zooms out with each wrong guess</p>
+                )}
+
+                {done && !revealHeld && (
+                  <Suspense fallback={null}>
+                    <ResultBanner
+                      status={status as "won" | "lost"}
+                      answer={answer}
+                      guesses={guesses}
+                      mode={mode}
+                      maxGuesses={maxGuesses}
+                      isDaily={isDaily}
+                      skips={skips}
+                      celebrate={freshWin}
+                    />
+                  </Suspense>
+                )}
+
+                {mode === "classic" && (!done || revealHeld) && (
+                  <GuessDots
+                    // While the winning row is still flipping in, keep the final
+                    // pip un-lit - it turns green only once the reveal completes.
+                    dots={buildDots(
+                      revealHeld ? guesses.slice(0, -1) : guesses,
+                      answer,
+                      skips,
+                      maxGuesses,
+                    )}
+                    wrongGuesses={wrongGuesses}
+                    maxGuesses={maxGuesses}
+                  />
+                )}
+
+                {ghost && (
+                  <GhostRace
+                    ghost={ghost}
+                    playerTurns={guesses.length + skips}
+                    playerWon={solved}
+                    done={done && !revealHeld}
+                    maxGuesses={maxGuesses}
+                  />
+                )}
+
+                {mode === "classic" ? (
+                  <ClassicGrid
+                    guesses={guesses}
+                    answer={answer}
+                    maxGuesses={maxGuesses}
+                    showExample={classicIntro}
+                  />
+                ) : (
+                  <GuessList history={history} answer={answer} />
+                )}
               </>
             )}
           </div>

@@ -6,6 +6,7 @@ import { archiveResult } from "../lib/archive";
 import { MODE_LIST } from "./modeList";
 import LogoTitle from "./layout/LogoTitle";
 import BackButton from "./layout/BackButton";
+import AccountWidget from "./layout/AccountWidget";
 
 /** Every past puzzle date, most recent first (today is live, so it's excluded). */
 function pastDates(): string[] {
@@ -40,6 +41,7 @@ export default function Archive() {
   return (
     <div className="app archive-page">
       <header className="app-header">
+        <AccountWidget />
         <BackButton to="/" label="Back to today" />
         <LogoTitle
           to="/"

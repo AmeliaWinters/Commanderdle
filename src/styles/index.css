@@ -16,12 +16,14 @@
 @import "./modals.css";
 @import "./higher-lower.css";
 @import "./higher-lower-extras.css";
-@import "./price-is-right.css";
+@import "./guess-the-cost.css";
 @import "./games-hub.css";
 @import "./grid-game.css";
 @import "./binder.css";
 @import "./archive.css";
 @import "./content.css";
+@import "./account.css";
+@import "./leaderboard.css";
 @import "./consent.css";
 @import "./landing.css";
 @import "./mtg-theme.css";

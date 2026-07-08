@@ -20,7 +20,7 @@ import {
 } from "react-icons/fi";
 
 /**
- * Compact settings cog for the side-game headers (Higher/Lower, Price Is Right,
+ * Compact settings cog for the side-game headers (Higher/Lower, Guess the cost,
  * Binder, Grid). Unlike the main {@link SettingsMenu} it carries no navigation —
  * just the sound-effect and daily-reminder toggles those games share.
  */

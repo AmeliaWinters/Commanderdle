@@ -10,6 +10,11 @@ interface Props {
   description: string;
   /** Absolute canonical URL for this page. */
   canonical: string;
+  /** Back control override. Defaults to "Back to today" → "/". */
+  back?: { label: string; to?: string; onClick?: () => void };
+  /** Suppress the header's back button (e.g. the account page renders its own below
+   *  the mode-tabs). */
+  hideBack?: boolean;
   children: ReactNode;
 }
 
@@ -46,6 +51,8 @@ export default function ContentPage({
   title,
   description,
   canonical,
+  back,
+  hideBack = false,
   children,
 }: Props) {
   useEffect(() => {
@@ -60,7 +67,13 @@ export default function ContentPage({
   return (
     <div className="content-page">
       <header className="app-header">
-        <BackButton to="/" label="Back to today" />
+        {!hideBack && (
+          <BackButton
+            to={back?.to ?? "/"}
+            label={back?.label ?? "Back to today"}
+            onClick={back?.onClick}
+          />
+        )}
         <h1>
           <a
             href="/"

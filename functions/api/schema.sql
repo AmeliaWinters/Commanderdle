@@ -33,6 +33,91 @@ CREATE TABLE IF NOT EXISTS grid_picks (
   PRIMARY KEY (puzzle, cell, client_id)
 ) WITHOUT ROWID;
 
+-- ── Accounts (Phase 3, item 2) ───────────────────────────────────────────────
+-- Optional OAuth accounts (Google / Discord). The game stays 100% playable
+-- anonymously; these tables only back opt-in leaderboards + supporter cosmetics.
+-- Absent OAuth secrets → the auth endpoints 503 and nothing here is written.
+--
+-- Privacy posture: we take the MINIMUM from the OAuth provider — a stable id (to
+-- recognise the returning account) and the email (only to match Ko-fi donations).
+-- We deliberately do NOT store the provider's username or avatar. The player's
+-- public identity is their own chosen `username` + a commander-art `avatar`, and
+-- they are referenced everywhere by the opaque `uuid`, never the provider id.
+--
+-- NOTE: this shape supersedes the first-cut users table. Pre-launch there are no
+-- real accounts, so to upgrade a dev/remote DB just drop the old tables first:
+--   DROP TABLE IF EXISTS user_results; DROP TABLE IF EXISTS sessions; DROP TABLE IF EXISTS users;
+CREATE TABLE IF NOT EXISTS users (
+  id                 INTEGER PRIMARY KEY AUTOINCREMENT,  -- internal join key only
+  uuid               TEXT    NOT NULL UNIQUE,             -- public identifier
+  provider           TEXT    NOT NULL,                    -- 'google' | 'discord'
+  provider_id        TEXT    NOT NULL,                    -- stable id from the provider
+  email              TEXT,                                 -- only to reconcile Ko-fi donations
+  username           TEXT,                                 -- player-chosen; null until set
+  username_lc        TEXT    UNIQUE,                       -- case-insensitive uniqueness (null ok)
+  avatar             TEXT    NOT NULL DEFAULT 'Atraxa, Praetors'' Voice',  -- commander name (see src/lib/avatars.ts)
+  tier               TEXT    NOT NULL DEFAULT 'none',      -- none|uncommon|rare|mythic
+  leaderboard_opt_in INTEGER NOT NULL DEFAULT 1,           -- 0|1
+  created_at         INTEGER NOT NULL DEFAULT (unixepoch()),
+  UNIQUE (provider, provider_id)
+);
+-- Donation reconciliation looks accounts up by email.
+CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+
+-- Ko-fi supporter donations (Phase 3, item 4). The Ko-fi webhook upserts one row per
+-- payment; we then sum a payer's payments by email and grant the matching tier to any
+-- account signed in with that email (and re-reconcile on every login, so a donation
+-- made *before* signing up still lands). Keyed by Ko-fi's own transaction id so a
+-- replayed webhook is a silent no-op and totals can't be inflated.
+CREATE TABLE IF NOT EXISTS donations (
+  kofi_txn_id TEXT    PRIMARY KEY,             -- Ko-fi kofi_transaction_id (dedupe)
+  email       TEXT    NOT NULL,                -- payer email, lower-cased
+  amount      REAL    NOT NULL,                -- payment amount, GBP
+  created_at  INTEGER NOT NULL DEFAULT (unixepoch())
+) WITHOUT ROWID;
+CREATE INDEX IF NOT EXISTS idx_donations_email ON donations(email);
+
+-- Server-side daily results for signed-in players (Phase B). This is the SOURCE OF
+-- TRUTH for leaderboard stats — anonymous localStorage numbers never feed the board.
+-- One row per (user, mode, date); a resubmit of the same day is a silent no-op, so
+-- stats can't be inflated by replaying. Validated with the same rules as the
+-- anonymous `results` ingest before it lands here.
+CREATE TABLE IF NOT EXISTS user_results (
+  user_id    INTEGER NOT NULL,
+  mode       TEXT    NOT NULL,
+  date       TEXT    NOT NULL,               -- YYYY-MM-DD (streaks are day-based)
+  puzzle     INTEGER NOT NULL,
+  won        INTEGER NOT NULL,               -- 0 | 1
+  guesses    INTEGER NOT NULL,
+  created_at INTEGER NOT NULL DEFAULT (unixepoch()),
+  PRIMARY KEY (user_id, mode, date)
+) WITHOUT ROWID;
+
+-- Cached, recomputed-on-write leaderboard stats (so the board is a cheap indexed
+-- read rather than a per-request aggregation over user_results). Recomputed from
+-- user_results by the results endpoint on every submit.
+CREATE TABLE IF NOT EXISTS user_stats (
+  user_id        INTEGER PRIMARY KEY,
+  play_streak    INTEGER NOT NULL DEFAULT 0,
+  max_play_streak INTEGER NOT NULL DEFAULT 0,
+  win_streak     INTEGER NOT NULL DEFAULT 0,
+  max_win_streak INTEGER NOT NULL DEFAULT 0,
+  total_wins     INTEGER NOT NULL DEFAULT 0,
+  xp             INTEGER NOT NULL DEFAULT 0,
+  updated_at     INTEGER NOT NULL DEFAULT (unixepoch())
+) WITHOUT ROWID;
+
+-- Server-side sessions. The cookie carries an opaque random token; we store only
+-- its SHA-256 hash, so a DB leak can't be replayed as a live session. Rows are
+-- self-expiring on read (expires_at check) — a periodic sweep is optional.
+CREATE TABLE IF NOT EXISTS sessions (
+  token_hash TEXT    PRIMARY KEY,
+  user_id    INTEGER NOT NULL,
+  created_at INTEGER NOT NULL DEFAULT (unixepoch()),
+  expires_at INTEGER NOT NULL                    -- unix seconds
+) WITHOUT ROWID;
+CREATE INDEX IF NOT EXISTS idx_sessions_user ON sessions(user_id);
+
 -- Fixed-window rate-limit buckets (see functions/api/rateLimit.ts). Keyed by
 -- "<endpoint>:<client-ip>"; each row holds the count in the current window and the unix
 -- second the window resets. Shared by the contact relay and the stats ingest endpoint to

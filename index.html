@@ -41,214 +41,79 @@
        * Everything is scoped under #boot so it can't leak into the loaded
        * stylesheet, and it's aria-hidden so it's invisible to assistive tech.
        * ------------------------------------------------------------------ */
-      #boot {
-        --bg: #0b0b0d;
-        --panel: #161619;
-        --panel-2: #1f1f25;
-        --line: #2c2c34;
-        --text: #f4f4f6;
-        --text-dim: #9b9ba6;
-        --flame-1: #f6a01a;
-        --flame: linear-gradient(135deg, #f6a01a, #c01f1f);
-        max-width: 1000px;
-        margin: 0 auto;
-        padding: 16px 16px 0;
-        display: flex;
-        flex-direction: column;
-        font-family: "EB Garamond", Georgia, serif;
-      }
-      #boot .boot-header {
-        text-align: center;
-        margin-bottom: 16px;
-        position: relative;
-      }
-      #boot .boot-cog {
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 40px;
-        height: 40px;
-        background: var(--panel);
-        border: 1px solid var(--line);
-        border-radius: 10px;
-      }
-      /* Matches .app-header h1 exactly so the title doesn't shift on swap. */
-      #boot h1 {
-        font-family: "Cinzel", serif;
-        font-weight: 900;
-        font-size: clamp(3rem, 7vw, 4rem);
-        margin: 0;
-        letter-spacing: 0.03em;
-        color: var(--text);
-        text-shadow: 0 2px 18px rgba(236, 90, 28, 0.35);
-      }
-      #boot h1 span {
-        background: var(--flame);
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-        color: transparent;
-      }
-      #boot .boot-tabs {
-        display: flex;
-        gap: 2px;
-        justify-content: center;
-        margin-bottom: 12px;
-      }
-      #boot .boot-tab {
-        flex: 1 1 0;
-        min-width: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 6px;
-        padding: 8px 2px;
-        color: var(--text-dim);
-        font-family: "Cinzel", serif;
-        font-weight: 700;
-        font-size: 0.68rem;
-        letter-spacing: 0.02em;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-      #boot .boot-tab::before {
-        content: "";
-        width: 22px;
-        height: 22px;
-        border-radius: 5px;
-        background: var(--panel-2);
-      }
-      #boot .boot-tab-active {
-        color: var(--flame-1);
-      }
-      #boot .boot-tab-active::before {
-        background: var(--flame);
-        opacity: 0.8;
-      }
-      #boot .boot-input {
-        height: 58px;
-        border-radius: 12px;
-        background: var(--panel);
-        border: 1px solid var(--line);
-        margin: 0 auto 14px;
-        max-width: 560px;
-        width: 100%;
-      }
-      #boot .boot-grid {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-      #boot .boot-row {
-        height: 46px;
-        border-radius: 10px;
-        background: var(--panel);
-        border: 1px solid var(--line);
-        opacity: 0.85;
-        animation: boot-pulse 1.4s ease-in-out infinite;
-      }
-      #boot .boot-row:nth-child(2) {
-        animation-delay: 0.1s;
-      }
-      #boot .boot-row:nth-child(3) {
-        animation-delay: 0.2s;
-      }
-      #boot .boot-button {
-        height: 46px;
-        border-radius: 12px;
-        background: var(--panel);
-        border: 1px solid var(--line);
-        margin: 0 auto 14px;
-        max-width: 560px;
-        width: 100%;
-      }
-      #boot .boot-dots-row {
-        position: relative;
-        display: flex;
-        width: 100%;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 20px;
-      }
-
-      #boot .boot-dots {
-        display: flex;
-        gap: 10px;
-        width: 100%;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 20px;
-      }
-
-      #boot .boot-dot {
-        width: 16px;
-        height: 16px;
-        border-radius: 50%;
-        border: 2px solid var(--line);
-        background: transparent;
-      }
-      @keyframes boot-pulse {
-        0%,
-        100% {
-          opacity: 0.55;
-        }
-        50% {
-          opacity: 0.9;
-        }
-      }
-      @media (prefers-reduced-motion: reduce) {
-        #boot .boot-row {
-          animation: none;
-        }
-      }
-
       /* ------------------------------------------------------------------ *
-       * Boot-shell backdrop card (LCP element).
+       * Loading state.
        *
-       * The largest floating card is the page's Largest Contentful Paint. In
-       * the live app it's a React-rendered <img> that can't appear until the
-       * JS bundle boots (~6s on throttled mobile), so LCP was pinned to that.
-       * We instead paint the same card straight from the HTML: an inline head
-       * script (injected at build by the backdrop-lcp-preload Vite plugin)
-       * preloads today's card and drops this <img> into #boot-backdrop on
-       * DOMContentLoaded, so it paints before any app JS. React's CardBackdrop
-       * renders the byte-identical card at the same slot, so the swap is
-       * invisible and no larger LCP candidate appears later.
-       *
-       * Scoped + self-contained so it doesn't depend on the (JS-injected in
-       * dev) main stylesheet. Values mirror CARDS[3] / .bg-card-real in
-       * CardBackdrop.tsx + base.css.
+       * A bare flame-coloured ring centred over the page background (the
+       * floating backdrop card in #boot-backdrop still paints from the HTML,
+       * so the loader sits on the same scene the app loads into). No title or
+       * chrome — React clears #boot on mount and renders the real app.
        * ------------------------------------------------------------------ */
-      #boot-backdrop {
+      #boot {
+        --line: #2c2c34;
+        --flame-1: #f6a01a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100dvh;
+      }
+      /* Static copy of the app's drifting flame glows (body::before in base.css)
+         so the loader sits on the same background the app loads into. Painted
+         from the HTML; no animation — it just needs to be there. */
+      #boot-orbs {
         position: fixed;
-        inset: 0;
-        z-index: -2;
+        inset: -20%;
+        z-index: -3;
         pointer-events: none;
-        overflow: hidden;
-        opacity: 0.3;
+        opacity: 0.9;
+        filter: blur(60px);
+        background:
+          radial-gradient(
+            42% 42% at 25% 30%,
+            rgba(236, 90, 28, 0.5),
+            transparent 70%
+          ),
+          radial-gradient(
+            46% 46% at 78% 70%,
+            rgba(192, 31, 31, 0.45),
+            transparent 70%
+          ),
+          radial-gradient(
+            38% 38% at 60% 15%,
+            rgba(246, 160, 26, 0.32),
+            transparent 70%
+          );
       }
-      #boot-backdrop img {
-        position: absolute;
-        display: block;
-        border-radius: 14px;
-        border: 1px solid rgba(246, 160, 26, 0.12);
-        object-fit: cover;
-        will-change: transform;
-        animation: boot-float 30s ease-in-out infinite alternate;
+      #boot .boot-spinner {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: conic-gradient(
+          from 0deg,
+          transparent 0deg,
+          var(--flame-1) 300deg,
+          transparent 360deg
+        );
+        -webkit-mask: radial-gradient(
+          farthest-side,
+          transparent calc(100% - 5px),
+          #000 calc(100% - 5px)
+        );
+        mask: radial-gradient(
+          farthest-side,
+          transparent calc(100% - 5px),
+          #000 calc(100% - 5px)
+        );
+        animation: boot-spin 0.9s linear infinite;
       }
-      @keyframes boot-float {
-        from {
-          transform: translateY(0) rotate(var(--rot, 0deg)) scale(1);
-        }
+      @keyframes boot-spin {
         to {
-          transform: translateY(-32px) rotate(calc(var(--rot, 0deg) + 6deg))
-            scale(1.05);
+          transform: rotate(360deg);
         }
       }
       @media (prefers-reduced-motion: reduce) {
-        #boot-backdrop img {
-          animation: none;
+        #boot .boot-spinner {
+          animation-duration: 2.4s;
         }
       }
     </style>
@@ -258,21 +123,18 @@
       name="description"
       content="Guess the daily Magic: The Gathering commander from the top 500 EDH Rank. Five modes: Classic, Silhouette, Zoom, Synergy, and Quote. 5 fresh puzzles every day."
     />
-    <link rel="canonical" href="https://commandle.com/" />
+    <link rel="canonical" href="https://commandle.app/" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Commandle" />
-    <meta
-      property="og:title"
-      content="Commandle MTG Commander Guessing Game"
-    />
+    <meta property="og:title" content="Commandle MTG Commander Guessing Game" />
     <meta
       property="og:description"
       content="Guess the daily Magic: The Gathering commander. Five modes, a fresh puzzle every day."
     />
-    <meta property="og:url" content="https://commandle.com/" />
-    <meta property="og:image" content="https://commandle.com/og-image.png" />
+    <meta property="og:url" content="https://commandle.app/" />
+    <meta property="og:image" content="https://commandle.app/og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta
@@ -304,8 +166,8 @@
         "@context": "https://schema.org",
         "@type": "WebApplication",
         "name": "Commandle",
-        "url": "https://commandle.com/",
-        "description": "A daily Magic: The Gathering commander guessing game with five modes: Classic, Silhouette, Zoom, Synergy, and Quote, plus Higher / Lower and Price Is Right side games. Everyone gets the same puzzle each day.",
+        "url": "https://commandle.app/",
+        "description": "A daily Magic: The Gathering commander guessing game with five modes: Classic, Silhouette, Zoom, Synergy, and Quote, plus Higher / Lower and Guess the cost side games. Everyone gets the same puzzle each day.",
         "applicationCategory": "GameApplication",
         "genre": "Puzzle game",
         "operatingSystem": "Any (web browser)",
@@ -318,41 +180,12 @@
   </head>
   <body>
     <div id="root">
-      <!-- Static app-shell skeleton (styles in <head>). Painted with the HTML so
-           there's meaningful content on screen long before the JS bundle is ready;
-           React clears it on mount. See the #boot comment above. -->
+      <!-- Loading state (styles in <head>): the app's ambient orbs plus a
+           spinner, painted with the HTML so there's something on screen before
+           the JS bundle is ready. React clears it on mount. -->
       <div id="boot" aria-hidden="true">
-        <!-- LCP backdrop card. The inline head script (injected by the
-             backdrop-lcp-preload Vite plugin) fills this with today's card
-             image on DOMContentLoaded, painting the LCP element pre-JS. -->
-        <div id="boot-backdrop" aria-hidden="true"></div>
-        <header class="boot-header">
-          <div class="boot-cog"></div>
-          <h1>Comman<span>dle</span></h1>
-        </header>
-        <nav class="boot-tabs">
-          <span class="boot-tab boot-tab-active">Classic</span>
-          <span class="boot-tab">Synergy</span>
-          <span class="boot-tab">Silhouette</span>
-          <span class="boot-tab">Zoom</span>
-          <span class="boot-tab">Quote</span>
-        </nav>
-        <div class="boot-input"></div>
-        <div class="boot-button"></div>
-        <div className="boot-dots-row">
-          <div class="boot-dots">
-            <span class="boot-dot"></span>
-            <span class="boot-dot"></span>
-            <span class="boot-dot"></span>
-            <span class="boot-dot"></span>
-            <span class="boot-dot"></span>
-          </div>
-        </div>
-        <div class="boot-grid">
-          <div class="boot-row"></div>
-          <div class="boot-row"></div>
-          <div class="boot-row"></div>
-        </div>
+        <div id="boot-orbs" aria-hidden="true"></div>
+        <div class="boot-spinner"></div>
       </div>
       <!-- Crawler-visible fallback. React replaces this on mount; search engines and
            no-JS clients index the real copy below instead of an empty shell. -->
@@ -387,7 +220,7 @@
             <a href="/higher-lower">Higher / Lower</a> - an endless bonus round.
           </li>
           <li>
-            <a href="/price-is-right">Price Is Right</a> - guess the card's
+            <a href="/guess-the-cost">Guess the cost</a> - guess the card's
             market price.
           </li>
         </ul>

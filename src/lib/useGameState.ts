@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useState } from 'react'
 import type { Commander, Mode } from '../types/commander'
-import { COMMANDERS_BY_NAME } from './commanders'
+import { commanderByName } from './commanders'
 import { dailyAnswer, randomAnswer, todayKey, puzzleNumber } from './dailyAnswer'
+import { ensureArchiveData, resolveArchiveAnswer } from './answers'
 import { recordDailyResult } from './stats'
 import { recordArchiveResult } from './archive'
 import { recordFound } from './collection'
 import { submitGlobalResult } from './api'
+import { submitAccountResult } from './auth'
 import { MAX_GUESSES, type ShareMode } from './shareCode'
 import { playSound } from './sounds'
 
@@ -52,8 +54,7 @@ export const dailyStorageKey = (mode: Mode) => `commandle:${mode}:daily`
 const storageKey = (mode: Mode, dateKey: string, isArchive: boolean) =>
   isArchive ? `commandle:${mode}:${dateKey}` : dailyStorageKey(mode)
 
-function loadGame(mode: Mode, dateKey: string, isArchive: boolean): GameState {
-  const answer = dailyAnswer(mode, dateKey)
+function loadGame(mode: Mode, dateKey: string, isArchive: boolean, answer: Commander): GameState {
   const base: GameState = {
     answer,
     guesses: [],
@@ -85,7 +86,7 @@ function loadGame(mode: Mode, dateKey: string, isArchive: boolean): GameState {
  * format (guess names + a skip count) by placing skips after the guesses. */
 function reconstructHistory(saved: PersistedDaily): Turn[] {
   const toGuess = (name: string): Turn | null => {
-    const commander = COMMANDERS_BY_NAME.get(name)
+    const commander = commanderByName(name)
     return commander ? { kind: 'guess', commander } : null
   }
   if (saved.timeline) {
@@ -126,11 +127,29 @@ export function useGameState(mode: Mode, archiveDate?: string) {
   const isArchive = Boolean(archiveDate && archiveDate !== today)
   const dateKey = archiveDate ?? today
 
-  const [state, setState] = useState<GameState>(() => loadGame(mode, dateKey, isArchive))
+  const [state, setState] = useState<GameState>(() =>
+    // Initial synchronous best-effort: the live daily is exact; an archive date starts from the
+    // live-pool computation and is corrected below once the frozen answer + vault have loaded.
+    loadGame(mode, dateKey, isArchive, dailyAnswer(mode, dateKey)),
+  )
 
-  // Reload persisted state when switching modes or archive target.
+  // Reload persisted state when switching modes or archive target. Live daily resolves
+  // synchronously; archive dates await the frozen answer + retired-commander vault so a past
+  // puzzle stays fixed to the commander that was actually the answer that day, even after it
+  // drops out of the top-500.
   useEffect(() => {
-    setState(loadGame(mode, dateKey, isArchive))
+    if (!isArchive) {
+      setState(loadGame(mode, dateKey, false, dailyAnswer(mode, dateKey)))
+      return
+    }
+    let cancelled = false
+    void ensureArchiveData().then(() => {
+      if (cancelled) return
+      setState(loadGame(mode, dateKey, true, resolveArchiveAnswer(mode, dateKey)))
+    })
+    return () => {
+      cancelled = true
+    }
   }, [mode, dateKey, isArchive])
 
   // Record a finished result (idempotent per date+mode / archive cell).
@@ -150,7 +169,11 @@ export function useGameState(mode: Mode, archiveDate?: string) {
     // deduped server-side). A loss records the guess cap as guesses-used.
     if (state.isDaily && !state.isArchive) {
       const guesses = won ? attempts : maxGuessesFor(mode)
-      void submitGlobalResult(mode as ShareMode, puzzleNumber(state.dateKey), won, guesses)
+      const puzzle = puzzleNumber(state.dateKey)
+      void submitGlobalResult(mode as ShareMode, puzzle, won, guesses)
+      // Also record against the signed-in account (source of truth for leaderboards).
+      // No-op for anonymous players; best-effort like the community submit above.
+      void submitAccountResult(mode, state.dateKey, puzzle, won, guesses)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode, state.dateKey, state.isDaily, state.isArchive, state.status, state.guesses.length, state.skips])
@@ -212,7 +235,7 @@ export function useGameState(mode: Mode, archiveDate?: string) {
   }, [mode])
 
   const backToDaily = useCallback(() => {
-    setState(loadGame(mode, today, false))
+    setState(loadGame(mode, today, false, dailyAnswer(mode, today)))
   }, [mode, today])
 
   // Debugging helper: wipe persisted progress for this mode/date and start fresh.
@@ -222,7 +245,8 @@ export function useGameState(mode: Mode, archiveDate?: string) {
     } catch {
       /* ignore */
     }
-    setState(loadGame(mode, dateKey, isArchive))
+    const answer = isArchive ? resolveArchiveAnswer(mode, dateKey) : dailyAnswer(mode, dateKey)
+    setState(loadGame(mode, dateKey, isArchive, answer))
   }, [mode, dateKey, isArchive])
 
   return { state, guess, skip, startPractice, backToDaily, reset, maxGuesses: maxGuessesFor(mode) }

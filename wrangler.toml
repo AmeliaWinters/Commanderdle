@@ -35,4 +35,4 @@ database_id = "ac4ef84f-8b4a-40c2-8cc9-e4a2feb2471a"
 #   npx wrangler secret put CONTACT_TO         (the destination inbox — keep it a secret)
 # CONTACT_FROM must be a Resend-verified sender on a domain you control.
 [vars]
-CONTACT_FROM = "Commandle <contact@commandle.com>"
+CONTACT_FROM = "Commandle <contact@commandle.app>"

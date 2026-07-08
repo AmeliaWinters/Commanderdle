@@ -39,6 +39,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.25rem;
   text-align: center;
   padding: 0.35rem 0.3rem;
   font-size: clamp(0.68rem, 2.4vw, 0.85rem);
@@ -139,17 +141,17 @@
 }
 
 .grid-board .grid-cell-uncommon {
-  border-color: #aab4bd;
+  border-color: var(--rarity-uncommon);
 }
 
 .grid-board .grid-cell-rare {
-  border-color: #d5a439;
-  box-shadow: 0 0 0 1px rgba(213, 164, 57, 0.4);
+  border-color: var(--rarity-rare);
+  box-shadow: 0 0 0 1px rgba(221, 187, 102, 0.4);
 }
 
 .grid-board .grid-cell-mythic {
-  border-color: #e8621f;
-  box-shadow: 0 0 10px rgba(232, 98, 31, 0.45);
+  border-color: var(--rarity-mythic);
+  box-shadow: 0 0 10px rgba(240, 126, 1, 0.45);
 }
 
 /* In a grid cell the gem sits inline just to the left of the commander's name. */
@@ -179,6 +181,25 @@
   color: #e07a6a;
 }
 
+.grid-give-up {
+  display: block;
+  margin: 1.25rem auto 0;
+  padding: 0.5rem 1.1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #e0a0a0;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(224, 122, 106, 0.4);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.grid-give-up:hover {
+  background: rgba(224, 122, 106, 0.15);
+  color: #e07a6a;
+}
+
 /* Correct-pick feedback, tinted by the MTG rarity the guess earned. */
 .grid-hit {
   display: flex;
@@ -195,16 +216,16 @@
 }
 
 .grid-hit-uncommon {
-  color: #b8c8d0; /* uncommon silver */
+  color: var(--rarity-uncommon); /* uncommon silver */
 }
 
 .grid-hit-rare {
-  color: #e8c34b; /* rare gold */
+  color: var(--rarity-rare); /* rare gold */
 }
 
 .grid-hit-mythic {
-  color: #f26b3a; /* mythic orange */
-  text-shadow: 0 0 10px rgba(242, 107, 58, 0.4);
+  color: var(--rarity-mythic); /* mythic orange */
+  text-shadow: 0 0 10px rgba(240, 126, 1, 0.4);
 }
 
 /* --- Cell-fill search dialog ------------------------------------------------------- */
@@ -306,12 +327,12 @@
 }
 
 .grid-result-tier-rare {
-  border-color: rgba(213, 164, 57, 0.5);
+  border-color: rgba(221, 187, 102, 0.5);
 }
 
 .grid-result-tier-mythic {
-  border-color: rgba(232, 98, 31, 0.55);
-  color: #f5a24a;
+  border-color: rgba(240, 126, 1, 0.55);
+  color: var(--rarity-mythic);
 }
 
 .grid-result-hint {
@@ -398,11 +419,11 @@
 }
 
 .grid-detail-tier-rare .grid-detail-tier-label {
-  color: #e6c463;
+  color: var(--rarity-rare);
 }
 
 .grid-detail-tier-mythic .grid-detail-tier-label {
-  color: #f5a24a;
+  color: var(--rarity-mythic);
 }
 
 /* Hide the wordy label on narrow screens; the gem alone carries the rarity. */

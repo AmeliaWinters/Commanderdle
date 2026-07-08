@@ -5,7 +5,7 @@ export default function AboutPage() {
     <ContentPage
       title="Commandle - About the daily Magic: The Gathering commander game"
       description="Commandle is a free daily guessing game for Magic: The Gathering Commander (EDH) fans. Learn what it is, how a new puzzle is chosen each day, and where the data comes from."
-      canonical="https://commandle.com/about"
+      canonical="https://commandle.app/about"
     >
       <h2>About Commandle</h2>
 

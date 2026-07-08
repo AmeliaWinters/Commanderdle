@@ -8,6 +8,7 @@ import {
   HL_MAX_SCORE,
 } from "../../lib/higherLower";
 import { playSound } from "../../lib/sounds";
+import { recordBonusDaily } from "../../lib/bonusStats";
 import CardBackdrop from "../CardBackdrop";
 import AppFooter from "../layout/AppFooter";
 import CardSlot from "./HlCard";
@@ -79,6 +80,11 @@ export default function HigherLowerMode() {
   useEffect(() => {
     saveDaily(daily);
   }, [daily]);
+
+  // Log today's daily to local bonus-stat history once it finishes.
+  useEffect(() => {
+    if (mode === "daily" && done) recordBonusDaily("higher-lower", wonDaily);
+  }, [mode, done, wonDaily]);
 
   useEffect(() => {
     if (mode === "daily" && done && score > dailyBest) {

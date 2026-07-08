@@ -64,6 +64,17 @@
   font-weight: 600;
 }
 
+/* Pin the "All games" back link to the bottom-left of the masthead so it sits on
+   the same vertical level as the Daily/Endless toggle (rather than dropping to its
+   own row below it). `.app-header` is already `position: relative`. */
+.hl-header .back-btn {
+  position: absolute;
+  left: 0;
+  bottom: 6px;
+  order: 0;
+  margin-top: 0;
+}
+
 /* ── Carousel stage ─────────────────────────────────────────────────── */
 /* Two full cards are visible at rest; on a correct guess the whole track
    slides left by one card so the guessed card glides into the "known" slot

@@ -58,6 +58,20 @@
   color: var(--flame-1);
 }
 
+/* The account page renders the site mode-tabs inside .content-body, where the rule
+   above would tint every tab ember. Restore the tabs' own ghost styling: dim by
+   default, brighter on hover, flame only when active. */
+.content-body .mode-tab {
+  color: var(--text-dim);
+}
+.content-body .mode-tab:hover {
+  color: var(--text);
+}
+.content-body .mode-tab.active,
+.content-body .mode-tab.active .mode-label {
+  color: var(--flame-1);
+}
+
 .content-body code {
   background: var(--panel-2);
   border: 1px solid var(--line);

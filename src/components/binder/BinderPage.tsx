@@ -8,6 +8,7 @@ import LogoTitle from "../layout/LogoTitle";
 import GameSettingsMenu from "../layout/GameSettingsMenu";
 import BackButton from "../layout/BackButton";
 import AppFooter from "../layout/AppFooter";
+import AccountWidget from "../layout/AccountWidget";
 import BinderCard from "./BinderCard";
 
 const WUBRG = ["W", "U", "B", "R", "G"] as const;
@@ -34,7 +35,10 @@ export default function BinderPage() {
   }, []);
 
   const [collection, setCollection] = useState(() => loadCollection());
-  useEffect(() => subscribeCollection(() => setCollection(loadCollection())), []);
+  useEffect(
+    () => subscribeCollection(() => setCollection(loadCollection())),
+    [],
+  );
 
   const [query, setQuery] = useState("");
   const [pips, setPips] = useState<Set<string>>(new Set());
@@ -83,25 +87,22 @@ export default function BinderPage() {
     <div className="app">
       <CardBackdrop />
       <header className="app-header binder-header">
+        <AccountWidget />
         <BackButton to={GAMES_PATH} label="All games" />
         <GameSettingsMenu />
         <LogoTitle ariaLabel="commandle">
           Comman<span className="accent">dle</span>
         </LogoTitle>
         <p className="mode-subtitle">The Binder</p>
-        <p className="tagline">
-          Every commander you've named goes in the binder. Gotta guess 'em all.
-        </p>
       </header>
 
       <main className="play-area binder-area">
         <section className="binder-about">
           <p>
             The Binder is your lifetime collection. Every commander in the
-            Commandle pool has a slot here, face-down. Guess a commander
-            correctly in any game — daily or practice, any mode — and its card
-            flips face-up in your binder for good. Fill every slot to complete
-            the collection.
+            Commandle pool has a slot here. Guess a commander correctly in any
+            daily game, and its card will appear in your binder. Fill every slot
+            to complete the collection! {":)"}
           </p>
         </section>
 
@@ -119,7 +120,10 @@ export default function BinderPage() {
             aria-valuemin={0}
             aria-valuemax={COMMANDERS.length}
           >
-            <div className="binder-progress-fill" style={{ width: `${pct}%` }} />
+            <div
+              className="binder-progress-fill"
+              style={{ width: `${pct}%` }}
+            />
           </div>
         </section>
 
@@ -132,7 +136,11 @@ export default function BinderPage() {
             onChange={(e) => setQuery(e.target.value)}
             aria-label="Search commanders"
           />
-          <div className="binder-pips" role="group" aria-label="Filter by color">
+          <div
+            className="binder-pips"
+            role="group"
+            aria-label="Filter by color"
+          >
             {[...WUBRG, "C"].map((p) => (
               <button
                 key={p}

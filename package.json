@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host",
+    "dev:auth": "vite --host --mode authmock",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "build:data": "tsx scripts/build-data.ts",

@@ -2,6 +2,7 @@ import { GAMES_PATH } from "../../lib/router";
 import LogoTitle from "../layout/LogoTitle";
 import GameSettingsMenu from "../layout/GameSettingsMenu";
 import BackButton from "../layout/BackButton";
+import AccountWidget from "../layout/AccountWidget";
 
 type Mode = "daily" | "endless";
 
@@ -14,6 +15,7 @@ interface Props {
 export default function HlHeader({ mode, onSwitchMode }: Props) {
   return (
     <header className="app-header hl-header">
+      <AccountWidget />
       <BackButton to={GAMES_PATH} label="All games" />
       <GameSettingsMenu />
       <LogoTitle ariaLabel="commandle">

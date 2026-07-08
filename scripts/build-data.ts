@@ -34,6 +34,7 @@ import { writeFile, mkdir, readFile, access } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 import sharp from 'sharp'
+import { hashString } from '../src/lib/hash'
 
 // WebP quality for the downloaded card images. 80 is visually ~indistinguishable from the
 // source JPGs while cutting file size by roughly half, which directly lowers bandwidth/CDN cost.
@@ -46,6 +47,12 @@ const CORE_FILE = join(__dirname, '..', 'src', 'data', 'commanders.core.json')
 const SYNERGY_FILE = join(__dirname, '..', 'src', 'data', 'synergy.json')
 // Small provenance sidecar (data freshness) shown in the app footer.
 const META_FILE = join(__dirname, '..', 'src', 'data', 'commanders.meta.json')
+// Append-only frozen daily answers (date -> mode -> commander name) and the retired-commander
+// vault (name -> full Commander). Together these keep the archive retroactive: a past day's
+// answer stays fixed, and its data (plus any avatar's) survives the commander leaving the top
+// 500. See src/lib/answers.ts and src/lib/commanders.ts (ensureVaultLoaded).
+const ANSWERS_FILE = join(__dirname, '..', 'src', 'data', 'answers.json')
+const VAULT_FILE = join(__dirname, '..', 'src', 'data', 'commanders.vault.json')
 // Vite serves public/ at the deploy root; images land here and ship as static assets.
 const CARDS_DIR = join(__dirname, '..', 'public', 'cards')
 // Last-good EDHREC payload, committed so the build survives json.edhrec.com going away.
@@ -487,6 +494,75 @@ async function localizeImages(commanders: Commander[]): Promise<void> {
   }
 }
 
+/** Read a committed JSON file, tolerating a missing/corrupt file by returning `fallback`. */
+async function readJson<T>(path: string, fallback: T): Promise<T> {
+  if (!(await fileExists(path))) return fallback
+  try {
+    return JSON.parse(await readFile(path, 'utf-8')) as T
+  } catch (e) {
+    console.warn(`Could not read ${path}: ${(e as Error).message}`)
+    return fallback
+  }
+}
+
+// Mode order/pool rules MUST mirror the client (src/lib/dailyAnswer.ts poolFor +
+// src/lib/commanders.ts memoPool predicates) — the daily answer is
+// pool[hashString(`${mode}:${date}`) % pool.length] over the same, same-ordered pool.
+const DAILY_MODES = ['classic', 'silhouette', 'quote', 'synergy', 'zoom'] as const
+type DailyMode = (typeof DAILY_MODES)[number]
+
+function poolForMode(mode: DailyMode, commanders: Commander[]): Commander[] {
+  switch (mode) {
+    case 'quote':
+      return commanders.filter((c) => c.flavorText)
+    case 'synergy':
+      return commanders.filter((c) => c.synergyCards.length >= 4)
+    case 'zoom':
+      return commanders.filter((c) => c.normalImage ?? c.artCrop)
+    default:
+      return commanders // classic + silhouette draw from the whole top-500
+  }
+}
+
+/**
+ * Freeze today's daily answers and fold the current top-500 into the retired-commander vault.
+ *
+ * Both files are append-only so the archive stays retroactive:
+ *  - answers.json: date -> mode -> name. First write for a date wins (never overwrite an
+ *    already-recorded answer), so re-runs on the same UTC day can't rewrite history.
+ *  - commanders.vault.json: name -> full Commander. Live commanders are refreshed each run;
+ *    a commander that has since left the top-500 keeps its last-frozen entry untouched, so its
+ *    art/flavor/synergy survive for past archive answers and as a player's avatar.
+ */
+async function freezeDailyData(mainCommanders: Commander[]): Promise<void> {
+  const today = new Date().toISOString().slice(0, 10)
+
+  const answers = await readJson<Record<string, Partial<Record<DailyMode, string>>>>(
+    ANSWERS_FILE,
+    {},
+  )
+  const todays = (answers[today] ??= {})
+  let added = 0
+  for (const mode of DAILY_MODES) {
+    if (todays[mode]) continue // freeze-on-first-write
+    const pool = poolForMode(mode, mainCommanders)
+    if (pool.length === 0) continue
+    todays[mode] = pool[hashString(`${mode}:${today}`) % pool.length].name
+    added++
+  }
+  await writeFile(ANSWERS_FILE, JSON.stringify(answers, null, 2) + '\n', 'utf-8')
+  console.log(`Froze ${added} answer(s) for ${today} -> ${ANSWERS_FILE}`)
+
+  const vault = await readJson<Record<string, Commander>>(VAULT_FILE, {})
+  const before = Object.keys(vault).length
+  for (const c of mainCommanders) vault[c.name] = c
+  const retained = Object.keys(vault).length - mainCommanders.length
+  await writeFile(VAULT_FILE, JSON.stringify(vault) + '\n', 'utf-8')
+  console.log(
+    `Vault: ${Object.keys(vault).length} commanders (${before} -> now; ${retained} retired kept) -> ${VAULT_FILE}`,
+  )
+}
+
 async function main() {
   const cache = await loadCache()
 
@@ -645,6 +721,10 @@ async function main() {
   // Provenance sidecar: when this dataset was last refreshed, for the footer freshness line.
   await writeFile(META_FILE, JSON.stringify({ generatedAt: newCache.fetchedAt }) + '\n', 'utf-8')
   console.log(`Wrote core -> ${CORE_FILE} and synergy -> ${SYNERGY_FILE}`)
+
+  // Freeze today's answers + update the retired-commander vault so the archive stays
+  // retroactive as the top-500 churns. Uses the localized (cards/<file>) image paths.
+  await freezeDailyData(mainCommanders)
   const withFlavor = mainCommanders.filter((c) => c.flavorText).length
   const withArt = mainCommanders.filter((c) => c.artCrop).length
   const withSynergy = mainCommanders.filter((c) => c.synergyCards.length >= 4).length

@@ -1,5 +1,10 @@
 import type { Commander, Mode } from "../types/commander";
 import { COMMANDERS, quotePool, synergyPool, zoomPool } from "./commanders";
+import { puzzleNumberForDate } from "./puzzleDate";
+import { hashString } from "./hash";
+
+// Re-exported for the many callers that import it from here (Higher/Lower PRNG seeding, etc.).
+export { hashString };
 
 /** Local calendar date as YYYY-MM-DD (puzzle rolls over at the player's local midnight). */
 export function todayKey(d = new Date()): string {
@@ -9,17 +14,9 @@ export function todayKey(d = new Date()): string {
   return `${y}-${m}-${day}`;
 }
 
-/** Launch date (puzzle #1). Puzzle numbers count days from here. */
-const PUZZLE_EPOCH = "2026-07-01";
-
 /** Sequential puzzle number for a given date, Wordle-style (#1 on the launch date). */
 export function puzzleNumber(dateKey = todayKey()): number {
-  const toUTC = (key: string) => {
-    const [y, m, d] = key.split("-").map(Number);
-    return Date.UTC(y, m - 1, d);
-  };
-  const days = Math.floor((toUTC(dateKey) - toUTC(PUZZLE_EPOCH)) / 86_400_000);
-  return days + 1;
+  return puzzleNumberForDate(dateKey);
 }
 
 /** Milliseconds remaining until the next local midnight (when the daily rolls over). */
@@ -43,18 +40,6 @@ export function formatCountdown(ms: number): string {
   const m = String(Math.floor((total % 3600) / 60)).padStart(2, "0");
   const s = String(total % 60).padStart(2, "0");
   return `${h}:${m}:${s}`;
-}
-
-/** Deterministic 32-bit hash (xmur3-style) of a string. Also seeds Higher/Lower's PRNG. */
-export function hashString(str: string): number {
-  let h = 1779033703 ^ str.length;
-  for (let i = 0; i < str.length; i++) {
-    h = Math.imul(h ^ str.charCodeAt(i), 3432918353);
-    h = (h << 13) | (h >>> 19);
-  }
-  h = Math.imul(h ^ (h >>> 16), 2246822507);
-  h = Math.imul(h ^ (h >>> 13), 3266489909);
-  return (h ^ (h >>> 16)) >>> 0;
 }
 
 export function poolFor(mode: Mode): Commander[] {

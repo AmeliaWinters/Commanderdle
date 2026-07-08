@@ -4,6 +4,7 @@ import { navigateToPath, HIGHER_LOWER_PATH } from "../../lib/router";
 import { edhrecUrl } from "../../lib/edhrec";
 import { useCountdown } from "../../lib/useCountdown";
 import { buildDots } from "../../lib/guessDots";
+import { gameXp } from "../../lib/accountStats";
 import CardZoom from "../CardZoom";
 import SynergyPct from "../SynergyPct";
 import StatsPanel from "../StatsPanel";
@@ -48,6 +49,10 @@ export default function ResultBanner({
 
   const score =
     status === "won" ? `${attempts}/${maxGuesses}` : `X/${maxGuesses}`;
+
+  // XP earned for this game — more for solving in fewer guesses, a little even on
+  // a loss. Mirrors the server-side award so the chip matches the account total.
+  const xp = gameXp(status === "won", attempts);
 
   const shareOptions = useShareOptions({
     status,
@@ -113,6 +118,9 @@ export default function ResultBanner({
               wrongGuesses={wrongGuesses}
               maxGuesses={maxGuesses}
             />
+            <span className="result-xp" aria-label={`${xp} XP earned`}>
+              +{xp} XP
+            </span>
           </div>
           <div className="share-row">
             <ShareMenu options={shareOptions} />

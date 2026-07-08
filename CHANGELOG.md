@@ -4,10 +4,139 @@ All notable player-facing changes to Commandle. Newest first. Dates are the day 
 landed on `main`. This log is maintained by hand — add an entry at the top whenever you ship
 a change that a player could notice.
 
+## 2026-07-08
+
+- **Stable archive & lasting avatars** — past puzzles now always show the exact commander
+  that was the answer that day, even after they slip out of the daily top-500 list — the
+  archive no longer shifts as the rankings change. Likewise, a commander you've set as your
+  avatar keeps its art forever, even if it later drops off the list.
+
+- **Bonus game stats** — your account page now has a "Bonus game stats" section with a
+  toggle between Grid, Guess the cost, and Higher / Lower, each showing your day streak,
+  win streak, and highest streak. These track your play on this device.
+
+- **Smoother loading** — the initial loading screen is now just a simple spinner on the page
+  background, instead of a placeholder layout that flickered as the game finished loading.
+
+- **Color pips in Grid** — color-identity criteria in Grid mode now show their mana pips
+  next to the name (e.g. Boros gets a red and white pip), matching Classic Grid.
+
+- **Give up in Grid** — a new "Give up" button in Grid mode lets you jump straight to the
+  results screen when you're done guessing.
+
+## 2026-07-07
+
+- **Fairer leaderboards** — daily results now only count toward your account when they're
+  played on the actual day, so streaks and XP on the leaderboards reflect real play.
+- **Tidier game headers** — the "All games" back link in Guess the Cost, Grid and
+  Higher / Lower now lines up with the Daily/Endless toggle instead of sitting on its own
+  row below it.
+- **Roomier leaderboards** — the home-screen leaderboard now spreads across the width of the
+  games hub, laying the top players out in columns of five on desktop. The full leaderboard
+  page sits on its own panel so names read clearly, and is now paged through the top 100.
+  Common-tier names show in plain white instead of the ember accent.
+- **Pick a username to finish signing in** — new accounts now choose a name before the
+  welcome screen will close; it can no longer be skipped for later.
+- **Tidier account button** — a long username no longer runs over the Commandle wordmark,
+  and the account button is now hidden on info pages (About, FAQ, Privacy, Changelog, the
+  leaderboard, and so on) where it was crowding the title.
+- **Your account page got a glow-up** — your level now wraps around your avatar as an XP
+  ring, your day and win streaks are shown as big glowing tiles that warm up the longer
+  your streak runs, and the whole page is tinted to your supporter rarity. The Ko-fi
+  supporter frames are now laid out as rarity chips so it's clear what each tip unlocks.
+  The public profile page gets the same treatment.
+- **Mythic supporters now have a foil** — Mythic Rare tier avatars and names get the
+  same holographic foil sweep a card gets when you guess it, drifting across every so
+  often, everywhere they appear (account, account menu, leaderboard, and public profiles).
+  Your rarity gem now sits beside your name in the account menu too, catching a foil glint.
+- **More free avatars** — every player can now pick from the 20 most popular commanders,
+  up from 5, without needing a supporter tier.
+- **Supporter tier colours are now consistent everywhere** — the same uncommon, rare and
+  mythic colours are used across your account, the leaderboard, and Grid mode. Your avatar
+  ring in the account menu now matches your supporter tier too (rare gold, mythic orange).
+- The **sign-in buttons now use the familiar Google and Discord branding** — the colour
+  Google “G” on a white button and the Discord mark on their blurple button — so they look
+  like the sign-in buttons you see elsewhere.
+- **Fixed the sign-in menu spilling off the side of the screen on phones** — it now always
+  opens fully within the viewport.
+- The **results screen now shows the XP you earned** — a “+N XP” badge next to your score.
+  Solving in fewer guesses earns more, and finishing a puzzle you didn’t crack still earns a
+  little participation XP.
+- The **account pill now sits in the masthead** (top-right, mirroring the settings cog)
+  instead of floating in the corner of the screen, and it no longer vanishes after pressing
+  Back.
+- The **first-time welcome is now skippable** — since accounts are optional, you can dismiss
+  it with “I’ll do this later,” the Escape key, or a click outside, and set your name and
+  avatar whenever you like from the account page.
+- The **avatar picker opens faster** — it now shows the most popular commanders first
+  with a “Show all” button, instead of loading all 500 portraits at once. Searching still
+  reaches every commander.
+- Changing your **avatar or leaderboard visibility** now shows a clear confirmation, so you
+  can tell a change actually saved. Save messages fade away on their own, and errors stick
+  around so you don't miss them.
+- Moved the **account pill to the top-right corner** (with the settings cog now on the
+  top-left), so it no longer sits awkwardly over the logo.
+- The account pill now opens a quick menu right where you are instead of sending you to a
+  separate page. Signed out, you can **sign in with Google or
+  Discord in one tap** and land back on the page you were on. Signed in, it drops down your
+  level, XP and shortcuts to your account, the leaderboard, your public profile and sign out.
+
 ## 2026-07-06
 
+- Fixed a crash that stopped the **account page from loading** for players who haven't
+  supported the project on Ko-fi.
+- Your **account is now reachable from every page** via a small avatar/name/level pill in
+  the top-left corner (or a "Sign in" pill when signed out) — it's no longer tucked away in
+  the footer.
+- The account page's **Back** button now returns to the main page instead of retracing your
+  steps (which could bounce you back through the sign-in redirect).
+- Tidied a heading font on the account page so the **Supporter frame** panel matches the
+  rest of the site.
+- The **account and profile pages** got a visual pass: the drifting card art from the
+  daily modes now floats behind them, panels sit on frosted glass instead of flat grey,
+  the stat tiles use proper icons in place of emoji, and the copy reads less like a form.
+  The action buttons are clearer too (a plain "View public profile" and "Sign out").
+- **Supporter cosmetics** are now granted automatically from Ko-fi donations: donate
+  with the same email you sign in with and your tier applies on your next login (and
+  donations made before signing up are picked up too). £5 unlocks **Uncommon**, £15
+  **Rare** and £20 **Mythic** (cumulative — your highest total wins). Each tier gives a
+  rarity-coloured username, a set-symbol rarity gem beside your name and a matching
+  avatar ring on the leaderboard and profiles.
+- Free accounts again choose from **five avatars**; the full top-500 gallery is a
+  supporter perk. Locked avatars show a padlock in the picker.
+- Fixed the account page's **mode tabs**, which were tinted ember — unselected tabs are
+  grey/white again, matching the daily pages.
+- The account page's **Back** button now sits below the mode tabs instead of up in the
+  masthead.
+
+- New **Leaderboard** page (`/leaderboard`, linked from the footer and the home widget) for signed-in
+  players who've opted in: tabs for day streak, best streak, win streak, XP and total
+  wins, the top 100 for each, and your own rank pinned below the list if you're not on
+  it. The home screen now also has a compact top-5 leaderboard widget with the same
+  tabs, linking through to the full board.
+- Daily wins now earn a small bonus to XP the longer your current day streak runs
+  (capped at +20%), on top of the existing per-win and full-5/5-day bonuses.
+- New **Account** page (`/account`, linked in the footer): sign in with Google or
+  Discord, then pick your own **username** and a **commander-art avatar** (five to
+  choose from, more unlocked by supporter tiers). Your account tracks your streaks,
+  win streak, wins and XP across the daily modes, and you can choose whether to
+  appear on the leaderboards. We take only a sign-in id and your email from Google/
+  Discord — never your name or picture — and you're identified by an anonymous id.
+  Accounts are entirely optional; every game still works fully without signing in.
+- First sign-in now has a short welcome: name your planeswalker and pick your
+  commander sigil before you land on your profile. Your profile is a proper MTG
+  character sheet — a hero banner with your avatar, a level + XP bar, and stat cards
+  for your streaks and wins. Change your avatar any time by clicking it to open the
+  gallery, and rename yourself with the pencil.
+- Avatars are chosen from a searchable five-across gallery (supporters unlock all top
+  500; free accounts pick from five — see the supporter note above). Supporter tiers
+  also colour your name, add a rarity gem and tint your avatar ring. The account page
+  now also carries the daily **mode tabs**,
+  so it sits within the rest of the site and shows which of today's puzzles you've solved.
+- The "back" control on info pages (and the games) now sits neatly below the title
+  instead of overlapping it, and the account page's is simply "Back".
 - The Changelog and other info pages now have a "Back to today" button, and Higher/Lower,
-  Price Is Right, The Binder and Grid now use the same flame-styled back button as the
+  Guess the cost, The Binder and Grid now use the same flame-styled back button as the
   archive.
 - New page: **Changelog** (`/changelog`) — a friendly, version-by-version history of
   what's been added to Commandle, with v1.0.0 as today's release. Linked from the games hub
@@ -15,9 +144,9 @@ a change that a player could notice.
 - In The Binder, found cards now read "Found {date} in {mode}" and no longer show the
   colored mode dots or the corner tick on the art. Undiscovered commanders now show in
   full-opacity grayscale instead of dimmed.
-- Higher/Lower, Price Is Right, The Binder and Grid now share the "Commandle" wordmark
+- Higher/Lower, Guess the cost, The Binder and Grid now share the "Commandle" wordmark
   in their header, with the game's name shown as a subtitle just beneath it.
-- Higher/Lower, Price Is Right, The Binder and Grid now have their own settings cog
+- Higher/Lower, Guess the cost, The Binder and Grid now have their own settings cog
   in the header, so you can toggle sound effects (and the daily reminder) from any game.
 - Grid rarity gems now use authentic MTG set-symbol icons (via the Keyrune font),
   and in a grid cell the gem sits just to the left of the commander's name.
@@ -40,7 +169,7 @@ a change that a player could notice.
   where every commander you've ever guessed correctly flips face-up.
 - Added a hint on the grid results screen that you can tap any cell to see every
   commander that fit.
-- Tidied the settings menu: removed the Higher/Lower and Price Is Right shortcuts
+- Tidied the settings menu: removed the Higher/Lower and Guess the cost shortcuts
   (they live in All games), and the debug Reset — plus a new "clear all data"
   wipe — now only appear in dev builds.
 - Reworded grid mode text and share/recap messages to drop em dashes in favour of
@@ -52,7 +181,7 @@ a change that a player could notice.
 - Grid mode now shows the same live "Next grid in HH:MM:SS" countdown as the daily
   modes, instead of the vaguer "a new grid arrives at midnight."
 - The title wordmark now wobbles, springs, and puffs embers on every mode's page —
-  Higher/Lower, Price Is Right, Grid, the Binder, and the games hub — matching the
+  Higher/Lower, Guess the cost, Grid, the Binder, and the games hub — matching the
   daily modes.
 - After finishing a grid you can tap any cell to see every commander that fit there,
   each with its art and the share of all players who picked it — hover or tap a
@@ -70,7 +199,7 @@ a change that a player could notice.
 - Binder cards you've found now show the date you **first found** them right on the sleeve,
   plus a gilt "found" seal and small dots for each mode you've cracked them in.
 - Title-screen tiles now have distinct icons: up/down arrows for Higher / Lower, a coin
-  for Price Is Right, and a grid for Grid — no more identical card backs.
+  for Guess the cost, and a grid for Grid — no more identical card backs.
 - **The Binder** moved into its own panel, separate from the bonus games.
 - The Binder now only collects commanders you find in the **live daily** puzzles. Archive
   replays, practice/unlimited and the bonus games no longer add cards to it.
@@ -97,7 +226,7 @@ a change that a player could notice.
 
 ## 2026-07-05
 
-- New bonus game: **Price Is Right** (`/price-is-right`) — guess the daily commander's
+- New bonus game: **Guess the cost** (`/guess-the-cost`) — guess the daily commander's
   market price in 6 tries with higher/lower arrows and hot/warm/cold hints, plus an
   Endless streak mode.
 - New **All Games** title screen (`/games`) listing the five daily modes and the bonus

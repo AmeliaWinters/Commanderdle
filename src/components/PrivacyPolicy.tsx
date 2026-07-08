@@ -5,7 +5,7 @@ export default function PrivacyPolicy() {
     <ContentPage
       title="Commandle Privacy Policy"
       description="How Commandle handles data: local browser storage for your puzzle progress, Google AdSense advertising cookies, analytics, and your choices under GDPR and CCPA."
-      canonical="https://commandle.com/privacy"
+      canonical="https://commandle.app/privacy"
     >
       <h2>Privacy Policy</h2>
       <p className="privacy-date">Last updated: 5 July 2026</p>
@@ -13,13 +13,11 @@ export default function PrivacyPolicy() {
       <section>
         <h3>Who I am</h3>
         <p>
-          Commandle ("I", "me", the
-          "site") is a free, unofficial fan game for{" "}
+          Commandle ("I", "me", the "site") is a free, unofficial fan game for{" "}
           <em>Magic: The Gathering</em>. It is not affiliated with or endorsed
           by Wizards of the Coast. This policy explains what data is processed
           when you use the site and the choices you have. If you have any
-          questions, contact me through my{" "}
-          <a href="/contact">contact page</a>.
+          questions, contact me through my <a href="/contact">contact page</a>.
         </p>
       </section>
 
@@ -33,16 +31,16 @@ export default function PrivacyPolicy() {
         </p>
         <ul>
           <li>
-            <strong>Game progress.</strong> Your daily guesses, results,
-            streaks and settings are stored entirely in your browser using{" "}
+            <strong>Game progress.</strong> Your daily guesses, results, streaks
+            and settings are stored entirely in your browser using{" "}
             <code>localStorage</code>. This data stays on your device and is not
             sent to me.
           </li>
           <li>
             <strong>Anonymous puzzle statistics.</strong> When you finish a
             puzzle I may record an anonymous, aggregate tally (for example
-            "solved in 4 guesses") so I can show global solve
-            rates. These records are not linked to you or your device.
+            "solved in 4 guesses") so I can show global solve rates. These
+            records are not linked to you or your device.
           </li>
           <li>
             <strong>Technical data.</strong> Like most websites, my hosting
@@ -73,9 +71,9 @@ export default function PrivacyPolicy() {
         </p>
         <ul>
           <li>
-            Google's use of advertising cookies enables it and its
-            partners to serve ads to you based on your visits to this site
-            and/or other sites on the Internet.
+            Google's use of advertising cookies enables it and its partners to
+            serve ads to you based on your visits to this site and/or other
+            sites on the Internet.
           </li>
           <li>
             You may opt out of personalised advertising by visiting{" "}
@@ -89,13 +87,21 @@ export default function PrivacyPolicy() {
             .
           </li>
           <li>
-            You can also opt out of a third-party vendor's use of cookies
-            for personalised advertising by visiting{" "}
-            <a href="https://www.aboutads.info/choices/" target="_blank" rel="noreferrer">
+            You can also opt out of a third-party vendor's use of cookies for
+            personalised advertising by visiting{" "}
+            <a
+              href="https://www.aboutads.info/choices/"
+              target="_blank"
+              rel="noreferrer"
+            >
               aboutads.info
             </a>{" "}
             or{" "}
-            <a href="https://www.youronlinechoices.eu" target="_blank" rel="noreferrer">
+            <a
+              href="https://www.youronlinechoices.eu"
+              target="_blank"
+              rel="noreferrer"
+            >
               youronlinechoices.eu
             </a>{" "}
             (EU).
@@ -135,11 +141,10 @@ export default function PrivacyPolicy() {
           data, including the right to access, correct, delete or restrict its
           processing, and to object to certain processing. Residents of
           California and similar jurisdictions may have the right to opt out of
-          the "sale" or "sharing" of personal
-          information for targeted advertising; you can exercise this using the
-          advertising opt-out links above. To make a request relating to data I
-          hold, contact me through my{" "}
-          <a href="/contact">contact page</a>.
+          the "sale" or "sharing" of personal information for targeted
+          advertising; you can exercise this using the advertising opt-out links
+          above. To make a request relating to data I hold, contact me through
+          my <a href="/contact">contact page</a>.
         </p>
       </section>
 
@@ -194,9 +199,9 @@ export default function PrivacyPolicy() {
         <h3>Changes to this policy</h3>
         <p>
           I may update this policy from time to time. Material changes will be
-          reflected by the "last updated" date above. Continued use
-          of the site after changes take effect constitutes acceptance of the
-          updated policy.
+          reflected by the "last updated" date above. Continued use of the site
+          after changes take effect constitutes acceptance of the updated
+          policy.
         </p>
       </section>
 

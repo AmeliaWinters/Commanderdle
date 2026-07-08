@@ -44,6 +44,15 @@
   --flame-3: #c01f1f;
   --flame: linear-gradient(135deg, var(--flame-1), var(--flame-3));
 
+  /* Canonical rarity/tier colours — mirror of TIER_META in src/lib/auth.ts.
+     Used by supporter tiers (account/leaderboard) and Grid mode rarities. */
+  --rarity-common: #333333;
+  --rarity-uncommon: #9d9d9d;
+  --rarity-rare: #ddbb66;
+  --rarity-mythic: #f07e01;
+  /* Shared orange fill for XP/progress bars (account page + widget popover). */
+  --xp-gradient: linear-gradient(90deg, #ec5a1c, #f7a338);
+
   /* guess feedback */
   --exact-bg: #1e6b39;
   --exact-bd: #38b461;

@@ -11,10 +11,11 @@
   color: var(--text-dim);
 }
 .back-btn {
-  position: absolute;
-  left: 0;
-  top: 6px;
-  z-index: 20;
+  /* Its own row beneath the masthead title (order pushes it below the flex-column
+     header's title/tagline), left-aligned, so it never overlaps the title. */
+  order: 99;
+  align-self: flex-start;
+  margin-top: var(--s2);
   display: flex;
   align-items: center;
   gap: 7px;

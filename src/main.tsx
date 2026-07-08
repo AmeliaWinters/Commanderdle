@@ -2,6 +2,8 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './components/App'
 import ConsentBanner from './components/ConsentBanner'
+import UsernameGate from './components/account/UsernameGate'
+import { AuthProvider } from './lib/useAuth'
 import 'keyrune/css/keyrune.css'
 import './styles/index.css'
 import { loadCommanders } from './lib/commanders'
@@ -16,10 +18,15 @@ loadCommanders()
   .then(() => {
     createRoot(document.getElementById('root')!).render(
       <StrictMode>
-        <App />
-        {/* Sibling of App so the cookie banner shows on every route, including the
-            standalone pages that App returns early for. */}
-        <ConsentBanner />
+        <AuthProvider>
+          <App />
+          {/* Siblings of App so they show on every route, including the standalone
+              pages that App returns early for. The account widget is no longer here —
+              it lives inside each page's masthead header instead. UsernameGate forces a
+              signed-in player to claim a required username before they can play on. */}
+          <UsernameGate />
+          <ConsentBanner />
+        </AuthProvider>
       </StrictMode>,
     )
   })
