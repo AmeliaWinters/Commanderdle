@@ -28,6 +28,10 @@
     color 0.15s;
 }
 
+.skip-btn span {
+  transform: translateY(-2px);
+}
+
 .skip-btn:hover {
   border-color: var(--flame-2);
   color: var(--flame-2);
@@ -137,9 +141,8 @@
     width: 44px;
     height: 44px;
   }
-  .skip-btn {
-    width: 36px;
-    height: 36px;
+  .skip-btn span {
+    transform: none;
   }
   .pool-peek-btn {
     min-height: 44px;

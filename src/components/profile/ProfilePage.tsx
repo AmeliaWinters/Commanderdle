@@ -6,7 +6,7 @@ import StatCards from "../account/StatCards";
 import AvatarRing from "../account/AvatarRing";
 import { fetchProfile } from "../../lib/leaderboardApi";
 import type { PublicProfile } from "../../lib/leaderboard";
-import { TIER_META } from "../../lib/auth";
+import { TIER_META, effectiveTierColor, tierNameDisplay } from "../../lib/auth";
 import { levelFromXp } from "../../lib/accountStats";
 import { useAuth } from "../../lib/useAuth";
 import { ACCOUNT_PATH, navigateToPath } from "../../lib/router";
@@ -50,7 +50,12 @@ export default function ProfilePage({ uuid }: { uuid: string }) {
 
   const isMe = user?.uuid === uuid;
   const level = profile ? levelFromXp(profile.stats.xp) : null;
-  const tierColor = profile ? TIER_META[profile.tier].color : "var(--flame-1)";
+  const tierColor = profile
+    ? effectiveTierColor(profile.tier, profile.nameColor)
+    : "var(--flame-1)";
+  const nameDisp = profile
+    ? tierNameDisplay(profile.tier, profile.nameColor)
+    : null;
 
   return (
     <ContentPage
@@ -92,12 +97,8 @@ export default function ProfilePage({ uuid }: { uuid: string }) {
             </AvatarRing>
             <div className="account-hero-id">
               <h2
-                className={`account-name${profile.tier === "mythic" ? " foil-text" : ""}`}
-                style={
-                  profile.tier !== "common" && profile.tier !== "mythic"
-                    ? { color: tierColor }
-                    : undefined
-                }
+                className={`account-name${nameDisp?.foil ? " foil-text" : ""}`}
+                style={nameDisp?.color ? { color: nameDisp.color } : undefined}
               >
                 {profile.username}
                 {profile.tier !== "common" && (

@@ -7,7 +7,38 @@ interface Release {
   notes: string[];
 }
 
-const RELEASES: Release[] = [
+export const RELEASES: Release[] = [
+  {
+    title: "Full Release!",
+    version: "1.0.0",
+    date: "2026-07-08",
+    notes: [
+      "Account page design improvements",
+      "Card zoom no longer shows up on mobile on last guess",
+      "Mythic supporters can now pick alternate art avatars",
+      "Binder now follows account",
+      "Various mobile bugfixes",
+    ],
+  },
+  {
+    version: "0.10.2",
+    date: "2026-07-08",
+    notes: [
+      "Rate limiting implemented on results",
+      "Added XSS safety",
+      "Added intercepted request safety",
+      "Ko-Fi donations now are properly converted",
+      "Users can no longer archive to a future daily",
+      "Verified emails can no longer be accidentally removed",
+      "Footer is no longer duplicated on mobile",
+      "Archive now scales with big numbers",
+      "Changelog button how shows date of latest update",
+      "Removed twitter support",
+      "Account widget name and ring now consistent with account tier",
+      "Account binder can no longer be spoofed",
+      "Added mythic rare user ability to change flare colour",
+    ],
+  },
   {
     version: "0.10.1",
     date: "2026-07-08",
@@ -23,7 +54,7 @@ const RELEASES: Release[] = [
       "Integration with Ko-Fi for automatic account tier upgrades",
       "Added supporter tiers explanations",
       "Added Ko-Fi buttons on main hub and account page",
-      "Creator Tier added",
+      "The Creator Tier added",
       "Added binder collection to account",
       "About page covers more",
       "Small redesign tweaks",
@@ -168,6 +199,20 @@ const RELEASES: Release[] = [
     ],
   },
 ];
+
+/** The newest release (RELEASES is maintained newest-first). */
+export const LATEST_RELEASE = RELEASES[0];
+
+/** Latest date formatted like "8 Jul 2026", or "" if the release has no date. */
+export function formatReleaseDate(iso?: string): string {
+  if (!iso) return "";
+  const d = new Date(`${iso}T00:00:00`);
+  return d.toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+}
 
 export default function ChangelogPage() {
   return (

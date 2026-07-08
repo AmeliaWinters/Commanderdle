@@ -14,6 +14,7 @@ import {
   CHANGELOG_PATH,
   navigateToPath,
 } from "../../lib/router";
+import { LATEST_RELEASE, formatReleaseDate } from "../pages/ChangelogPage";
 import { COMMANDERS } from "../../lib/commanders";
 import { loadCollection } from "../../lib/collection";
 import { isModeCompletedToday } from "../../lib/stats";
@@ -130,7 +131,10 @@ function BinderSection() {
         </span>
         <span className="hub-tile-text">
           <span className="hub-tile-label">Changelog</span>
-          <span className="hub-tile-blurb">What's new, version by version</span>
+          <span className="hub-tile-blurb">
+             Last update: {" "}
+            {formatReleaseDate(LATEST_RELEASE.date)}  (v{LATEST_RELEASE.version})
+          </span>
         </span>
       </a>
     </section>
@@ -157,7 +161,21 @@ export default function GamesHub() {
       <CardBackdrop />
       <header className="app-header hub-header">
         <AccountWidget />
-        <LogoTitle ariaLabel="commandle">
+        <LogoTitle
+          ariaLabel="commandle"
+          after={
+            <a
+              className="logo-version"
+              href={CHANGELOG_PATH}
+              onClick={(e) => {
+                e.preventDefault();
+                navigateToPath(CHANGELOG_PATH);
+              }}
+            >
+              v{LATEST_RELEASE.version}
+            </a>
+          }
+        >
           Comman<span className="accent">dle</span>
         </LogoTitle>
       </header>

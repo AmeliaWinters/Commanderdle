@@ -34,7 +34,7 @@ export default function StatsPanel({ mode, maxGuesses, highlight }: Props) {
           <span className="stat-label">Played</span>
         </div>
         <div className="stat">
-          <span className="stat-val">{winPct}</span>
+          <span className="stat-val">{winPct}%</span>
           <span className="stat-label">Win %</span>
         </div>
         <div className="stat">

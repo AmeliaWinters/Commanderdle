@@ -14,6 +14,10 @@
 import { isShareMode, type ShareMode } from '../../../../src/lib/shareCode'
 import { validateSubmission, type GlobalStats } from '../../../../src/lib/globalStats'
 import { rateLimitOk, clientIp } from '../../rateLimit'
+import { puzzleNumberForDate } from '../../../../src/lib/puzzleDate'
+
+// UTC date key (YYYY-MM-DD) for right now.
+const todayKey = () => new Date().toISOString().slice(0, 10)
 
 // Per-IP ingest cap. Dedupe already collapses repeat submissions of the same daily by
 // client id, but a script can mint fresh client ids to stuff the distribution — so also
@@ -98,6 +102,10 @@ async function postResult(
 
   const valid = validateSubmission(mode, puzzle, Boolean(body.won), Number(body.guesses))
   if (!valid) return json({ error: 'invalid result' }, 400)
+
+  // Don't let anyone pre-poison community stats for puzzles that don't exist yet. Allow up
+  // to today+1 (one day of timezone slack, mirroring the account endpoint's ±1-day guard).
+  if (puzzle > puzzleNumberForDate(todayKey()) + 1) return json({ error: 'puzzle not yet available' }, 400)
 
   // Cap how fast one IP can inject results, so fresh-client-id churn can't stuff the stats.
   const allowed = await rateLimitOk(

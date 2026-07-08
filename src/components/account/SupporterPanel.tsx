@@ -78,9 +78,9 @@ export default function SupporterPanel({
             ))}
           </div>
         </>
-      ) : user.tier === "creator" ? (
+      ) : user.tier === "theCreator" ? (
         <p>
-          You have the <strong style={{ color: tierColor }}>Creator</strong>{" "}
+          You have the <strong style={{ color: tierColor }}>The Creator</strong>{" "}
           tier. Hello, mother.
         </p>
       ) : (

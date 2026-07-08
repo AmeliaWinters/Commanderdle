@@ -32,7 +32,12 @@ import {
   type AuthEnv,
   type User,
 } from './session'
-import { isValidAvatar, isAvatarUnlocked } from '../../../src/lib/avatars'
+import {
+  isValidAvatar,
+  isAvatarUnlocked,
+  isValidNameColor,
+  canChooseNameColor,
+} from '../../../src/lib/avatars'
 import { containsProfanity } from '../../../src/lib/profanity'
 import { getStats } from '../account/store'
 import { reconcileTier } from '../webhooks/kofi'
@@ -46,7 +51,7 @@ const redirectUriFor = (request: Request, provider: ProviderId) =>
 
 /** Only same-origin absolute paths are allowed as a post-login return target. */
 function safeReturnTo(raw: string | null): string {
-  if (raw && raw.startsWith('/') && !raw.startsWith('//')) return raw
+  if (raw && raw.startsWith('/') && !raw.startsWith('//') && !raw.includes('\\')) return raw
   return '/account'
 }
 
@@ -113,7 +118,7 @@ export async function onCallback(
   const row = await env.STATS_DB.prepare(
     `INSERT INTO users (uuid, provider, provider_id, email)
      VALUES (?1, ?2, ?3, ?4)
-     ON CONFLICT(provider, provider_id) DO UPDATE SET email = ?4
+     ON CONFLICT(provider, provider_id) DO UPDATE SET email = COALESCE(?4, email)
      RETURNING id`,
   )
     .bind(crypto.randomUUID(), provider, profile.providerId, profile.email)
@@ -161,7 +166,12 @@ export async function onUpdateMe(request: Request, env: AuthEnv): Promise<Respon
   const user = await currentUserRow(env, request)
   if (!user || !env.STATS_DB) return json({ error: 'not signed in' }, 401)
 
-  let body: { username?: unknown; avatar?: unknown; leaderboardOptIn?: unknown }
+  let body: {
+    username?: unknown
+    avatar?: unknown
+    leaderboardOptIn?: unknown
+    nameColor?: unknown
+  }
   try {
     body = await request.json()
   } catch {
@@ -192,6 +202,16 @@ export async function onUpdateMe(request: Request, env: AuthEnv): Promise<Respon
   if (typeof body.leaderboardOptIn === 'boolean') {
     sets.push(`leaderboard_opt_in = ?${binds.length + 1}`)
     binds.push(body.leaderboardOptIn ? 1 : 0)
+  }
+  // Custom flare colour — a mythic+ cosmetic. `null` clears it back to the tier colour;
+  // a hex string sets it. Any other type is ignored (not part of this patch).
+  if (body.nameColor === null || typeof body.nameColor === 'string') {
+    if (!canChooseNameColor(user.tier))
+      return json({ error: 'a custom colour is a Mythic supporter perk' }, 403)
+    if (body.nameColor !== null && !isValidNameColor(body.nameColor))
+      return json({ error: 'colour must be a hex value like #ff8800' }, 400)
+    sets.push(`name_color = ?${binds.length + 1}`)
+    binds.push(body.nameColor)
   }
   if (sets.length === 0) return json({ error: 'nothing to update' }, 400)
 

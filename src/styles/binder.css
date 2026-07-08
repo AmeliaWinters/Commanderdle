@@ -138,7 +138,7 @@
 }
 
 .binder-shown-btn.active {
-  background: var(--panel-2);
+  background: var(--flame-1);
   color: var(--text);
 }
 

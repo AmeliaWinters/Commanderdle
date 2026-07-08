@@ -9,7 +9,7 @@
  * `uuid` + their own `username`/`avatar`.
  */
 import type { AccountStats } from "./accountStats";
-import type { Tier } from "./avatars";
+import { canChooseNameColor, type Tier } from "./avatars";
 
 export type { Tier };
 export type { AccountStats };
@@ -21,6 +21,11 @@ export interface AccountUser {
   /** Avatar id from src/lib/avatars.ts. */
   avatar: string;
   tier: Tier;
+  /**
+   * Optional custom flare colour (mythic+ cosmetic) for the username + profile
+   * theme. `null` = use the tier's default colour. See `tierNameDisplay`.
+   */
+  nameColor: string | null;
   leaderboardOptIn: boolean;
 }
 
@@ -98,6 +103,8 @@ export async function updateMe(patch: {
   username?: string;
   avatar?: string;
   leaderboardOptIn?: boolean;
+  /** A `#rgb`/`#rrggbb` flare colour, or `null` to clear it back to the tier colour. */
+  nameColor?: string | null;
 }): Promise<UpdateResult> {
   try {
     const res = await fetch(`${apiBase()}/api/auth/me`, {
@@ -130,6 +137,17 @@ export async function logout(): Promise<void> {
   }
 }
 
+// Lightweight pub/sub so the auth context can update its live XP/stats the instant a
+// result is recorded, without any page refresh. The submit path is fire-and-forget from
+// the game hook; this lets the freshly recomputed stats flow back into the UI.
+type StatsListener = (stats: AccountStats) => void;
+const statsListeners = new Set<StatsListener>();
+
+export function onAccountStats(fn: StatsListener): () => void {
+  statsListeners.add(fn);
+  return () => statsListeners.delete(fn);
+}
+
 /**
  * Record a finished daily result against the signed-in account (source of truth for
  * leaderboards). No-op for anonymous players. Returns the fresh stats, or null.
@@ -140,6 +158,7 @@ export async function submitAccountResult(
   puzzle: number,
   won: boolean,
   guesses: number,
+  answer?: string,
 ): Promise<AccountStats | null> {
   if (!loggedInHint()) return null;
   try {
@@ -147,11 +166,43 @@ export async function submitAccountResult(
       method: "POST",
       credentials: "include",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ mode, date, puzzle, won, guesses }),
+      body: JSON.stringify({ mode, date, puzzle, won, guesses, answer }),
     });
     if (!res.ok) return null;
     const data = (await res.json()) as { stats: AccountStats };
+    // Push the recomputed stats to any live listener (the auth context) so XP updates
+    // instantly in the account page and widget.
+    if (data.stats) statsListeners.forEach((fn) => fn(data.stats));
     return data.stats;
+  } catch {
+    return null;
+  }
+}
+
+/** One binder entry from the server: when a commander was first found + in which modes. */
+export interface BinderEntry {
+  firstFound: string;
+  modes: string[];
+}
+export type ServerBinder = Record<string, BinderEntry>;
+
+/**
+ * Fetch the signed-in player's server-side Binder (the source of truth for logged-in
+ * collections). Returns null for anonymous players or on any failure, so callers fall
+ * back to the local (localStorage) binder.
+ */
+export async function fetchBinder(
+  signal?: AbortSignal,
+): Promise<ServerBinder | null> {
+  if (!loggedInHint()) return null;
+  try {
+    const res = await fetch(`${apiBase()}/api/account/binder`, {
+      credentials: "include",
+      signal,
+    });
+    if (!res.ok) return null;
+    const data = (await res.json()) as { binder?: ServerBinder };
+    return data.binder ?? {};
   } catch {
     return null;
   }
@@ -182,9 +233,45 @@ export const TIER_META: Record<
     color: "#F07E01",
     keyrune: "ss ss-mythic ss-grad",
   },
-  creator: {
-    label: "Creator",
+  theCreator: {
+    label: "The Creator",
     color: "#fd7aacff",
     keyrune: "ss ss-timeshifted ss-grad",
   },
 };
+
+/**
+ * How a player's username should render, given their tier and optional custom flare
+ * colour. Centralises the branching every place that prints a name (account page,
+ * widget, profile, leaderboard) so they stay consistent:
+ *
+ *  - `color`  — an inline colour to apply, or `undefined` to leave it to CSS/foil.
+ *  - `foil`   — apply the `.foil-text` animated gradient (mythic default only).
+ *
+ * A mythic/creator player with a custom colour gets that solid colour instead of the
+ * foil gradient. The tier gem is intentionally left out of this — it always keeps its
+ * own rarity colour regardless of the chosen flare.
+ */
+export function tierNameDisplay(
+  tier: Tier,
+  nameColor?: string | null,
+): { color: string | undefined; foil: boolean } {
+  if (nameColor && canChooseNameColor(tier))
+    return { color: nameColor, foil: false };
+  if (tier === "mythic") return { color: undefined, foil: true };
+  if (tier === "common") return { color: undefined, foil: false };
+  return { color: TIER_META[tier].color, foil: false };
+}
+
+/**
+ * The effective theme colour (`--tier-color`) for a player: their custom flare colour
+ * when set and allowed, otherwise the tier's default. Drives avatar ring, badge and
+ * profile accents — but never the rarity gem.
+ */
+export function effectiveTierColor(
+  tier: Tier,
+  nameColor?: string | null,
+): string {
+  if (nameColor && canChooseNameColor(tier)) return nameColor;
+  return TIER_META[tier].color;
+}

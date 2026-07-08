@@ -108,7 +108,7 @@
 
 @media (max-width: 560px) {
   .bottom-bar {
-    margin: 20px 0 8px;
+    margin: 20px 0 24px;
     padding-bottom: env(safe-area-inset-bottom);
   }
 }

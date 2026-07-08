@@ -255,8 +255,6 @@ export default function App() {
       />
 
       <AppFooter isArchive={isArchive} archiveDate={archiveDate} />
-
-      <AppFooter isArchive={isArchive} archiveDate={archiveDate} />
     </div>
   );
 }

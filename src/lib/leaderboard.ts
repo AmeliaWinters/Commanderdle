@@ -29,7 +29,7 @@ export function metricByKey(key: string): MetricDef | undefined {
   return LEADERBOARD_METRICS.find((m) => m.key === key);
 }
 
-export type Tier = "common" | "uncommon" | "rare" | "mythic" | "creator";
+export type Tier = "common" | "uncommon" | "rare" | "mythic" | "theCreator";
 
 /** One ranked row on the board. */
 export interface LeaderboardEntry {
@@ -37,6 +37,8 @@ export interface LeaderboardEntry {
   username: string;
   avatar: string;
   tier: Tier;
+  /** Custom flare colour (mythic+), or null for the tier default. */
+  nameColor: string | null;
   value: number;
 }
 
@@ -51,6 +53,8 @@ export interface PublicProfile {
   username: string;
   avatar: string;
   tier: Tier;
+  /** Custom flare colour (mythic+), or null for the tier default. */
+  nameColor: string | null;
   joinedAt: number;
   stats: import("./accountStats").AccountStats;
 }

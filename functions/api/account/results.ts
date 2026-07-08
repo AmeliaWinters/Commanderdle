@@ -1,7 +1,7 @@
 /**
  * Server-recorded daily results for signed-in players (Phase B).
  *
- *   POST /api/account/results   body { mode, date, puzzle, won, guesses }
+ *   POST /api/account/results   body { mode, date, puzzle, won, guesses, answer? }
  *                               → { stats }  (recomputed leaderboard stats)
  *
  * Requires a session. The submission is validated with the same rules as the
@@ -13,7 +13,14 @@ import { isShareMode } from '../../../src/lib/shareCode'
 import { validateSubmission } from '../../../src/lib/globalStats'
 import { puzzleNumberForDate, utcMidnight } from '../../../src/lib/puzzleDate'
 import { currentUserRow, type AuthEnv } from '../auth/session'
+import { rateLimitOk } from '../rateLimit'
 import { recomputeStats } from './store'
+
+// Each accepted POST runs a full recomputeStats (every row for the user), so bound how
+// fast one account can hammer it. Mirrors the anonymous stats ingest's per-hour cap;
+// keyed by user id since the request is authenticated.
+const POST_LIMIT = 40
+const POST_WINDOW_SEC = 60 * 60
 
 // The daily rolls at the player's *local* midnight, so the server's UTC "today" can
 // differ from the client's date by up to a day either way. Accept only dates within
@@ -33,12 +40,16 @@ export async function onResults(request: Request, env: AuthEnv): Promise<Respons
   const user = await currentUserRow(env, request)
   if (!user) return json({ error: 'not signed in' }, 401)
 
+  const allowed = await rateLimitOk(env.STATS_DB, `account:${user.id}`, POST_LIMIT, POST_WINDOW_SEC)
+  if (!allowed) return json({ error: 'rate limited' }, 429)
+
   let body: {
     mode?: unknown
     date?: unknown
     puzzle?: unknown
     won?: unknown
     guesses?: unknown
+    answer?: unknown
   }
   try {
     body = await request.json()
@@ -68,12 +79,20 @@ export async function onResults(request: Request, env: AuthEnv): Promise<Respons
   const valid = validateSubmission(mode, puzzle, Boolean(body.won), Number(body.guesses))
   if (!valid) return json({ error: 'invalid result' }, 400)
 
+  // The commander guessed, stored only on a win — it's what feeds the server-side Binder.
+  // Tied to this authenticated, date-bounded, one-per-day row, so a client can at most lie
+  // about *today's* commander, never bulk-unlock the collection by editing localStorage.
+  const answer =
+    valid.won && typeof body.answer === 'string' && body.answer.length <= 200
+      ? body.answer
+      : null
+
   // One row per (user, mode, date); resubmits are silent no-ops.
   await env.STATS_DB.prepare(
-    `INSERT OR IGNORE INTO user_results (user_id, mode, date, puzzle, won, guesses)
-     VALUES (?, ?, ?, ?, ?, ?)`,
+    `INSERT OR IGNORE INTO user_results (user_id, mode, date, puzzle, won, guesses, answer)
+     VALUES (?, ?, ?, ?, ?, ?, ?)`,
   )
-    .bind(user.id, mode, date, puzzle, valid.won ? 1 : 0, valid.guesses)
+    .bind(user.id, mode, date, puzzle, valid.won ? 1 : 0, valid.guesses, answer)
     .run()
 
   const stats = await recomputeStats(env.STATS_DB, user.id)

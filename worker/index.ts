@@ -24,6 +24,7 @@ import {
 } from '../functions/api/auth/handlers'
 import type { AuthEnv } from '../functions/api/auth/session'
 import { onResults } from '../functions/api/account/results'
+import { onBinder } from '../functions/api/account/binder'
 import { onLeaderboard } from '../functions/api/leaderboard'
 import { onProfile } from '../functions/api/profile'
 import { onKofiWebhook, type KofiEnv } from '../functions/api/webhooks/kofi'
@@ -48,6 +49,7 @@ const AUTH_CALLBACK = /^\/api\/auth\/([^/]+)\/callback\/?$/
 const AUTH_LOGOUT = /^\/api\/auth\/logout\/?$/
 const AUTH_ME = /^\/api\/auth\/me\/?$/
 const ACCOUNT_RESULTS = /^\/api\/account\/results\/?$/
+const ACCOUNT_BINDER = /^\/api\/account\/binder\/?$/
 const KOFI_WEBHOOK = /^\/api\/webhooks\/kofi\/?$/
 const LEADERBOARD = /^\/api\/leaderboard\/([^/]+)\/?$/
 const PROFILE = /^\/api\/profile\/([^/]+)\/?$/
@@ -75,6 +77,9 @@ export default {
     }
     if (ACCOUNT_RESULTS.test(pathname)) {
       return onResults(request, env)
+    }
+    if (ACCOUNT_BINDER.test(pathname)) {
+      return onBinder(request, env)
     }
     if (KOFI_WEBHOOK.test(pathname)) {
       return onKofiWebhook(request, env)

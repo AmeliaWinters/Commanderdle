@@ -22,21 +22,27 @@
  *   GET   /api/profile/:uuid             → a fake public profile
  *
  * Handy query params on the login route to exercise cosmetics / states:
- *   ?tier=mythic        → sign in as a supporter (common | uncommon | rare | mythic | creator)
+ *   ?tier=mythic        → sign in as a supporter (common | uncommon | rare | mythic | theCreator)
  *   ?named=1            → skip the "choose a username" step (starts with a username set)
  */
 import type { Connect, Plugin } from "vite";
 import type { ServerResponse } from "node:http";
 
-type Tier = "common" | "uncommon" | "rare" | "mythic" | "creator";
+type Tier = "common" | "uncommon" | "rare" | "mythic" | "theCreator";
 
 interface MockUser {
   uuid: string;
   username: string | null;
   avatar: string;
   tier: Tier;
+  nameColor: string | null;
   leaderboardOptIn: boolean;
 }
+
+const canChooseNameColor = (tier: Tier): boolean =>
+  tier === "mythic" || tier === "theCreator";
+const isHexColor = (v: string): boolean =>
+  /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(v);
 
 // Single-process dev server → module-level state is the "session". Persists across page
 // reloads; resets when this file is edited (HMR) or the server restarts.
@@ -58,7 +64,7 @@ const isTier = (v: string): v is Tier =>
   v === "uncommon" ||
   v === "rare" ||
   v === "mythic" ||
-  v === "creator";
+  v === "theCreator";
 
 function sendJson(res: ServerResponse, status: number, body: unknown): void {
   const payload = JSON.stringify(body);
@@ -149,6 +155,7 @@ export function devAuthMock(): Plugin {
             username: named ? "DevPlayer" : null,
             avatar: DEFAULT_AVATAR,
             tier,
+            nameColor: null,
             leaderboardOptIn: named,
           };
           const returnTo = url.searchParams.get("returnTo");
@@ -169,6 +176,7 @@ export function devAuthMock(): Plugin {
             username?: unknown;
             avatar?: unknown;
             leaderboardOptIn?: unknown;
+            nameColor?: unknown;
           };
           if (typeof body.username === "string") {
             const name = body.username.trim();
@@ -183,6 +191,17 @@ export function devAuthMock(): Plugin {
           if (typeof body.avatar === "string") user.avatar = body.avatar;
           if (typeof body.leaderboardOptIn === "boolean")
             user.leaderboardOptIn = body.leaderboardOptIn;
+          if (body.nameColor === null || typeof body.nameColor === "string") {
+            if (!canChooseNameColor(user.tier))
+              return sendJson(res, 403, {
+                error: "a custom colour is a Mythic supporter perk",
+              });
+            if (body.nameColor !== null && !isHexColor(body.nameColor))
+              return sendJson(res, 400, {
+                error: "colour must be a hex value like #ff8800",
+              });
+            user.nameColor = body.nameColor;
+          }
           return sendJson(res, 200, { user });
         }
 
@@ -206,6 +225,7 @@ export function devAuthMock(): Plugin {
             username: e.username,
             avatar: e.avatar,
             tier: e.tier,
+            nameColor: null,
             value: 250 - i * 30,
           }));
           const you =
@@ -215,6 +235,7 @@ export function devAuthMock(): Plugin {
                   username: user.username,
                   avatar: user.avatar,
                   tier: user.tier,
+                  nameColor: user.nameColor,
                   value: 175,
                   rank: 3,
                 }
@@ -233,6 +254,7 @@ export function devAuthMock(): Plugin {
                 isSelf && user?.username ? user.username : "PlaneswalkerPat",
               avatar: isSelf ? user!.avatar : "The Ur-Dragon",
               tier: isSelf ? user!.tier : ("mythic" as Tier),
+              nameColor: isSelf ? user!.nameColor : null,
               joinedAt: Math.floor(Date.parse("2025-01-15T00:00:00Z") / 1000),
               stats,
             },

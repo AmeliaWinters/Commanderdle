@@ -11,6 +11,9 @@ export default function LeaderboardWidget() {
   const [metric, setMetric] = useState(DEFAULT_METRIC);
   const [entries, setEntries] = useState<LeaderboardEntry[] | null>(null);
   const [loaded, setLoaded] = useState(false);
+  // Once any category has shown entries we keep the widget mounted, so switching to an
+  // empty category shows an empty state rather than making the whole board vanish.
+  const [hasAnyData, setHasAnyData] = useState(false);
 
   useEffect(() => {
     let alive = true;
@@ -18,8 +21,10 @@ export default function LeaderboardWidget() {
     setLoaded(false);
     fetchLeaderboard(metric, 15, controller.signal).then((res) => {
       if (!alive) return;
-      setEntries(res?.entries ?? null);
+      const rows = res?.entries ?? null;
+      setEntries(rows);
       setLoaded(true);
+      if (rows && rows.length > 0) setHasAnyData(true);
     });
     return () => {
       alive = false;
@@ -27,8 +32,9 @@ export default function LeaderboardWidget() {
     };
   }, [metric]);
 
-  // Hide entirely until we know there's something to show.
-  if (loaded && (!entries || entries.length === 0)) return null;
+  // Hide entirely only while the board is genuinely empty everywhere (first load with no
+  // accounts). Never hide just because the currently selected category is empty.
+  if (loaded && !hasAnyData && (!entries || entries.length === 0)) return null;
 
   return (
     <section className="lb-widget" aria-labelledby="lb-widget-title">
@@ -60,12 +66,14 @@ export default function LeaderboardWidget() {
         ))}
       </div>
 
-      {entries && entries.length > 0 && (
+      {entries && entries.length > 0 ? (
         <LeaderboardList
           entries={entries}
           unit={metricByKey(metric)?.unit}
           meUuid={user?.uuid}
         />
+      ) : (
+        loaded && <p className="lb-empty">No one on this board yet.</p>
       )}
     </section>
   );

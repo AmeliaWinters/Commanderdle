@@ -1,5 +1,5 @@
 import AvatarImage from "../AvatarImage";
-import { TIER_META } from "../../lib/auth";
+import { TIER_META, tierNameDisplay } from "../../lib/auth";
 import { profilePath, navigateToPath } from "../../lib/router";
 import type { LeaderboardEntry, LeaderboardYou } from "../../lib/leaderboard";
 
@@ -34,6 +34,7 @@ function Row({
   isMe: boolean;
 }) {
   const tier = TIER_META[entry.tier];
+  const nameDisp = tierNameDisplay(entry.tier, entry.nameColor);
   return (
     <a
       href={profilePath(entry.uuid)}
@@ -51,12 +52,8 @@ function Row({
         foil={entry.tier === "mythic"}
       />
       <span
-        className={`lb-name${entry.tier === "mythic" ? " foil-text" : ""}`}
-        style={
-          entry.tier !== "common" && entry.tier !== "mythic"
-            ? { color: tier.color }
-            : undefined
-        }
+        className={`lb-name${nameDisp.foil ? " foil-text" : ""}`}
+        style={nameDisp.color ? { color: nameDisp.color } : undefined}
       >
         {entry.username}
         {entry.tier !== "common" && (

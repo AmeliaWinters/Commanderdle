@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import type { Commander } from '../types/commander'
 import { searchCommanders } from '../lib/commanders'
+import { markGuessSubmitted } from '../lib/ghostClick'
 
 interface Props {
   onGuess: (c: Commander) => void
@@ -50,6 +51,7 @@ export default function GuessInput({
 
   const submit = (c: Commander | undefined) => {
     if (!c || disabledNames.has(c.name)) return
+    markGuessSubmitted()
     onGuess(c)
     setQuery('')
     setOpen(false)

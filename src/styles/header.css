@@ -37,6 +37,27 @@
     filter 0.2s ease;
 }
 
+.logo-version {
+  position: absolute;
+  display: inline-block;
+  margin-left: 0.5em;
+  vertical-align: super;
+  font-size: 0.32em;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--accent, #ec5a1c);
+  text-decoration: none;
+  opacity: 0.85;
+  bottom: -5px;
+  right: 0;
+  transform: translateX(0%);
+}
+
+.logo-version:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
 .logo-btn:hover {
   animation: logo-wobble 0.6s ease-in-out;
   filter: drop-shadow(0 0 14px rgba(236, 90, 28, 0.55));
@@ -173,4 +194,3 @@
   text-transform: uppercase;
   color: var(--accent, var(--text-dim));
 }
-

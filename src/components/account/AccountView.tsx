@@ -8,7 +8,14 @@ import BonusStatCards from "./BonusStatCards";
 import SupporterPanel from "./SupporterPanel";
 import ModeTabs from "../ModeTabs";
 import BackButton from "../layout/BackButton";
-import { updateMe, TIER_META } from "../../lib/auth";
+import {
+  updateMe,
+  TIER_META,
+  tierNameDisplay,
+  effectiveTierColor,
+} from "../../lib/auth";
+import { canChooseNameColor } from "../../lib/avatars";
+import NameColorPicker from "./NameColorPicker";
 import { levelFromXp } from "../../lib/accountStats";
 import type { AccountUser, AccountStats } from "../../lib/auth";
 import {
@@ -36,6 +43,8 @@ export default function AccountView({ user, stats, setUser, logout }: Props) {
   );
   const [busy, setBusy] = useState(false);
   const [avatarOpen, setAvatarOpen] = useState(false);
+  // Live preview of the name flare colour while the native picker is open.
+  const [flarePreview, setFlarePreview] = useState<string | null>(null);
 
   // Binder progress (commanders unlocked / total), kept live with the collection store.
   const [binder, setBinder] = useState(() => collectionProgress());
@@ -107,8 +116,22 @@ export default function AccountView({ user, stats, setUser, logout }: Props) {
     }
   }
 
+  async function saveNameColor(color: string | null) {
+    const res = await updateMe({ nameColor: color });
+    if (res.ok) {
+      setUser(res.user);
+      flash(true, color ? "Flare colour updated" : "Flare colour reset");
+    } else {
+      flash(false, res.error);
+    }
+  }
+
   const level = stats ? levelFromXp(stats.xp) : null;
-  const tierColor = TIER_META[user.tier].color;
+  const tierColor = effectiveTierColor(
+    user.tier,
+    flarePreview ?? user.nameColor,
+  );
+  const nameDisp = tierNameDisplay(user.tier, flarePreview ?? user.nameColor);
 
   return (
     <div
@@ -169,13 +192,15 @@ export default function AccountView({ user, stats, setUser, logout }: Props) {
             ) : (
               <>
                 <h2
-                  className={`account-name${user.tier === "mythic" ? " foil-text" : ""}`}
+                  className={`account-name${nameDisp.foil ? " foil-text" : ""}`}
                   style={{
-                    color: tierColor,
+                    color: nameDisp.foil ? undefined : tierColor,
                     margin: 0,
                   }}
                 >
                   {user.username ?? "Unnamed planeswalker"}
+                </h2>
+                <span className="account-name-actions">
                   {user.tier !== "common" && (
                     <i
                       className={`${TIER_META[user.tier].keyrune} account-gem`}
@@ -184,22 +209,22 @@ export default function AccountView({ user, stats, setUser, logout }: Props) {
                       title={TIER_META[user.tier].label}
                     />
                   )}
-                </h2>
-                <button
-                  className="account-edit-name"
-                  onClick={() => setEditingName(true)}
-                  aria-label="Edit username"
-                  title="Edit username"
-                >
-                  <FaPen />
-                </button>
+                  <button
+                    className="account-edit-name"
+                    onClick={() => setEditingName(true)}
+                    aria-label="Edit username"
+                    title="Edit username"
+                  >
+                    <FaPen />
+                  </button>
+                </span>
               </>
             )}
           </div>
           {user.tier !== "common" && (
             <span className="account-tier-badge" style={{ color: tierColor }}>
-              {user.tier === "creator"
-                ? "Creator"
+              {user.tier === "theCreator"
+                ? "The Creator"
                 : `${TIER_META[user.tier].label} Supporter`}
             </span>
           )}
@@ -211,6 +236,14 @@ export default function AccountView({ user, stats, setUser, logout }: Props) {
               {level.into} / {level.span} XP to level {level.level + 1}
             </span>
           </div>
+        )}
+        {canChooseNameColor(user.tier) && (
+          <NameColorPicker
+            value={user.nameColor}
+            defaultColor={TIER_META[user.tier].color}
+            onSave={saveNameColor}
+            onPreview={setFlarePreview}
+          />
         )}
       </div>
 

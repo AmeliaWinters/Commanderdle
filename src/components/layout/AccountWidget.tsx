@@ -11,7 +11,12 @@ import {
 import { FcGoogle } from "react-icons/fc";
 import AvatarImage from "../AvatarImage";
 import { useAuth } from "../../lib/useAuth";
-import { beginLogin, TIER_META } from "../../lib/auth";
+import {
+  beginLogin,
+  TIER_META,
+  tierNameDisplay,
+  effectiveTierColor,
+} from "../../lib/auth";
 import { levelFromXp } from "../../lib/accountStats";
 import {
   navigateToPath,
@@ -57,6 +62,7 @@ export default function AccountWidget() {
   // Sign-in returns to wherever the player currently is, not always /account.
   const here = window.location.pathname + window.location.search;
   const level = user && stats ? levelFromXp(stats.xp) : null;
+  const nameDisp = user ? tierNameDisplay(user.tier, user.nameColor) : null;
 
   return (
     <div className="account-widget-wrap" onClick={(e) => e.stopPropagation()}>
@@ -66,6 +72,13 @@ export default function AccountWidget() {
         aria-expanded={open}
         aria-label={user ? "Your account" : "Sign in"}
         onClick={() => setOpen((o) => !o)}
+        style={
+          user
+            ? ({
+                "--tier-color": effectiveTierColor(user.tier, user.nameColor),
+              } as CSSProperties)
+            : undefined
+        }
       >
         {user ? (
           <>
@@ -77,13 +90,16 @@ export default function AccountWidget() {
             <span className="account-widget-id">
               <span className="account-widget-nrow">
                 <span
-                  className={`account-widget-name${user.tier === "mythic" ? " foil-text" : ""}`}
+                  className={`account-widget-name${nameDisp?.foil ? " foil-text" : ""}`}
+                  style={
+                    nameDisp?.color ? { color: nameDisp.color } : undefined
+                  }
                 >
                   {user.username ?? "Planeswalker"}
                 </span>
                 {user.tier !== "common" && (
                   <i
-                    className={`${TIER_META[user.tier].keyrune} account-gem${user.tier === "mythic" || user.tier === "creator" ? " gem-foil" : ""}`}
+                    className={`${TIER_META[user.tier].keyrune} account-gem${user.tier === "mythic" || user.tier === "theCreator" ? " gem-foil" : ""}`}
                     role="img"
                     aria-label={TIER_META[user.tier].label}
                     title={TIER_META[user.tier].label}
@@ -113,7 +129,7 @@ export default function AccountWidget() {
               className="account-pop-profile"
               style={
                 {
-                  "--tier-color": TIER_META[user.tier].color,
+                  "--tier-color": effectiveTierColor(user.tier, user.nameColor),
                 } as CSSProperties
               }
             >
@@ -125,13 +141,16 @@ export default function AccountWidget() {
               <div className="account-pop-idcol">
                 <span className="account-pop-nrow">
                   <span
-                    className={`account-pop-name${user.tier === "mythic" ? " foil-text" : ""}`}
+                    className={`account-pop-name${nameDisp?.foil ? " foil-text" : ""}`}
+                    style={
+                      nameDisp?.color ? { color: nameDisp.color } : undefined
+                    }
                   >
                     {user.username ?? "Unnamed planeswalker"}
                   </span>
                   {user.tier !== "common" && (
                     <i
-                      className={`${TIER_META[user.tier].keyrune} account-gem${user.tier === "mythic" || user.tier === "creator" ? " gem-foil" : ""}`}
+                      className={`${TIER_META[user.tier].keyrune} account-gem${user.tier === "mythic" || user.tier === "theCreator" ? " gem-foil" : ""}`}
                       role="img"
                       aria-label={TIER_META[user.tier].label}
                       title={TIER_META[user.tier].label}

@@ -10,6 +10,40 @@ import {
   type DailyResult,
 } from '../../../src/lib/accountStats'
 
+/** One binder entry: when a commander was first found and in which modes. */
+export interface BinderEntry {
+  firstFound: string
+  modes: string[]
+}
+export type Binder = Record<string, BinderEntry>
+
+/**
+ * Derive the signed-in player's Binder from their recorded wins. This is the server-side
+ * source of truth — the collection comes from `user_results`, never from editable
+ * localStorage. Grouped by commander so a card found in several modes lists them all.
+ */
+export async function getBinder(db: D1Database, userId: number): Promise<Binder> {
+  const { results } = await db
+    .prepare(
+      `SELECT answer AS name, MIN(date) AS first_found,
+              GROUP_CONCAT(DISTINCT mode) AS modes
+       FROM user_results
+       WHERE user_id = ? AND won = 1 AND answer IS NOT NULL
+       GROUP BY answer`,
+    )
+    .bind(userId)
+    .all<{ name: string; first_found: string; modes: string }>()
+
+  const binder: Binder = {}
+  for (const r of results ?? []) {
+    binder[r.name] = {
+      firstFound: r.first_found,
+      modes: r.modes ? r.modes.split(',') : [],
+    }
+  }
+  return binder
+}
+
 /** Read the cached leaderboard stats for a user (zeros if none recorded yet). */
 export async function getStats(db: D1Database, userId: number): Promise<AccountStats> {
   const row = await db

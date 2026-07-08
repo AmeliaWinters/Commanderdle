@@ -37,8 +37,11 @@
   transform: translateY(1px);
 }
 
+/* Avatar ring + name colour follow the account's supporter tier (common = white,
+   mythic = mythic-orange, etc. — see TIER_META). `--tier-color` is set inline on the
+   widget button; falls back to the flame accent for the signed-out state. */
 .account-widget .avatar-img {
-  border-color: var(--flame-2);
+  border-color: var(--tier-color, var(--flame-2));
 }
 
 .account-widget-id {
@@ -58,6 +61,8 @@
   font-family: "Cinzel", serif;
   font-weight: 700;
   font-size: 1rem;
+  /* Tier colour for the name (mythic uses .foil-text, which overrides this). */
+  color: var(--tier-color, inherit);
   /* A long username must not run past the widget and collide with the centered
      wordmark — cap it and ellipsize. */
   max-width: 9rem;

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
+import { isGhostClick } from '../lib/ghostClick'
 
 interface Props {
   name: string
@@ -61,6 +62,9 @@ export default function CardZoom({ name, image, children, className }: Props) {
   const toggle = (e: React.MouseEvent<HTMLSpanElement>) => {
     if (pos) {
       setPos(null)
+    } else if (isGhostClick()) {
+      // A guess just submitted; this is the touch's ghost click landing on the
+      // freshly-rendered result card, not a deliberate tap to open the zoom.
     } else if (Date.now() - dismissedAt.current > 300) {
       // Ignore the click from the same tap that the document pointerdown
       // listener already used to dismiss the popover - otherwise it reopens.

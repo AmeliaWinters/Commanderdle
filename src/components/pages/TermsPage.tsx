@@ -26,21 +26,21 @@ export default function TermsPage() {
           Commandle is a free, browser-based daily guessing game for{" "}
           <em>Magic: The Gathering</em> fans, provided for your personal
           entertainment. The daily puzzles are, and will remain, free to play. I
-          may add, change, suspend or discontinue any part of the game at any time
-          without notice.
+          may add, change, suspend or discontinue any part of the game at any
+          time without notice.
         </p>
       </section>
 
       <section>
         <h3>Accounts</h3>
         <p>
-          You don't need an account to play, but you can create one by signing in
-          with Google or Discord to unlock streaks, a profile and the
+          You don't need an account to play, but you can create one by signing
+          in with Google or Discord to unlock streaks, a profile and the
           leaderboards. Please keep your sign-in secure and don't impersonate
           others or pick a nickname that's offensive, misleading or infringes
-          someone's rights — I may change or remove such names, and may suspend or
-          delete accounts that break these terms. You can ask me to delete your
-          account at any time via the <a href="/contact">contact page</a>.
+          someone's rights — I may change or remove such names, and may suspend
+          or delete accounts that break these terms. You can ask me to delete
+          your account at any time via the <a href="/contact">contact page</a>.
         </p>
       </section>
 
@@ -51,14 +51,14 @@ export default function TermsPage() {
           <a href="https://ko-fi.com" target="_blank" rel="noreferrer">
             Ko-fi
           </a>
-          . Payments are processed by Ko-fi under their own terms; I never handle
-          your card details. Support is a voluntary tip, not a purchase of{" "}
-          <em>Magic: The Gathering</em> content — as a thank-you, supporters get
-          optional cosmetic extras (such as avatars and badges) that have no effect
-          on gameplay or puzzle answers. Because these are digital thank-you
-          perks, contributions are generally non-refundable except where the law
-          requires otherwise. I may adjust the available cosmetics over time, but I
-          won't take away the core game.
+          . Payments are processed by Ko-fi under their own terms; I never
+          handle your card details. Support is a voluntary tip, not a purchase
+          of <em>Magic: The Gathering</em> content — as a thank-you, supporters
+          get optional cosmetic extras (such as avatars and badges) that have no
+          effect on gameplay or puzzle answers. Because these are digital
+          thank-you perks, contributions are generally non-refundable except
+          where the law requires otherwise. I may adjust the available cosmetics
+          over time, but I won't take away the core game.
         </p>
       </section>
 
@@ -102,7 +102,7 @@ export default function TermsPage() {
             EDHREC
           </a>
           , subject to their respective terms. The game's own code, layout and
-          original text remain the property of its creator.
+          original text remain the property of its theCreator.
         </p>
       </section>
 
@@ -131,7 +131,7 @@ export default function TermsPage() {
       <section>
         <h3>Limitation of liability</h3>
         <p>
-          To the fullest extent permitted by law, Commandle and its creator
+          To the fullest extent permitted by law, Commandle and its theCreator
           shall not be liable for any indirect, incidental or consequential
           damages arising out of your use of, or inability to use, the site.
         </p>

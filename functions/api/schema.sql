@@ -56,16 +56,22 @@ CREATE TABLE IF NOT EXISTS users (
   username           TEXT,                                 -- player-chosen; null until set
   username_lc        TEXT    UNIQUE,                       -- case-insensitive uniqueness (null ok)
   avatar             TEXT    NOT NULL DEFAULT 'Atraxa, Praetors'' Voice',  -- commander name (see src/lib/avatars.ts)
-  tier               TEXT    NOT NULL DEFAULT 'common',    -- common|uncommon|rare|mythic|creator
-  -- 'creator' is a manually-granted, never-expiring owner/collaborator tier that unlocks
+  tier               TEXT    NOT NULL DEFAULT 'common',    -- common|uncommon|rare|mythic|theCreator
+  -- 'theCreator' is a manually-granted, never-expiring owner/collaborator tier that unlocks
   -- every cosmetic. Grant it by hand (it's never sold and reconcileTier leaves it alone):
-  --   UPDATE users SET tier = 'creator', tier_expires_at = NULL WHERE lower(email) = lower('you@example.com');
+  --   UPDATE users SET tier = 'theCreator', tier_expires_at = NULL WHERE lower(email) = lower('you@example.com');
   -- Unix second the current supporter tier lapses (a donation buys 31 days; paying
   -- again pushes it out). NULL = never a supporter / already lapsed. Reads treat a
   -- past/NULL value as 'common' (see EFFECTIVE_TIER_SQL) so a lapsed member loses the
   -- coloured cosmetics with no cron sweep. The avatar is deliberately left untouched,
   -- so they keep whatever they equipped while supporting.
   tier_expires_at    INTEGER,
+  -- Optional custom flare colour (a #rgb/#rrggbb hex) for mythic+ supporters: the
+  -- colour their username + profile theme render in. NULL = use the tier's default
+  -- colour. The server only lets a mythic/theCreator account set it (see handlers.ts).
+  -- Migrating an existing DB: run once, ignore "duplicate column".
+  --   ALTER TABLE users ADD COLUMN name_color TEXT;
+  name_color         TEXT,
   leaderboard_opt_in INTEGER NOT NULL DEFAULT 1,           -- 0|1
   created_at         INTEGER NOT NULL DEFAULT (unixepoch()),
   UNIQUE (provider, provider_id)
@@ -84,9 +90,14 @@ CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
 CREATE TABLE IF NOT EXISTS donations (
   kofi_txn_id TEXT    PRIMARY KEY,             -- Ko-fi kofi_transaction_id (dedupe)
   email       TEXT    NOT NULL,                -- payer email, lower-cased
-  amount      REAL    NOT NULL,                -- payment amount, GBP
+  amount      REAL    NOT NULL,                -- payment amount, in `currency`
+  currency    TEXT    NOT NULL DEFAULT 'GBP',  -- Ko-fi payment currency; only GBP grants a tier
+  type        TEXT    NOT NULL DEFAULT 'Donation', -- Ko-fi txn type; only honoured types grant a tier
   created_at  INTEGER NOT NULL DEFAULT (unixepoch())
 ) WITHOUT ROWID;
+-- Migration for DBs created before the currency/type columns existed:
+--   ALTER TABLE donations ADD COLUMN currency TEXT NOT NULL DEFAULT 'GBP';
+--   ALTER TABLE donations ADD COLUMN type TEXT NOT NULL DEFAULT 'Donation';
 CREATE INDEX IF NOT EXISTS idx_donations_email ON donations(email);
 
 -- Server-side daily results for signed-in players (Phase B). This is the SOURCE OF
@@ -101,9 +112,16 @@ CREATE TABLE IF NOT EXISTS user_results (
   puzzle     INTEGER NOT NULL,
   won        INTEGER NOT NULL,               -- 0 | 1
   guesses    INTEGER NOT NULL,
+  -- The commander guessed on a win. This is the SERVER-SIDE source of truth for the
+  -- signed-in player's Binder: the collection is derived from these rows, never from
+  -- editable localStorage. Only accrues on a real, authenticated, date-bounded daily
+  -- win (one row per user+mode+date), so it can't be bulk-spoofed. NULL on a loss.
+  answer     TEXT,
   created_at INTEGER NOT NULL DEFAULT (unixepoch()),
   PRIMARY KEY (user_id, mode, date)
 ) WITHOUT ROWID;
+-- Migrating an existing DB (the column is new): run once, ignore "duplicate column".
+--   ALTER TABLE user_results ADD COLUMN answer TEXT;
 
 -- Cached, recomputed-on-write leaderboard stats (so the board is a cheap indexed
 -- read rather than a per-request aggregation over user_results). Recomputed from

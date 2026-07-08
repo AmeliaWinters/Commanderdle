@@ -29,6 +29,26 @@ function notify() {
   listeners.forEach((l) => l())
 }
 
+// When a player is signed in, their binder is the SERVER's copy (source of truth,
+// derived from recorded daily wins) rather than the editable localStorage ledger — so
+// it can't be spoofed by hand. Null means "anonymous / not yet loaded": fall back to
+// localStorage. The auth context sets this on login/logout via setAccountBinder().
+let accountBinder: Collection | null = null
+
+/**
+ * Install (or clear) the signed-in player's server binder. Pass the fetched collection
+ * when logged in, or null on logout to fall back to the anonymous localStorage binder.
+ */
+export function setAccountBinder(col: Collection | null): void {
+  accountBinder = col
+  notify()
+}
+
+/** Whether the server binder is the active source (i.e. the player is signed in). */
+export function isAccountBinder(): boolean {
+  return accountBinder !== null
+}
+
 /**
  * Binder progress: how many of the pool's commanders the player has unlocked, out of
  * the total. Counts only commanders that are actually in the binder pool (found entries
@@ -43,6 +63,9 @@ export function collectionProgress(): { found: number; total: number } {
 }
 
 export function loadCollection(): Collection {
+  // Signed in → the server binder is authoritative and localStorage is ignored, so a
+  // hand-edited ledger can't unlock cards on an account.
+  if (accountBinder !== null) return accountBinder
   seedFromPersistedGames()
   try {
     const raw = localStorage.getItem(COLLECTION_KEY)
@@ -64,6 +87,19 @@ function saveCollection(col: Collection) {
 
 /** Add a found commander to the binder. Idempotent per (name, mode). */
 export function recordFound(name: string, mode: Mode, date: string): void {
+  // Signed in: the server is the source of truth (written by the results submit). Update
+  // the in-memory server binder optimistically so the freshly-won card shows immediately;
+  // the authoritative copy is re-fetched on the next load. Skip localStorage entirely.
+  if (accountBinder !== null) {
+    const entry = accountBinder[name]
+    if (entry) {
+      if (!entry.modes.includes(mode)) entry.modes.push(mode)
+    } else {
+      accountBinder[name] = { firstFound: date, modes: [mode] }
+    }
+    notify()
+    return
+  }
   seedFromPersistedGames()
   let col: Collection = {}
   try {

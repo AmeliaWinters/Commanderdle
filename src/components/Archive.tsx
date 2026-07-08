@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { FaCheck } from "react-icons/fa6";
+import { useEffect, useMemo, useState } from "react";
+import { FaCheck, FaXmark, FaChevronDown } from "react-icons/fa6";
 import { todayKey, puzzleNumber } from "../lib/dailyAnswer";
 import { archivePlayPath, navigateToPath } from "../lib/router";
 import { archiveResult } from "../lib/archive";
@@ -32,11 +32,89 @@ function prettyDate(key: string): string {
   });
 }
 
+/** "2026-07" → "July 2026" for the collapsible month headings. */
+function prettyMonth(monthKey: string): string {
+  const [y, m] = monthKey.split("-").map(Number);
+  return new Date(y, m - 1, 1).toLocaleDateString(undefined, {
+    month: "long",
+    year: "numeric",
+  });
+}
+
+interface MonthGroup {
+  key: string; // "YYYY-MM"
+  dates: string[];
+}
+
+/** Group the flat, newest-first date list into newest-first month buckets. */
+function groupByMonth(dates: string[]): MonthGroup[] {
+  const groups: MonthGroup[] = [];
+  let current: MonthGroup | null = null;
+  for (const date of dates) {
+    const monthKey = date.slice(0, 7);
+    if (!current || current.key !== monthKey) {
+      current = { key: monthKey, dates: [] };
+      groups.push(current);
+    }
+    current.dates.push(date);
+  }
+  return groups;
+}
+
+function DateRow({ date }: { date: string }) {
+  return (
+    <section className="archive-row">
+      <div className="archive-row-head">
+        <span className="archive-num">#{puzzleNumber(date)}</span>
+        <span className="archive-date">{prettyDate(date)}</span>
+      </div>
+      <div className="archive-modes">
+        {MODE_LIST.map((m) => {
+          const result = archiveResult(m.id, date);
+          const cls = result ? (result.won ? " won" : " lost") : "";
+          return (
+            <button
+              key={m.id}
+              className={`archive-mode-btn${cls}`}
+              title={`${m.label}${result ? (result.won ? " - solved" : " - missed") : ""}`}
+              aria-label={`Play ${m.label} for ${prettyDate(date)}${result ? (result.won ? " (solved)" : " (missed)") : ""}`}
+              onClick={() => navigateToPath(archivePlayPath(m.id, date))}
+            >
+              <span className="archive-mode-icon">
+                <m.Icon />
+              </span>
+              <span className="archive-mode-label">{m.label}</span>
+              {result && (
+                <span className="archive-mode-check">
+                  {result.won ? <FaCheck /> : <FaXmark />}
+                </span>
+              )}
+            </button>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
 export default function Archive() {
   useEffect(() => {
     document.title = "Commandle Archive";
   }, []);
-  const dates = pastDates();
+
+  const months = useMemo(() => groupByMonth(pastDates()), []);
+  // Only the most recent month is expanded on load; closed months don't render
+  // their rows at all, so the page stays light no matter how old the archive gets.
+  const [open, setOpen] = useState<Set<string>>(
+    () => new Set(months.length ? [months[0].key] : []),
+  );
+
+  const toggle = (key: string) =>
+    setOpen((prev) => {
+      const next = new Set(prev);
+      next.has(key) ? next.delete(key) : next.add(key);
+      return next;
+    });
 
   return (
     <div className="app archive-page">
@@ -56,46 +134,40 @@ export default function Archive() {
       </header>
 
       <main className="play-area archive-list">
-        {dates.length === 0 ? (
+        {months.length === 0 ? (
           <p className="archive-empty">
             No past puzzles yet. Check back tomorrow!
           </p>
         ) : (
-          dates.map((date) => (
-            <section className="archive-row" key={date}>
-              <div className="archive-row-head">
-                <span className="archive-num">#{puzzleNumber(date)}</span>
-                <span className="archive-date">{prettyDate(date)}</span>
-              </div>
-              <div className="archive-modes">
-                {MODE_LIST.map((m) => {
-                  const result = archiveResult(m.id, date);
-                  const cls = result ? (result.won ? " won" : " lost") : "";
-                  return (
-                    <button
-                      key={m.id}
-                      className={`archive-mode-btn${cls}`}
-                      title={`${m.label}${result ? (result.won ? " - solved" : " - missed") : ""}`}
-                      aria-label={`Play ${m.label} for ${prettyDate(date)}`}
-                      onClick={() =>
-                        navigateToPath(archivePlayPath(m.id, date))
-                      }
-                    >
-                      <span className="archive-mode-icon">
-                        <m.Icon />
-                      </span>
-                      <span className="archive-mode-label">{m.label}</span>
-                      {result && (
-                        <span className="archive-mode-check">
-                          <FaCheck />
-                        </span>
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-            </section>
-          ))
+          months.map((group) => {
+            const isOpen = open.has(group.key);
+            return (
+              <section className="archive-month" key={group.key}>
+                <button
+                  type="button"
+                  className={`archive-month-toggle${isOpen ? " open" : ""}`}
+                  aria-expanded={isOpen}
+                  onClick={() => toggle(group.key)}
+                >
+                  <FaChevronDown className="archive-month-chevron" />
+                  <span className="archive-month-name">
+                    {prettyMonth(group.key)}
+                  </span>
+                  <span className="archive-month-count">
+                    {group.dates.length}{" "}
+                    {group.dates.length === 1 ? "day" : "days"}
+                  </span>
+                </button>
+                {isOpen && (
+                  <div className="archive-month-body">
+                    {group.dates.map((date) => (
+                      <DateRow key={date} date={date} />
+                    ))}
+                  </div>
+                )}
+              </section>
+            );
+          })
         )}
       </main>
     </div>

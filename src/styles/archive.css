@@ -28,7 +28,9 @@
   font-size: 0.9rem;
   letter-spacing: 0.02em;
   cursor: pointer;
-  transition: filter 0.15s ease, transform 0.15s ease;
+  transition:
+    filter 0.15s ease,
+    transform 0.15s ease;
 }
 .back-btn svg {
   transition: transform 0.15s ease;
@@ -39,6 +41,14 @@
 .back-btn:hover svg {
   transform: translateX(-3px);
 }
+@media (max-width: 640px) {
+  .back-btn {
+    position: absolute;
+    left: 0;
+    bottom: 0px;
+  }
+}
+
 @media (max-width: 560px) {
   .back-btn span {
     display: none;
@@ -88,6 +98,57 @@
   color: var(--text-dim);
   font-style: italic;
   padding: 32px 0;
+}
+.archive-month {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.archive-month-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel-2);
+  color: var(--text);
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+.archive-month-toggle:hover {
+  border-color: var(--flame-1);
+}
+.archive-month-chevron {
+  color: var(--flame-1);
+  transition: transform 0.15s ease;
+  transform: rotate(-90deg);
+  flex-shrink: 0;
+}
+.archive-month-toggle.open .archive-month-chevron {
+  transform: rotate(0deg);
+}
+.archive-month-name {
+  flex: 1;
+  text-align: left;
+}
+.archive-month-count {
+  font-family: "Inter", system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+}
+.archive-month-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 .archive-row {
   border: 1px solid var(--line);
@@ -168,7 +229,9 @@
   font-size: 1.3rem;
   display: flex;
   color: var(--accent);
-  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--accent) 45%, transparent));
+  filter: drop-shadow(
+    0 0 6px color-mix(in srgb, var(--accent) 45%, transparent)
+  );
 }
 .archive-mode-check {
   position: absolute;

@@ -9,10 +9,10 @@
  * lightly validate an incoming avatar.
  */
 
-export type Tier = "common" | "uncommon" | "rare" | "mythic" | "creator";
+export type Tier = "common" | "uncommon" | "rare" | "mythic" | "theCreator";
 
 /**
- * Ascending rank so `>=` comparisons gate higher tiers. `creator` sits above every
+ * Ascending rank so `>=` comparisons gate higher tiers. `theCreator` sits above every
  * purchasable tier: it's the owner/collaborator tier, granted manually and never
  * bought or expired, so it always outranks (and therefore unlocks) everything.
  */
@@ -21,7 +21,7 @@ export const TIER_RANK: Record<Tier, number> = {
   uncommon: 1,
   rare: 2,
   mythic: 3,
-  creator: 4,
+  theCreator: 4,
 };
 
 export function isTier(v: unknown): v is Tier {
@@ -30,7 +30,7 @@ export function isTier(v: unknown): v is Tier {
     v === "uncommon" ||
     v === "rare" ||
     v === "mythic" ||
-    v === "creator"
+    v === "theCreator"
   );
 }
 
@@ -40,11 +40,36 @@ export const TIER_META_MIN: Record<Tier, string> = {
   uncommon: "Uncommon",
   rare: "Rare",
   mythic: "Mythic",
-  creator: "Creator",
+  theCreator: "The Creator",
 };
 
 /** The avatar new accounts start with (a well-known top commander). */
 export const DEFAULT_AVATAR = "Atraxa, Praetors' Voice";
+
+/**
+ * Alternate-art avatars are stored as `"<commander name>#<art id>"`. The bare name renders
+ * the commander's default (top-500) art; a suffixed value renders a specific alternate
+ * printing's art (deduped by Scryfall illustration id, so only *meaningfully different* arts
+ * — never mere foils — get an id). Kept as a single string so it flows through the DB, the
+ * profile/leaderboard APIs and AvatarImage untouched; only this module and the gallery need
+ * to understand the split. Alternate arts are a Mythic+/The Creator-only cosmetic.
+ */
+export const AVATAR_VARIANT_SEP = "#";
+
+/** Split an avatar value into its commander name and optional alternate-art id. */
+export function splitAvatar(avatar: string): {
+  name: string;
+  variant: string | null;
+} {
+  const i = avatar.indexOf(AVATAR_VARIANT_SEP);
+  if (i === -1) return { name: avatar, variant: null };
+  return { name: avatar.slice(0, i), variant: avatar.slice(i + 1) || null };
+}
+
+/** Build an avatar value from a commander name and optional alternate-art id. */
+export function makeAvatar(name: string, variant: string | null): string {
+  return variant ? `${name}${AVATAR_VARIANT_SEP}${variant}` : name;
+}
 
 /**
  * The only avatars a non-supporter (tier `none`) may equip. Any supporter tier
@@ -75,9 +100,32 @@ export const FREE_AVATARS: readonly string[] = [
   "Baylen, the Haymaker",
 ];
 
-/** Whether `name` may be equipped by a player at the given tier. */
-export function isAvatarUnlocked(name: string, tier: Tier): boolean {
+/** Whether `avatar` may be equipped by a player at the given tier. */
+export function isAvatarUnlocked(avatar: string, tier: Tier): boolean {
+  const { name, variant } = splitAvatar(avatar);
+  // Alternate-art printings are a Mythic+/The Creator perk (and only visible to them).
+  if (variant) return TIER_RANK[tier] >= TIER_RANK.mythic;
   return TIER_RANK[tier] > 0 || FREE_AVATARS.includes(name);
+}
+
+/**
+ * Whether a tier may choose a custom flare colour (the colour their username +
+ * profile theme render in). Mythic and above — the owner/The Creator tier inherits it.
+ * Imported by the Worker too, to gate the update, so keep it free of client imports.
+ */
+export function canChooseNameColor(tier: Tier): boolean {
+  return TIER_RANK[tier] >= TIER_RANK.mythic;
+}
+
+/**
+ * Validate a user-chosen flare colour: a 3- or 6-digit CSS hex (e.g. `#f80` or
+ * `#ff8800`). Deliberately strict so the value can be dropped straight into a
+ * `color:` / CSS variable without escaping. `null` clears it (back to the tier colour).
+ */
+export function isValidNameColor(v: unknown): v is string {
+  return (
+    typeof v === "string" && /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(v)
+  );
 }
 
 /**
@@ -107,5 +155,15 @@ export function tierForTotal(totalGbp: number): Tier {
  * fallback silhouette (it's cosmetic, and only ever shown as that player's own icon).
  */
 export function isValidAvatar(name: unknown): name is string {
-  return typeof name === "string" && name.length >= 1 && name.length <= 80;
+  // Bound the length to a real card-name range and restrict to the characters that
+  // actually occur in commander names (letters incl. accents, digits, spaces and the
+  // handful of punctuation marks Wizards uses). We still don't check membership, but
+  // this keeps a junk string out of a public aria-label / an empty avatar ring.
+  if (typeof name !== "string") return false;
+  const { name: base, variant } = splitAvatar(name);
+  if (base.length < 1 || base.length > 40) return false;
+  if (!/^[\p{L}\p{N} '",.:!?&/()+-]+$/u.test(base)) return false;
+  // The alternate-art id is a short slice of a Scryfall illustration UUID (hex only).
+  if (variant !== null && !/^[a-f0-9]{1,40}$/.test(variant)) return false;
+  return true;
 }

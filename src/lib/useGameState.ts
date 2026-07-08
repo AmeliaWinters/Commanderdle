@@ -173,7 +173,14 @@ export function useGameState(mode: Mode, archiveDate?: string) {
       void submitGlobalResult(mode as ShareMode, puzzle, won, guesses)
       // Also record against the signed-in account (source of truth for leaderboards).
       // No-op for anonymous players; best-effort like the community submit above.
-      void submitAccountResult(mode, state.dateKey, puzzle, won, guesses)
+      void submitAccountResult(
+        mode,
+        state.dateKey,
+        puzzle,
+        won,
+        guesses,
+        won ? state.answer.name : undefined,
+      )
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode, state.dateKey, state.isDaily, state.isArchive, state.status, state.guesses.length, state.skips])

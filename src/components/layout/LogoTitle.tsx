@@ -30,7 +30,7 @@ export default function LogoTitle({
   };
 
   return (
-    <h1>
+    <h1 style={{ position: "relative" }}>
       <button
         type="button"
         className={`logo-btn${bursts.length ? " logo-pop" : ""}`}

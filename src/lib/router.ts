@@ -81,8 +81,6 @@ function applyModeMeta(mode: Mode) {
   setMeta("property", "og:title", title);
   setMeta("property", "og:description", desc);
   setMeta("property", "og:url", url);
-  setMeta("name", "twitter:title", title);
-  setMeta("name", "twitter:description", desc);
 }
 
 function normalize(pathname: string): string {

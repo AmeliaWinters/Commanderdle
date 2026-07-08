@@ -4,7 +4,54 @@ All notable player-facing changes to Commandle. Newest first. Dates are the day 
 landed on `main`. This log is maintained by hand — add an entry at the top whenever you ship
 a change that a player could notice.
 
+_Last updated: 2026-07-08 — currently on v0.10.1._
+
 ## 2026-07-08
+
+- **Account name now sits dead-centre** — your username is centred in the account hero,
+  with the supporter gem and edit pencil trailing neatly to its right instead of nudging
+  the name off to the side.
+
+- **Name flare moved into the account hero (Mythic supporters)** — the colour picker now
+  sits right under your name: tap a preset swatch to apply it instantly, hit the rainbow
+  pencil chip for any custom colour (your name previews live while you pick), or the ↺
+  chip to go back to the tier colour.
+
+- **Mobile: no stray card zoom on your final guess** — tapping your last guess no longer
+  pops open the card preview on top of the results screen.
+
+- **Alternate-art avatars (Mythic supporters)** — Mythic Rare and The Creator accounts now see
+  every commander's alternate printings in the avatar picker — each meaningfully different
+  artwork, labelled by its collector number (e.g. #207), so you can pick the exact art you
+  love. Lower tiers see only the standard art.
+
+- **Pick your name colour (Mythic supporters)** — Mythic Rare and The Creator accounts can
+  now choose a custom colour for their username and profile from the account page. Your
+  rarity gem always keeps its Mythic colour.
+
+- **Your Binder follows your account** — while signed in, your collection is stored on
+  your account (built from your real daily wins) instead of only in this browser, so it
+  travels between devices and can't be tampered with locally. Signed-out players keep
+  their local binder as before.
+
+- **Account name & avatar match your tier** — the name and avatar ring in the account
+  widget now use your tier's color (white for common, mythic orange for Mythic, and so
+  on).
+
+- **Fixed a doubled footer** — game pages were showing the footer (and its
+  attribution links) twice; now it appears once.
+
+- **Archive is grouped by month** — past puzzles are now collapsed into
+  month sections so the page stays fast and it's easy to jump to a specific
+  day. Missed puzzles now show an ✕ (solved ones keep the ✓) so the two read
+  apart at a glance, not just by color.
+
+- **XP updates instantly** — finishing a daily now updates your level and XP in the
+  account page and account widget right away, with no page refresh needed.
+
+- **Empty leaderboard categories no longer hide the board** — selecting a category
+  with no players now shows a short "No one on this board yet" note instead of making
+  the whole leaderboard vanish.
 
 - **Leaderboard results record reliably** — signed-in players with browser storage
   disabled or cleared (private mode, cookie-only) now have their daily results recorded
@@ -17,7 +64,7 @@ a change that a player could notice.
   exactly what each tier (Uncommon, Rare, Mythic Rare) unlocks, with monthly prices.
   A quiet "Support Commandle" link also sits on the home page.
 
-- **New Creator tier** — a special tier with every cosmetic unlocked, always. It's
+- **New The Creator tier** — a special tier with every cosmetic unlocked, always. It's
   granted by hand to the team, so its purple gem marks an official account.
 
 - **Support on Ko-fi from your account** — the Support panel now has a direct Ko-fi

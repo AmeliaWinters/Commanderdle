@@ -43,14 +43,17 @@ export default function ContactForm() {
       setStatus("ok");
     } catch {
       setStatus("err");
-      setError("Couldn't reach the server. Check your connection and try again.");
+      setError(
+        "Couldn't reach the server. Check your connection and try again.",
+      );
     }
   }
 
   if (status === "ok") {
     return (
       <p className="contact-status ok">
-        Thank you! Your message is on its way. I'll *try* get back to you soon.
+        Thank you! Your message is on its way. I'll *try* to get back to you
+        soon.
       </p>
     );
   }

@@ -5,7 +5,7 @@
  */
 
 /** Launch date (puzzle #1). Puzzle numbers count UTC days from here. */
-export const PUZZLE_EPOCH = "2026-07-01";
+export const PUZZLE_EPOCH = "2026-07-08";
 
 /** UTC midnight (ms) for a YYYY-MM-DD key. */
 export function utcMidnight(key: string): number {
@@ -15,6 +15,8 @@ export function utcMidnight(key: string): number {
 
 /** Sequential puzzle number for a given date, Wordle-style (#1 on the launch date). */
 export function puzzleNumberForDate(dateKey: string): number {
-  const days = Math.floor((utcMidnight(dateKey) - utcMidnight(PUZZLE_EPOCH)) / 86_400_000);
+  const days = Math.floor(
+    (utcMidnight(dateKey) - utcMidnight(PUZZLE_EPOCH)) / 86_400_000,
+  );
   return days + 1;
 }

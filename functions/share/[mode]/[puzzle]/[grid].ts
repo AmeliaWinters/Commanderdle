@@ -1,5 +1,5 @@
 /**
- * Landing page for a shared result. A crawler (Twitter, Facebook, Discord, iMessage…) reads
+ * Landing page for a shared result. A crawler (Facebook, Discord, iMessage…) reads
  * the per-result Open Graph tags here — including og:image pointing at the dynamic PNG — so the
  * link unfurls into a rich card. A human is bounced straight to the live puzzle so a shared
  * result is always a one-tap entry point into the game.
@@ -55,10 +55,6 @@ export const onRequest = (context: { params: Params; request: Request }): Respon
 <meta property="og:image" content="${escapeHtml(image)}" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="${escapeHtml(title)}" />
-<meta name="twitter:description" content="${escapeHtml(description)}" />
-<meta name="twitter:image" content="${escapeHtml(image)}" />
 <link rel="canonical" href="${escapeHtml(origin + playPath)}" />
 <meta http-equiv="refresh" content="0; url=${escapeHtml(playUrl)}" />
 <script>window.location.replace(${JSON.stringify(playUrl)});</script>

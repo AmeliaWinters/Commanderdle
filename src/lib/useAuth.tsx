@@ -13,11 +13,14 @@ import {
 } from 'react'
 import {
   fetchMe,
+  fetchBinder,
   logout as apiLogout,
+  onAccountStats,
   setLoggedInHint,
   type AccountStats,
   type AccountUser,
 } from './auth'
+import { setAccountBinder, type Collection } from './collection'
 
 interface AuthState {
   user: AccountUser | null
@@ -42,6 +45,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLoggedInHint(!!user)
   }, [user])
 
+  // Swap the binder to the server's copy while signed in (source of truth, spoof-proof),
+  // and back to the anonymous localStorage binder on logout.
+  useEffect(() => {
+    if (!user) {
+      setAccountBinder(null)
+      return
+    }
+    let alive = true
+    const controller = new AbortController()
+    void fetchBinder(controller.signal).then((binder) => {
+      if (alive) setAccountBinder((binder ?? {}) as Collection)
+    })
+    return () => {
+      alive = false
+      controller.abort()
+    }
+  }, [user])
+
   const refresh = useMemo(
     () => async () => {
       const me = await fetchMe()
@@ -50,6 +71,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     },
     [],
   )
+
+  // Live-update XP/stats the moment a result is recorded, so the account page and
+  // widget reflect the new XP without a page refresh.
+  useEffect(() => onAccountStats(setStats), [])
 
   useEffect(() => {
     let alive = true

@@ -1,14 +1,19 @@
-import type { GuessDot } from '../lib/guessDots'
+import type { GuessDot } from "../lib/guessDots";
 
 interface Props {
-  dots: GuessDot[]
-  wrongGuesses: number
-  maxGuesses: number
+  dots: GuessDot[];
+  wrongGuesses: number;
+  maxGuesses: number;
   /** Renders the skip button beside the pips (in-play modes only). */
-  onSkip?: () => void
+  onSkip?: () => void;
 }
 
-export default function GuessDots({ dots, onSkip, wrongGuesses, maxGuesses }: Props) {
+export default function GuessDots({
+  dots,
+  onSkip,
+  wrongGuesses,
+  maxGuesses,
+}: Props) {
   return (
     <div className="guess-dots-row">
       <div
@@ -26,9 +31,9 @@ export default function GuessDots({ dots, onSkip, wrongGuesses, maxGuesses }: Pr
           onClick={onSkip}
           title="Skip - counts as a wrong guess"
         >
-          <span style={{ transform: 'translateY(-2px)' }}>»</span>
+          <span>»</span>
         </button>
       )}
     </div>
-  )
+  );
 }

@@ -172,7 +172,7 @@
 .menu-pop {
   position: absolute;
   top: 46px;
-  left: 0;
+  right: 0;
   min-width: 168px;
   background: var(--panel);
   border: 1px solid var(--line);

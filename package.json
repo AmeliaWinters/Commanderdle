@@ -9,6 +9,7 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "build:data": "tsx scripts/build-data.ts",
+    "build:variants": "tsx scripts/build-variants.ts",
     "build:backdrop": "tsx scripts/build-backdrop-images.ts",
     "build:og": "tsx scripts/build-og.ts",
     "test": "vitest run",
