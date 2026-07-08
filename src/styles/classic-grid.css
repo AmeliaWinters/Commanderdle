@@ -40,8 +40,8 @@
 }
 
 .head-cell {
-  background: transparent !important;
-  color: var(--text-dim);
+  background: var(--panel-2) !important;
+  color: white;
   font-family: "Cinzel", serif;
   font-size: 0.8rem;
   letter-spacing: 0.06em;
@@ -157,4 +157,3 @@ button.head-help:hover {
   /* Enable container queries so .cell-text can scale with the cell's actual width. */
   container-type: inline-size;
 }
-

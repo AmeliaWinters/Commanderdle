@@ -97,8 +97,13 @@
 
 .pool-peek-btn:disabled {
   cursor: default;
-  opacity: 0.55;
   color: var(--text-dim);
+}
+
+.pool-peek-lock {
+  display: inline-block;
+  vertical-align: -0.12em;
+  margin-right: 0.4em;
 }
 
 .guess-input {

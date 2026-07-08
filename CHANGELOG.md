@@ -8,6 +8,9 @@ _Last updated: 2026-07-08 — currently on v0.10.1._
 
 ## 2026-07-08
 
+- **Card pool button now shows a lock** — the "View cards in…" button is fully solid and
+  displays a lock icon while it's still locked.
+
 - **Account name now sits dead-centre** — your username is centred in the account hero,
   with the supporter gem and edit pencil trailing neatly to its right instead of nudging
   the name off to the side.

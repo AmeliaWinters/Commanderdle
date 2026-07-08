@@ -8,11 +8,16 @@ interface Release {
 }
 
 export const RELEASES: Release[] = [
-    {
+  {
+    version: "1.0.2",
+    date: "2026-07-08",
+    notes: ["Classic visual clarity changes"],
+  },
+  {
     version: "1.0.1",
     date: "2026-07-08",
     notes: [
-      "Fixed a bug where daily results were sent on every refresh of the page"
+      "Fixed a bug where daily results were sent on every refresh of the page",
     ],
   },
   {

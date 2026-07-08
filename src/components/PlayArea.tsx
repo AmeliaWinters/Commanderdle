@@ -1,4 +1,5 @@
 import { lazy, Suspense, type ComponentType } from "react";
+import { FaLock } from "react-icons/fa6";
 import type { Commander, Mode } from "../types/commander";
 import type { Peek } from "../lib/peek";
 import type { GhostRun } from "../lib/ghost";
@@ -126,9 +127,14 @@ export default function PlayArea({
                         disabled={!peekUnlocked}
                         title={peekUnlocked ? peek.hint : undefined}
                       >
-                        {peekUnlocked
-                          ? `Card pool (${peek.pool.length})`
-                          : `View cards in ${peek.unlockAt - wrongGuesses}`}
+                        {peekUnlocked ? (
+                          `Card pool (${peek.pool.length})`
+                        ) : (
+                          <>
+                            <FaLock className="pool-peek-lock" />
+                            {`View cards in ${peek.unlockAt - wrongGuesses}`}
+                          </>
+                        )}
                       </button>
                     )}
                   </div>
