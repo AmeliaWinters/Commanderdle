@@ -135,9 +135,9 @@ export const TIER_THRESHOLDS_GBP: Record<
   "uncommon" | "rare" | "mythic",
   number
 > = {
-  uncommon: 5,
-  rare: 10,
-  mythic: 20,
+  uncommon: 2,
+  rare: 5,
+  mythic: 10,
 };
 
 /** Map a cumulative donation total (GBP) to the highest tier it unlocks. */
