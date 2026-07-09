@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import type { Mode } from "../types/commander";
-import { loadStats, subscribeStats, emptyStats, type ModeStats } from "../lib/stats";
+import {
+  loadStats,
+  subscribeStats,
+  emptyStats,
+  type ModeStats,
+} from "../lib/stats";
 import { puzzleNumber } from "../lib/dailyAnswer";
 import type { ShareMode } from "../lib/shareCode";
 import { useAuth } from "../lib/useAuth";
@@ -16,7 +21,12 @@ interface Props {
   self?: { won: boolean; guesses: number };
 }
 
-export default function StatsPanel({ mode, maxGuesses, highlight, self }: Props) {
+export default function StatsPanel({
+  mode,
+  maxGuesses,
+  highlight,
+  self,
+}: Props) {
   const { user } = useAuth();
   const loggedIn = !!user;
 
@@ -58,7 +68,7 @@ export default function StatsPanel({ mode, maxGuesses, highlight, self }: Props)
 
   // While signed in but the server copy hasn't landed yet, show zeros rather than leaking
   // this browser's local numbers.
-  const stats = loggedIn ? account ?? emptyStats() : local;
+  const stats = loggedIn ? (account ?? emptyStats()) : local;
 
   const winPct =
     stats.played > 0 ? Math.round((stats.wins / stats.played) * 100) : 0;
@@ -87,7 +97,7 @@ export default function StatsPanel({ mode, maxGuesses, highlight, self }: Props)
       </div>
       <p className="stats-freezes">
         ❄ {stats.freezes ?? 0} streak freeze
-        {(stats.freezes ?? 0) === 1 ? "" : "s"} banked — each covers one missed
+        {(stats.freezes ?? 0) === 1 ? "" : "s"} banked - each covers one missed
         day. Earn one for every 10 days you play.
       </p>
       <div className="stats-dist">
