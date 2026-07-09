@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-07-08T14:59:25.408Z",
+  "fetchedAt": "2026-07-09T09:00:55.699Z",
   "commanders": [
     {
       "id": "10d42b35-844f-4a64-9981-c6118d45e826",
@@ -2493,9 +2493,9 @@
     },
     {
       "id": "5fea0781-e933-47ef-9414-92c8652a7778",
-      "name": "Saheeli, Radiant The Creator",
-      "sanitized": "saheeli-radiant-theCreator",
-      "url": "/commanders/saheeli-radiant-theCreator",
+      "name": "Saheeli, Radiant Creator",
+      "sanitized": "saheeli-radiant-creator",
+      "url": "/commanders/saheeli-radiant-creator",
       "inclusion": 9377,
       "num_decks": 9377,
       "potential_decks": 0,
@@ -4813,9 +4813,9 @@
     },
     {
       "id": "59c5bd2b-cf68-4e5e-819d-53917a6c5275",
-      "name": "Davros, Dalek The Creator",
-      "sanitized": "davros-dalek-theCreator",
-      "url": "/commanders/davros-dalek-theCreator",
+      "name": "Davros, Dalek Creator",
+      "sanitized": "davros-dalek-creator",
+      "url": "/commanders/davros-dalek-creator",
       "inclusion": 5808,
       "num_decks": 5808,
       "potential_decks": 0,
@@ -16905,7 +16905,7 @@
         "synergy": 0.4918070178077452
       }
     ],
-    "Saheeli, Radiant The Creator": [
+    "Saheeli, Radiant Creator": [
       {
         "name": "Aetherworks Marvel",
         "synergy": 0.8593828249999067
@@ -22729,7 +22729,7 @@
         "synergy": 0.5217788564175923
       }
     ],
-    "Davros, Dalek The Creator": [
+    "Davros, Dalek Creator": [
       {
         "name": "Exterminate!",
         "synergy": 0.8560332914623578
