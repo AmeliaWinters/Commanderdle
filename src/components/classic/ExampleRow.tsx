@@ -57,11 +57,7 @@ export default function ExampleRow() {
           </span>
         </DemoCell>
       </div>
-      <p className="example-caption">
-        <b className="ex-green">green</b> matches the secret commander,{" "}
-        <b className="ex-yellow">yellow</b> is close/shared colours, arrows point toward the
-        answer, <b className="ex-gray">double/gray</b> = far off/not shared
-      </p>
+
     </div>
   );
 }

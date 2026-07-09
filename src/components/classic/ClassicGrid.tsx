@@ -60,7 +60,10 @@ export default function ClassicGrid({
       const margin = 8;
       const width = Math.min(260, window.innerWidth - margin * 2);
       let left = r.left + r.width / 2 - width / 2;
-      left = Math.max(margin, Math.min(left, window.innerWidth - width - margin));
+      left = Math.max(
+        margin,
+        Math.min(left, window.innerWidth - width - margin),
+      );
       setTipPos({ left, top: r.bottom + 6 });
     };
     measure();
@@ -84,6 +87,12 @@ export default function ClassicGrid({
         role="table"
         aria-label="Guess comparison grid"
       >
+        <p className="example-caption">
+          <b className="ex-green">green</b> matches the secret commander,{" "}
+          <b className="ex-yellow">yellow</b> is close/shared colours, arrows
+          point toward the answer, <b className="ex-gray">double/gray</b> = far
+          off/not shared
+        </p>
         <DeductionRow
           guesses={guesses}
           answer={answer}
@@ -120,8 +129,8 @@ export default function ClassicGrid({
                       role="note"
                       style={{ left: tipPos.left, top: tipPos.top }}
                     >
-                      Rank is the commander's popularity on EDHRE. #1 is
-                      the most-built commander.
+                      Rank is the commander's popularity on EDHRE. #1 is the
+                      most-built commander.
                       <button
                         type="button"
                         className="head-tip-close"

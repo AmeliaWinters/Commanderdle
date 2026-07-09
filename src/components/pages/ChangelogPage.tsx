@@ -9,6 +9,13 @@ interface Release {
 
 export const RELEASES: Release[] = [
   {
+    version: "1.1.3",
+    date: "2026-07-09",
+    notes: [
+      "Classic grid tooltip does not disappear after guesses for non 'dle' players",
+    ],
+  },
+  {
     version: "1.1.2",
     date: "2026-07-09",
     notes: ["Made the card pool clear of top 500 commanders"],
