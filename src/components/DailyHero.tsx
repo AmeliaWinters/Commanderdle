@@ -21,11 +21,11 @@ function usePulse(mode: Mode): string | null {
       if (!stats || stats.total < 25) return;
       const s = summarize(stats);
       const solved = `${stats.wins.toLocaleString()} ${
-        stats.wins === 1 ? "player has" : "players have"
-      } solved today's ${MODE_LABEL[mode]}`;
+        stats.total === 1 ? "player has" : "players have"
+      } attempted today's ${MODE_LABEL[mode]}!`;
       setLine(
         s.modeGuesses !== null
-          ? `${solved}! On average in ${s.modeGuesses} ${s.modeGuesses === 1 ? "guess" : "guesses"}`
+          ? `${solved}! Average score: ${s.modeGuesses} ${s.modeGuesses === 1 ? "guess" : "guesses"}`
           : solved,
       );
     });
