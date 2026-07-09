@@ -139,7 +139,7 @@
 
 .binder-shown-btn.active {
   background: var(--flame-1);
-  color: var(--text);
+  color: white;
 }
 
 /* Card grid: card-proportioned sleeves, like a binder page */

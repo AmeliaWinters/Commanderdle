@@ -64,13 +64,15 @@
   border-radius: 999px;
   padding: 0.35rem 0.8rem;
   cursor: pointer;
-  transition: color 0.12s ease, border-color 0.12s ease;
+  transition:
+    color 0.12s ease,
+    border-color 0.12s ease;
 }
 .lb-tab:hover {
   color: var(--text);
 }
 .lb-tab.active {
-  color: #10100f;
+  color: white;
   background: var(--flame-1);
   border-color: var(--flame-1);
   font-weight: 600;
@@ -200,7 +202,9 @@
   border-radius: 999px;
   padding: 0.35rem 0.9rem;
   cursor: pointer;
-  transition: color 0.12s ease, border-color 0.12s ease;
+  transition:
+    color 0.12s ease,
+    border-color 0.12s ease;
 }
 .lb-pager-btn:hover:not(:disabled) {
   color: var(--flame-1);

@@ -85,7 +85,7 @@
   justify-content: center;
   border-radius: 50%;
   background: var(--flame-1);
-  color: #10100f;
+  color: white;
   font-size: 0.8rem;
   border: 2px solid var(--panel);
 }
@@ -172,7 +172,7 @@
 .account-name-edit button {
   font: inherit;
   font-weight: 600;
-  color: #10100f;
+  color: white;
   background: var(--flame-1);
   border: none;
   border-radius: 8px;

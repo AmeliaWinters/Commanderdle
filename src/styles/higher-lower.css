@@ -60,7 +60,7 @@
 }
 .hl-mode-tab.active {
   background: var(--flame-1);
-  color: #1a0f08;
+  color: white;
   font-weight: 600;
 }
 

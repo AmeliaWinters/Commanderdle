@@ -182,7 +182,7 @@
   align-self: flex-start;
   font: inherit;
   font-weight: 600;
-  color: var(--bg, #10100f);
+  color: white;
   background: var(--flame-1);
   border: none;
   border-radius: 8px;
