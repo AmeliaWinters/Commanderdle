@@ -9,6 +9,11 @@ interface Release {
 
 export const RELEASES: Release[] = [
   {
+    version: "1.1.2",
+    date: "2026-07-09",
+    notes: ["Made the card pool clear of top 500 commanders"],
+  },
+  {
     version: "1.1.1",
     date: "2026-07-09",
     notes: [

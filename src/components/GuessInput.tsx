@@ -21,7 +21,7 @@ export default function GuessInput({
   disabled,
   blurQuote,
   pool,
-  placeholder = 'Type a commander name...',
+  placeholder = 'Type a top 500 commander name...',
   autoFocus,
 }: Props) {
   const [query, setQuery] = useState('')

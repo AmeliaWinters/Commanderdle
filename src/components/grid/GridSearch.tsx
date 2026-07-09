@@ -10,7 +10,12 @@ interface Props {
   onClose: () => void;
 }
 
-export default function GridSearch({ prompt, disabledNames, onPick, onClose }: Props) {
+export default function GridSearch({
+  prompt,
+  disabledNames,
+  onPick,
+  onClose,
+}: Props) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -20,11 +25,20 @@ export default function GridSearch({ prompt, disabledNames, onPick, onClose }: P
   }, [onClose]);
 
   return (
-    <div className="grid-search-overlay" onClick={onClose} role="dialog" aria-modal="true">
+    <div
+      className="grid-search-overlay"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+    >
       <div className="grid-search" onClick={(e) => e.stopPropagation()}>
         <div className="grid-search-head">
           <span className="grid-search-prompt">{prompt}</span>
-          <button className="grid-search-close" aria-label="Close" onClick={onClose}>
+          <button
+            className="grid-search-close"
+            aria-label="Close"
+            onClick={onClose}
+          >
             ✕
           </button>
         </div>
@@ -32,7 +46,7 @@ export default function GridSearch({ prompt, disabledNames, onPick, onClose }: P
           onGuess={onPick}
           disabledNames={disabledNames}
           pool={gridPool()}
-          placeholder="Search any commander…"
+          placeholder="Type a top 1000 commander..."
           autoFocus
         />
       </div>
