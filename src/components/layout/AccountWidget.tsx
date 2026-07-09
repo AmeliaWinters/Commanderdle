@@ -246,8 +246,11 @@ export default function AccountWidget() {
               </button>
             </div>
             <p className="account-pop-note">
-              <b>Optional!</b> Claim a name, climb the leaderboards, flex on
-              others.
+              <b>Optional!</b> Climb the leaderboards, public profile.
+            </p>
+            <p className="account-pop-legal">
+              By signing in, you agree to the <a href="/terms">Terms</a> and{" "}
+              <a href="/privacy">Privacy Policy</a>.
             </p>
           </div>
         ))}

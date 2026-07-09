@@ -22,15 +22,11 @@ export default function ConsentBanner() {
   }
 
   return (
-    <div
-      className="consent-banner"
-      role="region"
-      aria-label="Cookie consent"
-    >
+    <div className="consent-banner" role="region" aria-label="Cookie consent">
       <div className="consent-inner">
         <p className="consent-text">
-          Commandle shows ads to keep the game free. Allow personalised ads
-          and analytics cookies for more relevant ads, or reject to keep only
+          Commandle shows ads to keep the game free. Allow personalised ads and
+          analytics cookies for more relevant ads, or reject to keep only
           non-personalised ads and what's essential. See our{" "}
           <a href="/privacy">Privacy Policy</a>.
         </p>
@@ -47,7 +43,7 @@ export default function ConsentBanner() {
             className="consent-btn consent-accept"
             onClick={() => choose("granted")}
           >
-            Allow personalised
+            Allow
           </button>
         </div>
       </div>

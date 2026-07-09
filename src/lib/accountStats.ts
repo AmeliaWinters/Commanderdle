@@ -29,7 +29,7 @@ export interface ModeStats {
   lastPlayedDate: string | null;
   /** distribution[n] = number of daily wins solved in n guesses. */
   distribution: Record<number, number>;
-  /** Banked streak freezes: earned 1 per day played (this mode), each one silently
+  /** Banked streak freezes: earned 1 per 10 days played (this mode), each one silently
    *  covers one missed day so the win streak survives a busy Tuesday. */
   freezes: number;
 }
@@ -72,7 +72,7 @@ export interface AccountStats {
   maxWinStreak: number;
   totalWins: number;
   xp: number;
-  /** Banked streak freezes: earned 1 per day played, each one silently covers one
+  /** Banked streak freezes: earned 1 per 10 days played, each one silently covers one
    *  missed day so the play streak survives a busy Tuesday (Duolingo-style). */
   streakFreezes: number;
 }
@@ -222,7 +222,7 @@ export function computeModeStats(
       } else {
         stats.currentStreak = 0;
       }
-      stats.freezes += 1; // earned: 1 freeze per day played
+      if (stats.played % 10 === 0) stats.freezes += 1; // earned: 1 freeze per 10 days played
       stats.lastPlayedDate = r.date;
     }
     out[mode] = stats;
@@ -258,12 +258,13 @@ export function computeStats(results: DailyResult[]): AccountStats {
   // Walk dates chronologically so each day's XP can be scaled by the running play
   // streak *as of that day* — the streak has to be built up in date order, not the
   // (arbitrary) order results were submitted in. Streak freezes are banked and spent
-  // along the same walk: 1 earned per day played, and a gap of N missed days is
+  // along the same walk: 1 earned per 10 days played, and a gap of N missed days is
   // silently bridged by spending N banked freezes (the streak survives but the missed
   // days don't add to it). Today's earned freeze can't cover today's own gap.
   const orderedDates = [...byDate.keys()].sort();
   let runningPlayStreak = 0;
   let freezeBank = 0;
+  let daysPlayed = 0;
   let prevDayNum: number | null = null;
   for (const date of orderedDates) {
     const day = byDate.get(date)!;
@@ -277,7 +278,8 @@ export function computeStats(results: DailyResult[]): AccountStats {
     } else {
       runningPlayStreak = 1;
     }
-    freezeBank += 1;
+    daysPlayed += 1;
+    if (daysPlayed % 10 === 0) freezeBank += 1; // earned: 1 freeze per 10 days played
     prevDayNum = dNum;
     if (runningPlayStreak > stats.maxPlayStreak)
       stats.maxPlayStreak = runningPlayStreak;

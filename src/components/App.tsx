@@ -222,7 +222,6 @@ export default function App() {
             pool={peek ? peek.pool : poolFor(mode)}
             onClose={() => setPoolOpen(false)}
             blurQuote={mode === "quote"}
-            heading={peek ? "Possible commanders" : undefined}
           />
         </Suspense>
       )}

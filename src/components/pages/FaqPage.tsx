@@ -64,7 +64,7 @@ const FAQS: QA[] = [
     q: "What happens to my streak if I miss a day?",
     a: (
       <>
-        You've got insurance. Every day you play banks one streak freeze, and
+        You've got insurance. Every 10 days you play banks one streak freeze, and
         each missed day quietly spends one to keep your streak alive — so a
         busy Tuesday won't torch a 40-day run. Freezes only cover days you
         didn't play at all; a finished loss still ends a win streak. Your

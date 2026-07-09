@@ -10,7 +10,7 @@
 .account-widget-wrap {
   position: absolute;
   top: 0;
-  left: 0;
+  right: 0;
   z-index: 30;
 }
 
@@ -124,11 +124,11 @@
 .account-pop {
   position: absolute;
   top: calc(100% + 6px);
-  /* The widget lives at the left edge of the masthead, so open the menu rightward.
+  /* The widget lives at the right edge of the masthead, so open the menu leftward.
      Mobile-first: cap the width to the viewport (minus a gutter) so it can never spill
      off-screen on a phone; it grows to its natural width only where there's room. */
-  left: 0;
-  right: auto;
+  right: 0;
+  left: auto;
   width: max-content;
   max-width: min(19rem, calc(100vw - 16px));
   padding: 8px;
@@ -269,6 +269,16 @@
 }
 .account-pop-note .link-btn {
   font-size: 0.78rem;
+}
+.account-pop-legal {
+  margin: 4px 4px 2px;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+.account-pop-legal a {
+  color: inherit;
+  text-decoration: underline;
 }
 
 /* On phones the name/level would crowd the centered wordmark, so show just the

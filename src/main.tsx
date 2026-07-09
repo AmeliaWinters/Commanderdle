@@ -1,7 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './components/App'
-import ConsentBanner from './components/ConsentBanner'
 import UsernameGate from './components/account/UsernameGate'
 import { AuthProvider } from './lib/useAuth'
 import 'keyrune/css/keyrune.css'
@@ -25,7 +24,7 @@ loadCommanders()
               it lives inside each page's masthead header instead. UsernameGate forces a
               signed-in player to claim a required username before they can play on. */}
           <UsernameGate />
-          <ConsentBanner />
+          {/* Cookie-consent banner disabled as no ads yet */}
         </AuthProvider>
       </StrictMode>,
     )

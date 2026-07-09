@@ -158,7 +158,7 @@ CREATE TABLE IF NOT EXISTS user_stats (
   max_win_streak INTEGER NOT NULL DEFAULT 0,
   total_wins     INTEGER NOT NULL DEFAULT 0,
   xp             INTEGER NOT NULL DEFAULT 0,
-  -- Banked streak freezes (earned 1/day played, spent to bridge missed days).
+  -- Banked streak freezes (earned 1 per 10 days played, spent to bridge missed days).
   -- Cached like the rest; recomputed from user_results on every submit.
   streak_freezes INTEGER NOT NULL DEFAULT 0,
   updated_at     INTEGER NOT NULL DEFAULT (unixepoch())

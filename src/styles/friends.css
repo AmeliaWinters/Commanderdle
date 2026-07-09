@@ -278,7 +278,14 @@
   background: var(--correct, #46a758);
 }
 
+/* Completed the daily but ran out of guesses (X/6): a definitive miss, so red.
+   Amber (--present) is reserved for an in-progress attempt. */
 .friend-dot-wrong {
+  background: var(--danger, #e5624c);
+}
+
+/* Started but hasn't finished today's daily yet. */
+.friend-dot-progress {
   background: var(--present, #d9a441);
 }
 

@@ -8,6 +8,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from 'react'
@@ -21,6 +22,7 @@ import {
   type AccountUser,
 } from './auth'
 import { beginAccountBinder, setAccountBinder, type Collection } from './collection'
+import { syncLocalDailyResults } from './syncResults'
 
 interface AuthState {
   user: AccountUser | null
@@ -46,6 +48,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // players) in sync with the real session state.
   useEffect(() => {
     setLoggedInHint(!!user)
+  }, [user])
+
+  // Once per signed-in session, backfill any dailies the player finished while logged
+  // out — those games load already-finished (no fresh playing→won transition), so they
+  // never reached the account on their own. Runs after the hint above is set so the
+  // submit POSTs aren't skipped as anonymous. Server dedupes, so it's safe to re-run.
+  const syncedRef = useRef(false)
+  useEffect(() => {
+    if (!user) {
+      syncedRef.current = false
+      return
+    }
+    if (syncedRef.current) return
+    syncedRef.current = true
+    void syncLocalDailyResults()
   }, [user])
 
   // Swap the binder to the server's copy while signed in (source of truth, spoof-proof),

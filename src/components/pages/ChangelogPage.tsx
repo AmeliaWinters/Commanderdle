@@ -9,6 +9,17 @@ interface Release {
 
 export const RELEASES: Release[] = [
   {
+    version: "1.1.1",
+    date: "2026-07-09",
+    notes: [
+      "Deduce bug always showing values above the guess fixed",
+      "Converted currency bug in the deduce row fixed",
+      "Streak freeze bug fixed, now correctly getting 1 streak freeze every 10 days",
+      "Users that complete the daily and then sign-in get to keep the results on their account",
+      "Friends dots show as red if they failed the daily game",
+    ],
+  },
+  {
     version: "1.1.0",
     date: "2026-07-09",
     notes: [

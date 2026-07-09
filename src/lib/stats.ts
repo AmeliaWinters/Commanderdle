@@ -46,9 +46,9 @@ export function loadStats(mode: Mode): ModeStats {
         ...emptyStats(),
         ...saved,
         distribution: saved.distribution ?? {},
-        // Legacy records predate streak freezes: back-credit 1 per day played, so
+        // Legacy records predate streak freezes: back-credit 1 per 10 days played, so
         // long-time anonymous players don't start the feature with an empty bank.
-        freezes: saved.freezes ?? saved.played ?? 0,
+        freezes: saved.freezes ?? Math.floor((saved.played ?? 0) / 10),
       };
     }
   } catch {
@@ -94,7 +94,7 @@ export function recordDailyResult(
       stats.lastPlayedDate !== null &&
       daysBetween(stats.lastPlayedDate, date) === 1;
     // Streak freeze: a gap of N missed days is bridged by spending N banked freezes
-    // (earned 1 per day played). A loss still kills the streak — freezes only cover
+    // (earned 1 per 10 days played). A loss still kills the streak — freezes only cover
     // days not played at all. Mirrors computeModeStats in accountStats.ts exactly.
     if (!consecutive && stats.lastPlayedDate !== null) {
       const gap = daysBetween(stats.lastPlayedDate, date) - 1;
@@ -109,7 +109,8 @@ export function recordDailyResult(
   } else {
     stats.currentStreak = 0;
   }
-  stats.freezes += 1; // earned: 1 streak freeze per day played
+  // earned: 1 streak freeze per 10 days played
+  if (stats.played % 10 === 0) stats.freezes += 1;
   stats.lastPlayedDate = date;
   saveStats(mode, stats);
   return stats;

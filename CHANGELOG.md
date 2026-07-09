@@ -8,6 +8,33 @@ _Last updated: 2026-07-08 — currently on v0.10.1._
 
 ## 2026-07-09
 
+- **Play first, sign in later** — if you finish today's puzzles while logged out and then sign in,
+  those results now sync to your account instead of being left behind.
+
+- **Header corners swapped** — your account widget now sits in the top-right and the settings cog
+  in the top-left, with their menus opening on the matching side.
+
+- **Sign-in now notes that you agree to the Terms and Privacy Policy** — a short line with links
+  sits under the Google/Discord buttons, so signing in makes your agreement clear.
+
+- **The cookie-consent banner is gone for now** — Commandle currently sets no advertising or
+  analytics cookies, so there's nothing non-essential to consent to. The banner will return if
+  ads or analytics are ever switched on.
+
+- **Streak freezes now bank once every 10 days you play** (previously one per day). Each still
+  quietly covers a single missed day to keep your streak alive.
+
+- **Friends' "Today's dailies" dots now show a failed daily in red** — if a friend finished a
+  mode without solving it (e.g. X/6), that dot is red instead of amber.
+
+- **The "Possible commanders" peek now shows the full popularity range** — a close (amber)
+  guess no longer trims the list to the ranks right around it. If you've bracketed the answer
+  between a #110 and a #220 guess, you'll see every commander from #111 to #219.
+
+- **Fixed the deduced number ranges** in Classic — bounds were drifting off by one
+  (e.g. mana value showing `...-7` instead of `...-5`), and price ranges were off in
+  non-USD currencies because the bound wasn't rounded to your chosen currency's units.
+
 - **Signing in takes you to your account page** instead of dropping you back where you
   started, so you land straight on your profile and onboarding.
 

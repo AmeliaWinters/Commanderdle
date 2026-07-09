@@ -88,7 +88,7 @@ export default function StatsPanel({ mode, maxGuesses, highlight, self }: Props)
       <p className="stats-freezes">
         ❄ {stats.freezes ?? 0} streak freeze
         {(stats.freezes ?? 0) === 1 ? "" : "s"} banked — each covers one missed
-        day. Earn one for every day you play.
+        day. Earn one for every 10 days you play.
       </p>
       <div className="stats-dist">
         <h3>Guess distribution</h3>

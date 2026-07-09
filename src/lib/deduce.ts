@@ -9,14 +9,18 @@ import {
   type MatchKind,
 } from "./compare";
 import { sortColors } from "../components/ManaSymbols";
+import { getCurrency, toUsd } from "./currency";
 
 /**
  * Commanders still consistent with the player's guesses, judged ONLY on the
  * popularity (EDHREC rank) clue. We deliberately ignore colors/type/stats here:
  * filtering on every column narrows the pool so hard it gives the answer away,
  * so the peek leans on the single weakest axis. A candidate survives if, for
- * each guess, its rank would read the same (kind + direction, within the
- * popularity tolerance) as the real answer's rank does.
+ * each guess, its rank lies on the same side of that guess as the real answer's
+ * rank does. We key on direction ONLY, deliberately ignoring the close/far
+ * (amber/grey) tolerance: an amber guess shouldn't shrink the shown range to the
+ * tolerance window. So a #110 guess the answer sits above and a #220 guess it
+ * sits below leave the whole open range #111-#219 on show.
  */
 export function possiblePool(
   pool: Commander[],
@@ -24,10 +28,8 @@ export function possiblePool(
   answer: Commander,
 ): Commander[] {
   if (guesses.length === 0) return pool;
-  const fb = (guess: Commander, target: Commander) => {
-    const r = compareNumeric(guess.rank, target.rank, POPULARITY_TOL);
-    return `${r.kind}:${r.direction}`;
-  };
+  const fb = (guess: Commander, target: Commander) =>
+    compareNumeric(guess.rank, target.rank, POPULARITY_TOL).direction;
   const keys = guesses.map((g) => fb(g, answer));
   return pool.filter((c) => guesses.every((g, i) => fb(g, c) === keys[i]));
 }
@@ -97,24 +99,34 @@ interface NumericSpec {
   fmt: (n: number) => string;
   /** Distance within which a guess reads as "close" - matches the column's tolerance. */
   tol: number;
+  /**
+   * Smallest distinguishable increment in `get` units, used to nudge a bound to a
+   * strict one (a guess the answer sits below yields "< guess", shown as one step
+   * lower). It's a function because for price the step depends on the player's
+   * display currency: one yen is a bigger USD nudge than one cent.
+   */
+  step: () => number;
 }
 
 const id = (n: number) => String(n);
 
 const NUMERIC_SPECS: NumericSpec[] = [
-  { label: "Mana value", get: (c) => c.manaValue, fmt: id, tol: 2 },
+  { label: "Mana value", get: (c) => c.manaValue, fmt: id, tol: 2, step: () => 1 },
   // Popularity is keyed on EDHREC rank (lower = more popular), shown as "#42".
   {
     label: "Popularity",
     get: (c) => c.rank,
     fmt: (n) => `#${n}`,
     tol: POPULARITY_TOL,
+    step: () => 1,
   },
   {
     label: "Price",
     get: (c) => c.price,
     fmt: (n) => formatPrice(n),
     tol: PRICE_TOL,
+    // One smallest display unit (e.g. 1¥ or $0.01), expressed back in stored USD.
+    step: () => toUsd(Math.pow(10, -getCurrency().decimals)),
   },
 ];
 
@@ -156,12 +168,15 @@ function numericClue(
   const hasLt = lt < Infinity;
   if (!hasGt && !hasLt) return null;
 
+  const step = spec.step();
+  const lower = spec.fmt(gt + step); // strict: answer sits above `gt`
+  const upper = spec.fmt(lt - step); // strict: answer sits below `lt`
+
   let value: string;
   if (hasGt && gt == lt) value = `${spec.fmt(gt)}`;
-  else if (hasGt && hasLt)
-    value = `${spec.fmt(changeConditionally(gt, "plus"))}-${changeConditionally(lt, "minus")}`;
-  else if (hasGt) value = `${spec.fmt(changeConditionally(gt, "plus"))}-...`;
-  else value = `...-${spec.fmt(changeConditionally(lt, "plus"))}`;
+  else if (hasGt && hasLt) value = `${lower}-${upper}`;
+  else if (hasGt) value = `${lower}-...`;
+  else value = `...-${upper}`;
 
   // The bound reads as "close" (amber) only if one of the tightest bounding
   // guesses actually landed within tolerance of the answer; otherwise the answer
@@ -170,17 +185,6 @@ function numericClue(
     (hasGt && a - gt <= spec.tol) || (hasLt && lt - a <= spec.tol);
 
   return { label: spec.label, tone: closeBounded ? "partial" : "none", value };
-}
-
-function changeConditionally(num: number, operation: "minus" | "plus"): number {
-  const adjustment = Number.isInteger(num)
-    ? operation
-      ? 1
-      : -1
-    : operation
-      ? 0.01
-      : -0.01;
-  return num + adjustment;
 }
 
 interface SetClue {
