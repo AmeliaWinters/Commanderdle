@@ -54,15 +54,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px dashed var(--accent, #c9a227);
+  border: 2px dashed var(--gold);
   border-radius: 6px;
-  background: color-mix(in srgb, var(--accent, #c9a227) 8%, transparent);
+  background: color-mix(in srgb, var(--gold) 8%, transparent);
 }
 
 .ad-placeholder-label {
   font-family: monospace;
   font-size: 0.75rem;
-  color: var(--accent, #c9a227);
+  color: var(--gold);
   opacity: 0.8;
   text-align: center;
   padding: 8px;

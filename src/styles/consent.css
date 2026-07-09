@@ -30,7 +30,7 @@
 }
 
 .consent-text a {
-  color: var(--flame-1, #f6a01a);
+  color: var(--flame-1);
 }
 
 .consent-actions {
@@ -55,7 +55,7 @@
 }
 
 .consent-accept {
-  background: var(--flame, linear-gradient(135deg, #f6a01a, #c01f1f));
+  background: var(--flame);
   color: #fff;
   border-color: transparent;
 }

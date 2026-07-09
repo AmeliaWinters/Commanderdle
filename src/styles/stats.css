@@ -45,6 +45,13 @@
   text-align: center;
 }
 
+.stats-freezes {
+  color: var(--text-dim);
+  font-size: 0.75rem;
+  text-align: center;
+  margin: 6px 0 14px;
+}
+
 .stats-empty {
   color: var(--text-dim);
   font-size: 0.85rem;

@@ -40,7 +40,7 @@ export async function onProfile(
 
   const row = await env.STATS_DB.prepare(
     `SELECT u.id, u.uuid, u.username, u.avatar, ${EFFECTIVE_TIER_SQL} AS tier, u.name_color, u.created_at,
-            s.play_streak, s.max_play_streak, s.win_streak, s.max_win_streak, s.total_wins, s.xp
+            s.play_streak, s.max_play_streak, s.win_streak, s.max_win_streak, s.total_wins, s.xp, s.streak_freezes
      FROM users u LEFT JOIN user_stats s ON s.user_id = u.id
      WHERE u.uuid = ? AND u.username IS NOT NULL`,
   )
@@ -59,6 +59,7 @@ export async function onProfile(
       max_win_streak: number | null;
       total_wins: number | null;
       xp: number | null;
+      streak_freezes: number | null;
     }>();
 
   if (!row) return json({ error: "not found" }, 404);
@@ -91,6 +92,7 @@ export async function onProfile(
       maxWinStreak: row.max_win_streak ?? 0,
       totalWins: row.total_wins ?? 0,
       xp: row.xp ?? 0,
+      streakFreezes: row.streak_freezes ?? 0,
     },
     bonusStats,
     binderCount: Object.keys(binder).length,

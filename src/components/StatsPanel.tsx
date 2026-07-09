@@ -85,6 +85,11 @@ export default function StatsPanel({ mode, maxGuesses, highlight, self }: Props)
           <span className="stat-label">Max streak</span>
         </div>
       </div>
+      <p className="stats-freezes">
+        ❄ {stats.freezes ?? 0} streak freeze
+        {(stats.freezes ?? 0) === 1 ? "" : "s"} banked — each covers one missed
+        day. Earn one for every day you play.
+      </p>
       <div className="stats-dist">
         <h3>Guess distribution</h3>
         {stats.wins === 0 ? (

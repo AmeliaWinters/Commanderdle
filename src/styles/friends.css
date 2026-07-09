@@ -1,0 +1,355 @@
+/* Friends page: add-by-username form, request/manage lists. The board itself
+   reuses the leaderboard styles (lb-*). */
+
+/* Pending-request signals on the header account widget. */
+.account-widget-wrap .account-widget {
+  position: relative;
+}
+
+.account-widget-alert {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--flame-1, #ff5a3c);
+  border: 2px solid var(--surface-0, #101014);
+}
+
+.account-pop-badge {
+  margin-left: auto;
+  min-width: 1.35em;
+  padding: 0 0.35em;
+  border-radius: 999px;
+  background: var(--flame-1, #ff5a3c);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* Global | Friends scope toggle on the leaderboard page. */
+.lb-scope {
+  display: inline-flex;
+  gap: 2px;
+  margin: 0.75rem 0 0.25rem;
+  padding: 3px;
+  border-radius: 10px;
+  background: var(--surface-1, rgba(255, 255, 255, 0.06));
+}
+
+.lb-scope-btn {
+  padding: 0.4rem 1.1rem;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.lb-scope-btn.active {
+  background: var(--surface-2, rgba(255, 255, 255, 0.12));
+  opacity: 1;
+}
+
+.lb-friends-manage {
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+}
+
+/* ── Friends page ────────────────────────────────────────────────────────── */
+
+.friends-hero-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.friends-hero-head h2 {
+  margin: 0;
+}
+
+.friends-count {
+  font-size: 0.95rem;
+  opacity: 0.65;
+}
+
+.friends-add {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0.9rem 0 0.25rem;
+}
+
+.friends-add-input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.6rem 0.8rem;
+  border-radius: 9px;
+  border: 1px solid var(--border, #444);
+  background: var(--surface-1, #1c1c22);
+  color: inherit;
+  font: inherit;
+}
+
+.friends-add-input:focus-visible {
+  outline: 2px solid var(--tier-color, var(--flame-1, #ff5a3c));
+  outline-offset: 1px;
+}
+
+.friends-notice {
+  margin: 0.4rem 0 0;
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+.friends-section {
+  margin-top: 1.6rem;
+}
+
+.friends-section h3 {
+  margin: 0 0 0.6rem;
+}
+
+.friends-subtle {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.55;
+}
+
+/* Requests inbox — a highlighted panel so a waiting request is impossible to miss. */
+.friends-panel {
+  margin-top: 1.4rem;
+  padding: 0.85rem 1rem 1rem;
+  border-radius: 14px;
+}
+
+.friends-inbox {
+  background: color-mix(in srgb, var(--flame-1, #ff5a3c) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--flame-1, #ff5a3c) 35%, transparent);
+}
+
+.friends-inbox h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.friends-inbox-count {
+  min-width: 1.5em;
+  padding: 0 0.4em;
+  border-radius: 999px;
+  background: var(--flame-1, #ff5a3c);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.5em;
+  text-align: center;
+}
+
+/* Request rows (incoming / outgoing / sent). */
+.friend-req-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.friend-req {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.friend-req-id {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
+  text-decoration: none;
+  color: inherit;
+}
+
+.friend-req-actions {
+  display: flex;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.friend-req-btn {
+  padding: 0.32rem 0.75rem;
+  font-size: 0.85rem;
+}
+
+/* Shared name + tier gem. */
+.friend-name {
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.friend-gem {
+  font-size: 0.85em;
+}
+
+/* Friend cards. */
+.friends-list-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 0.55rem;
+}
+
+.friends-today-legend {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.55;
+}
+
+.friend-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.friend-card {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.55rem 0.65rem;
+  border-radius: 12px;
+  background: var(--surface-1, rgba(255, 255, 255, 0.045));
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.07));
+}
+
+.friend-card-main {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-width: 0;
+  flex: 1;
+  text-decoration: none;
+  color: inherit;
+}
+
+.friend-card-id {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 0.1rem;
+}
+
+.friend-card-level {
+  font-size: 0.8rem;
+  opacity: 0.6;
+}
+
+/* The "today" strip: one pip per daily mode. */
+.friend-today {
+  display: flex;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.friend-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+
+.friend-dot-correct {
+  background: var(--correct, #46a758);
+}
+
+.friend-dot-wrong {
+  background: var(--present, #d9a441);
+}
+
+.friend-dot-empty {
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--border, rgba(255, 255, 255, 0.22));
+}
+
+/* Per-card overflow menu. */
+.friend-card-menu {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.friend-menu-btn {
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+.friend-menu-btn:hover {
+  opacity: 1;
+  background: var(--surface-2, rgba(255, 255, 255, 0.1));
+}
+
+.friend-menu-pop {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 4px;
+  z-index: 5;
+  border-radius: 9px;
+  background: var(--surface-2, #23232b);
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.12));
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+}
+
+.friend-menu-pop button {
+  display: block;
+  width: 100%;
+  padding: 0.55rem 0.9rem;
+  border: none;
+  background: transparent;
+  color: var(--danger, #e5624c);
+  font: inherit;
+  white-space: nowrap;
+  text-align: left;
+  cursor: pointer;
+}
+
+.friend-menu-pop button:hover {
+  background: var(--surface-3, rgba(255, 255, 255, 0.08));
+}
+
+/* Empty state that recruits. */
+.friends-recruit {
+  padding: 1.5rem 1.2rem;
+  border-radius: 14px;
+  border: 1px dashed var(--border, rgba(255, 255, 255, 0.2));
+  text-align: center;
+}
+
+.friends-recruit-lead {
+  margin: 0 0 1rem;
+  opacity: 0.8;
+}

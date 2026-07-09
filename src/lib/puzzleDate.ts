@@ -5,7 +5,7 @@
  */
 
 /** Launch date (puzzle #1). Puzzle numbers count UTC days from here. */
-export const PUZZLE_EPOCH = "2026-07-08";
+export const PUZZLE_EPOCH = "2026-07-09";
 
 /** UTC midnight (ms) for a YYYY-MM-DD key. */
 export function utcMidnight(key: string): number {

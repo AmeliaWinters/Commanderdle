@@ -20,6 +20,9 @@
  *   POST  /api/account/results           → echoes back stats
  *   GET   /api/leaderboard/:metric       → a fake board (with the mock account slotted in)
  *   GET   /api/profile/:uuid             → a fake public profile
+ *   /api/friends (+ /:uuid, /leaderboard/:metric, /today) → in-memory friends store,
+ *                                          reseeded on login with friends + requests in
+ *                                          every state, plus a sample "today" strip
  *
  * Handy query params on the login route to exercise cosmetics / states:
  *   ?tier=mythic        → sign in as a supporter (common | uncommon | rare | mythic | theCreator)
@@ -47,6 +50,46 @@ const isHexColor = (v: string): boolean =>
 // Single-process dev server → module-level state is the "session". Persists across page
 // reloads; resets when this file is edited (HMR) or the server restarts.
 let user: MockUser | null = null;
+
+interface MockPerson {
+  uuid: string;
+  username: string;
+  avatar: string;
+  tier: Tier;
+  nameColor: string | null;
+  xp: number;
+}
+
+const person = (
+  i: number,
+  username: string,
+  avatar: string,
+  tier: Tier = "common",
+  xp = 0,
+): MockPerson => ({
+  uuid: `dev-friend-${i}`,
+  username,
+  avatar,
+  tier,
+  nameColor: null,
+  xp,
+});
+
+// In-memory friends state, reseeded on every mock login so each dev session starts
+// with every UI state populated (accepted friends, an inbox, an open outgoing request).
+const seedSocial = () => ({
+  friends: [
+    person(1, "PlaneswalkerPat", "The Ur-Dragon", "mythic", 9200),
+    person(2, "GruulSmash", "Krenko, Mob Boss", "rare", 3100),
+    person(3, "SimicSteve", "Y'shtola, Night's Blessed", "common", 640),
+  ],
+  incoming: [
+    person(4, "AzoriusAndy", "Edgar Markov", "uncommon"),
+    person(5, "OrzhovOlivia", "Atraxa, Praetors' Voice"),
+  ],
+  outgoing: [person(6, "DimirDana", "Edgar Markov")],
+});
+let social = seedSocial();
 
 const DEFAULT_AVATAR = "Atraxa, Praetors' Voice";
 
@@ -158,6 +201,7 @@ export function devAuthMock(): Plugin {
             nameColor: null,
             leaderboardOptIn: named,
           };
+          social = seedSocial();
           const returnTo = url.searchParams.get("returnTo");
           redirect(
             res,
@@ -168,7 +212,11 @@ export function devAuthMock(): Plugin {
 
         // --- auth: me ---
         if (path === "/api/auth/me" && method === "GET") {
-          return sendJson(res, 200, { user, stats: user ? stats : null });
+          return sendJson(res, 200, {
+            user,
+            stats: user ? stats : null,
+            pendingFriendRequests: user ? social.incoming.length : 0,
+          });
         }
         if (path === "/api/auth/me" && method === "PATCH") {
           if (!user) return sendJson(res, 401, { error: "not signed in" });
@@ -257,6 +305,123 @@ export function devAuthMock(): Plugin {
                 }
               : undefined;
           return sendJson(res, 200, { entries: base, you });
+        }
+
+        // --- friends: private board (must match before the :uuid route) ---
+        const friendsLbMatch = path.match(
+          /^\/api\/friends\/leaderboard\/([\w-]+)$/,
+        );
+        if (friendsLbMatch && method === "GET") {
+          if (!user || !user.username)
+            return sendJson(res, 401, { error: "not signed in" });
+          const entries = [
+            {
+              uuid: user.uuid,
+              username: user.username,
+              avatar: user.avatar,
+              tier: user.tier,
+              nameColor: user.nameColor,
+              value: 175,
+            },
+            ...social.friends.map((f, i) => ({ ...f, value: 220 - i * 60 })),
+          ].sort((a, b) => b.value - a.value);
+          return sendJson(res, 200, { entries });
+        }
+
+        // --- friends: today's dailies per friend ---
+        if (path === "/api/friends/today" && method === "GET") {
+          if (!user || !user.username)
+            return sendJson(res, 401, { error: "not signed in" });
+          const date = url.searchParams.get("date") ?? "";
+          // A plausible mix so the today strip shows solved / missed / not-played.
+          const results: Record<
+            string,
+            Record<string, { won: boolean; guesses: number }>
+          > = {};
+          const f = social.friends;
+          if (f[0])
+            results[f[0].uuid] = {
+              classic: { won: true, guesses: 3 },
+              silhouette: { won: true, guesses: 2 },
+              zoom: { won: true, guesses: 4 },
+              synergy: { won: true, guesses: 1 },
+              quote: { won: true, guesses: 5 },
+            };
+          if (f[1])
+            results[f[1].uuid] = {
+              classic: { won: true, guesses: 4 },
+              zoom: { won: false, guesses: 6 },
+            };
+          // f[2] has played nothing today → all-empty strip.
+          return sendJson(res, 200, { date, results });
+        }
+
+        // --- friends: lists + send request ---
+        if (path === "/api/friends") {
+          if (!user || !user.username)
+            return sendJson(res, 401, { error: "not signed in" });
+          if (method === "GET") return sendJson(res, 200, social);
+          if (method === "POST") {
+            const body = (await readBody(req)) as { username?: unknown };
+            const name =
+              typeof body.username === "string" ? body.username.trim() : "";
+            if (!name) return sendJson(res, 400, { error: "bad username" });
+            const lc = name.toLowerCase();
+            if (lc === user.username.toLowerCase())
+              return sendJson(res, 400, { error: "that's you" });
+            if (social.friends.some((f) => f.username.toLowerCase() === lc))
+              return sendJson(res, 409, { error: "already friends" });
+            if (social.outgoing.some((f) => f.username.toLowerCase() === lc))
+              return sendJson(res, 409, { error: "request already sent" });
+            const mutual = social.incoming.find(
+              (f) => f.username.toLowerCase() === lc,
+            );
+            if (mutual) {
+              social.incoming = social.incoming.filter((f) => f !== mutual);
+              social.friends.push(mutual);
+              return sendJson(res, 200, {
+                ok: true,
+                status: "accepted",
+                person: mutual,
+              });
+            }
+            // Any unknown name "exists" in dev, except the reserved miss case.
+            if (lc === "nobody")
+              return sendJson(res, 404, { error: "player not found" });
+            const p = person(Date.now() % 100000, name, DEFAULT_AVATAR);
+            social.outgoing.push(p);
+            return sendJson(res, 200, { ok: true, status: "pending", person: p });
+          }
+          return sendJson(res, 405, { error: "method not allowed" });
+        }
+
+        // --- friends: accept / remove one ---
+        const friendMatch = path.match(/^\/api\/friends\/([\w-]+)$/);
+        if (friendMatch && (method === "PATCH" || method === "DELETE")) {
+          if (!user || !user.username)
+            return sendJson(res, 401, { error: "not signed in" });
+          const id = friendMatch[1];
+          if (method === "PATCH") {
+            const p = social.incoming.find((f) => f.uuid === id);
+            if (!p) return sendJson(res, 404, { error: "no such request" });
+            social.incoming = social.incoming.filter((f) => f !== p);
+            social.friends.push(p);
+            return sendJson(res, 200, { ok: true });
+          }
+          const before =
+            social.friends.length +
+            social.incoming.length +
+            social.outgoing.length;
+          social.friends = social.friends.filter((f) => f.uuid !== id);
+          social.incoming = social.incoming.filter((f) => f.uuid !== id);
+          social.outgoing = social.outgoing.filter((f) => f.uuid !== id);
+          const after =
+            social.friends.length +
+            social.incoming.length +
+            social.outgoing.length;
+          if (before === after)
+            return sendJson(res, 404, { error: "not connected" });
+          return sendJson(res, 200, { ok: true });
         }
 
         // --- account: bonus daily mirror ---

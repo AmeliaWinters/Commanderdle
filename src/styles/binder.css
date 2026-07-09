@@ -155,10 +155,8 @@
   flex-direction: column;
   align-items: center;
   gap: var(--s1);
-  /* Skip layout/paint for off-screen cards; keep box size stable so the
-     scrollbar doesn't jump. Height ≈ image (170*88/63) + name + meta lines. */
-  content-visibility: auto;
-  contain-intrinsic-size: auto 320px;
+  /* No content-visibility here: VirtualBinderGrid already windows the DOM,
+     and its implied paint containment clips the foil tilt/lift overflow. */
 }
 
 .binder-card-frame {
@@ -170,7 +168,7 @@
   width: 100%;
   aspect-ratio: 63 / 88;
   object-fit: cover;
-  border-radius: 6px;
+  border-radius: 12px;
   display: block;
   background: var(--panel-2);
 }
@@ -225,7 +223,7 @@
 .binder-card-noart {
   width: 100%;
   aspect-ratio: 63 / 88;
-  border-radius: 6px;
+  border-radius: 8px;
   background: var(--panel-2);
   border: 1px solid var(--line);
   display: flex;

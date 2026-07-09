@@ -28,7 +28,16 @@ function StatValue({ value }: { value: number }) {
   return <span className="account-stat-value">{useCountUp(value).toLocaleString()}</span>;
 }
 
-function FeaturedCard({ card, value }: { card: Card; value: number }) {
+function FeaturedCard({
+  card,
+  value,
+  sub,
+}: {
+  card: Card;
+  value: number;
+  /** Optional small line under the label (e.g. the streak-freeze bank). */
+  sub?: string;
+}) {
   const { Icon, label } = card;
   // A live streak warms up as it climbs: 0 → no glow, saturating around a 14-day run.
   const glow = Math.min(1, value / 14);
@@ -43,6 +52,7 @@ function FeaturedCard({ card, value }: { card: Card; value: number }) {
       </span>
       <StatValue value={value} />
       <span className="account-stat-label">{label}</span>
+      {sub !== undefined && <span className="account-stat-sub">{sub}</span>}
     </div>
   );
 }
@@ -67,7 +77,17 @@ export default function StatCards({ stats }: { stats: AccountStats }) {
     <div className="account-stats">
       <div className="account-stats-featured">
         {FEATURED.map((card) => (
-          <FeaturedCard key={card.key} card={card} value={stats[card.key]} />
+          <FeaturedCard
+            key={card.key}
+            card={card}
+            value={stats[card.key]}
+            sub={
+              card.key === "playStreak"
+                ? // `?? 0` guards against stats from a not-yet-migrated server.
+                  `❄ ${(stats.streakFreezes ?? 0).toLocaleString()} freeze${(stats.streakFreezes ?? 0) === 1 ? "" : "s"} banked`
+                : undefined
+            }
+          />
         ))}
       </div>
       <div className="account-stats-secondary">

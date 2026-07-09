@@ -65,7 +65,7 @@
 .hero-pulse {
   margin: 4px 0 0;
   font-size: 0.8rem;
-  color: var(--accent, #ec5a1c);
+  color: var(--flame-2);
   text-shadow: 0 0 12px rgba(236, 90, 28, 0.25);
 }
 

@@ -42,7 +42,7 @@
   gap: 0.25rem;
   padding: 4px 2px;
   border: 2px solid transparent;
-  border-radius: 12px;
+  border-radius: var(--radius);
   background: none;
   cursor: pointer;
   transition:

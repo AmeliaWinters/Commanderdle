@@ -76,7 +76,7 @@
   max-height: 76vh;
   display: flex;
   flex-direction: column;
-  border-radius: 12px;
+  border-radius: var(--radius);
   background: var(--panel, #1d1a24);
   border: 1px solid rgba(255, 255, 255, 0.15);
   padding: 0.75rem;
@@ -124,7 +124,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.03em;
-  color: var(--accent, #e8b34b);
+  color: var(--gold);
 }
 
 /* Rarity badge in the answers modal: gem + label, tinted by tier. */
@@ -165,7 +165,7 @@
 }
 
 .grid-detail-pct-rare {
-  background: var(--accent, #e8b34b);
+  background: var(--gold);
   color: #1a1408;
 }
 

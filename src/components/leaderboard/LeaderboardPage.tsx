@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import ContentPage from "../pages/ContentPage";
 import LeaderboardList from "./LeaderboardList";
 import { fetchLeaderboard } from "../../lib/leaderboardApi";
+import { fetchFriendsLeaderboard } from "../../lib/friendsApi";
 import {
   LEADERBOARD_METRICS,
   DEFAULT_METRIC,
@@ -9,7 +10,7 @@ import {
 } from "../../lib/leaderboard";
 import type { LeaderboardEntry, LeaderboardYou } from "../../lib/leaderboard";
 import { useAuth } from "../../lib/useAuth";
-import { ACCOUNT_PATH, navigateToPath } from "../../lib/router";
+import { ACCOUNT_PATH, FRIENDS_PATH, navigateToPath } from "../../lib/router";
 
 /** How many ranks to show per page on the full leaderboard. */
 const PAGE_SIZE = 50;
@@ -17,6 +18,7 @@ const PAGE_SIZE = 50;
 /** The full public leaderboard: metric tabs + up to the top 100 opted-in players. */
 export default function LeaderboardPage() {
   const { user } = useAuth();
+  const [scope, setScope] = useState<"global" | "friends">("global");
   const [metric, setMetric] = useState(DEFAULT_METRIC);
   const [entries, setEntries] = useState<LeaderboardEntry[] | null>(null);
   const [you, setYou] = useState<LeaderboardYou | undefined>(undefined);
@@ -28,19 +30,31 @@ export default function LeaderboardPage() {
     const controller = new AbortController();
     setLoading(true);
     setPage(0);
-    // Ask for the signed-in player's own rank too, so it can be shown even if
-    // they didn't make the visible top 100.
-    fetchLeaderboard(metric, 100, controller.signal, user?.uuid).then((res) => {
-      if (!alive) return;
-      setEntries(res?.entries ?? null);
-      setYou(res?.you);
-      setLoading(false);
-    });
+    if (scope === "friends") {
+      // The friends board is you + everyone you've accepted — no separate rank row.
+      fetchFriendsLeaderboard(metric, controller.signal).then((entries) => {
+        if (!alive) return;
+        setEntries(entries);
+        setYou(undefined);
+        setLoading(false);
+      });
+    } else {
+      // Ask for the signed-in player's own rank too, so it can be shown even if
+      // they didn't make the visible top 100.
+      fetchLeaderboard(metric, 100, controller.signal, user?.uuid).then(
+        (res) => {
+          if (!alive) return;
+          setEntries(res?.entries ?? null);
+          setYou(res?.you);
+          setLoading(false);
+        },
+      );
+    }
     return () => {
       alive = false;
       controller.abort();
     };
-  }, [metric, user?.uuid]);
+  }, [scope, metric, user?.uuid]);
 
   const optedOut = user && !user.leaderboardOptIn;
 
@@ -65,6 +79,20 @@ export default function LeaderboardPage() {
     >
       <h2>Leaderboards</h2>
 
+      <div className="lb-scope" role="tablist" aria-label="Leaderboard scope">
+        {(["global", "friends"] as const).map((s) => (
+          <button
+            key={s}
+            role="tab"
+            aria-selected={scope === s}
+            className={`lb-scope-btn${scope === s ? " active" : ""}`}
+            onClick={() => setScope(s)}
+          >
+            {s === "global" ? "Global" : "Friends"}
+          </button>
+        ))}
+      </div>
+
       <div className="lb-tabs lb-tabs-page" role="tablist">
         {LEADERBOARD_METRICS.map((m) => (
           <button
@@ -83,7 +111,25 @@ export default function LeaderboardPage() {
         <p>Loading...</p>
       ) : !entries ? (
         <p className="lb-empty">
-          The leaderboard is having a rest - try again shortly.
+          {scope === "friends" ? (
+            <>
+              {user
+                ? "Your friends board isn't available - "
+                : "Sign in to race your friends - "}
+              <a
+                href={FRIENDS_PATH}
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigateToPath(FRIENDS_PATH);
+                }}
+              >
+                set up friends here
+              </a>
+              .
+            </>
+          ) : (
+            "The leaderboard is having a rest - try again shortly."
+          )}
         </p>
       ) : entries.length === 0 ? (
         <p className="lb-empty">
@@ -122,6 +168,21 @@ export default function LeaderboardPage() {
                 Next →
               </button>
             </div>
+          )}
+
+          {scope === "friends" && (
+            <p className="lb-friends-manage">
+              {entries.length <= 1 && "It's just you so far. "}
+              <a
+                href={FRIENDS_PATH}
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigateToPath(FRIENDS_PATH);
+                }}
+              >
+                {entries.length <= 1 ? "Add some friends" : "Manage friends"}
+              </a>
+            </p>
           )}
         </>
       )}

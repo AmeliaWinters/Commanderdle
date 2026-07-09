@@ -1,0 +1,89 @@
+/* ---------- Binder showcase: sleeve page, sleeve gloss, foil tilt ---------- */
+
+/* The card grid sits on a "binder page": a leather-dark panel with a stitched
+   edge, so found cards read as sleeved in a real trade binder. */
+.binder-page-panel {
+  /* .play-area is a centered flex column, so without this the panel
+     shrink-wraps its (absolutely positioned, zero-width) contents. */
+  width: 100%;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 40%),
+    var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: var(--s3);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+/* Sleeve gloss: a static top-light sheen over every found card, like the
+   plastic of a penny sleeve. Sits above the art, below the foil glare. */
+.binder-card-found .binder-card-frame {
+  perspective: 600px;
+}
+
+.binder-card-found .binder-card-frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  pointer-events: none;
+  z-index: 1;
+  background: linear-gradient(
+    165deg,
+    rgba(255, 255, 255, 0.14),
+    rgba(255, 255, 255, 0.04) 30%,
+    transparent 55%
+  );
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+}
+
+/* Foil tilt (hover-capable devices only; BinderCard.tsx drives the vars).
+   The image and both overlays share the same rotation so the card tilts as
+   one solid slab. */
+@media (hover: hover) {
+  .binder-card-found .binder-card-img {
+    transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+    will-change: transform;
+  }
+
+  /* Replace the flat hover-lift from binder.css with lift + tilt combined. */
+  .binder-card-found:hover .binder-card-img {
+    transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg))
+      translateY(-3px) scale(1.04);
+  }
+
+  /* Holo glare: a bright spot that follows the pointer, over faint rainbow
+     banding — the classic foil look. */
+  .binder-card-found .binder-card-frame::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    pointer-events: none;
+    z-index: 2;
+    mix-blend-mode: screen;
+    background:
+      radial-gradient(
+        circle at var(--fx, 50%) var(--fy, 50%),
+        rgba(255, 255, 255, 0.28),
+        transparent 55%
+      ),
+      linear-gradient(
+        115deg,
+        transparent 25%,
+        rgba(169, 213, 240, 0.14) 42%,
+        rgba(255, 251, 213, 0.14) 52%,
+        rgba(241, 160, 129, 0.12) 62%,
+        transparent 78%
+      );
+    opacity: var(--glare, 0);
+    transition: opacity 0.25s ease;
+    transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg))
+      translateY(-3px) scale(1.04);
+  }
+}
+
+/* Reduced motion: BinderCard.tsx never sets the tilt vars, and the global
+   reduced-motion block kills the transitions, so the card stays flat. */

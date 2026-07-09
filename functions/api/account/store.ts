@@ -58,7 +58,7 @@ export async function getBinder(db: D1Database, userId: number): Promise<Binder>
 export async function getStats(db: D1Database, userId: number): Promise<AccountStats> {
   const row = await db
     .prepare(
-      `SELECT play_streak, max_play_streak, win_streak, max_win_streak, total_wins, xp
+      `SELECT play_streak, max_play_streak, win_streak, max_win_streak, total_wins, xp, streak_freezes
        FROM user_stats WHERE user_id = ?`,
     )
     .bind(userId)
@@ -69,6 +69,7 @@ export async function getStats(db: D1Database, userId: number): Promise<AccountS
       max_win_streak: number
       total_wins: number
       xp: number
+      streak_freezes: number
     }>()
   if (!row) return emptyAccountStats()
   return {
@@ -78,6 +79,7 @@ export async function getStats(db: D1Database, userId: number): Promise<AccountS
     maxWinStreak: row.max_win_streak,
     totalWins: row.total_wins,
     xp: row.xp,
+    streakFreezes: row.streak_freezes,
   }
 }
 
@@ -161,11 +163,11 @@ export async function recomputeStats(db: D1Database, userId: number): Promise<Ac
   await db
     .prepare(
       `INSERT INTO user_stats
-         (user_id, play_streak, max_play_streak, win_streak, max_win_streak, total_wins, xp, updated_at)
-       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, unixepoch())
+         (user_id, play_streak, max_play_streak, win_streak, max_win_streak, total_wins, xp, streak_freezes, updated_at)
+       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, unixepoch())
        ON CONFLICT(user_id) DO UPDATE SET
          play_streak = ?2, max_play_streak = ?3, win_streak = ?4,
-         max_win_streak = ?5, total_wins = ?6, xp = ?7, updated_at = unixepoch()`,
+         max_win_streak = ?5, total_wins = ?6, xp = ?7, streak_freezes = ?8, updated_at = unixepoch()`,
     )
     .bind(
       userId,
@@ -175,6 +177,7 @@ export async function recomputeStats(db: D1Database, userId: number): Promise<Ac
       stats.maxWinStreak,
       stats.totalWins,
       stats.xp,
+      stats.streakFreezes,
     )
     .run()
 

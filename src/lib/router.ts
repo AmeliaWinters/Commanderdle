@@ -102,6 +102,7 @@ export const CONTACT_PATH = "/contact";
 export const CHANGELOG_PATH = "/changelog";
 export const ACCOUNT_PATH = "/account";
 export const LEADERBOARD_PATH = "/leaderboard";
+export const FRIENDS_PATH = "/friends";
 
 export function isAboutPath(pathname: string): boolean {
   return normalize(pathname) === ABOUT_PATH;
@@ -133,6 +134,10 @@ export function isAccountPath(pathname: string): boolean {
 
 export function isLeaderboardPath(pathname: string): boolean {
   return normalize(pathname) === LEADERBOARD_PATH;
+}
+
+export function isFriendsPath(pathname: string): boolean {
+  return normalize(pathname) === FRIENDS_PATH;
 }
 
 /** Public profile: /u/{uuid}. */
@@ -268,6 +273,7 @@ function isStandalonePath(path: string): boolean {
     isChangelogPath(path) ||
     isAccountPath(path) ||
     isLeaderboardPath(path) ||
+    isFriendsPath(path) ||
     parseProfilePath(path) !== null ||
     parseProfileBinderPath(path) !== null ||
     isHigherLowerPath(path) ||

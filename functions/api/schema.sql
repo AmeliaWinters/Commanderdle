@@ -158,8 +158,28 @@ CREATE TABLE IF NOT EXISTS user_stats (
   max_win_streak INTEGER NOT NULL DEFAULT 0,
   total_wins     INTEGER NOT NULL DEFAULT 0,
   xp             INTEGER NOT NULL DEFAULT 0,
+  -- Banked streak freezes (earned 1/day played, spent to bridge missed days).
+  -- Cached like the rest; recomputed from user_results on every submit.
+  streak_freezes INTEGER NOT NULL DEFAULT 0,
   updated_at     INTEGER NOT NULL DEFAULT (unixepoch())
 ) WITHOUT ROWID;
+-- Migration for existing deploys (run once; skip if the column already exists):
+-- ALTER TABLE user_stats ADD COLUMN streak_freezes INTEGER NOT NULL DEFAULT 0;
+
+-- Friends (Phase 3, item 5). One row per relationship, stored in the direction it was
+-- requested: `user_id` asked, `friend_id` was asked. status 'pending' until the
+-- addressee accepts (which flips it to 'accepted' in place — no second row). Removing
+-- or declining deletes the row, so "friends" queries only ever see both directions via
+-- an OR on the two columns. Both sides must have set a username (you're found by it).
+CREATE TABLE IF NOT EXISTS friends (
+  user_id    INTEGER NOT NULL,               -- requester
+  friend_id  INTEGER NOT NULL,               -- addressee
+  status     TEXT    NOT NULL DEFAULT 'pending',  -- 'pending' | 'accepted'
+  created_at INTEGER NOT NULL DEFAULT (unixepoch()),
+  PRIMARY KEY (user_id, friend_id)
+) WITHOUT ROWID;
+-- Incoming-request + reverse-direction lookups scan by addressee.
+CREATE INDEX IF NOT EXISTS idx_friends_friend ON friends(friend_id);
 
 -- Server-side sessions. The cookie carries an opaque random token; we store only
 -- its SHA-256 hash, so a DB leak can't be replayed as a live session. Rows are

@@ -2,6 +2,32 @@ import { memo } from "react";
 import type { Commander } from "../../types/commander";
 import type { FoundEntry } from "../../lib/collection";
 import { colorIdentityName } from "../../lib/colorNames";
+import { prefersReducedMotion } from "../../lib/reducedMotion";
+
+/* Foil tilt: pointer position drives CSS vars on the sleeve; binder-foil.css
+   turns them into a 3D tilt + holo glare. Mouse-only (touch scrolls the grid)
+   and off entirely for reduced-motion users. */
+function foilMove(e: React.PointerEvent<HTMLDivElement>) {
+  if (e.pointerType !== "mouse" || prefersReducedMotion()) return;
+  const el = e.currentTarget;
+  const r = el.getBoundingClientRect();
+  const x = (e.clientX - r.left) / r.width;
+  const y = (e.clientY - r.top) / r.height;
+  el.style.setProperty("--fx", `${(x * 100).toFixed(1)}%`);
+  el.style.setProperty("--fy", `${(y * 100).toFixed(1)}%`);
+  el.style.setProperty("--ry", `${((x - 0.5) * 10).toFixed(2)}deg`);
+  el.style.setProperty("--rx", `${((0.5 - y) * 10).toFixed(2)}deg`);
+  el.style.setProperty("--glare", "1");
+}
+
+function foilLeave(e: React.PointerEvent<HTMLDivElement>) {
+  const el = e.currentTarget;
+  el.style.removeProperty("--fx");
+  el.style.removeProperty("--fy");
+  el.style.removeProperty("--ry");
+  el.style.removeProperty("--rx");
+  el.style.removeProperty("--glare");
+}
 
 const MODE_LABEL: Record<string, string> = {
   classic: "Classic",
@@ -52,7 +78,11 @@ function BinderCard({ commander: c, entry }: Props) {
   )} in ${modeLabels}`;
   return (
     <div className="binder-card binder-card-found" title={title}>
-      <div className="binder-card-frame">
+      <div
+        className="binder-card-frame"
+        onPointerMove={foilMove}
+        onPointerLeave={foilLeave}
+      >
         {c.normalImage ? (
           <img
             className="binder-card-img"

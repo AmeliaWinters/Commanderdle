@@ -29,6 +29,7 @@ describe('computeStats', () => {
       maxWinStreak: 0,
       totalWins: 0,
       xp: 0,
+      streakFreezes: 0,
     })
   })
 
@@ -43,15 +44,37 @@ describe('computeStats', () => {
     expect(s.totalWins).toBe(0)
   })
 
-  it('a gap day breaks the play streak but keeps the best', () => {
+  it('banks one streak freeze per day played', () => {
+    const s = computeStats([
+      { mode: 'classic', date: '2026-07-01', won: true, guesses: 3 },
+      { mode: 'classic', date: '2026-07-02', won: false, guesses: 5 }, // losses still bank
+    ])
+    expect(s.streakFreezes).toBe(2)
+  })
+
+  it('spends banked freezes to bridge a gap day, keeping the play streak alive', () => {
     const s = computeStats([
       { mode: 'classic', date: '2026-07-01', won: true, guesses: 3 },
       { mode: 'classic', date: '2026-07-02', won: true, guesses: 3 },
       { mode: 'classic', date: '2026-07-04', won: true, guesses: 3 }, // skipped the 3rd
     ])
+    // Two banked freezes going into the gap; one covers the missed day.
+    expect(s.playStreak).toBe(3)
+    expect(s.maxPlayStreak).toBe(3)
+    expect(s.streakFreezes).toBe(2) // 2 banked − 1 spent + 1 earned on the 4th
+    expect(s.totalWins).toBe(3)
+  })
+
+  it('breaks the play streak when the gap exceeds the freeze bank', () => {
+    const s = computeStats([
+      { mode: 'classic', date: '2026-07-01', won: true, guesses: 3 },
+      { mode: 'classic', date: '2026-07-02', won: true, guesses: 3 },
+      { mode: 'classic', date: '2026-07-06', won: true, guesses: 3 }, // 3 missed days > 2 freezes
+    ])
     expect(s.playStreak).toBe(1)
     expect(s.maxPlayStreak).toBe(2)
-    expect(s.totalWins).toBe(3)
+    // Not enough to bridge, so none were spent; the 6th still earns one.
+    expect(s.streakFreezes).toBe(3)
   })
 
   it('counts consecutive individual wins across modes, not full-clear days', () => {
@@ -91,8 +114,8 @@ describe('computeStats', () => {
 
   it('awards fewer-guess wins more XP, plus a full-clear bonus', () => {
     const oneDayFast = computeStats(fullClear('2026-07-01', 1))
-    // full-clear win XP + 25 full-clear bonus, no streak bonus on day one of a streak
-    expect(oneDayFast.xp).toBe(fullClearXp(1) + 25)
+    // full-clear win XP + 50 full-clear bonus, no streak bonus on day one of a streak
+    expect(oneDayFast.xp).toBe(fullClearXp(1) + 50)
     expect(winXp(1)).toBeGreaterThan(winXp(5))
     // A last-guess win scores the flat base regardless of the mode's guess limit.
     expect(winXp(5, 5)).toBe(winXp(6, 6))
@@ -114,7 +137,7 @@ describe('computeStats', () => {
       ...fullClear('2026-07-02', 3),
       ...fullClear('2026-07-03', 3),
     ])
-    const dayXp = fullClearXp(3) + 25
+    const dayXp = fullClearXp(3) + 50
     const expected =
       Math.round(dayXp * streakXpMultiplier(1)) +
       Math.round(dayXp * streakXpMultiplier(2)) +
@@ -123,18 +146,35 @@ describe('computeStats', () => {
     expect(s.xp).toBeGreaterThan(dayXp * 3)
   })
 
-  it('resets the streak multiplier after a gap day', () => {
+  it('resets the streak multiplier after an unbridgeable gap', () => {
     const s = computeStats([
       ...fullClear('2026-07-01', 3),
       ...fullClear('2026-07-02', 3),
-      ...fullClear('2026-07-05', 3), // gap: streak restarts at 1
+      ...fullClear('2026-07-06', 3), // 3 missed days > 2 freezes: streak restarts at 1
     ])
-    const dayXp = fullClearXp(3) + 25
-    const expected =
-      Math.round(dayXp * streakXpMultiplier(1)) +
-      Math.round(dayXp * streakXpMultiplier(2)) +
-      Math.round(dayXp * streakXpMultiplier(1))
-    expect(s.xp).toBe(expected)
+    // XP is additive per day, so a broken streak scores like the two runs separately.
+    const twoDayRun = computeStats([
+      ...fullClear('2026-07-01', 3),
+      ...fullClear('2026-07-02', 3),
+    ])
+    const oneDay = computeStats(fullClear('2026-07-06', 3))
+    expect(s.xp).toBe(twoDayRun.xp + oneDay.xp)
+  })
+
+  it('keeps the streak multiplier running through a frozen gap day', () => {
+    const s = computeStats([
+      ...fullClear('2026-07-01', 3),
+      ...fullClear('2026-07-02', 3),
+      ...fullClear('2026-07-04', 3), // skipped the 3rd, bridged by a banked freeze
+    ])
+    // Scores exactly like an unbroken three-day run.
+    const unbroken = computeStats([
+      ...fullClear('2026-07-01', 3),
+      ...fullClear('2026-07-02', 3),
+      ...fullClear('2026-07-03', 3),
+    ])
+    expect(s.xp).toBe(unbroken.xp)
+    expect(s.playStreak).toBe(3)
   })
 })
 
@@ -155,8 +195,22 @@ describe('computeModeStats', () => {
       maxStreak: 2,
       lastPlayedDate: '2026-07-04',
       distribution: { 2: 1, 3: 1, 4: 1 },
+      freezes: 4, // one banked per day played, none spent (no gap days)
     })
     expect(stats.zoom.wins).toBe(1)
     expect(stats.zoom.distribution).toEqual({ 1: 1 })
+    expect(stats.zoom.freezes).toBe(1)
+  })
+
+  it('bridges a missed day with a banked freeze, but never a loss', () => {
+    const stats = computeModeStats([
+      { mode: 'classic', date: '2026-07-01', won: true, guesses: 3 },
+      { mode: 'classic', date: '2026-07-02', won: true, guesses: 3 },
+      { mode: 'classic', date: '2026-07-04', won: true, guesses: 3 }, // gap bridged
+      { mode: 'classic', date: '2026-07-05', won: false, guesses: 6 }, // loss still resets
+    ])
+    expect(stats.classic.maxStreak).toBe(3)
+    expect(stats.classic.currentStreak).toBe(0)
+    expect(stats.classic.freezes).toBe(3) // 4 earned − 1 spent on the gap
   })
 })

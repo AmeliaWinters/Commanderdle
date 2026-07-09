@@ -108,7 +108,7 @@
 .hl-btn {
   min-width: 170px;
   padding: 14px 20px;
-  border-radius: 12px;
+  border-radius: var(--radius);
   border: 1px solid var(--line);
   background: var(--panel-2);
   color: var(--text);

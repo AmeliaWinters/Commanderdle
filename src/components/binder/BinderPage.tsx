@@ -203,7 +203,9 @@ export default function BinderPage({ profileUuid }: { profileUuid?: string }) {
           </div>
         </div>
 
-        <VirtualBinderGrid cards={cards} collection={collection} />
+        <div className="binder-page-panel">
+          <VirtualBinderGrid cards={cards} collection={collection} />
+        </div>
         {cards.length === 0 && (
           <p className="binder-empty">No commanders match those filters.</p>
         )}

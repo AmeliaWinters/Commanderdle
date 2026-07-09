@@ -6,7 +6,40 @@ a change that a player could notice.
 
 _Last updated: 2026-07-08 — currently on v0.10.1._
 
+## 2026-07-09
+
+- **Signing in takes you to your account page** instead of dropping you back where you
+  started, so you land straight on your profile and onboarding.
+
+- **The Friends page got a redesign** — friends are now cards showing their level and a
+  five-dot strip of how they did on today's dailies (solved, missed, or not played yet).
+  Friend requests sit in their own highlighted inbox, the friends leaderboard is built
+  right into the page, and there's a one-tap "copy my profile link" prompt when you
+  haven't added anyone yet.
+
+- **Friends are easier to find** — a Friends entry now lives in your account menu, with a
+  red badge showing how many friend requests are waiting for you (plus a dot on your
+  avatar so you don't miss it).
+
+- **Friends on the leaderboard** — the leaderboard page now has a Global / Friends toggle,
+  so you can flip between the world's top 100 and just your own circle on every metric.
+
 ## 2026-07-08
+
+- **Streak freezes** — every day you play now banks a streak freeze, and each missed day
+  automatically spends one to keep your streak alive (Duolingo-style). Long-time players are
+  back-credited one freeze per day already played. Freezes cover days you skipped entirely —
+  a loss still resets win streaks. Your banked total shows in the stats panel and on your
+  account's Day streak card.
+
+- **Friends have arrived** — add friends by username (or straight from their profile page)
+  and race them on a private friends leaderboard at `/friends`: day streaks, win streaks,
+  XP and total wins, just between you. Requests need accepting on both sides, and you can
+  unfriend any time.
+
+- **The Binder got a glow-up** — found cards are now foils: tilt them with your mouse to
+  catch a holographic shine, complete with a sleeve gloss. The collection also sits on a
+  proper binder-page panel. (Foils stay still on touch screens and for reduced-motion users.)
 
 - **Choose your currency** — a new "Preferred currency" setting on your account page converts
   every card price (in the classic clue table and in Guess the cost) from USD into your pick,

@@ -14,6 +14,7 @@ import {
   isChangelogPath,
   isAccountPath,
   isLeaderboardPath,
+  isFriendsPath,
   isHigherLowerPath,
   isPriceIsRightPath,
   isGridPath,
@@ -32,6 +33,7 @@ const ContactPage = lazy(() => import("./pages/ContactPage"));
 const ChangelogPage = lazy(() => import("./pages/ChangelogPage"));
 const AccountPage = lazy(() => import("./pages/AccountPage"));
 const LeaderboardPage = lazy(() => import("./leaderboard/LeaderboardPage"));
+const FriendsPage = lazy(() => import("./friends/FriendsPage"));
 const ProfilePage = lazy(() => import("./profile/ProfilePage"));
 const HigherLowerMode = lazy(() => import("./higher-lower/HigherLowerMode"));
 const PriceIsRightMode = lazy(
@@ -58,6 +60,7 @@ export function useStandalonePage(): ReactNode | null {
   const isChangelog = usePathMatch(isChangelogPath);
   const isAccount = usePathMatch(isAccountPath);
   const isLeaderboard = usePathMatch(isLeaderboardPath);
+  const isFriends = usePathMatch(isFriendsPath);
   const profileUuid = useProfileUuid();
   const profileBinderUuid = useProfileBinderUuid();
   const isHigherLower = usePathMatch(isHigherLowerPath);
@@ -77,6 +80,7 @@ export function useStandalonePage(): ReactNode | null {
     [isChangelog, <ChangelogPage />],
     [isAccount, <AccountPage />],
     [isLeaderboard, <LeaderboardPage />],
+    [isFriends, <FriendsPage />],
     [
       profileBinderUuid != null,
       profileBinderUuid ? <BinderPage profileUuid={profileBinderUuid} /> : null,

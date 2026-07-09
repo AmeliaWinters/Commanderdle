@@ -154,8 +154,19 @@ export async function onMe(request: Request, env: AuthEnv): Promise<Response> {
   const row = await currentUserRow(env, request)
   if (!row || !env.STATS_DB) return json({ user: null }, 200, { 'cache-control': 'no-store' })
   const { id, ...user } = row
-  const stats = await getStats(env.STATS_DB, id)
-  return json({ user, stats }, 200, { 'cache-control': 'no-store' })
+  // Pending friend requests ride along so the header can badge them on every boot
+  // without an extra round trip. Best-effort: a DB missing the friends table → 0.
+  const [stats, pending] = await Promise.all([
+    getStats(env.STATS_DB, id),
+    env.STATS_DB
+      .prepare(`SELECT COUNT(*) AS n FROM friends WHERE friend_id = ? AND status = 'pending'`)
+      .bind(id)
+      .first<{ n: number }>()
+      .catch(() => null),
+  ])
+  return json({ user, stats, pendingFriendRequests: pending?.n ?? 0 }, 200, {
+    'cache-control': 'no-store',
+  })
 }
 
 // Usernames: 3–20 chars, letters/digits/underscore. Kept tight so leaderboard names

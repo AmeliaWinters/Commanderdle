@@ -29,6 +29,9 @@ export interface ModeStats {
   lastPlayedDate: string | null;
   /** distribution[n] = number of daily wins solved in n guesses. */
   distribution: Record<number, number>;
+  /** Banked streak freezes: earned 1 per day played (this mode), each one silently
+   *  covers one missed day so the win streak survives a busy Tuesday. */
+  freezes: number;
 }
 
 /** The five daily guessing modes (a "full clear" is winning all of these in one day). */
@@ -69,6 +72,9 @@ export interface AccountStats {
   maxWinStreak: number;
   totalWins: number;
   xp: number;
+  /** Banked streak freezes: earned 1 per day played, each one silently covers one
+   *  missed day so the play streak survives a busy Tuesday (Duolingo-style). */
+  streakFreezes: number;
 }
 
 export const emptyAccountStats = (): AccountStats => ({
@@ -78,6 +84,7 @@ export const emptyAccountStats = (): AccountStats => ({
   maxWinStreak: 0,
   totalWins: 0,
   xp: 0,
+  streakFreezes: 0,
 });
 
 /** Integer day index (UTC) so date arithmetic is timezone-independent. */
@@ -85,23 +92,6 @@ function dayNumber(date: string): number {
   return Math.round(Date.parse(date + "T00:00:00Z") / 86_400_000);
 }
 
-/** Longest run of consecutive days, and the run that ends on the most recent day. */
-function streaks(days: number[]): { current: number; max: number } {
-  const sorted = [...new Set(days)].sort((a, b) => a - b);
-  if (sorted.length === 0) return { current: 0, max: 0 };
-  let max = 1;
-  let run = 1;
-  for (let i = 1; i < sorted.length; i++) {
-    run = sorted[i] === sorted[i - 1] + 1 ? run + 1 : 1;
-    if (run > max) max = run;
-  }
-  let current = 1;
-  for (let i = sorted.length - 1; i > 0; i--) {
-    if (sorted[i] === sorted[i - 1] + 1) current++;
-    else break;
-  }
-  return { current, max };
-}
 
 /**
  * XP awarded for a single win: a flat base plus an efficiency bonus for guesses to
@@ -205,6 +195,7 @@ export function computeModeStats(
       maxStreak: 0,
       lastPlayedDate: null,
       distribution: {},
+      freezes: 0,
     };
     for (const r of sorted) {
       // One row per (mode, date) server-side, but guard against a stray duplicate.
@@ -212,9 +203,18 @@ export function computeModeStats(
       stats.played += 1;
       if (r.won) {
         stats.wins += 1;
-        const consecutive =
+        let consecutive =
           stats.lastPlayedDate !== null &&
           dayNumber(r.date) === dayNumber(stats.lastPlayedDate) + 1;
+        // A gap of N missed days is bridged by spending N banked freezes (a loss
+        // still kills the streak — freezes only cover days not played at all).
+        if (!consecutive && stats.lastPlayedDate !== null) {
+          const gap = dayNumber(r.date) - dayNumber(stats.lastPlayedDate) - 1;
+          if (gap > 0 && gap <= stats.freezes) {
+            stats.freezes -= gap;
+            consecutive = true;
+          }
+        }
         stats.currentStreak = consecutive ? stats.currentStreak + 1 : 1;
         stats.maxStreak = Math.max(stats.maxStreak, stats.currentStreak);
         stats.distribution[r.guesses] =
@@ -222,6 +222,7 @@ export function computeModeStats(
       } else {
         stats.currentStreak = 0;
       }
+      stats.freezes += 1; // earned: 1 freeze per day played
       stats.lastPlayedDate = r.date;
     }
     out[mode] = stats;
@@ -254,23 +255,32 @@ export function computeStats(results: DailyResult[]): AccountStats {
     }
   }
 
-  const playDays: number[] = [];
-
   // Walk dates chronologically so each day's XP can be scaled by the running play
   // streak *as of that day* — the streak has to be built up in date order, not the
-  // (arbitrary) order results were submitted in.
+  // (arbitrary) order results were submitted in. Streak freezes are banked and spent
+  // along the same walk: 1 earned per day played, and a gap of N missed days is
+  // silently bridged by spending N banked freezes (the streak survives but the missed
+  // days don't add to it). Today's earned freeze can't cover today's own gap.
   const orderedDates = [...byDate.keys()].sort();
   let runningPlayStreak = 0;
+  let freezeBank = 0;
   let prevDayNum: number | null = null;
   for (const date of orderedDates) {
     const day = byDate.get(date)!;
     const dNum = dayNumber(date);
-    playDays.push(dNum);
-    runningPlayStreak =
-      prevDayNum !== null && dNum === prevDayNum + 1
-        ? runningPlayStreak + 1
-        : 1;
+    const gap = prevDayNum === null ? null : dNum - prevDayNum - 1;
+    if (gap === 0) {
+      runningPlayStreak += 1;
+    } else if (gap !== null && gap <= freezeBank) {
+      freezeBank -= gap;
+      runningPlayStreak += 1;
+    } else {
+      runningPlayStreak = 1;
+    }
+    freezeBank += 1;
     prevDayNum = dNum;
+    if (runningPlayStreak > stats.maxPlayStreak)
+      stats.maxPlayStreak = runningPlayStreak;
 
     let dayXp = day.winXps.reduce((sum, xp) => sum + xp, 0);
     dayXp += day.losses * LOSS_XP;
@@ -280,9 +290,8 @@ export function computeStats(results: DailyResult[]): AccountStats {
     stats.xp += Math.round(dayXp * streakXpMultiplier(runningPlayStreak));
   }
 
-  const play = streaks(playDays);
-  stats.playStreak = play.current;
-  stats.maxPlayStreak = play.max;
+  stats.playStreak = runningPlayStreak;
+  stats.streakFreezes = freezeBank;
 
   // Win streak = individual daily wins in a row across every mode (win Classic then
   // Synergy = 2), any loss resetting it to 0. We have no per-game timestamp, so games

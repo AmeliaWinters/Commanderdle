@@ -257,7 +257,7 @@
 
 .guess-list li.skipped .guess-name {
   font-style: italic;
-  color: var(--muted, #9aa0a6);
+  color: var(--text-dim);
 }
 
 .guess-list-item {

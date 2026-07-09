@@ -52,6 +52,8 @@
   --rarity-mythic: #f07e01;
   /* Shared orange fill for XP/progress bars (account page + widget popover). */
   --xp-gradient: linear-gradient(90deg, #ec5a1c, #f7a338);
+  /* Warm gold accent (Grid mode highlights, dev ad placeholder). */
+  --gold: #e8b34b;
 
   /* guess feedback */
   --exact-bg: #1e6b39;

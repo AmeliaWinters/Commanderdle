@@ -3,6 +3,7 @@ import {
   FaRightToBracket,
   FaChevronDown,
   FaUser,
+  FaUserGroup,
   FaTrophy,
   FaIdBadge,
   FaArrowRightFromBracket,
@@ -22,12 +23,13 @@ import {
   navigateToPath,
   ACCOUNT_PATH,
   LEADERBOARD_PATH,
+  FRIENDS_PATH,
   profilePath,
   isAccountPath,
 } from "../../lib/router";
 
 export default function AccountWidget() {
-  const { user, stats, loading, logout } = useAuth();
+  const { user, stats, pendingFriendRequests, loading, logout } = useAuth();
   const [open, setOpen] = useState(false);
 
   const [, setPath] = useState(window.location.pathname);
@@ -59,8 +61,8 @@ export default function AccountWidget() {
     navigateToPath(path);
   };
 
-  // Sign-in returns to wherever the player currently is, not always /account.
-  const here = window.location.pathname + window.location.search;
+  // Sign-in sends the player to their account page so they land on their profile
+  // and onboarding, rather than back wherever they happened to start.
   const level = user && stats ? levelFromXp(stats.xp) : null;
   const nameDisp = user ? tierNameDisplay(user.tier, user.nameColor) : null;
 
@@ -131,6 +133,12 @@ export default function AccountWidget() {
           </>
         )}
         <FaChevronDown className="account-widget-caret" aria-hidden="true" />
+        {user && pendingFriendRequests > 0 && (
+          <span
+            className="account-widget-alert"
+            aria-label={`${pendingFriendRequests} pending friend request${pendingFriendRequests === 1 ? "" : "s"}`}
+          />
+        )}
       </button>
 
       {open &&
@@ -191,8 +199,16 @@ export default function AccountWidget() {
               <button role="menuitem" onClick={go(ACCOUNT_PATH)}>
                 <FaUser aria-hidden="true" /> My account
               </button>
+              <button role="menuitem" onClick={go(FRIENDS_PATH)}>
+                <FaUserGroup aria-hidden="true" /> Friends
+                {pendingFriendRequests > 0 && (
+                  <span className="account-pop-badge">
+                    {pendingFriendRequests}
+                  </span>
+                )}
+              </button>
               <button role="menuitem" onClick={go(LEADERBOARD_PATH)}>
-                <FaTrophy aria-hidden="true" /> Leaderboard
+                <FaTrophy aria-hidden="true" /> Leaderboards
               </button>
               {user.username && (
                 <button role="menuitem" onClick={go(profilePath(user.uuid))}>
@@ -216,14 +232,14 @@ export default function AccountWidget() {
             <div className="account-oauth">
               <button
                 className="oauth-btn oauth-google"
-                onClick={() => beginLogin("google", here)}
+                onClick={() => beginLogin("google", ACCOUNT_PATH)}
               >
                 <FcGoogle className="oauth-logo" aria-hidden="true" />
                 <span>Sign in with Google</span>
               </button>
               <button
                 className="oauth-btn oauth-discord"
-                onClick={() => beginLogin("discord", here)}
+                onClick={() => beginLogin("discord", ACCOUNT_PATH)}
               >
                 <FaDiscord className="oauth-logo" aria-hidden="true" />
                 <span>Sign in with Discord</span>

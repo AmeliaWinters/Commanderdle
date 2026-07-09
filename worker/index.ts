@@ -29,6 +29,12 @@ import { onModeStats } from '../functions/api/account/modeStats'
 import { onLeaderboard } from '../functions/api/leaderboard'
 import { onBonus } from '../functions/api/account/bonus'
 import { onProfile, onProfileBinder } from '../functions/api/profile'
+import {
+  onFriends,
+  onFriend,
+  onFriendsLeaderboard,
+  onFriendsToday,
+} from '../functions/api/friends'
 import { onKofiWebhook, type KofiEnv } from '../functions/api/webhooks/kofi'
 
 interface Env extends AuthEnv, KofiEnv {
@@ -57,6 +63,10 @@ const KOFI_WEBHOOK = /^\/api\/webhooks\/kofi\/?$/
 const LEADERBOARD = /^\/api\/leaderboard\/([^/]+)\/?$/
 const ACCOUNT_BONUS = /^\/api\/account\/bonus\/?$/
 const PROFILE = /^\/api\/profile\/([^/]+)\/?$/
+const FRIENDS = /^\/api\/friends\/?$/
+const FRIENDS_LEADERBOARD = /^\/api\/friends\/leaderboard\/([^/]+)\/?$/
+const FRIENDS_TODAY = /^\/api\/friends\/today\/?$/
+const FRIEND = /^\/api\/friends\/([^/]+)\/?$/
 const PROFILE_BINDER = /^\/api\/profile\/([^/]+)\/binder\/?$/
 
 const dec = (s: string) => decodeURIComponent(s)
@@ -97,6 +107,19 @@ export default {
     }
     if (ACCOUNT_BONUS.test(pathname)) {
       return onBonus(request, env)
+    }
+    if (FRIENDS.test(pathname)) {
+      return onFriends(request, env)
+    }
+    // Order matters: the specific /leaderboard and /today paths before the /:uuid catch-all.
+    if ((m = pathname.match(FRIENDS_LEADERBOARD))) {
+      return onFriendsLeaderboard(request, env, dec(m[1]))
+    }
+    if (FRIENDS_TODAY.test(pathname)) {
+      return onFriendsToday(request, env)
+    }
+    if ((m = pathname.match(FRIEND))) {
+      return onFriend(request, env, dec(m[1]))
     }
     if ((m = pathname.match(PROFILE_BINDER))) {
       return onProfileBinder(request, env, dec(m[1]))

@@ -35,6 +35,8 @@ export type OAuthProvider = "google" | "discord";
 export interface Me {
   user: AccountUser | null;
   stats: AccountStats | null;
+  /** Incoming friend requests awaiting an answer (0 when signed out). */
+  pendingFriendRequests: number;
 }
 
 /** API origin. Same-origin in production; override for local `wrangler dev`. */
@@ -87,11 +89,15 @@ export async function fetchMe(signal?: AbortSignal): Promise<Me> {
       credentials: "include",
       signal,
     });
-    if (!res.ok) return { user: null, stats: null };
+    if (!res.ok) return { user: null, stats: null, pendingFriendRequests: 0 };
     const data = (await res.json()) as Me;
-    return { user: data.user ?? null, stats: data.stats ?? null };
+    return {
+      user: data.user ?? null,
+      stats: data.stats ?? null,
+      pendingFriendRequests: data.pendingFriendRequests ?? 0,
+    };
   } catch {
-    return { user: null, stats: null };
+    return { user: null, stats: null, pendingFriendRequests: 0 };
   }
 }
 

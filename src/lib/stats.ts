@@ -33,6 +33,7 @@ export function emptyStats(): ModeStats {
     maxStreak: 0,
     lastPlayedDate: null,
     distribution: {},
+    freezes: 0,
   };
 }
 
@@ -45,6 +46,9 @@ export function loadStats(mode: Mode): ModeStats {
         ...emptyStats(),
         ...saved,
         distribution: saved.distribution ?? {},
+        // Legacy records predate streak freezes: back-credit 1 per day played, so
+        // long-time anonymous players don't start the feature with an empty bank.
+        freezes: saved.freezes ?? saved.played ?? 0,
       };
     }
   } catch {
@@ -62,11 +66,11 @@ function saveStats(mode: Mode, stats: ModeStats) {
   notifyStats();
 }
 
-/** Is `date` exactly one calendar day after `prev`? (both YYYY-MM-DD) */
-function isConsecutive(prev: string, date: string): boolean {
+/** Whole days between `prev` and `date` (both YYYY-MM-DD); 1 = consecutive days. */
+function daysBetween(prev: string, date: string): number {
   const p = new Date(prev + "T00:00:00");
   const d = new Date(date + "T00:00:00");
-  return Math.round((d.getTime() - p.getTime()) / 86_400_000) === 1;
+  return Math.round((d.getTime() - p.getTime()) / 86_400_000);
 }
 
 /**
@@ -86,15 +90,26 @@ export function recordDailyResult(
   stats.played += 1;
   if (won) {
     stats.wins += 1;
-    stats.currentStreak =
-      stats.lastPlayedDate && isConsecutive(stats.lastPlayedDate, date)
-        ? stats.currentStreak + 1
-        : 1;
+    let consecutive =
+      stats.lastPlayedDate !== null &&
+      daysBetween(stats.lastPlayedDate, date) === 1;
+    // Streak freeze: a gap of N missed days is bridged by spending N banked freezes
+    // (earned 1 per day played). A loss still kills the streak — freezes only cover
+    // days not played at all. Mirrors computeModeStats in accountStats.ts exactly.
+    if (!consecutive && stats.lastPlayedDate !== null) {
+      const gap = daysBetween(stats.lastPlayedDate, date) - 1;
+      if (gap > 0 && gap <= stats.freezes) {
+        stats.freezes -= gap;
+        consecutive = true;
+      }
+    }
+    stats.currentStreak = consecutive ? stats.currentStreak + 1 : 1;
     stats.maxStreak = Math.max(stats.maxStreak, stats.currentStreak);
     stats.distribution[guessCount] = (stats.distribution[guessCount] ?? 0) + 1;
   } else {
     stats.currentStreak = 0;
   }
+  stats.freezes += 1; // earned: 1 streak freeze per day played
   stats.lastPlayedDate = date;
   saveStats(mode, stats);
   return stats;

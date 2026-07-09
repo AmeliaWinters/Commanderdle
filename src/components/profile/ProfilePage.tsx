@@ -16,6 +16,7 @@ import {
   profileBinderPath,
 } from "../../lib/router";
 import { COMMANDERS } from "../../lib/commanders";
+import { sendFriendRequest } from "../../lib/friendsApi";
 
 function joinedLabel(unix: number): string {
   const d = new Date(unix * 1000);
@@ -28,6 +29,7 @@ export default function ProfilePage({ uuid }: { uuid: string }) {
   const [profile, setProfile] = useState<PublicProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [friendMsg, setFriendMsg] = useState<string | null>(null);
 
   useEffect(() => {
     let alive = true;
@@ -54,7 +56,20 @@ export default function ProfilePage({ uuid }: { uuid: string }) {
     );
   }
 
+  // Fire-and-report add-friend: the server answers with why it refused ("already
+  // friends", "request already sent", …), which doubles as the status label here.
+  async function addFriend() {
+    if (!profile || friendMsg) return;
+    const res = await sendFriendRequest(profile.username);
+    if (res.ok) {
+      setFriendMsg(res.status === "accepted" ? "Friends!" : "Request sent");
+    } else {
+      setFriendMsg(res.error ?? "Something went wrong");
+    }
+  }
+
   const isMe = user?.uuid === uuid;
+  const canBefriend = !!user?.username && !isMe;
   const level = profile ? levelFromXp(profile.stats.xp) : null;
   const tierColor = profile
     ? effectiveTierColor(profile.tier, profile.nameColor)
@@ -121,7 +136,7 @@ export default function ProfilePage({ uuid }: { uuid: string }) {
                   className="account-tier-badge"
                   style={{ color: tierColor }}
                 >
-                  {TIER_META[profile.tier].label}
+                  {TIER_META[profile.tier].label} Supporter
                 </span>
               )}
               <span className="account-uuid">
@@ -163,6 +178,15 @@ export default function ProfilePage({ uuid }: { uuid: string }) {
             <button className="account-btn account-btn-primary" onClick={share}>
               {copied ? "Link copied" : "Share profile"}
             </button>
+            {canBefriend && (
+              <button
+                className="account-btn account-btn-ghost"
+                onClick={addFriend}
+                disabled={!!friendMsg}
+              >
+                {friendMsg ?? "Add friend"}
+              </button>
+            )}
             {isMe && (
               <a
                 className="account-btn account-btn-ghost"

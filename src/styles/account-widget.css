@@ -134,7 +134,7 @@
   padding: 8px;
   background: rgba(22, 22, 25, 0.94);
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: var(--radius);
   box-shadow: 0 14px 34px rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(9px);
   animation: account-pop-in 0.14s ease;

@@ -8,13 +8,24 @@ interface Release {
 }
 
 export const RELEASES: Release[] = [
-    {
+  {
+    version: "1.1.0",
+    date: "2026-07-09",
+    notes: [
+      "Implemented the friends system",
+      "Added streak freezes",
+      "Added a more showy binder",
+      "Users are redirected to their account page on login not home page",
+      "New public release => Official Puzzle Epoch start and reset of data",
+    ],
+  },
+  {
     version: "1.0.8",
     date: "2026-07-08",
     notes: [
       "Added a currency preference in account settings",
       "Fixed OAuth error lingering issue",
-      "Added accessible keyboard navigation for share menu"
+      "Added accessible keyboard navigation for share menu",
     ],
   },
   {

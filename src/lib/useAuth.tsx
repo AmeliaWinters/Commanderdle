@@ -25,6 +25,8 @@ import { beginAccountBinder, setAccountBinder, type Collection } from './collect
 interface AuthState {
   user: AccountUser | null
   stats: AccountStats | null
+  /** Incoming friend requests awaiting an answer — drives the header badge. */
+  pendingFriendRequests: number
   /** True until the initial /me check resolves. */
   loading: boolean
   refresh: () => Promise<void>
@@ -37,6 +39,7 @@ const AuthContext = createContext<AuthState | null>(null)
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AccountUser | null>(null)
   const [stats, setStats] = useState<AccountStats | null>(null)
+  const [pendingFriendRequests, setPendingFriendRequests] = useState(0)
   const [loading, setLoading] = useState(true)
 
   // Keep the cheap "logged in" hint (used to skip account POSTs for anonymous
@@ -71,6 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const me = await fetchMe()
       setUser(me.user)
       setStats(me.stats)
+      setPendingFriendRequests(me.pendingFriendRequests)
     },
     [],
   )
@@ -87,6 +91,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (!alive) return
         setUser(me.user)
         setStats(me.stats)
+        setPendingFriendRequests(me.pendingFriendRequests)
       })
       .finally(() => {
         if (alive) setLoading(false)
@@ -101,6 +106,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     () => ({
       user,
       stats,
+      pendingFriendRequests,
       loading,
       refresh,
       setUser,
@@ -108,9 +114,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         await apiLogout()
         setUser(null)
         setStats(null)
+        setPendingFriendRequests(0)
       },
     }),
-    [user, stats, loading, refresh],
+    [user, stats, pendingFriendRequests, loading, refresh],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

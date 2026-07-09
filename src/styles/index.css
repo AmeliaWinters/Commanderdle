@@ -24,6 +24,7 @@
 @import "./grid-game.css";
 @import "./grid-result.css";
 @import "./binder.css";
+@import "./binder-foil.css";
 @import "./archive.css";
 @import "./content.css";
 @import "./account-widget.css";
@@ -34,6 +35,7 @@
 @import "./account-avatar.css";
 @import "./account-picker.css";
 @import "./leaderboard.css";
+@import "./friends.css";
 @import "./consent.css";
 @import "./landing.css";
 @import "./mtg-theme.css";

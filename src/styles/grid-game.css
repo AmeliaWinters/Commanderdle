@@ -69,12 +69,12 @@
 }
 
 .grid-board .grid-cell:not(:disabled):hover {
-  border-color: var(--accent, #e8b34b);
+  border-color: var(--gold);
   transform: translateY(-1px);
 }
 
 .grid-board .grid-cell-active {
-  border-color: var(--accent, #e8b34b);
+  border-color: var(--gold);
   box-shadow: 0 0 0 2px rgba(232, 179, 75, 0.35);
 }
 
@@ -171,7 +171,7 @@
 }
 
 .grid-board .grid-cell-pct-rare {
-  background: var(--accent, #e8b34b);
+  background: var(--gold);
   color: #1a1408;
 }
 
@@ -243,7 +243,7 @@
 
 .grid-search {
   width: min(100%, 420px);
-  border-radius: 12px;
+  border-radius: var(--radius);
   background: var(--panel, #1d1a24);
   border: 1px solid rgba(255, 255, 255, 0.15);
   padding: 0.75rem;
