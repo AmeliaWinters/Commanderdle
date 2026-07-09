@@ -31,7 +31,7 @@ const MODE_BLURBS: Record<Mode, string> = {
   synergy: "Guess it from its highest synergy cards",
   silhouette: "Guess it from a blur of its art",
   zoom: "Guess it from a crop that widens",
-  quote: "Guess it from its flavor text",
+  quote: "Guess it from its flavour text",
 };
 
 const MODE_PIP: Record<Mode, string> = {

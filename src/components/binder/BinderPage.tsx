@@ -175,7 +175,7 @@ export default function BinderPage({ profileUuid }: { profileUuid?: string }) {
           <div
             className="binder-pips"
             role="group"
-            aria-label="Filter by color"
+            aria-label="Filter by colour"
           >
             {[...WUBRG, "C"].map((p) => (
               <button

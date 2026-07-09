@@ -34,9 +34,9 @@ const MODE_DESCRIPTIONS: Record<Mode, string> = {
     "Name the daily MTG commander from its card-art silhouette alone. A new outline to identify every day.",
   zoom: "Identify the daily MTG commander from a zoomed-in crop of its card art. The view widens with each guess.",
   synergy:
-    "Guess the daily MTG commander from the cards it synergizes with most. A new synergy puzzle every day.",
+    "Guess the daily MTG commander from the cards it synergises with most. A new synergy puzzle every day.",
   quote:
-    "Name the daily MTG commander from its flavor text and quotes. A new quote to place every day.",
+    "Name the daily MTG commander from its flavour text and quotes. A new quote to place every day.",
 };
 
 /** Canonical site origin (no trailing slash), configurable per deploy. */

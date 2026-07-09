@@ -41,7 +41,7 @@ const GUIDES: Record<Mode, Guide> = {
   },
   zoom: {
     title: "How to play Zoom",
-    intro: "Name the commander from a  close crop of its art in 5 tries",
+    intro: "Name the commander from a close crop of its art in 5 tries",
     bullets: ["The view pulls back a little with every wrong guess"],
   },
   synergy: {
@@ -54,7 +54,7 @@ const GUIDES: Record<Mode, Guide> = {
   },
   quote: {
     title: "How to play Quote",
-    intro: "Guess the commander from its card's flavor text in 5 tries.",
+    intro: "Guess the commander from its card's flavour text in 5 tries.",
     bullets: ["Extra hints unlock as you miss."],
   },
 };
