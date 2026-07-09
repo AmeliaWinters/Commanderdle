@@ -1,7 +1,3 @@
-/* Self-hosted fonts (latin subset, woff2). Replaces the render-blocking Google Fonts
-   stylesheet: no extra cross-origin round-trips, and `swap` keeps text visible while
-   the face loads. Cinzel and EB Garamond ship as variable fonts, so one file per
-   subset covers every weight we use. */
 @font-face {
   font-family: "Cinzel";
   font-style: normal;
@@ -24,8 +20,6 @@
   src: url("/fonts/ebgaramond-italic-latin.woff2") format("woff2");
 }
 
-/* Reserve space while a code-split mode view fetches its chunk, so swapping the
-   loaded component in doesn't shift the layout below it. */
 .mode-view-loading {
   min-height: 320px;
 }
@@ -44,18 +38,17 @@
   --flame-3: #c01f1f;
   --flame: linear-gradient(135deg, var(--flame-1), var(--flame-3));
 
-  /* Canonical rarity/tier colours — mirror of TIER_META in src/lib/auth.ts.
-     Used by supporter tiers (account/leaderboard) and Grid mode rarities. */
+
   --rarity-common: #333333;
   --rarity-uncommon: #9d9d9d;
   --rarity-rare: #ddbb66;
   --rarity-mythic: #f07e01;
-  /* Shared orange fill for XP/progress bars (account page + widget popover). */
+
   --xp-gradient: linear-gradient(90deg, #ec5a1c, #f7a338);
-  /* Warm gold accent (Grid mode highlights, dev ad placeholder). */
+
   --gold: #e8b34b;
 
-  /* guess feedback */
+
   --exact-bg: #1e6b39;
   --exact-bd: #38b461;
   --partial-bg: #9a7414;
@@ -81,23 +74,17 @@
   --s5: 40px;
   --s6: 64px;
 
-  /* Max width of the focused content column. Sized to fit the 7-column classic
-     grid (~640px) plus the input row's centered guess box and side peek button.
-     Narrower modes (quote, synergy, guess list) self-constrain below this, so
-     they still read as a tight, focused column. */
+
   --col: 1000px;
 
   font-family: "EB Garamond", Georgia, "Times New Roman", serif;
 
-  /* ---------- Background "blurry ball" glows (tweak these) ---------- */
-  /* Extra softness applied to the whole glow layer. Higher = blurrier. */
+
   --orb-blur: 60px;
-  /* Master opacity for the glow layer (0–1). Higher = more pronounced. */
-  --orb-opacity: 0.9;
-  /* How far each glow drifts, and how long one cycle takes. */
+
+
   --orb-drift: 6%;
   --orb-speed: 14s;
-  /* Per-orb tuning: color, alpha, position (x y) and radius (% of layer). */
   --orb1-color: 236, 90, 28; /* ember orange */
   --orb1-alpha: 0.5;
   --orb1-pos: 25% 30%;
@@ -128,9 +115,6 @@
   box-sizing: border-box;
 }
 
-/* ---------- Accessible focus ring ---------- */
-/* One consistent, visible ring for keyboard users across every interactive
-   control. Mouse clicks don't trigger :focus-visible, so it stays clean. */
 :focus-visible {
   outline: none;
   box-shadow:
@@ -138,7 +122,7 @@
     0 0 0 4px var(--flame-2);
   border-radius: 8px;
 }
-/* Inputs already carry an inset shadow; keep it and stack the ring on top. */
+
 .guess-input input:focus-visible,
 .pool-search:focus-visible {
   box-shadow:
@@ -156,7 +140,6 @@ body {
 }
 
 /* ---------- Animated background ---------- */
-/* drifting flame glows */
 body::before {
   content: "";
   position: fixed;
@@ -184,7 +167,6 @@ body::before {
   animation: drift var(--orb-speed) ease-in-out infinite alternate;
 }
 
-/* floating MTG-card silhouettes */
 .card-backdrop {
   position: fixed;
   inset: 0;
@@ -210,8 +192,6 @@ body::before {
   will-change: transform;
 }
 
-/* Real-card variant (USE_REAL_CARDS in CardBackdrop.tsx): show the actual card
-   art instead of the abstract gradient silhouette. */
 .bg-card-real {
   background: none;
   object-fit: cover;
@@ -248,12 +228,6 @@ body::before {
 }
 
 /* ---------- Reduced motion ---------- */
-/* Honor the OS "reduce motion" setting globally. We neutralize every animation
-   and transition rather than maintaining a per-component allow-list, so nothing
-   drifts, floats, flips, slides, or counts up for users who've asked for calm.
-   State still changes instantly (near-zero durations), so feedback isn't lost —
-   only the motion is. Individual JS-driven animations (e.g. the count-up in
-   Higher/Lower) also check the same media query and snap to their end state. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -266,8 +240,7 @@ body::before {
     scroll-behavior: auto !important;
   }
 
-  /* The drifting orbs and floating cards are pure ambient motion with no state
-     to preserve — stop them outright rather than settling on a final frame. */
+
   body::before,
   .bg-card {
     animation: none !important;
@@ -286,8 +259,6 @@ body::before {
   flex-direction: column;
 }
 
-/* Mobile-first: gameplay above the fold. Trim the decorative top padding so
-   the board and input land higher on small screens. */
 @media (max-width: 560px) {
   .app {
     padding-top: var(--s3);
