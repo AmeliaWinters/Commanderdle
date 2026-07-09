@@ -4,7 +4,7 @@ export default function TermsPage() {
   return (
     <ContentPage
       title="Commandle - Terms of Service"
-      description="The terms of service for Commandle, the free daily Magic: The Gathering commander guessing game: acceptable use, intellectual property, advertising, disclaimers and liability."
+      description="The terms of service for Commandle - MTG Commander Guessing Game"
       canonical="https://commandle.app/terms"
     >
       <h2>Terms of Service</h2>

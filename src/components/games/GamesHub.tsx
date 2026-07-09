@@ -145,7 +145,7 @@ function BinderSection() {
 
 export default function GamesHub() {
   useEffect(() => {
-    document.title = "Commandle - Daily MTG Commander Guessing Games";
+    document.title = "Commandle - MTG Commander Guessing Game";
   }, []);
   const today = todayKey();
   const art = useMemo(

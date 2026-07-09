@@ -318,7 +318,7 @@ export default function ChangelogPage() {
   return (
     <ContentPage
       title="Commandle - Changelog"
-      description="What's new in Commandle, the daily Magic: The Gathering commander guessing game. Release notes for every version, newest first."
+      description="What's new in Commandle - MTG Commander Guessing Game. Release notes for every version."
       canonical="https://commandle.app/changelog"
     >
       <h2>Changelog</h2>

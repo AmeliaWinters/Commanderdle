@@ -118,7 +118,7 @@ export default function FaqPage() {
   return (
     <ContentPage
       title="Commandle FAQ - frequently asked questions"
-      description="Answers to common questions about Commandle, the daily Magic: The Gathering commander guessing game: how puzzles work, playing past days, how popularity is measured, and more."
+      description="Answers to common questions about Commandle - MTG Commander Guessing Game: how puzzles work, playing past days, how popularity is measured, etc."
       canonical="https://commandle.app/faq"
     >
       <h2>Frequently asked questions</h2>

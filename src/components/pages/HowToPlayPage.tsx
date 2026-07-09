@@ -3,8 +3,8 @@ import ContentPage from "./ContentPage";
 export default function HowToPlayPage() {
   return (
     <ContentPage
-      title="How to play Commandle - rules, clues and strategy"
-      description="A complete guide to playing Commandle, the daily Magic: The Gathering commander guessing game. Learn every mode, what the colour clues mean, and tips to solve the puzzle in fewer guesses."
+      title="How to play Commandle - rules, clues, and strategy"
+      description="A complete guide to playing Commandle - MTG Commander Guessing Game."
       canonical="https://commandle.app/how-to-play"
     >
       <h2>How to play Commandle</h2>
