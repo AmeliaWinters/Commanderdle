@@ -97,7 +97,7 @@ export default function StatsPanel({
       </div>
       <p className="stats-freezes">
         ❄ {stats.freezes ?? 0} streak freeze
-        {(stats.freezes ?? 0) === 1 ? "" : "s"} banked - each covers one missed
+        {(stats.freezes ?? 0) === 1 ? "" : "s"} banked. Each covers one missed
         day. Earn one for every 10 days you play.
       </p>
       <div className="stats-dist">
