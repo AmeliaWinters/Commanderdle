@@ -20,7 +20,7 @@ function usePulse(mode: Mode): string | null {
     fetchGlobalStats(mode, puzzleNumber(), ctrl.signal).then((stats) => {
       if (!stats || stats.total < 25) return;
       const s = summarize(stats);
-      const solved = `${stats.wins.toLocaleString()} ${
+      const solved = `${stats.total.toLocaleString()} ${
         stats.total === 1 ? "player has" : "players have"
       } attempted today's ${MODE_LABEL[mode]}!`;
       setLine(
