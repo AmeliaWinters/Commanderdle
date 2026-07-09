@@ -1,17 +1,3 @@
-/**
- * Generate downscaled, more-compressed variants of the card art used by the decorative
- * floating backdrop (CardBackdrop.tsx), written to public/cards-bg/.
- *
- * The backdrop renders full-card `normal_*` images at <=250px CSS width and 0.3 opacity, but
- * was serving the same ~67KB files Zoom mode uses at full size — and the largest one is the
- * page's LCP element, so those bytes sit on the critical path. Zoom mode still needs the
- * crisp originals, so rather than recompress those in place we emit a separate backdrop-only
- * variant (440px wide — enough for a 250px card at ~1.75x DPR — at webp q58, roughly halving
- * the bytes). CardBackdrop and the backdrop-lcp-preload build plugin rewrite `/cards/` to
- * `/cards-bg/` to pick these up.
- *
- * Run:  npm run build:backdrop   (idempotent; skips files already generated)
- */
 import { readFileSync, existsSync, mkdirSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
 import sharp from 'sharp'
@@ -29,7 +15,6 @@ async function main() {
   const core = JSON.parse(readFileSync(CORE, 'utf8')) as Core
   const existing = new Set(readdirSync(OUT_DIR))
 
-  // Only the `normal_*` files that live under public/cards/ (skip legacy absolute URLs).
   const files = [
     ...new Set(
       core

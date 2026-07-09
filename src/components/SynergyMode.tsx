@@ -24,7 +24,6 @@ export default function SynergyMode({
   solved,
   onSkip,
 }: Props) {
-  // The synergy card arrays are loaded on demand (split out of the initial bundle).
   const synergyReady = useSynergyData(true);
   const cards = answer.synergyCards;
   const revealCount = solved
@@ -92,7 +91,6 @@ export default function SynergyMode({
   );
 }
 
-/** A revealed synergy card with the shared hover-zoom popover and its EDHREC synergy score. */
 function CardZoomCard({
   name,
   image,

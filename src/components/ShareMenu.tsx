@@ -34,12 +34,10 @@ export default function ShareMenu({ options }: { options: ShareOption[] }) {
     };
   }, [open]);
 
-  // Move focus into the menu when it opens, so arrow keys have somewhere to start.
   useEffect(() => {
     if (open) itemRefs.current[0]?.focus();
   }, [open]);
 
-  // Roving focus between menu items with the arrow/Home/End keys.
   const onPanelKey = (e: React.KeyboardEvent) => {
     const items = itemRefs.current.filter(Boolean) as HTMLButtonElement[];
     if (!items.length) return;

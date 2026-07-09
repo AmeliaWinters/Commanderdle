@@ -4,10 +4,6 @@ import { hlValue, HL_STAT_LABEL } from "../../lib/higherLower";
 import { prefersReducedMotion } from "../../lib/reducedMotion";
 import CardZoom from "../CardZoom";
 
-/**
- * Animate a number from 0 up to `target` with an ease-out when `active`, so the
- * reveal lands with a little drama. When inactive, snaps straight to `target`.
- */
 function useCountUp(target: number, active: boolean, duration = 900): number {
   const animate = active && !prefersReducedMotion();
   const [val, setVal] = useState(animate ? 0 : target);
@@ -20,7 +16,7 @@ function useCountUp(target: number, active: boolean, duration = 900): number {
     const start = performance.now();
     const tick = (now: number) => {
       const t = Math.min(1, (now - start) / duration);
-      const eased = 1 - Math.pow(1 - t, 3); // easeOutCubic
+      const eased = 1 - Math.pow(1 - t, 3);
       setVal(Math.round(target * eased));
       if (t < 1) raf = requestAnimationFrame(tick);
     };
@@ -65,8 +61,6 @@ export default function CardSlot({
   revealed: boolean;
   counting: boolean;
   verdict: "ok" | "bad" | null;
-  /** Only cards near the current position load their image - an 80-card Endless
-   * chain otherwise fetches every card at once. */
   showImage: boolean;
 }) {
   const image = card.normalImage ?? card.artCrop;

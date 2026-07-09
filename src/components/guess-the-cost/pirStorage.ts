@@ -23,7 +23,6 @@ export function loadPirDaily(): PirPersisted {
         return saved;
     }
   } catch {
-    /* ignore corrupt storage */
   }
   return { date: todayKey(), guesses: [], status: "playing" };
 }
@@ -35,7 +34,6 @@ export function savePirDaily(run: PirRun): void {
       JSON.stringify({ ...run, date: todayKey() } satisfies PirPersisted),
     );
   } catch {
-    /* ignore */
   }
 }
 
@@ -51,6 +49,5 @@ export function savePirBest(value: number): void {
   try {
     localStorage.setItem(PIR_STREAK_KEY, String(value));
   } catch {
-    /* ignore */
   }
 }

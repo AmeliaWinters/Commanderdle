@@ -5,7 +5,6 @@ interface Props {
   children: ReactNode;
   to?: string;
   ariaLabel?: string;
-  /** Extra content rendered after the title inside the <h1> (e.g. badges). */
   after?: ReactNode;
 }
 
@@ -15,8 +14,6 @@ export default function LogoTitle({
   ariaLabel,
   after,
 }: Props) {
-  // Each click spawns a short-lived burst of embers keyed by an incrementing id
-  // so repeated clicks retrigger the animation cleanly.
   const [bursts, setBursts] = useState<number[]>([]);
 
   const pop = () => {

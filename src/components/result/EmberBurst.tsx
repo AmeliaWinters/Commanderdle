@@ -1,8 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
 
-/** One-shot burst of ember particles that fly out from behind the result card.
- * Pure CSS animation; each ember gets a random direction/size/timing via custom
- * properties. The layer is pointer-transparent and removes itself when done. */
 export default function EmberBurst() {
   const embers = useMemo(
     () =>
@@ -12,7 +9,6 @@ export default function EmberBurst() {
         return {
           id: i,
           dx: `${Math.cos(angle) * dist}px`,
-          // Bias upward - embers rise.
           dy: `${Math.sin(angle) * dist * 0.6 - 70 - Math.random() * 90}px`,
           size: `${3 + Math.random() * 6}px`,
           dur: `${1.1 + Math.random() * 1.1}s`,

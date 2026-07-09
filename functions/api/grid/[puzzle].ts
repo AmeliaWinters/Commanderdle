@@ -1,19 +1,8 @@
-/**
- * Grid-mode community picks endpoint (drives the rarity score).
- *
- *   GET  /api/grid/:puzzle   → aggregate { total, cells: [ { name: count }, ×9 ] }
- *   POST /api/grid/:puzzle   → ingest one finished grid { clientId, picks: [{cell, name}] }
- *
- * Anonymous + aggregated, same posture as /api/stats: deduped per (puzzle, cell, client),
- * rate-limited per IP, and degradable — no STATS_DB binding means 503 and the client
- * silently hides community numbers.
- */
 import { rateLimitOk, clientIp } from '../rateLimit'
 
 const POST_LIMIT = 40
 const POST_WINDOW_SEC = 60 * 60
 const CELLS = 9
-/** Cap how many distinct names GET returns per cell (the long tail reads as ~0% anyway). */
 const TOP_PER_CELL = 40
 
 interface Env {
@@ -76,8 +65,6 @@ async function postPicks(ctx: Ctx, db: D1Database, puzzle: number): Promise<Resp
   const clientId = typeof body.clientId === 'string' ? body.clientId.trim() : ''
   if (!/^[A-Za-z0-9_-]{8,64}$/.test(clientId)) return json({ error: 'bad clientId' }, 400)
 
-  // Up to 9 picks, one per distinct cell. Names are opaque strings (the server has no card
-  // list); bound their length and rely on dedupe + rate limits to keep junk marginal.
   if (!Array.isArray(body.picks) || body.picks.length > CELLS)
     return json({ error: 'bad picks' }, 400)
   const seen = new Set<number>()

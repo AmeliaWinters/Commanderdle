@@ -1,7 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react";
 
 interface Props {
-  /** XP progress toward the next level, 0–1. */
   progress: number;
   level: number;
   size: number;
@@ -9,19 +8,13 @@ interface Props {
 }
 
 const STROKE = 6;
-const GAP = 5; // clear space between avatar edge and the ring
+const GAP = 5;
 
-/**
- * A circular XP gauge wrapped around the hero avatar, with the player's level pinned
- * to the bottom.
- */
 export default function AvatarRing({ progress, level, size, children }: Props) {
   const ringSize = size + (GAP + STROKE) * 2;
   const r = (ringSize - STROKE) / 2;
   const circ = 2 * Math.PI * r;
 
-  // Start empty and fill to the target after mount so the stroke animates in. Reduced
-  // motion jumps straight to the final value (the CSS transition is disabled to match).
   const [shown, setShown] = useState(0);
   useEffect(() => {
     const reduce = window.matchMedia?.(
@@ -46,7 +39,6 @@ export default function AvatarRing({ progress, level, size, children }: Props) {
       >
         <defs>
           <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
-            {/* The XP ring is coloured in the player's flare/tier colour. */}
             <stop
               offset="0%"
               stopColor="color-mix(in srgb, var(--tier-color, var(--flame-1)) 65%, #000)"

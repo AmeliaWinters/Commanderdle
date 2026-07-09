@@ -19,7 +19,6 @@ interface Props {
 
 const DED_COL_COUNT = COLUMNS.length;
 
-/** Deduction row aligned to the table columns, sitting just above the headers. */
 export default function DeductionRow({
   guesses,
   answer,
@@ -32,7 +31,6 @@ export default function DeductionRow({
     const count = guesses.length;
     const grew = count > prevCount.current;
     prevCount.current = count;
-    // On removal (reset/undo) or with motion disabled, reveal everything at once.
     if (!grew || prefersReducedMotion()) {
       setColsShown(DED_COL_COUNT);
       return;
@@ -48,8 +46,6 @@ export default function DeductionRow({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [guesses.length]);
 
-  // `full` includes the newest guess; `base` excludes it. Per column we pick
-  // between them based on whether that column has been revealed yet.
   const full = deduce(guesses, answer);
   const base =
     colsShown < DED_COL_COUNT ? deduce(guesses.slice(0, -1), answer) : full;
@@ -76,9 +72,6 @@ export default function DeductionRow({
         </div>
       );
     }
-    // Amber (partial) whenever we've learned any colors are present or narrowed
-    // to a "maybe" - that's the yellow-guess case. Only drop to grey (match-none)
-    // when every clue is a ruled-out color and nothing positive is known.
     const hasInfo = colors.present.length > 0 || colors.maybe.length > 0;
     return (
       <div
@@ -126,10 +119,6 @@ export default function DeductionRow({
     return <div className={`deduction-cell match-${n.tone}`}>{n.value}</div>;
   };
 
-  // A stable signature of the clue a column currently displays. Keying each cell
-  // on this means it only remounts (and thus replays the flip animation) when the
-  // shown content actually changes - a newly revealed column whose clue is
-  // unchanged by the latest guess keeps its key and stays put.
   const colorsSig = (c: ColorClue | null) =>
     c
       ? `c${c.exact ? "x" : ""}|${c.present.join("")}|${c.maybe.join("")}|${c.absent.join("")}`
@@ -141,8 +130,6 @@ export default function DeductionRow({
     return n ? `n${n.tone}|${n.value}` : "-";
   };
 
-  // Reveal index for a column is its cell index in the guess row: position + 1,
-  // since the name cell occupies index 0.
   const cellFor: Record<
     ColumnId,
     (i: number) => { cell: React.ReactElement; sig: string }

@@ -11,8 +11,6 @@ export default function LeaderboardWidget() {
   const [metric, setMetric] = useState(DEFAULT_METRIC);
   const [entries, setEntries] = useState<LeaderboardEntry[] | null>(null);
   const [loaded, setLoaded] = useState(false);
-  // Once any category has shown entries we keep the widget mounted, so switching to an
-  // empty category shows an empty state rather than making the whole board vanish.
   const [hasAnyData, setHasAnyData] = useState(false);
 
   useEffect(() => {
@@ -32,8 +30,6 @@ export default function LeaderboardWidget() {
     };
   }, [metric]);
 
-  // Hide entirely only while the board is genuinely empty everywhere (first load with no
-  // accounts). Never hide just because the currently selected category is empty.
   if (loaded && !hasAnyData && (!entries || entries.length === 0)) return null;
 
   return (

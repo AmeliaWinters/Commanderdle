@@ -40,7 +40,6 @@ import { loadGridDaily, saveGridDaily } from "./gridStorage";
 const EMPTY_PICKS: Array<string | null> = Array(GRID_CELLS).fill(null);
 const EMPTY_TIERS: Array<GuessTier | null> = Array(GRID_CELLS).fill(null);
 
-/** Rebuild a saved puzzle from its criterion ids; null if any id no longer exists. */
 function puzzleFromIds(rowIds: string[], colIds: string[]): GridPuzzle | null {
   const rows = rowIds.map(criterionById);
   const cols = colIds.map(criterionById);
@@ -53,8 +52,6 @@ export default function GridMode() {
     document.title = "Commandle Grid";
   }, []);
 
-  // The deeper top-1000 pool loads lazily; the board renders once it's in (or the fetch
-  // has given up, in which case the grid plays over the top-500 core).
   const [ready, setReady] = useState(false);
   useEffect(() => {
     let alive = true;
@@ -81,15 +78,11 @@ export default function GridMode() {
   );
   const [guessesUsed, setGuessesUsed] = useState(saved?.guessesUsed ?? 0);
   const [selected, setSelected] = useState<number | null>(null);
-  // Brief "doesn't fit" feedback after a wrong pick: [cell, commander name].
   const [miss, setMiss] = useState<[number, string] | null>(null);
-  // Feedback after a correct pick: what tier the guess earned.
   const [hit, setHit] = useState<{ name: string; tier: GuessTier } | null>(null);
   const [community, setCommunity] = useState<GridPicks | null>(null);
-  // Community picks fetched up-front so each guess can be rated the moment it lands.
   const [live, setLive] = useState<GridPicks | null>(null);
 
-  // Saved state is loaded lazily (after the pool), so sync it in when it lands.
   useEffect(() => {
     if (saved) {
       setPicks(saved.picks);
@@ -98,7 +91,6 @@ export default function GridMode() {
     }
   }, [saved]);
 
-  // Pull today's community picks right away so guesses can be rated live.
   useEffect(() => {
     if (!ready) return;
     let alive = true;
@@ -113,7 +105,6 @@ export default function GridMode() {
     ready && (guessesUsed >= GRID_MAX_GUESSES || filled === GRID_CELLS);
   const puzzleNo = puzzleNumber();
 
-  // Persist every change; on completion submit picks and pull community pick-rates.
   useEffect(() => {
     if (!puzzle) return;
     saveGridDaily({
@@ -126,7 +117,6 @@ export default function GridMode() {
     });
   }, [puzzle, picks, tiers, guessesUsed, done]);
 
-  // Log today's daily to local bonus-stat history once it finishes (a full board wins).
   useEffect(() => {
     if (done) recordBonusDaily("grid", filled === GRID_CELLS);
   }, [done, filled]);
@@ -140,7 +130,6 @@ export default function GridMode() {
     return () => {
       alive = false;
     };
-    // Runs once when the game completes (picks are frozen from then on).
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [done]);
 

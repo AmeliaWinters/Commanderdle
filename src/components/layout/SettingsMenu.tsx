@@ -20,14 +20,12 @@ import {
   FiBellOff,
 } from "react-icons/fi";
 
-/** Dev-only nuke: delete every commandle:* localStorage key and reload clean. */
 function clearAllCommandleStorage() {
   try {
     Object.keys(localStorage)
       .filter((k) => k.toLowerCase().startsWith("commandle"))
       .forEach((k) => localStorage.removeItem(k));
   } catch {
-    /* ignore */
   }
   window.location.reload();
 }
@@ -40,7 +38,6 @@ interface Props {
   onReset: () => void;
 }
 
-/** The header cog: how-to, archive/practice navigation, sound + reminder toggles. */
 export default function SettingsMenu({
   isDaily,
   onHowTo,
@@ -53,8 +50,6 @@ export default function SettingsMenu({
   const [muted, setMuted] = useState(isMuted);
   const [reminderOn, setReminderOn] = useState(isReminderEnabled);
 
-  // Play the collapse animation before unmounting the panel. Reduced-motion
-  // users skip straight to closed, matching the entrance animations.
   const closeMenu = () => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setOpen(false);
@@ -67,8 +62,6 @@ export default function SettingsMenu({
     }, 150);
   };
 
-  // Keep the mute button in sync, and warm the audio cache on the first user gesture
-  // (not at mount) so the effect files don't compete with LCP-critical resources.
   useEffect(() => {
     const stopPreload = preloadSoundsOnFirstGesture();
     const stopMute = onMuteChange(setMuted);
@@ -78,12 +71,10 @@ export default function SettingsMenu({
     };
   }, []);
 
-  // Arm the daily reminder timer on load if the player opted in.
   useEffect(() => {
     scheduleReminder();
   }, []);
 
-  // Close the menu on any outside click.
   useEffect(() => {
     if (!open || closing) return;
     const close = () => closeMenu();
@@ -127,7 +118,6 @@ export default function SettingsMenu({
             Archive ↗
           </button>
           {isDaily ? (
-            //<button onClick={pick(onPractice)}>Practice (random)</button>
             <></>
           ) : (
             <button onClick={pick(onBackToDaily)}>Back to daily</button>

@@ -30,7 +30,6 @@ describe('puzzleNumber', () => {
   })
 
   it('crosses month and DST boundaries by whole days (UTC-anchored)', () => {
-    // 2026-07-01 -> 2026-08-01 is 31 days, so puzzle #32 regardless of DST.
     expect(puzzleNumber('2026-08-01')).toBe(32)
   })
 

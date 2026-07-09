@@ -1,10 +1,3 @@
-/*
- * Builds the static social-preview hero (public/og-image.png): real Magic card art behind a
- * dark scrim and the branded wordmark. Uses the satori + resvg pipeline (real font rendering
- * with Cinzel / EB Garamond) — the same engine as the dynamic share cards.
- *
- * Run: npx tsx scripts/build-og.ts
- */
 import satori from 'satori'
 import { html } from 'satori-html'
 import { Resvg } from '@resvg/resvg-js'
@@ -16,7 +9,6 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const W = 1200
 const H = 630
 
-/** Fetch a Google Font as a TTF buffer (legacy UA forces TTF over woff2). */
 async function fetchFont(css2: string): Promise<Buffer> {
   const css = await (await fetch(css2, { headers: { 'User-Agent': 'Mozilla/4.0' } })).text()
   const url = css.match(/https:\/\/[^)]+\.ttf/)?.[0]
@@ -30,7 +22,6 @@ async function main() {
     fetchFont('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@600'),
   ])
 
-  // Hero art — The Ur-Dragon (epic, five-colour: reads instantly as "commander").
   const heroArt = resolve(ROOT, 'public/cards/art_crop_10d42b35-844f-4a64-9981-c6118d45e826.webp')
   const artPng = await sharp(heroArt)
     .resize(W, H, { fit: 'cover', position: 'top' })
@@ -38,8 +29,6 @@ async function main() {
     .png()
     .toBuffer()
 
-  // satori renders only the scrim + text on a transparent canvas; sharp composites it over
-  // the art. Keeping <img> out of satori avoids its numeric-dimension quirks entirely.
   const raw = `
     <div style="display:flex;width:${W}px;height:${H}px;">
       <div style="display:flex;position:absolute;top:0;left:0;width:${W}px;height:${H}px;background:linear-gradient(to top, #08080a 24%, rgba(8,8,10,0.82) 46%, rgba(8,8,10,0.22) 74%, rgba(8,8,10,0) 100%);"></div>

@@ -11,17 +11,6 @@ import {
 import { sortColors } from "../components/ManaSymbols";
 import { getCurrency, toUsd } from "./currency";
 
-/**
- * Commanders still consistent with the player's guesses, judged ONLY on the
- * popularity (EDHREC rank) clue. We deliberately ignore colors/type/stats here:
- * filtering on every column narrows the pool so hard it gives the answer away,
- * so the peek leans on the single weakest axis. A candidate survives if, for
- * each guess, its rank lies on the same side of that guess as the real answer's
- * rank does. We key on direction ONLY, deliberately ignoring the close/far
- * (amber/grey) tolerance: an amber guess shouldn't shrink the shown range to the
- * tolerance window. So a #110 guess the answer sits above and a #220 guess it
- * sits below leave the whole open range #111-#219 on show.
- */
 export function possiblePool(
   pool: Commander[],
   guesses: Commander[],
@@ -34,12 +23,6 @@ export function possiblePool(
   return pool.filter((c) => guesses.every((g, i) => fb(g, c) === keys[i]));
 }
 
-/**
- * Synergy mode peek: commanders still consistent with the colors of the synergy
- * cards revealed so far. Every card in a deck sits within its commander's color
- * identity, so the union of revealed cards' colors is a lower bound - a candidate
- * survives only if its identity contains all of those colors.
- */
 export function synergyPool(
   pool: Commander[],
   revealed: { colorIdentity: string[] }[],
@@ -53,12 +36,6 @@ export function synergyPool(
   });
 }
 
-/**
- * Quote mode peek: commanders whose color identity exactly matches the answer's.
- * Color identity is the first hint revealed in quote mode, so filtering the pool
- * on it leaks nothing the player hasn't already earned. The pool itself is already
- * restricted to commanders that have a quote (flavor text).
- */
 export function quotePool(pool: Commander[], answer: Commander): Commander[] {
   const a = [...answer.colorIdentity].sort().join("");
   return pool.filter((c) => [...c.colorIdentity].sort().join("") === a);
@@ -66,18 +43,14 @@ export function quotePool(pool: Commander[], answer: Commander): Commander[] {
 
 export interface NumericClue {
   label: string;
-  /** 'exact' = pinned value (green); 'partial' = bounded by close guesses (amber); 'none' = bounded by far guesses (grey). */
   tone: "exact" | "partial" | "none";
   value: string;
 }
 
 export interface ColorClue {
   exact: boolean;
-  /** Colors known to be in the identity. */
   present: string[];
-  /** Colors known to be absent (greyed/struck). */
   absent: string[];
-  /** Unresolved candidates: at least one of these is present. */
   maybe: string[];
 }
 
@@ -97,14 +70,7 @@ interface NumericSpec {
   label: string;
   get: (c: Commander) => number | null;
   fmt: (n: number) => string;
-  /** Distance within which a guess reads as "close" - matches the column's tolerance. */
   tol: number;
-  /**
-   * Smallest distinguishable increment in `get` units, used to nudge a bound to a
-   * strict one (a guess the answer sits below yields "< guess", shown as one step
-   * lower). It's a function because for price the step depends on the player's
-   * display currency: one yen is a bigger USD nudge than one cent.
-   */
   step: () => number;
 }
 
@@ -112,7 +78,6 @@ const id = (n: number) => String(n);
 
 const NUMERIC_SPECS: NumericSpec[] = [
   { label: "Mana value", get: (c) => c.manaValue, fmt: id, tol: 2, step: () => 1 },
-  // Popularity is keyed on EDHREC rank (lower = more popular), shown as "#42".
   {
     label: "Popularity",
     get: (c) => c.rank,
@@ -125,22 +90,12 @@ const NUMERIC_SPECS: NumericSpec[] = [
     get: (c) => c.price,
     fmt: (n) => formatPrice(n),
     tol: PRICE_TOL,
-    // One smallest display unit (e.g. 1¥ or $0.01), expressed back in stored USD.
     step: () => toUsd(Math.pow(10, -getCurrency().decimals)),
   },
 ];
 
 const WUBRG = ["W", "U", "B", "R", "G"];
 
-/**
- * Numeric clue derived purely from the guessed values - never the close/far
- * tolerance. A guess the answer sits above contributes a strict lower bound,
- * a guess it sits below a strict upper bound. We deliberately do NOT use the
- * comparison tolerance to tighten these: that would leak the tolerance and
- * hand the player a range they didn't actually earn (e.g. "≥ 11" off a guess
- * of 8). Instead the player only ever sees the bare "8-" / "-62" they can read
- * straight off their own guesses.
- */
 function numericClue(
   spec: NumericSpec,
   guesses: Commander[],
@@ -150,8 +105,8 @@ function numericClue(
   if (a == null) return null;
 
   let exact: number | undefined;
-  let gt = -Infinity; // answer is strictly greater than this guessed value
-  let lt = Infinity; // answer is strictly less than this guessed value
+  let gt = -Infinity;
+  let lt = Infinity;
 
   for (const guess of guesses) {
     const g = spec.get(guess);
@@ -169,8 +124,8 @@ function numericClue(
   if (!hasGt && !hasLt) return null;
 
   const step = spec.step();
-  const lower = spec.fmt(gt + step); // strict: answer sits above `gt`
-  const upper = spec.fmt(lt - step); // strict: answer sits below `lt`
+  const lower = spec.fmt(gt + step);
+  const upper = spec.fmt(lt - step);
 
   let value: string;
   if (hasGt && gt == lt) value = `${spec.fmt(gt)}`;
@@ -178,9 +133,6 @@ function numericClue(
   else if (hasGt) value = `${lower}-...`;
   else value = `...-${upper}`;
 
-  // The bound reads as "close" (amber) only if one of the tightest bounding
-  // guesses actually landed within tolerance of the answer; otherwise the answer
-  // is only loosely fenced in by far guesses, so the clue stays grey.
   const closeBounded =
     (hasGt && a - gt <= spec.tol) || (hasLt && lt - a <= spec.tol);
 
@@ -193,18 +145,6 @@ interface SetClue {
   maybe: Set<string>;
 }
 
-/**
- * Generic membership deduction over a finite set of tokens (colors, subtypes).
- * Each observation pairs a guess's tokens with how that guess's set compared to
- * the answer's:
- *  - 'none'    → no overlap, so every token in the guess is definitely absent.
- *  - 'partial' → at least one token overlaps. A single-token partial pins that
- *                token as present; multi-token partials become "at least one of
- *                these" constraints that we resolve against what's known absent.
- * We run the constraints to a fixpoint so cross-guess logic falls out (e.g. a
- * {B,R} partial plus R proven absent ⇒ B present). Anything still unresolved is
- * surfaced as `maybe` candidates rather than hidden.
- */
 function deduceSet(
   observations: { items: string[]; kind: MatchKind }[],
 ): SetClue {
@@ -227,7 +167,7 @@ function deduceSet(
   while (changed) {
     changed = false;
     for (const c of constraints) {
-      if (c.some((x) => present.has(x))) continue; // already satisfied
+      if (c.some((x) => present.has(x))) continue;
       const rem = c.filter((x) => !absent.has(x));
       if (rem.length === 1) {
         present.add(rem[0]);
@@ -292,7 +232,6 @@ function typeClue(guesses: Commander[], answer: Commander): TypeClue | null {
   return { exact: false, present: present.sort(), maybe: maybe.sort() };
 }
 
-/** Aggregate everything the player can logically deduce so far from their guesses. */
 export function deduce(guesses: Commander[], answer: Commander): Deductions {
   return {
     colors: colorClue(guesses, answer),

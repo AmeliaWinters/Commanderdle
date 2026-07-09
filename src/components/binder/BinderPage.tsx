@@ -20,7 +20,6 @@ const WUBRG = ["W", "U", "B", "R", "G"] as const;
 
 type Shown = "all" | "found" | "missing";
 
-/** Fold a name for search the same way the guess box does. */
 function fold(s: string): string {
   return s
     .toLowerCase()
@@ -29,14 +28,6 @@ function fold(s: string): string {
     .replace(/[^a-z0-9]+/g, "");
 }
 
-/**
- * The Binder: every commander in the pool laid out like a trade binder.
- * Found ones sit face-up; the rest stay face-down as card backs until the
- * player guesses them correctly in any mode.
- *
- * With a `profileUuid`, this is instead a read-only view of that player's public
- * binder (fetched from the server), linked from their profile page.
- */
 export default function BinderPage({ profileUuid }: { profileUuid?: string }) {
   const [collection, setCollection] = useState<Collection>(() =>
     profileUuid ? {} : loadCollection(),
@@ -49,7 +40,6 @@ export default function BinderPage({ profileUuid }: { profileUuid?: string }) {
     return subscribeCollection(() => setCollection(loadCollection()));
   }, [profileUuid]);
 
-  // Public view: pull the named player's server binder + username.
   useEffect(() => {
     if (!profileUuid) return;
     const controller = new AbortController();
@@ -85,7 +75,6 @@ export default function BinderPage({ profileUuid }: { profileUuid?: string }) {
       if (shown === "missing" && found) return false;
       if (q && !fold(c.name).includes(q)) return false;
       if (pips.size > 0) {
-        // "C" pip = colorless only; letters must all be within the identity.
         if (pips.has("C")) return c.colorIdentity.length === 0;
         for (const p of pips) if (!c.colorIdentity.includes(p)) return false;
       }
@@ -98,7 +87,6 @@ export default function BinderPage({ profileUuid }: { profileUuid?: string }) {
       const next = new Set(prev);
       if (next.has(p)) next.delete(p);
       else {
-        // Colorless is exclusive of the five colors.
         if (p === "C") next.clear();
         else next.delete("C");
         next.add(p);

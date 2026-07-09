@@ -9,7 +9,6 @@ import type { Mode } from '../types/commander'
 
 const MODE: Mode = 'classic'
 
-/** Prime stored stats so freeze-bridging tests don't have to play 10 days to bank one. */
 function seed(partial: Partial<ReturnType<typeof emptyStats>>) {
   localStorage.setItem(
     'commandle:stats:classic',
@@ -39,7 +38,6 @@ describe('loadStats', () => {
     const s = loadStats(MODE)
     expect(s.played).toBe(30)
     expect(s.distribution).toEqual({})
-    // Streak freezes are back-credited at 1 per 10 days played for legacy records.
     expect(s.freezes).toBe(3)
   })
 })
@@ -67,20 +65,19 @@ describe('recordDailyResult streak math', () => {
   })
 
   it('spends a banked freeze to bridge a gap day', () => {
-    // Two freezes already banked (played 9 days, one more play about to earn none).
     seed({ played: 2, wins: 2, currentStreak: 2, maxStreak: 2, freezes: 2, lastPlayedDate: '2026-07-02' })
-    const s = recordDailyResult(MODE, true, 3, '2026-07-04') // skipped the 3rd
+    const s = recordDailyResult(MODE, true, 3, '2026-07-04')
     expect(s.currentStreak).toBe(3)
     expect(s.maxStreak).toBe(3)
-    expect(s.freezes).toBe(1) // 2 banked − 1 spent, no new one earned (played 3 ≢ 0 mod 10)
+    expect(s.freezes).toBe(1)
   })
 
   it('resets the streak when the gap exceeds the freeze bank, keeping maxStreak', () => {
     seed({ played: 2, wins: 2, currentStreak: 2, maxStreak: 2, freezes: 2, lastPlayedDate: '2026-07-02' })
-    const s = recordDailyResult(MODE, true, 3, '2026-07-06') // 3 missed days > 2 freezes
+    const s = recordDailyResult(MODE, true, 3, '2026-07-06')
     expect(s.currentStreak).toBe(1)
     expect(s.maxStreak).toBe(2)
-    expect(s.freezes).toBe(2) // none spent (couldn't bridge), none newly earned
+    expect(s.freezes).toBe(2)
   })
 
   it('never spends a freeze on a loss — only on missed days', () => {

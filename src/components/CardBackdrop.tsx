@@ -2,24 +2,22 @@ import { useEffect, useMemo, useState } from "react";
 import { zoomPool } from "../lib/commanders";
 
 interface Pos {
-  left?: number; 
-  right?: number; 
-  top: number; 
-  size: number; 
+  left?: number;
+  right?: number;
+  top: number;
+  size: number;
 }
 
 interface CardSpec extends Pos {
   delay: number;
   dur: number;
   rot: number;
-  /** Target position/size at (and below) MOBILE_W. Cards lerp desktop -> mobile. */
   mobile: Pos;
 }
 
 const DESKTOP_W = 900;
 const MOBILE_W = 450;
 
-/** Desktop layout: a handful of large cards drifting around the page edges. */
 const CARDS: CardSpec[] = [
   {
     left: 8,
@@ -79,7 +77,6 @@ const CARDS: CardSpec[] = [
 
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
-/** Interpolate one edge value (left/right); undefined on both sides stays undefined. */
 function lerpEdge(
   mobileVal: number | undefined,
   deskVal: number | undefined,
@@ -89,7 +86,6 @@ function lerpEdge(
   return lerp(mobileVal ?? deskVal ?? 0, deskVal ?? mobileVal ?? 0, t);
 }
 
-/** Resolve a card's position/size at the current interpolation factor (0=mobile, 1=desktop). */
 function interpCard(c: CardSpec, t: number): Pos {
   return {
     left: lerpEdge(c.mobile.left, c.left, t),
@@ -99,7 +95,6 @@ function interpCard(c: CardSpec, t: number): Pos {
   };
 }
 
-/** Current viewport width, tracked across resizes. */
 function useViewportWidth(): number {
   const [w, setW] = useState(() =>
     typeof window === "undefined" ? DESKTOP_W : window.innerWidth,
@@ -111,8 +106,6 @@ function useViewportWidth(): number {
   }, []);
   return w;
 }
-
-/** Matches the mobile breakpoint used elsewhere in the layout. */
 
 function useIsWidth(width: string): boolean {
   const QUERY = `(max-width: ${width})`;
@@ -128,12 +121,6 @@ function useIsWidth(width: string): boolean {
   return isMobile;
 }
 
-/**
- * Defer the decorative backdrop until just after first paint, so its images never
- * compete with real content for the initial render. Uses requestIdleCallback *with a
- * timeout* and an independent setTimeout backstop, so the cards always appear even when
- * the main thread stays busy (ads/analytics) and an idle period never arrives.
- */
 function useIdleMount(): boolean {
   const [ready, setReady] = useState(false);
   useEffect(() => {
@@ -152,8 +139,6 @@ function useIdleMount(): boolean {
         ) => void;
       }
     ).requestIdleCallback;
-    // Guarantee the mount: idle-callback timeout forces it to run within 600ms, and a
-    // plain timer covers browsers without requestIdleCallback.
     ric?.(show, { timeout: 600 });
     const id = window.setTimeout(show, 300);
     return () => window.clearTimeout(id);
@@ -161,10 +146,6 @@ function useIdleMount(): boolean {
   return ready;
 }
 
-/**
- * Swap a full-size /cards/normal_*.webp URL for its downscaled, more-compressed
- * /cards-bg/ backdrop variant (see scripts/build-backdrop-images.ts).
- */
 function toBackdropVariant(src: string): string {
   return src.replace(/\/cards\/(normal_[^/]+)$/, "/cards-bg/$1");
 }
@@ -198,16 +179,12 @@ export default function CardBackdrop() {
     : is5Breakpoint
       ? CARDS.slice(0, 5)
       : CARDS;
-  // useMemo so the day's picks stay stable across re-renders.
   const images = useMemo(() => pickRealImages(cards.length), [cards.length]);
-  // The largest rendered card is the LCP element; hint the browser to fetch it first.
   const lcpIndex = cards.reduce(
     (best, c, i) => (c.size > cards[best].size ? i : best),
     0,
   );
 
-  // Keep the container in the tree from the start (so it doesn't shift layout), but
-  // hold the card images back until the browser is idle after first paint.
   if (!mounted) return <div className="card-backdrop" aria-hidden="true" />;
 
   return (
@@ -220,7 +197,7 @@ export default function CardBackdrop() {
           right: p.right !== undefined ? `${p.right}%` : undefined,
           top: `${p.top}%`,
           width: p.size,
-          height: p.size * 1.4, // MTG card aspect ratio (~63:88)
+          height: p.size * 1.4,
           animationDuration: `${c.dur}s`,
           animationDelay: `${c.delay}s`,
           ["--rot" as string]: `${c.rot}deg`,

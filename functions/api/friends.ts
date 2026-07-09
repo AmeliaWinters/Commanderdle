@@ -1,18 +1,3 @@
-/**
- * Friends endpoints (Phase 3, item 5). All of these require a session AND a set
- * username — you're found by username, so unnamed accounts can't take part.
- *
- *   GET    /api/friends                       → { friends, incoming, outgoing }
- *   POST   /api/friends      { username }     → send a request (auto-accepts a mutual one)
- *   PATCH  /api/friends/:uuid                 → accept an incoming request
- *   DELETE /api/friends/:uuid                 → unfriend / cancel / decline
- *   GET    /api/friends/leaderboard/:metric   → { entries } — you + accepted friends, ranked
- *
- * A relationship is one row in `friends`, stored requester→addressee; accepting flips
- * its status in place. The friends board deliberately ignores `leaderboard_opt_in`:
- * both sides consented to each other by accepting, unlike the public board.
- * Degradable: 503 without D1.
- */
 import { metricByKey, type LeaderboardEntry } from "../../src/lib/leaderboard";
 import { EFFECTIVE_TIER_SQL } from "./webhooks/kofi";
 import { canChooseNameColor } from "../../src/lib/avatars";
@@ -21,10 +6,9 @@ import { rateLimitOk } from "./rateLimit";
 import { resolveSend } from "../../src/lib/friendsFlow";
 import { utcMidnight } from "../../src/lib/puzzleDate";
 
-/** Hard caps: keep lists renderable and blunt invite-spam. */
 const MAX_FRIENDS = 200;
 const MAX_OUTGOING = 50;
-const SEND_LIMIT = 30; // requests per user per hour
+const SEND_LIMIT = 30;
 const SEND_WINDOW_SEC = 60 * 60;
 
 const UUID_RE = /^[0-9a-fA-F-]{36}$/;
@@ -39,11 +23,9 @@ interface PersonRow {
   avatar: string;
   tier: string;
   name_color: string | null;
-  /** Present only where the query joins user_stats (the accepted-friends list). */
   xp?: number;
 }
 
-/** Public shape of a person on a friends list (same identity fields as the board). */
 function toPerson(r: PersonRow) {
   const tier = (
     ["uncommon", "rare", "mythic", "theCreator"].includes(r.tier)
@@ -56,12 +38,10 @@ function toPerson(r: PersonRow) {
     avatar: r.avatar,
     tier,
     nameColor: canChooseNameColor(tier) ? (r.name_color ?? null) : null,
-    // Only surfaced for accepted friends (drives the level badge on their card).
     ...(r.xp != null ? { xp: r.xp } : {}),
   };
 }
 
-/** Auth + named-account gate shared by every friends route. */
 async function gate(
   env: AuthEnv,
   request: Request,
@@ -76,7 +56,6 @@ async function gate(
 
 const PERSON_COLS = `u.uuid, u.username, u.avatar, ${EFFECTIVE_TIER_SQL} AS tier, u.name_color`;
 
-/** GET / POST /api/friends */
 export async function onFriends(
   request: Request,
   env: AuthEnv,
@@ -88,7 +67,6 @@ export async function onFriends(
   const method = request.method.toUpperCase();
 
   if (method === "GET") {
-    // Three cheap indexed reads: accepted (either direction), incoming, outgoing.
     const [friends, incoming, outgoing] = await Promise.all([
       db
         .prepare(
@@ -151,7 +129,6 @@ export async function onFriends(
     .first<PersonRow & { id: number }>();
   if (!target) return json({ error: "player not found" }, 404);
 
-  // Existing relationship in either direction?
   const existing = await db
     .prepare(
       `SELECT user_id, friend_id, status FROM friends
@@ -168,7 +145,6 @@ export async function onFriends(
     case "already-sent":
       return json({ error: "request already sent" }, 409);
     case "accept-mutual":
-      // They already asked us — a request back is an acceptance.
       await db
         .prepare(
           `UPDATE friends SET status = 'accepted' WHERE user_id = ?1 AND friend_id = ?2`,
@@ -177,10 +153,9 @@ export async function onFriends(
         .run();
       return json({ ok: true, status: "accepted", person: toPerson(target) });
     case "new-request":
-      break; // fall through to the cap checks + insert below
+      break;
   }
 
-  // Caps: total accepted friends + open outgoing requests.
   const counts = await db
     .prepare(
       `SELECT
@@ -203,7 +178,6 @@ export async function onFriends(
   return json({ ok: true, status: "pending", person: toPerson(target) });
 }
 
-/** PATCH (accept) / DELETE (unfriend, cancel or decline) /api/friends/:uuid */
 export async function onFriend(
   request: Request,
   env: AuthEnv,
@@ -223,7 +197,6 @@ export async function onFriend(
 
   const method = request.method.toUpperCase();
   if (method === "PATCH") {
-    // Accept: only the addressee of a pending row can flip it.
     const res = await db
       .prepare(
         `UPDATE friends SET status = 'accepted'
@@ -248,7 +221,6 @@ export async function onFriend(
   return json({ error: "method not allowed" }, 405);
 }
 
-/** GET /api/friends/leaderboard/:metric — you + your accepted friends, ranked. */
 export async function onFriendsLeaderboard(
   request: Request,
   env: AuthEnv,
@@ -260,7 +232,6 @@ export async function onFriendsLeaderboard(
   if ("fail" in g) return g.fail;
   const me = g.user;
 
-  // `col` comes from the fixed metric whitelist (never user text) — safe to interpolate.
   const col = metric.column;
   const { results } = await env.STATS_DB!.prepare(
     `SELECT ${PERSON_COLS}, COALESCE(s.${col}, 0) AS value
@@ -279,21 +250,11 @@ export async function onFriendsLeaderboard(
     ...toPerson(r),
     value: r.value,
   }));
-  // Personalised read — never edge-cache it.
   return json({ entries }, 200);
 }
 
-/** ±1 day of the server's UTC date covers every timezone (mirrors results.ts). */
 const DATE_SLACK_MS = 24 * 60 * 60 * 1000;
 
-/**
- * GET /api/friends/today?date=YYYY-MM-DD — how each accepted friend did on the given
- * day's five dailies, so the friends page can show an at-a-glance "today" strip. The
- * date is the viewer's local day (the daily rolls at local midnight); bounded to ±1 day
- * of server UTC so it can't be used to probe arbitrary history.
- *
- *   → { date, results: { [friendUuid]: { [mode]: { won, guesses } } } }
- */
 export async function onFriendsToday(
   request: Request,
   env: AuthEnv,
@@ -310,7 +271,6 @@ export async function onFriendsToday(
   );
   if (drift > DATE_SLACK_MS) return json({ error: "date out of range" }, 400);
 
-  // Every accepted friend's daily rows for this date, joined back to their uuid.
   const { results } = await db
     .prepare(
       `SELECT u.uuid AS uuid, r.mode AS mode, r.won AS won, r.guesses AS guesses

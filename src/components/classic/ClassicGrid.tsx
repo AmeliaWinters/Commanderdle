@@ -21,7 +21,6 @@ function PlaceholderRow({ index }: { index: number }) {
     <div
       className="grid-row placeholder-row"
       aria-hidden="true"
-      // Drives the intro-cascade delay so empty rows rise in one after another.
       style={{ "--row-i": index } as React.CSSProperties}
     >
       {HEADERS.map((h) => (
@@ -38,8 +37,6 @@ export default function ClassicGrid({
   showExample,
 }: Props) {
   const remaining = Math.max(0, maxGuesses - guesses.length);
-  // Re-render the whole table when the display currency changes so every price
-  // cell (computed via formatPrice) reformats.
   useCurrency();
   const [rankTipOpen, setRankTipOpen] = useState(false);
   const rankBtnRef = useRef<HTMLButtonElement>(null);
@@ -47,10 +44,6 @@ export default function ClassicGrid({
     null,
   );
 
-  // The popover uses position: fixed so it escapes the table's overflow
-  // clipping. Measure the trigger and clamp the box within the viewport so it's
-  // always fully on screen, even when the Rank header sits at the right edge on
-  // a narrow phone.
   useLayoutEffect(() => {
     if (!rankTipOpen) return;
     const measure = () => {
@@ -74,9 +67,6 @@ export default function ClassicGrid({
       window.removeEventListener("scroll", measure, true);
     };
   }, [rankTipOpen]);
-  // Guesses already present when this grid mounted were loaded from storage
-  // (e.g. after switching modes and back), not just made - they must not replay
-  // the flip-in/reveal animation. Only rows for guesses added while mounted animate.
   const initialNames = useRef(new Set(guesses.map((g) => g.name)));
   const isNew = (g: Commander) => !initialNames.current.has(g.name);
   const latest = guesses[guesses.length - 1];

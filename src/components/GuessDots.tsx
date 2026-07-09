@@ -4,7 +4,6 @@ interface Props {
   dots: GuessDot[];
   wrongGuesses: number;
   maxGuesses: number;
-  /** Renders the skip button beside the pips (in-play modes only). */
   onSkip?: () => void;
 }
 

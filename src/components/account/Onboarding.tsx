@@ -6,20 +6,9 @@ import { useAuth } from "../../lib/useAuth";
 import { updateMe } from "../../lib/auth";
 import { containsProfanity } from "../../lib/profanity";
 
-/**
- * First-login welcome. Shown once, when a signed-in account has no username yet.
- * Two quick steps — claim a name, then choose a commander-art avatar — so a new
- * player's first taste of their account feels like a proper character creation.
- *
- * Step 1 (choosing a name) is mandatory once you're signed in: while the account has
- * no username the modal can't be dismissed (Escape and the backdrop are ignored, and
- * there's no skip button). Once a name is claimed, step 2 (the avatar) is optional and
- * the modal dismisses freely.
- */
 export default function Onboarding({ onDone }: { onDone: () => void }) {
   const { user, setUser } = useAuth();
   const ref = useRef<HTMLDivElement>(null);
-  // Block dismissal until a username exists — the name is required.
   const dismiss = () => {
     if (user?.username) onDone();
   };

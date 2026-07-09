@@ -2,7 +2,6 @@ import { FaArrowLeft } from "react-icons/fa6";
 import { navigateToPath } from "../../lib/router";
 
 interface Props {
-  /** Path to navigate to when pressed. Ignored when `onClick` is given. */
   to?: string;
   label: string;
   ariaLabel?: string;

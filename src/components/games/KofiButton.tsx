@@ -12,9 +12,6 @@ declare global {
   }
 }
 
-// Renders the official Ko-fi "Support me" widget button. The widget ships as a
-// script that expects document.write, so instead of injecting the raw <script>
-// tags we load the script once and drop its generated markup into a container.
 export default function KofiButton() {
   const containerRef = useRef<HTMLSpanElement>(null);
 

@@ -5,7 +5,6 @@ import {
   parseProfileBinderPath,
 } from "./router";
 
-/** Tracks whether the URL matches one of the standalone (non-mode) pages. */
 export function usePathMatch(match: (pathname: string) => boolean) {
   const [hit, setHit] = useState(() => match(window.location.pathname));
   useEffect(() => {
@@ -16,7 +15,6 @@ export function usePathMatch(match: (pathname: string) => boolean) {
   return hit;
 }
 
-/** Reactive archive-play target parsed from /archive/{mode}/{date}, or null. */
 export function useArchivePlay() {
   const [target, setTarget] = useState(() =>
     parseArchivePlay(window.location.pathname),
@@ -29,7 +27,6 @@ export function useArchivePlay() {
   return target;
 }
 
-/** Reactive public-profile uuid parsed from /u/{uuid}, or null. */
 export function useProfileUuid() {
   const [uuid, setUuid] = useState(() =>
     parseProfilePath(window.location.pathname),
@@ -42,7 +39,6 @@ export function useProfileUuid() {
   return uuid;
 }
 
-/** Reactive public-binder uuid parsed from /u/{uuid}/binder, or null. */
 export function useProfileBinderUuid() {
   const [uuid, setUuid] = useState(() =>
     parseProfileBinderPath(window.location.pathname),

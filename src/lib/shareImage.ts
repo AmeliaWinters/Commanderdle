@@ -1,31 +1,17 @@
 import type { CellCode } from "./shareCode";
 
-/**
- * Client-side renderer for the branded share card: a PNG of the result grid
- * dressed like the og-image (hero card art under a dark scrim, two-tone
- * Cinzel wordmark, editorial header block), sized for social feeds. Rendered on demand with <canvas> - no
- * server round-trip, works offline, and never spoils the answer.
- */
-
 export interface ShareCardOpts {
-  /** e.g. "Classic" */
   modeLabel: string;
-  /** Daily puzzle number, or null for practice games. */
   puzzle: number | null;
-  /** e.g. "4/6" or "X/6" */
   score: string;
   grid: CellCode[][];
-  /** Draw the cells as circles (visual modes' single pip row) rather than
-   * rounded squares (classic's comparison grid). */
   round?: boolean;
-  /** Hostname printed at the bottom, e.g. "commandle.app". */
   site: string;
 }
 
 const W = 1080;
 const H = 1080;
 
-// Palette mirrored from index.css custom properties + the og-image build.
 const BG = "#08080a";
 const PANEL = "rgba(22, 22, 25, 0.88)";
 const LINE = "#2c2c34";
@@ -36,14 +22,13 @@ const FLAME_2 = "#ee5f22";
 const FLAME_3 = "#c01f1f";
 const FLAME_SOFT = "#f3894a";
 
-// Same hero art as the static og-image (The Ur-Dragon).
 const HERO_ART = "/cards/art_crop_10d42b35-844f-4a64-9981-c6118d45e826.webp";
 
 const CELL_FILL: Record<CellCode, string> = {
-  0: "#26262d", // no match
-  1: "#e3ab26", // partial
-  2: "#38b461", // exact
-  3: "#bd4150", // wrong (visual modes)
+  0: "#26262d",
+  1: "#e3ab26",
+  2: "#38b461",
+  3: "#bd4150",
 };
 
 function roundRect(
@@ -63,7 +48,6 @@ function roundRect(
   ctx.closePath();
 }
 
-/** Soft radial ember glow, like the site's background orbs. */
 function orb(
   ctx: CanvasRenderingContext2D,
   x: number,
@@ -79,20 +63,17 @@ function orb(
   ctx.fillRect(x - radius, y - radius, radius * 2, radius * 2);
 }
 
-/** Load the hero art; resolves null if it can't be fetched (offline, etc). */
 function loadHeroArt(): Promise<HTMLImageElement | null> {
   return new Promise((resolve) => {
     const img = new Image();
     img.onload = () => resolve(img);
     img.onerror = () => resolve(null);
     img.src = HERO_ART;
-    // Don't hold the card hostage on a slow asset.
     setTimeout(() => resolve(null), 3000);
   });
 }
 
 export async function renderShareCard(opts: ShareCardOpts): Promise<Blob> {
-  // Make sure the brand fonts are usable on the canvas before drawing.
   const [art] = await Promise.all([
     loadHeroArt(),
     Promise.all([
@@ -100,7 +81,6 @@ export async function renderShareCard(opts: ShareCardOpts): Promise<Blob> {
       document.fonts.load('700 44px "Cinzel"'),
       document.fonts.load('600 30px "EB Garamond"'),
     ]).catch(() => {
-      // Fonts unavailable - serif fallbacks below still read fine.
     }),
   ]);
 
@@ -113,8 +93,6 @@ export async function renderShareCard(opts: ShareCardOpts): Promise<Blob> {
   ctx.fillStyle = BG;
   ctx.fillRect(0, 0, W, H);
 
-  // Hero art across the top (cover-fit), fading into the dark body - same
-  // composition as the static og-image.
   if (art) {
     const bandH = 560;
     const scale = Math.max(W / art.naturalWidth, bandH / art.naturalHeight);
@@ -129,14 +107,11 @@ export async function renderShareCard(opts: ShareCardOpts): Promise<Blob> {
     ctx.fillStyle = scrim;
     ctx.fillRect(0, 0, W, Math.max(bandH + 60, dh));
   } else {
-    // Offline fallback: the site's ember orbs.
     orb(ctx, W * 0.22, H * 0.24, 440, "236, 90, 28", 0.22);
     orb(ctx, W * 0.82, H * 0.78, 480, "192, 31, 31", 0.2);
     orb(ctx, W * 0.65, H * 0.12, 380, "246, 160, 26", 0.14);
   }
 
-  // Editorial header block, left-aligned like the og-image: accent bar,
-  // small-caps tagline, two-tone wordmark, then the result line.
   const left = 84;
   ctx.textAlign = "left";
   ctx.textBaseline = "alphabetic";
@@ -170,14 +145,12 @@ export async function renderShareCard(opts: ShareCardOpts): Promise<Blob> {
     322,
   );
 
-  // Result grid in a rounded panel, sized to fit between header and footer.
   const headerBottom = 356;
   const footerTop = H - 108;
   const rows = opts.grid.length;
   const cols = Math.max(1, ...opts.grid.map((r) => r.length));
   const pad = 40;
   const maxPanelH = footerTop - headerBottom - 32;
-  // cell + gap where gap = 0.14 * cell → solve against both axes.
   const cell = Math.min(
     92,
     (W - 240 - pad * 2) / (cols + (cols - 1) * 0.14),
@@ -204,7 +177,6 @@ export async function renderShareCard(opts: ShareCardOpts): Promise<Blob> {
   ctx.stroke();
 
   opts.grid.forEach((row, r) => {
-    // Center shorter rows (visual modes have one cell per guess).
     const rowW = row.length * cell + (row.length - 1) * gap;
     const x0 = (W - rowW) / 2;
     row.forEach((code, c) => {
@@ -224,7 +196,6 @@ export async function renderShareCard(opts: ShareCardOpts): Promise<Blob> {
     });
   });
 
-  // Footer: accent rule + site, centered.
   ctx.textAlign = "center";
   ctx.fillStyle = FLAME_1;
   ctx.font = '700 40px "Cinzel", Georgia, serif';
@@ -240,11 +211,6 @@ export async function renderShareCard(opts: ShareCardOpts): Promise<Blob> {
 
 export type ImageShareOutcome = "shared" | "copied-image" | "downloaded";
 
-/**
- * Push the rendered card out into the world, best channel first:
- * Web Share with the image attached (mobile) → PNG on the clipboard
- * (desktop Chrome/Edge/Safari) → plain download as a last resort.
- */
 export async function shareCardImage(
   blob: Blob,
   text: string,
@@ -260,7 +226,6 @@ export async function shareCardImage(
       await navigator.share({ text, files: [file] });
       return "shared";
     } catch {
-      // Cancelled or failed - fall through.
     }
   }
   if (typeof ClipboardItem !== "undefined" && navigator.clipboard?.write) {
@@ -270,7 +235,6 @@ export async function shareCardImage(
       ]);
       return "copied-image";
     } catch {
-      // Clipboard blocked - fall through to download.
     }
   }
   const url = URL.createObjectURL(blob);

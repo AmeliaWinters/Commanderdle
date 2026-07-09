@@ -1,12 +1,3 @@
-/**
- * The signed-in player's Binder (server-side source of truth).
- *
- *   GET /api/account/binder   → { binder: Record<name, { firstFound, modes[] }> }
- *
- * Requires a session. The collection is derived from the player's recorded daily wins
- * (`user_results.answer`), so it can't be spoofed by editing localStorage — anonymous
- * players keep their localStorage binder instead (see src/lib/collection.ts).
- */
 import { currentUserRow, type AuthEnv } from '../auth/session'
 import { getBinder } from './store'
 

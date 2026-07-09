@@ -294,10 +294,8 @@ export const RELEASES: Release[] = [
   },
 ];
 
-/** The newest release (RELEASES is maintained newest-first). */
 export const LATEST_RELEASE = RELEASES[0];
 
-/** Latest date formatted like "8 Jul 2026", or "" if the release has no date. */
 export function formatReleaseDate(iso?: string): string {
   if (!iso) return "";
   const d = new Date(`${iso}T00:00:00`);

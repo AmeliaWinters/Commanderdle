@@ -8,11 +8,10 @@ import LogoTitle from "./layout/LogoTitle";
 import BackButton from "./layout/BackButton";
 import AccountWidget from "./layout/AccountWidget";
 
-/** Every past puzzle date, most recent first (today is live, so it's excluded). */
 function pastDates(): string[] {
   const dates: string[] = [];
   const d = new Date();
-  d.setDate(d.getDate() - 1); // start yesterday
+  d.setDate(d.getDate() - 1);
   for (let guard = 0; guard < 3660; guard++) {
     const key = todayKey(d);
     if (puzzleNumber(key) < 1) break;
@@ -32,7 +31,6 @@ function prettyDate(key: string): string {
   });
 }
 
-/** "2026-07" → "July 2026" for the collapsible month headings. */
 function prettyMonth(monthKey: string): string {
   const [y, m] = monthKey.split("-").map(Number);
   return new Date(y, m - 1, 1).toLocaleDateString(undefined, {
@@ -42,11 +40,10 @@ function prettyMonth(monthKey: string): string {
 }
 
 interface MonthGroup {
-  key: string; // "YYYY-MM"
+  key: string;
   dates: string[];
 }
 
-/** Group the flat, newest-first date list into newest-first month buckets. */
 function groupByMonth(dates: string[]): MonthGroup[] {
   const groups: MonthGroup[] = [];
   let current: MonthGroup | null = null;
@@ -103,8 +100,6 @@ export default function Archive() {
   }, []);
 
   const months = useMemo(() => groupByMonth(pastDates()), []);
-  // Only the most recent month is expanded on load; closed months don't render
-  // their rows at all, so the page stays light no matter how old the archive gets.
   const [open, setOpen] = useState<Set<string>>(
     () => new Set(months.length ? [months[0].key] : []),
   );

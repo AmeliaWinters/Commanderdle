@@ -36,8 +36,6 @@ export default function SynergyPct({ synergy, className }: Props) {
     else place(e.currentTarget);
   };
 
-  // While the tooltip is open, the next pointer down anywhere dismisses it.
-  // Attached after the opening tap resolves so it only catches later touches.
   useEffect(() => {
     if (!pos) return;
     const dismiss = () => setPos(null);

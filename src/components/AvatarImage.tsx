@@ -14,16 +14,6 @@ interface Props {
   foil?: boolean;
 }
 
-/**
- * Resolves an avatar (a commander name, optionally suffixed `#<art id>` for a Mythic+
- * alternate printing) to its art crop.
- *
- * A commander picked as an avatar can later drop out of the top-500 daily dataset; when that
- * happens it's no longer in the live pool, so we fall back to the retired-commander vault
- * (lazily loaded) rather than showing an empty ring. An alternate-art suffix resolves against
- * the lazily-loaded variants map. Falls back to an empty ringed circle only if nothing knows
- * the art.
- */
 export default function AvatarImage({ avatar, size = 48, className, foil }: Props) {
   const { name, variant } = splitAvatar(avatar);
 
@@ -37,8 +27,6 @@ export default function AvatarImage({ avatar, size = 48, className, foil }: Prop
     let cancelled = false;
 
     if (variant) {
-      // Alternate printing: resolve against the (lazily-loaded) variants map, falling back
-      // to the commander's default art if that specific printing isn't known.
       const known = variantArt(name, variant)?.artCrop ?? null;
       if (known) {
         setArt(known);
@@ -64,7 +52,6 @@ export default function AvatarImage({ avatar, size = 48, className, foil }: Prop
       setArt(live);
       return;
     }
-    // Not in the live pool — it may have dropped out; consult the vault.
     setArt(null);
     void ensureVaultLoaded().then(() => {
       if (!cancelled) setArt(commanderByName(name)?.artCrop ?? null);

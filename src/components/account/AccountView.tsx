@@ -44,19 +44,14 @@ export default function AccountView({ user, stats, setUser, logout }: Props) {
   );
   const [busy, setBusy] = useState(false);
   const [avatarOpen, setAvatarOpen] = useState(false);
-  // Live preview of the name flare colour while the native picker is open.
   const [flarePreview, setFlarePreview] = useState<string | null>(null);
 
-  // Binder progress (commanders unlocked / total), kept live with the collection store.
   const [binder, setBinder] = useState(() => collectionProgress());
   useEffect(
     () => subscribeCollection(() => setBinder(collectionProgress())),
     [],
   );
 
-  // Transient inline confirmation, shared by every save path (username, avatar,
-  // leaderboard toggle). Success messages auto-dismiss after a beat; errors linger
-  // so they can't be missed. Toast.
   const flashTimer = useRef<number | undefined>(undefined);
   function flash(ok: boolean, text: string) {
     window.clearTimeout(flashTimer.current);

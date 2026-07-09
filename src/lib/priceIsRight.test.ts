@@ -17,7 +17,6 @@ describe('judgePrice', () => {
   })
 
   it('wins within the absolute floor on bulk prices', () => {
-    // 25 cents off a $0.40 card is way past 10%, but within the $0.25 floor.
     expect(judgePrice(0.65, 0.4).heat).toBe('win')
   })
 
@@ -27,9 +26,9 @@ describe('judgePrice', () => {
   })
 
   it('grades heat by relative distance', () => {
-    expect(judgePrice(8.2, 10).heat).toBe('hot') // 18% off
-    expect(judgePrice(6, 10).heat).toBe('warm') // 40% off
-    expect(judgePrice(50, 10).heat).toBe('cold') // 400% off
+    expect(judgePrice(8.2, 10).heat).toBe('hot')
+    expect(judgePrice(6, 10).heat).toBe('warm')
+    expect(judgePrice(50, 10).heat).toBe('cold')
   })
 })
 
@@ -83,7 +82,6 @@ describe('randomPriceCard', () => {
         .slice(1)
         .map((c) => c.name),
     )
-    // Everything but one card excluded - must deal the remaining one.
     expect(randomPriceCard(exclude).name).toBe(pricePool()[0].name)
   })
 })

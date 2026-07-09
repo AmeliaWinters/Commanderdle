@@ -12,21 +12,20 @@ interface Props {
   started: boolean;
 }
 
-/** "1,234 players solved today's Classic" - live community pulse for the landing view. */
 function usePulse(mode: Mode): string | null {
   const [line, setLine] = useState<string | null>(null);
   useEffect(() => {
     setLine(null);
     const ctrl = new AbortController();
     fetchGlobalStats(mode, puzzleNumber(), ctrl.signal).then((stats) => {
-      if (!stats || stats.total < 25) return; // too few to be social proof
+      if (!stats || stats.total < 25) return;
       const s = summarize(stats);
       const solved = `${stats.wins.toLocaleString()} ${
         stats.wins === 1 ? "player has" : "players have"
       } solved today's ${MODE_LABEL[mode]}`;
       setLine(
         s.modeGuesses !== null
-          ? `${solved} · most in ${s.modeGuesses} ${s.modeGuesses === 1 ? "guess" : "guesses"}`
+          ? `${solved}! On average in ${s.modeGuesses} ${s.modeGuesses === 1 ? "guess" : "guesses"}`
           : solved,
       );
     });
@@ -41,11 +40,6 @@ const DATE_FMT = new Intl.DateTimeFormat(undefined, {
   year: "numeric",
 });
 
-/**
- * Daily framing band under the mode tabs: puzzle number + date, next-puzzle
- * countdown, a live community line, and (classic/quote) a face-down MTG-style
- * mystery card.
- */
 export default function DailyHero({ mode, showCard }: Props) {
   const countdown = useCountdown();
   const pulse = usePulse(mode);

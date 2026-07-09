@@ -1,15 +1,3 @@
-/**
- * Auth route handlers (Phase 3, item 2). Wired into `worker/index.ts`:
- *
- *   GET   /api/auth/:provider/login      → redirect to Google/Discord consent
- *   GET   /api/auth/:provider/callback   → exchange code, upsert user, set session
- *   POST  /api/auth/logout               → destroy session, clear cookie
- *   GET   /api/auth/me                   → { user | null }
- *   PATCH /api/auth/me                   → update display name / leaderboard opt-in
- *
- * Degradable: with no OAuth secrets or no D1 the login/callback routes 503 and
- * `/api/auth/me` returns { user: null }, so the client just shows the logged-out UI.
- */
 import {
   authorizeUrl,
   exchangeCode,
@@ -49,7 +37,6 @@ const json = (body: unknown, status = 200, extra: Record<string, string> = {}) =
 const redirectUriFor = (request: Request, provider: ProviderId) =>
   `${new URL(request.url).origin}/api/auth/${provider}/callback`
 
-/** Only same-origin absolute paths are allowed as a post-login return target. */
 function safeReturnTo(raw: string | null): string {
   if (raw && raw.startsWith('/') && !raw.startsWith('//') && !raw.includes('\\')) return raw
   return '/account'
@@ -64,8 +51,6 @@ export async function onLogin(request: Request, env: AuthEnv, provider: string):
   const url = authorizeUrl(provider, env, redirectUriFor(request, provider), nonce)
   if (!url) return json({ error: 'auth unavailable' }, 503)
 
-  // Bind the nonce (and return target) to the browser via a signed, short-lived cookie.
-  // returnTo is URL-encoded so a '|' in the path can't truncate the pipe-split state.
   const stateCookie = await sign(
     `${provider}|${nonce}|${encodeURIComponent(returnTo)}`,
     env.SESSION_SECRET,
@@ -89,7 +74,6 @@ export async function onCallback(
   const state = url.searchParams.get('state')
   if (url.searchParams.get('error') || !code || !state) return fail('sign-in was cancelled')
 
-  // Validate the state cookie: it must be intact and its nonce must match the query.
   const raw = readCookie(request, STATE_COOKIE)
   const value = raw ? await unsign(raw, env.SESSION_SECRET) : null
   const [cookieProvider, nonce, returnToRaw] = (value ?? '').split('|')
@@ -112,9 +96,6 @@ export async function onCallback(
     return fail('could not read your profile')
   }
 
-  // Upsert the account. On first sight we mint a public uuid and a default avatar; the
-  // player picks their own username/avatar later. We store only the provider id (to
-  // recognise them next time) and email (to reconcile Ko-fi donations) — nothing else.
   const row = await env.STATS_DB.prepare(
     `INSERT INTO users (uuid, provider, provider_id, email)
      VALUES (?1, ?2, ?3, ?4)
@@ -125,18 +106,15 @@ export async function onCallback(
     .first<{ id: number }>()
   if (!row) return fail('could not create your account')
 
-  // Reconcile any Ko-fi donations made with this email — covers "donated before
-  // signing up" and top-ups since the last login. Best-effort; never blocks login.
   await reconcileTier(env.STATS_DB, profile.email)
 
   const token = await createSession(env.STATS_DB, row.id)
   const headers = new Headers({ Location: returnTo })
   headers.append('Set-Cookie', cookie(SESSION_COOKIE, token, SESSION_MAX_AGE))
-  headers.append('Set-Cookie', cookie(STATE_COOKIE, '', 0)) // clear the state cookie
+  headers.append('Set-Cookie', cookie(STATE_COOKIE, '', 0))
   return new Response(null, { status: 302, headers })
 
   function fail(message: string): Response {
-    // Bounce back to the account page with a human-readable error in the query.
     const to = `/account?error=${encodeURIComponent(message)}`
     return new Response(null, {
       status: 302,
@@ -154,8 +132,6 @@ export async function onMe(request: Request, env: AuthEnv): Promise<Response> {
   const row = await currentUserRow(env, request)
   if (!row || !env.STATS_DB) return json({ user: null }, 200, { 'cache-control': 'no-store' })
   const { id, ...user } = row
-  // Pending friend requests ride along so the header can badge them on every boot
-  // without an extra round trip. Best-effort: a DB missing the friends table → 0.
   const [stats, pending] = await Promise.all([
     getStats(env.STATS_DB, id),
     env.STATS_DB
@@ -169,8 +145,6 @@ export async function onMe(request: Request, env: AuthEnv): Promise<Response> {
   })
 }
 
-// Usernames: 3–20 chars, letters/digits/underscore. Kept tight so leaderboard names
-// are readable and can't smuggle markup or lookalike whitespace.
 const USERNAME_RE = /^[A-Za-z0-9_]{3,20}$/
 
 export async function onUpdateMe(request: Request, env: AuthEnv): Promise<Response> {
@@ -204,7 +178,6 @@ export async function onUpdateMe(request: Request, env: AuthEnv): Promise<Respon
   }
   if (body.avatar !== undefined) {
     if (!isValidAvatar(body.avatar)) return json({ error: 'invalid avatar' }, 400)
-    // Free players may only equip one of the FREE_AVATARS; supporters get all.
     if (!isAvatarUnlocked(body.avatar, user.tier))
       return json({ error: 'that avatar is for supporters' }, 403)
     sets.push(`avatar = ?${binds.length + 1}`)
@@ -214,8 +187,6 @@ export async function onUpdateMe(request: Request, env: AuthEnv): Promise<Respon
     sets.push(`leaderboard_opt_in = ?${binds.length + 1}`)
     binds.push(body.leaderboardOptIn ? 1 : 0)
   }
-  // Custom flare colour — a mythic+ cosmetic. `null` clears it back to the tier colour;
-  // a hex string sets it. Any other type is ignored (not part of this patch).
   if (body.nameColor === null || typeof body.nameColor === 'string') {
     if (!canChooseNameColor(user.tier))
       return json({ error: 'a custom colour is a Mythic supporter perk' }, 403)
@@ -232,7 +203,6 @@ export async function onUpdateMe(request: Request, env: AuthEnv): Promise<Respon
       .bind(...binds)
       .run()
   } catch (e) {
-    // The only UNIQUE constraint that can fire here is username_lc.
     if (String(e).includes('UNIQUE')) return json({ error: 'that username is taken' }, 409)
     return json({ error: 'could not save' }, 500)
   }

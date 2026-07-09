@@ -12,10 +12,8 @@ import type { LeaderboardEntry, LeaderboardYou } from "../../lib/leaderboard";
 import { useAuth } from "../../lib/useAuth";
 import { ACCOUNT_PATH, FRIENDS_PATH, navigateToPath } from "../../lib/router";
 
-/** How many ranks to show per page on the full leaderboard. */
 const PAGE_SIZE = 50;
 
-/** The full public leaderboard: metric tabs + up to the top 100 opted-in players. */
 export default function LeaderboardPage() {
   const { user } = useAuth();
   const [scope, setScope] = useState<"global" | "friends">("global");
@@ -31,7 +29,6 @@ export default function LeaderboardPage() {
     setLoading(true);
     setPage(0);
     if (scope === "friends") {
-      // The friends board is you + everyone you've accepted — no separate rank row.
       fetchFriendsLeaderboard(metric, controller.signal).then((entries) => {
         if (!alive) return;
         setEntries(entries);
@@ -39,8 +36,6 @@ export default function LeaderboardPage() {
         setLoading(false);
       });
     } else {
-      // Ask for the signed-in player's own rank too, so it can be shown even if
-      // they didn't make the visible top 100.
       fetchLeaderboard(metric, 100, controller.signal, user?.uuid).then(
         (res) => {
           if (!alive) return;
@@ -58,7 +53,6 @@ export default function LeaderboardPage() {
 
   const optedOut = user && !user.leaderboardOptIn;
 
-  // Page the top 100 in chunks so the list stays a single, readable column.
   const pageCount = entries
     ? Math.max(1, Math.ceil(entries.length / PAGE_SIZE))
     : 1;

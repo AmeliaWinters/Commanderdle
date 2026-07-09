@@ -23,7 +23,6 @@ describe('buildDailyRecap', () => {
   })
 
   it('ignores an unfinished, un-won game', () => {
-    // 2 guesses, no skips, not the answer, cap is 6 for classic → not finished.
     seed('classic', { answerName: 'Atraxa', guessNames: ['Krenko', 'Yuriko'] })
     expect(buildDailyRecap()).toBeNull()
   })
@@ -44,7 +43,6 @@ describe('buildDailyRecap', () => {
   })
 
   it('counts skips toward the guess cap for finishing', () => {
-    // silhouette cap is 5: 3 wrong guesses + 2 skips = 5 → finished (loss).
     seed('silhouette', {
       answerName: 'Atraxa',
       guessNames: ['a', 'b', 'c'],

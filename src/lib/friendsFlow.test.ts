@@ -4,7 +4,6 @@ import { resolveSend, canAccept, type FriendRow } from "./friendsFlow";
 const ME = 1;
 const THEM = 2;
 
-/** A relationship row in the stored direction requester → addressee. */
 const row = (
   requester: number,
   addressee: number,

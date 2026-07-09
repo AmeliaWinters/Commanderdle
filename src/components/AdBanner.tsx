@@ -3,7 +3,6 @@ import { hasAdConsent, onConsentChange } from '../lib/consent'
 
 const PUB_ID = import.meta.env.VITE_ADSENSE_PUB_ID ?? ''
 const SLOT_ID = import.meta.env.VITE_ADSENSE_SLOT_ID ?? ''
-/** Ads only render once a real publisher + slot are configured via env. */
 const ADS_CONFIGURED = PUB_ID !== '' && SLOT_ID !== ''
 const STORAGE_KEY = 'commandle:ad-test'
 const TOGGLE_EVENT = 'commandle:ad-test-toggle'
@@ -14,7 +13,6 @@ declare global {
   }
 }
 
-/** Inject the AdSense loader once, lazily, only when a publisher id is configured. */
 function ensureAdSenseScript() {
   if (!ADS_CONFIGURED) return
   if (document.querySelector('script[data-adsense]')) return
@@ -39,7 +37,7 @@ export function toggleAdTestMode() {
   try {
     if (next) sessionStorage.setItem(STORAGE_KEY, '1')
     else sessionStorage.removeItem(STORAGE_KEY)
-  } catch { /* ignore */ }
+  } catch { }
   window.dispatchEvent(new CustomEvent(TOGGLE_EVENT, { detail: next }))
 }
 
@@ -57,29 +55,22 @@ export default function AdBanner() {
   const [refreshKey, setRefreshKey] = useState(0)
   const [consented, setConsented] = useState(hasAdConsent)
 
-  // Ads always run once configured. Consent only decides whether they're
-  // *personalised*: without it we request non-personalised (contextual) ads,
-  // which don't need consent to serve.
   const adsActive = ADS_CONFIGURED
 
-  // Track toggle events from the footer button.
   useEffect(() => {
     const onToggle = (e: Event) => setTestMode((e as CustomEvent<boolean>).detail)
     window.addEventListener(TOGGLE_EVENT, onToggle)
     return () => window.removeEventListener(TOGGLE_EVENT, onToggle)
   }, [])
 
-  // React to consent grant/withdraw so ads appear (or stay off) without a reload.
   useEffect(() => onConsentChange((c) => setConsented(c === 'granted')), [])
 
-  // Bump refreshKey on pageview so the placeholder re-labels itself.
   useEffect(() => {
     const onPageview = () => setRefreshKey((k) => k + 1)
     window.addEventListener('commandle:pageview', onPageview)
     return () => window.removeEventListener('commandle:pageview', onPageview)
   }, [])
 
-  // Real AdSense slot mount + refresh on pageview.
   useEffect(() => {
     if (testMode || !adsActive) return
 
@@ -88,12 +79,10 @@ export default function AdBanner() {
     function pushAd() {
       try {
         const q = (window.adsbygoogle = window.adsbygoogle || [])
-        // Without ad-personalisation consent, ask Google for non-personalised
-        // (contextual) ads so they can still serve.
         ;(q as unknown as { requestNonPersonalizedAds?: number }).requestNonPersonalizedAds =
           consented ? 0 : 1
         q.push({})
-      } catch { /* not loaded yet */ }
+      } catch { }
     }
 
     function mountAd() {
@@ -107,7 +96,6 @@ export default function AdBanner() {
       ins.dataset.adSlot = SLOT_ID
       ins.dataset.adFormat = 'auto'
       ins.dataset.fullWidthResponsive = 'true'
-      // Tag the slot non-personalised until the visitor consents to ad personalisation.
       if (!consented) ins.dataset.npa = '1'
       container.appendChild(ins)
       pushAd()
@@ -123,9 +111,6 @@ export default function AdBanner() {
     }
   }, [testMode, adsActive, consented])
 
-  // Test mode, or no real ad config / no consent yet: show a labelled placeholder instead of
-  // an empty gap. The detailed debug label (slot id, refresh count) is test-mode only, so it
-  // never leaks to real visitors who've simply declined ad cookies.
   if (testMode || !adsActive) {
     const label = testMode
       ? `Ad slot · refresh #${refreshKey} · slot ${SLOT_ID}`

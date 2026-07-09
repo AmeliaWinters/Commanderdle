@@ -56,8 +56,6 @@ export default function ProfilePage({ uuid }: { uuid: string }) {
     );
   }
 
-  // Fire-and-report add-friend: the server answers with why it refused ("already
-  // friends", "request already sent", …), which doubles as the status label here.
   async function addFriend() {
     if (!profile || friendMsg) return;
     const res = await sendFriendRequest(profile.username);

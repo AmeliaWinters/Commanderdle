@@ -1,56 +1,16 @@
-/**
- * build-data.ts
- *
- * Generates src/data/commanders.json — the static dataset the app ships with — and
- * downloads every card image into public/cards/ so the app serves images from its own
- * host rather than hotlinking Scryfall's CDN (which Scryfall's guidelines discourage,
- * and whose URLs rotate over time).
- *
- * Pipeline:
- *   1. Pull the EDHREC "top commanders (past 2 years)" ranked list (paginated, 100/page),
- *      plus each commander's high-synergy cards. EDHREC drives popularity/ranking, which
- *      changes over time, so this is re-run regularly (at least daily).
- *   2. Enrich each via Scryfall's /cards/collection batch endpoint (75 ids/request) to get
- *      color identity, type, mana value, power/toughness, rarity, release year, flavor text,
- *      and image URIs.
- *   3. Download all referenced images into public/cards/ (deduped, skipping ones already
- *      on disk) and rewrite the dataset to point at local "cards/<file>" paths.
- *   4. Write the merged, ranked dataset to src/data/commanders.json.
- *
- * Resilience: EDHREC has no official API — json.edhrec.com is undocumented and could be
- * discontinued or start refusing our requests. So every successful EDHREC fetch is cached
- * to scripts/.cache/edhrec.json (committed to the repo). On a run where EDHREC fails or
- * returns too little data, we fall back to that last-good cache and keep building rather
- * than wiping a good dataset. We only overwrite cached data when EDHREC returns a proper,
- * non-empty response. Likewise we refuse to overwrite commanders.json with a degenerate
- * (too-small) result.
- *
- * Run with: npm run build:data
- *
- * Both APIs are free and require no key. Scryfall asks for a descriptive User-Agent and a
- * ~50-100ms delay between requests, which we honor.
- */
 import { writeFile, mkdir, readFile, access } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import sharp from "sharp";
 import { hashString } from "../src/lib/hash";
 
-// WebP quality for the downloaded card images. 80 is visually ~indistinguishable from the
-// source JPGs while cutting file size by roughly half, which directly lowers bandwidth/CDN cost.
 const WEBP_QUALITY = 80;
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUT_FILE = join(__dirname, "..", "src", "data", "commanders.json");
-// Derived splits consumed by the app (see the write near the end of main()).
 const CORE_FILE = join(__dirname, "..", "src", "data", "commanders.core.json");
 const SYNERGY_FILE = join(__dirname, "..", "src", "data", "synergy.json");
-// Small provenance sidecar (data freshness) shown in the app footer.
 const META_FILE = join(__dirname, "..", "src", "data", "commanders.meta.json");
-// Append-only frozen daily answers (date -> mode -> commander name) and the retired-commander
-// vault (name -> full Commander). Together these keep the archive retroactive: a past day's
-// answer stays fixed, and its data (plus any avatar's) survives the commander leaving the top
-// 500. See src/lib/answers.ts and src/lib/commanders.ts (ensureVaultLoaded).
 const ANSWERS_FILE = join(__dirname, "..", "src", "data", "answers.json");
 const VAULT_FILE = join(
   __dirname,
@@ -59,8 +19,6 @@ const VAULT_FILE = join(
   "data",
   "commanders.vault.json",
 );
-// Alternate-art printings per commander (name -> ArtVariant[]), consumed by the Mythic+/The Creator
-// avatar gallery. Deduped by Scryfall illustration id so only meaningfully-different arts appear.
 const VARIANTS_FILE = join(
   __dirname,
   "..",
@@ -68,24 +26,15 @@ const VARIANTS_FILE = join(
   "data",
   "commanders.variants.json",
 );
-// Vite serves public/ at the deploy root; images land here and ship as static assets.
 const CARDS_DIR = join(__dirname, "..", "public", "cards");
-// Last-good EDHREC payload, committed so the build survives json.edhrec.com going away.
 const CACHE_FILE = join(__dirname, ".cache", "edhrec.json");
 
 const TARGET_COUNT = 500;
-// Grid mode draws from a deeper pool (top GRID_COUNT). Ranks TARGET_COUNT+1..GRID_COUNT ship
-// as a separate lazily-loaded commanders.ext.json (no synergy fetch, no flavor) so the
-// initial page payload stays exactly the size of the top-TARGET_COUNT core file.
 const GRID_COUNT = 1000;
 const EXT_FILE = join(__dirname, "..", "src", "data", "commanders.ext.json");
-// A fresh EDHREC ranking shorter than this is treated as a failed/degraded fetch, and we
-// fall back to the cached list instead of trusting it.
 const MIN_VALID = Math.floor(TARGET_COUNT * 0.8);
-// EDHREC's JSON host sits behind Cloudflare and 403s non-browser User-Agents.
 const EDHREC_UA =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36";
-// Scryfall asks for a descriptive User-Agent identifying the app.
 const SCRYFALL_UA =
   "Commanderdle/0.1 (https://github.com/AmeliaWinters/Commanderdle)";
 const EDHREC_BASE = "https://json.edhrec.com/pages/";
@@ -97,20 +46,17 @@ const fileExists = (p: string) =>
     () => false,
   );
 
-/** A top synergy card name paired with its EDHREC synergy score (decimal fraction). */
 interface SynergyRef {
   name: string;
   synergy: number;
 }
 
-/** Shape of the committed last-good EDHREC cache (scripts/.cache/edhrec.json). */
 interface EdhrecCache {
   fetchedAt: string;
   commanders: EdhrecCardView[];
   synergy: Record<string, SynergyRef[]>;
 }
 
-/** Coerce a cached synergy list (old string[] or new SynergyRef[]) into SynergyRef[]. */
 function normalizeSynergyRefs(raw: unknown): SynergyRef[] {
   if (!Array.isArray(raw)) return [];
   return raw.map((r) =>
@@ -133,7 +79,6 @@ async function saveCache(cache: EdhrecCache): Promise<void> {
   await writeFile(CACHE_FILE, JSON.stringify(cache, null, 2), "utf-8");
 }
 
-/** Normalize a card name for matching across EDHREC/Scryfall (diacritics, punctuation, case). */
 const norm = (s: string) =>
   s
     .normalize("NFD")
@@ -149,26 +94,10 @@ interface EdhrecCardView {
   num_decks?: number;
   inclusion?: number;
   synergy?: number;
-  // Partner-pair entries carry these: `is_partner` flags the pair, `cards` lists the two
-  // individual commanders ({ name, url=slug }) that make it up. (Double-faced/melded cards
-  // also use an "A // B" name but are a single Scryfall card and carry none of these.)
   is_partner?: boolean;
   cards?: Array<{ name: string; url?: string }>;
 }
 
-/**
- * Expand partner-pair entries into one entry per individual commander.
- *
- * EDHREC lists a legal partner pairing (e.g. "Rograkh, Son of Rohgahh // Silas Renn,
- * Seeker Adept") as a single ranked entry, but the two partners are distinct cards that
- * should each be guessable. We split each `is_partner` entry into its two members, both
- * inheriting the pair's rank and deck count, and point each at its own EDHREC page slug so
- * synergy/enrichment resolve per individual commander. Non-partner entries (including
- * single-card double-faced commanders) pass through untouched.
- *
- * Idempotent: a list with no partner entries (e.g. an already-expanded cache) is returned
- * unchanged.
- */
 function expandPartners(list: EdhrecCardView[]): EdhrecCardView[] {
   const out: EdhrecCardView[] = [];
   for (const v of list) {
@@ -189,7 +118,6 @@ function expandPartners(list: EdhrecCardView[]): EdhrecCardView[] {
   return out;
 }
 
-/** How many top-synergy cards to keep per commander (drives the Synergy game mode). */
 const SYNERGY_COUNT = 6;
 
 interface ScryfallCard {
@@ -207,9 +135,7 @@ interface ScryfallCard {
   collector_number?: string;
   prices?: { usd?: string | null; usd_foil?: string | null };
   flavor_text?: string;
-  /** Scryfall id for this card's *artwork*; shared by every printing/foil of the same art. */
   illustration_id?: string;
-  /** Scryfall search URL listing every printing of this card (used to gather alternate arts). */
   prints_search_uri?: string;
   card_faces?: Array<{
     type_line?: string;
@@ -223,13 +149,11 @@ interface ScryfallCard {
   image_uris?: { art_crop?: string; normal?: string };
 }
 
-/** One meaningfully-different alternate printing's art (mirrors src/lib/commanders.ts). */
 interface ArtVariant {
   id: string;
   artCrop: string | null;
   normalImage: string | null;
   setName: string;
-  /** Collector number of this printing (e.g. "307"), used as the gallery label. */
   number: string;
 }
 
@@ -237,7 +161,6 @@ export interface SynergyCard {
   name: string;
   image: string | null;
   colorIdentity: string[];
-  /** EDHREC synergy score as a decimal fraction (e.g. 0.34 → 34%). */
   synergy: number;
 }
 
@@ -252,6 +175,7 @@ export interface Commander {
   toughness: string | null;
   loyalty: string | null;
   rarity: string;
+  rarities: string[];
   year: number;
   setName: string;
   price: number | null;
@@ -264,8 +188,6 @@ export interface Commander {
 async function fetchEdhrecTop(count: number): Promise<EdhrecCardView[]> {
   const collected: EdhrecCardView[] = [];
   const seen = new Set<string>();
-  // Start at the "Past 2 Years" top-commanders list; each page's cardlist carries a `more`
-  // field pointing at the next 100-entry page (e.g. commanders/year-past2years-1.json).
   let path: string | undefined = "commanders/year.json";
   let page = 0;
   while (path && collected.length < count && page < 14) {
@@ -279,8 +201,6 @@ async function fetchEdhrecTop(count: number): Promise<EdhrecCardView[]> {
       break;
     }
     const json: any = await res.json();
-    // First page nests the list under container.json_dict.cardlists[0]; subsequent paginated
-    // pages put `cardviews` and `more` at the top level.
     const list = json?.container?.json_dict?.cardlists?.[0] ?? json;
     const views: EdhrecCardView[] = list?.cardviews ?? [];
     if (views.length === 0) break;
@@ -298,12 +218,6 @@ async function fetchEdhrecTop(count: number): Promise<EdhrecCardView[]> {
   return collected.slice(0, count);
 }
 
-/**
- * Fetch a commander's EDHREC page and return the top synergy cards (most
- * synergistic first) with their synergy scores. Reads the "High Synergy Cards"
- * list, falling back to the highest-`synergy` cardviews across the page if that
- * list is absent.
- */
 async function fetchSynergyNames(sanitized: string): Promise<SynergyRef[]> {
   const res = await fetch(`${EDHREC_BASE}commanders/${sanitized}.json`, {
     headers: { "User-Agent": EDHREC_UA },
@@ -317,7 +231,6 @@ async function fetchSynergyNames(sanitized: string): Promise<SynergyRef[]> {
   let views: EdhrecCardView[] =
     lists.find((l) => /synerg/i.test(l?.header ?? ""))?.cardviews ?? [];
   if (views.length === 0) {
-    // Fall back: flatten every list and rank by synergy score.
     views = lists
       .flatMap((l) => l?.cardviews ?? [])
       .filter((v: EdhrecCardView) => typeof v?.synergy === "number")
@@ -353,8 +266,6 @@ async function fetchScryfallBatch(
     const json: any = await res.json();
     for (const card of json.data as ScryfallCard[]) {
       byName.set(norm(card.name), card);
-      // EDHREC references double-faced commanders by their front-face name only, while Scryfall
-      // returns the full "Front // Back" name — index the front (and back) face too.
       for (const face of card.name.split(" // ")) byName.set(norm(face), card);
     }
     if (json.not_found?.length) {
@@ -378,7 +289,6 @@ async function fetchScryfallBatch(
 }
 
 async function fetchScryfallFuzzy(name: string): Promise<ScryfallCard | null> {
-  // Partner/double-faced names like "A // B" sometimes miss exact match; try the front half fuzzy.
   const query = name.split(" // ")[0];
   const res = await fetch(
     `https://api.scryfall.com/cards/named?fuzzy=${encodeURIComponent(query)}`,
@@ -428,6 +338,7 @@ function toCommander(
     toughness: toughness ?? null,
     loyalty: loyalty ?? null,
     rarity: card.rarity ?? "unknown",
+    rarities: [card.rarity ?? "unknown"],
     year,
     setName: card.set_name ?? "",
     price: usd != null ? Number(usd) : null,
@@ -438,7 +349,6 @@ function toCommander(
   };
 }
 
-/** Resolve a Scryfall normal image for a card name (front face for DFCs). */
 function imageForName(
   name: string,
   cards: Map<string, ScryfallCard>,
@@ -449,13 +359,6 @@ function imageForName(
   return images?.normal ?? null;
 }
 
-/**
- * Derive a stable, collision-free local filename from a Scryfall image URL.
- * e.g. https://cards.scryfall.io/normal/front/1/0/<uuid>.jpg?123 -> "normal_<uuid>.webp"
- * The size folder (normal/art_crop) and the per-art uuid together are unique, and dropping
- * the ?<timestamp> query means re-runs reuse the same file instead of re-downloading.
- * Images are stored as WebP (see WEBP_QUALITY), so the extension is forced to .webp.
- */
 function localFileName(url: string): string {
   const { pathname } = new URL(url);
   const parts = pathname.split("/").filter(Boolean);
@@ -465,23 +368,16 @@ function localFileName(url: string): string {
   return name.replace(/\.[a-z0-9]+$/i, "") + ".webp";
 }
 
-/** The artwork id for a card (front face for DFCs); shared across foils/reprints of that art. */
 function illustrationId(card: ScryfallCard): string | null {
   return card.illustration_id ?? card.card_faces?.[0]?.illustration_id ?? null;
 }
 
-/** Turn a Scryfall illustration UUID into the short hex avatar suffix (see splitAvatar). */
 function variantId(illId: string): string {
   return illId.replace(/-/g, "").slice(0, 12);
 }
 
-/** Follow a Scryfall `prints_search_uri`, collecting every printing (paginated). */
 async function fetchPrints(url: string): Promise<ScryfallCard[]> {
   const out: ScryfallCard[] = [];
-  // The default prints search omits promos, variations and other "extras" — which is exactly
-  // where many alternate arts live (borderless, Secret Lair, special-numbered printings). Opt
-  // into them so we catch every meaningfully-different artwork. Scryfall preserves these params
-  // on the `next_page` links, so we only add them to the first request.
   const u = new URL(url);
   u.searchParams.set("include_extras", "true");
   u.searchParams.set("include_variations", "true");
@@ -503,12 +399,6 @@ async function fetchPrints(url: string): Promise<ScryfallCard[]> {
   return out;
 }
 
-/**
- * For each commander, gather its *meaningfully-different* alternate-art printings: fetch every
- * printing, dedupe by Scryfall illustration id (so foils and same-art reprints collapse into
- * one) and drop the id already used as the commander's default art. Returns name -> variants
- * with remote image URLs; localizeImages() later pulls those onto our own host.
- */
 async function buildVariants(
   commanders: Commander[],
   cards: Map<string, ScryfallCard>,
@@ -529,7 +419,10 @@ async function buildVariants(
       );
       continue;
     }
-    // Exclude the default art already shipped for this commander.
+    const rarities = new Set(c.rarities);
+    for (const p of prints) if (p.rarity) rarities.add(p.rarity);
+    c.rarities = [...rarities];
+    if (c.rank > TARGET_COUNT) continue;
     const seen = new Set<string>();
     const defaultIll = illustrationId(card);
     if (defaultIll) seen.add(variantId(defaultIll));
@@ -564,23 +457,12 @@ async function buildVariants(
   return result;
 }
 
-/**
- * Download every Scryfall image referenced by the dataset into public/cards/ and rewrite
- * the commanders (in place) to point at local "cards/<file>" paths.
- *
- * - Deduplicates: synergy art repeats across commanders, so each URL downloads once.
- * - Skips files already on disk, making re-runs cheap and surviving an offline Scryfall
- *   CDN (a previously-downloaded image is reused).
- * - On a download failure with no existing file, the original remote URL is kept so the
- *   app still renders something rather than a broken image.
- */
 async function localizeImages(
   commanders: Commander[],
   variants: Record<string, ArtVariant[]> = {},
 ): Promise<void> {
   await mkdir(CARDS_DIR, { recursive: true });
 
-  // Collect every distinct remote URL the dataset references.
   const remoteUrls = new Set<string>();
   const addUrl = (u: string | null) => {
     if (u && /^https?:\/\//.test(u)) remoteUrls.add(u);
@@ -597,7 +479,6 @@ async function localizeImages(
     }
   }
 
-  // remote URL -> local "cards/<file>" path (or the remote URL itself if download failed).
   const resolved = new Map<string, string>();
   const urls = [...remoteUrls];
   let downloaded = 0;
@@ -617,8 +498,6 @@ async function localizeImages(
       reused++;
       return;
     }
-    // Migrate any pre-WebP download: convert the existing .jpg in place rather than
-    // re-fetching it from Scryfall.
     const legacyJpg = dest.replace(/\.webp$/, ".jpg");
     if (await fileExists(legacyJpg)) {
       try {
@@ -640,7 +519,6 @@ async function localizeImages(
       resolved.set(url, localPath);
       downloaded++;
     } catch (e) {
-      // Keep the remote URL as a last-resort fallback so the image still loads.
       resolved.set(url, url);
       failed++;
       console.warn(`Image download failed (${(e as Error).message}): ${url}`);
@@ -652,14 +530,12 @@ async function localizeImages(
   );
   for (let i = 0; i < urls.length; i += CONCURRENCY) {
     await Promise.all(urls.slice(i, i + CONCURRENCY).map(handle));
-    // Stay comfortably under Scryfall's 10 req/s ceiling between batches.
     await sleep(80);
   }
   console.log(
     `  images: ${downloaded} downloaded, ${reused} reused, ${failed} failed`,
   );
 
-  // Rewrite the dataset to local paths.
   const map = (u: string | null) => (u ? (resolved.get(u) ?? u) : null);
   for (const c of commanders) {
     c.artCrop = map(c.artCrop);
@@ -674,7 +550,6 @@ async function localizeImages(
   }
 }
 
-/** Read a committed JSON file, tolerating a missing/corrupt file by returning `fallback`. */
 async function readJson<T>(path: string, fallback: T): Promise<T> {
   if (!(await fileExists(path))) return fallback;
   try {
@@ -706,20 +581,10 @@ function poolForMode(mode: DailyMode, commanders: Commander[]): Commander[] {
     case "zoom":
       return commanders.filter((c) => c.normalImage ?? c.artCrop);
     default:
-      return commanders; // classic + silhouette draw from the whole top-500
+      return commanders;
   }
 }
 
-/**
- * Freeze today's daily answers and fold the current top-500 into the retired-commander vault.
- *
- * Both files are append-only so the archive stays retroactive:
- *  - answers.json: date -> mode -> name. First write for a date wins (never overwrite an
- *    already-recorded answer), so re-runs on the same UTC day can't rewrite history.
- *  - commanders.vault.json: name -> full Commander. Live commanders are refreshed each run;
- *    a commander that has since left the top-500 keeps its last-frozen entry untouched, so its
- *    art/flavor/synergy survive for past archive answers and as a player's avatar.
- */
 async function freezeDailyData(mainCommanders: Commander[]): Promise<void> {
   const today = new Date().toISOString().slice(0, 10);
 
@@ -729,7 +594,7 @@ async function freezeDailyData(mainCommanders: Commander[]): Promise<void> {
   const todays = (answers[today] ??= {});
   let added = 0;
   for (const mode of DAILY_MODES) {
-    if (todays[mode]) continue; // freeze-on-first-write
+    if (todays[mode]) continue;
     const pool = poolForMode(mode, mainCommanders);
     if (pool.length === 0) continue;
     todays[mode] = pool[hashString(`${mode}:${today}`) % pool.length].name;
@@ -756,8 +621,6 @@ async function main() {
   const cache = await loadCache();
 
   console.log("Fetching EDHREC top commanders...");
-  // Pull the top GRID_COUNT ranked entries. Partner pairs later expand into two commanders
-  // each (and some entries fail enrichment), so the final count is trimmed by rank below.
   let edhList: EdhrecCardView[] = [];
   try {
     edhList = await fetchEdhrecTop(GRID_COUNT);
@@ -765,8 +628,6 @@ async function main() {
     console.warn(`EDHREC ranking fetch threw: ${(e as Error).message}`);
   }
 
-  // Only trust a fresh ranking that looks complete; otherwise fall back to the last-good
-  // cache so we never rebuild on top of a degraded/empty EDHREC response.
   let usingFreshRanking = edhList.length >= MIN_VALID;
   if (!usingFreshRanking) {
     if (cache?.commanders?.length) {
@@ -784,8 +645,6 @@ async function main() {
     `Using ${edhList.length} commanders from ${usingFreshRanking ? "EDHREC (fresh)" : "cache"}.`,
   );
 
-  // Split partner pairings into their individual commanders (same rank, separate cards)
-  // before any per-commander fetching, so synergy/enrichment run on each partner.
   const beforeExpand = edhList.length;
   edhList = expandPartners(edhList);
   if (edhList.length !== beforeExpand) {
@@ -798,8 +657,6 @@ async function main() {
   const synergyNamesByCommander = new Map<string, SynergyRef[]>();
   for (let i = 0; i < edhList.length; i++) {
     const edh = edhList[i];
-    // Only the top TARGET_COUNT (the Synergy-mode pool) need synergy cards; fetching pages
-    // for the extended grid-only tail would double the EDHREC crawl for data nothing reads.
     if ((edh.rank ?? Infinity) > TARGET_COUNT) continue;
     const slug = edh.sanitized;
     if (!slug) continue;
@@ -809,8 +666,6 @@ async function main() {
     } catch (e) {
       console.warn(`EDHREC synergy ${slug} threw: ${(e as Error).message}`);
     }
-    // Per-commander fallback: if this fetch came back empty/failed but we have cached
-    // synergy for the card, reuse it rather than dropping the commander's Synergy mode.
     if (names.length === 0 && cache?.synergy?.[edh.name]?.length) {
       names = normalizeSynergyRefs(cache.synergy[edh.name]);
     }
@@ -820,9 +675,6 @@ async function main() {
     await sleep(120);
   }
 
-  // Persist the best data we now hold as the new last-good cache. Only overwrite the
-  // ranking when EDHREC actually gave us a proper fresh one; always fold in whatever
-  // synergy we resolved (fresh or cache-backed).
   const newCache: EdhrecCache = {
     fetchedAt: new Date().toISOString(),
     commanders: usingFreshRanking ? edhList : (cache?.commanders ?? edhList),
@@ -831,7 +683,6 @@ async function main() {
   await saveCache(newCache);
 
   console.log("Enriching via Scryfall (commanders + synergy cards)...");
-  // One batch over the union of commander names and every synergy-card name.
   const allNames = new Set<string>();
   for (const e of edhList) allNames.add(e.name);
   for (const refs of synergyNamesByCommander.values())
@@ -841,7 +692,6 @@ async function main() {
   let commanders: Commander[] = [];
   const seenNames = new Set<string>();
   for (const edh of edhList) {
-    // Try full name, then the front-face half of DFC names ("A // B").
     const card =
       cards.get(norm(edh.name)) ?? cards.get(norm(edh.name.split(" // ")[0]));
     const synergyCards: SynergyCard[] = (
@@ -856,8 +706,6 @@ async function main() {
         synergy: r.synergy,
       };
     });
-    // Use EDHREC's own popularity rank: the two members of a partner pair share that pair's
-    // rank, so ties are expected here and read as equally popular in the game.
     const c = toCommander(
       edh.rank ?? commanders.length + 1,
       edh,
@@ -868,9 +716,6 @@ async function main() {
       console.warn(`No card for: ${edh.name}`);
       continue;
     }
-    // The same commander can appear in several partner pairs (e.g. Rograkh). edhList is in
-    // ascending-rank order, so keeping the first occurrence keeps each commander at its best
-    // (most popular) rank. This also drops any DFC variants that resolve to one Scryfall card.
     if (seenNames.has(c.name)) {
       console.warn(`Duplicate card dropped: ${c.name} (from "${edh.name}")`);
       continue;
@@ -878,53 +723,36 @@ async function main() {
     seenNames.add(c.name);
     commanders.push(c);
   }
-  // Keep every commander within the top GRID_COUNT ranking spots. Partner pairs share a
-  // spot — two commanders at one rank — so a slice can exceed its count in entries even
-  // though ranks only span 1..GRID_COUNT.
   commanders = commanders.filter((c) => c.rank <= GRID_COUNT);
-  // The main dataset (all five daily modes) stays the top TARGET_COUNT; the tail ships
-  // separately for Grid mode only.
   const mainCommanders = commanders.filter((c) => c.rank <= TARGET_COUNT);
   const extCommanders = commanders.filter((c) => c.rank > TARGET_COUNT);
 
-  // Guard: refuse to overwrite a good dataset with a degenerate one (e.g. Scryfall
-  // enrichment mostly failed). Keep the existing committed commanders.json instead.
   if (mainCommanders.length < MIN_VALID) {
     throw new Error(
       `Only built ${mainCommanders.length} commanders (< ${MIN_VALID}); refusing to overwrite commanders.json.`,
     );
   }
 
-  // Gather each top-TARGET_COUNT commander's meaningfully-different alternate-art printings
-  // (Mythic+/The Creator avatar cosmetic). Fetched here so its art can be localized alongside the
-  // rest; a failure per commander just omits that commander's alternates.
-  console.log("Fetching alternate-art printings from Scryfall...");
+  console.log("Fetching printings (rarities + alternate art) from Scryfall...");
   let variants: Record<string, ArtVariant[]> = {};
   try {
-    variants = await buildVariants(mainCommanders, cards);
+    variants = await buildVariants(commanders, cards);
   } catch (e) {
     console.warn(`Variant build failed: ${(e as Error).message}`);
   }
 
-  // Pull all images onto our own host and rewrite the dataset to local paths.
   await localizeImages(commanders, variants);
 
   await mkdir(dirname(OUT_FILE), { recursive: true });
   await writeFile(OUT_FILE, JSON.stringify(mainCommanders, null, 2), "utf-8");
   console.log(`Wrote ${mainCommanders.length} commanders to ${OUT_FILE}`);
 
-  // Extended tail for Grid mode: same core shape minus the fields only other modes use
-  // (flavor text, synergy). Loaded on demand by /grid, never in the initial bundle.
   const ext = extCommanders.map(
     ({ synergyCards, flavorText, ...rest }) => rest,
   );
   await writeFile(EXT_FILE, JSON.stringify(ext), "utf-8");
   console.log(`Wrote ${ext.length} extended commanders to ${EXT_FILE}`);
 
-  // Derived, app-facing splits (keep in sync with src/lib/commanders.ts):
-  //  - commanders.core.json: every field except the heavy `synergyCards` arrays,
-  //    plus a `synergyCount`, so it loads in the initial bundle.
-  //  - synergy.json: name -> SynergyCard[], loaded on demand by Synergy mode only.
   const core = mainCommanders.map(({ synergyCards, ...rest }) => ({
     ...rest,
     synergyCount: synergyCards.length,
@@ -934,10 +762,8 @@ async function main() {
   for (const c of mainCommanders) synergy[c.name] = c.synergyCards;
   await writeFile(CORE_FILE, JSON.stringify(core), "utf-8");
   await writeFile(SYNERGY_FILE, JSON.stringify(synergy), "utf-8");
-  // Alternate-art variants (localized paths), consumed lazily by the Mythic+/The Creator gallery.
   await writeFile(VARIANTS_FILE, JSON.stringify(variants) + "\n", "utf-8");
   console.log(`Wrote variants -> ${VARIANTS_FILE}`);
-  // Provenance sidecar: when this dataset was last refreshed, for the footer freshness line.
   await writeFile(
     META_FILE,
     JSON.stringify({ generatedAt: newCache.fetchedAt }) + "\n",
@@ -945,8 +771,6 @@ async function main() {
   );
   console.log(`Wrote core -> ${CORE_FILE} and synergy -> ${SYNERGY_FILE}`);
 
-  // Freeze today's answers + update the retired-commander vault so the archive stays
-  // retroactive as the top-500 churns. Uses the localized (cards/<file>) image paths.
   await freezeDailyData(mainCommanders);
   const withFlavor = mainCommanders.filter((c) => c.flavorText).length;
   const withArt = mainCommanders.filter((c) => c.artCrop).length;

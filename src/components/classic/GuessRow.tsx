@@ -14,7 +14,6 @@ import {
 import ManaCost from "../ManaSymbols";
 import CardZoom from "../CardZoom";
 
-/** Single arrow = close (just off); double arrow = far. */
 function arrow(kind: MatchKind, direction?: string): React.ReactNode {
   if (direction !== "up" && direction !== "down") return null;
   if (kind === "none") {
@@ -31,8 +30,6 @@ function arrow(kind: MatchKind, direction?: string): React.ReactNode {
   );
 }
 
-/** Spoken description of a cell for screen readers - conveys the colour-coded clue
- * (match / close / no match) and arrow direction that sighted players read visually. */
 function cellAria(col: ComparedColumn): string {
   const value = col.colors
     ? col.colors.length
@@ -73,8 +70,6 @@ function Cell({
           animationDelay: win
             ? `${index * 0.5}s, ${igniteDelay}s`
             : `${index * 0.5}s`,
-          // The inner scale pop can't inherit the cell's animation-delay list,
-          // so it reads its timing from this custom property instead.
           "--ignite-delay": win ? `${igniteDelay}s` : undefined,
         } as React.CSSProperties
       }
@@ -106,8 +101,6 @@ export default function GuessRow({
 }: {
   guess: Commander;
   answer: Commander;
-  /** Play the flip-in / win-reveal animation. False for rows loaded from
-   *  storage on mount, so remounting (e.g. mode switch) doesn't replay them. */
   animate?: boolean;
 }) {
   const cols = compareCommander(guess, answer);

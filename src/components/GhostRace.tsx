@@ -3,10 +3,8 @@ import { ghostDots, ghostScore, ghostVerdict } from "../lib/ghost";
 
 interface Props {
   ghost: GhostRun;
-  /** Turns the player has spent so far (guesses + skips). */
   playerTurns: number;
   playerWon: boolean;
-  /** True once the player's game is over and the win reveal has finished. */
   done: boolean;
   maxGuesses: number;
 }

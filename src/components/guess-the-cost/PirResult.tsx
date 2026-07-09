@@ -12,14 +12,12 @@ interface Props {
   won: boolean;
   answer: Commander;
   feedback: PirFeedback[];
-  /** Endless: solves this run / lifetime best. Unused for daily. */
   streak: number;
   best: number;
   onPlayEndless: () => void;
   onPlayAgain: () => void;
 }
 
-/** One emoji per guess for the spoiler-free share line. */
 function shareLine(feedback: PirFeedback[]): string {
   return feedback
     .map((f) => {
@@ -29,7 +27,6 @@ function shareLine(feedback: PirFeedback[]): string {
     .join(" ");
 }
 
-/** End-of-round banner: price reveal plus share (daily) or streak/replay (endless). */
 export default function PirResult({
   mode,
   won,

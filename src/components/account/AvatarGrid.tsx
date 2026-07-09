@@ -17,29 +17,14 @@ import {
 import KofiButton from "../games/KofiButton";
 
 interface Props {
-  /** Currently selected avatar (commander name, optionally `#<art id>`). */
   current: string;
-  /** The viewer's tier — gates which avatars they can pick, and whether alt arts show at all. */
   tier: Tier;
   onSelect: (name: string) => void;
 }
 
-/**
- * A scrollable 5-column gallery of every top-500 commander as a pickable avatar,
- * with a search box to jump to one by name. Shared by first-login onboarding and the
- * account page's avatar modal. Free (tier `none`) players can only pick the five
- * FREE_AVATARS; the rest render locked with a padlock until a supporter tier unlocks them.
- *
- * Mythic+/The Creator additionally see every commander's meaningfully-different alternate-art
- * printings as extra cells (labelled by collector number). Lower tiers never see them at all.
- */
-/** How many commanders to render initially, and how many more to reveal each time the player
- *  scrolls to the bottom. Rendering all ~500 at once is a real cost on mobile; growing the
- *  list as they scroll (images lazy-load) keeps the first paint cheap without a "show all". */
 const INITIAL_LIMIT = 60;
 const PAGE_STEP = 60;
 
-/** One pickable cell: the stored avatar value, its commander name, and a display label. */
 interface Cell {
   avatar: string;
   name: string;
@@ -48,17 +33,13 @@ interface Cell {
 
 export default function AvatarGrid({ current, tier, onSelect }: Props) {
   const [query, setQuery] = useState("");
-  // How many commanders are currently rendered; grows as the player scrolls to the bottom.
   const [visibleCount, setVisibleCount] = useState(INITIAL_LIMIT);
-  // Name of the locked avatar the player just tried to pick — drives the Ko-fi nudge.
   const [lockedPick, setLockedPick] = useState<string | null>(null);
-  // Bumped once the lazily-loaded alt-art variants land, to re-expand the gallery.
   const [variantsReady, setVariantsReady] = useState(false);
 
   const gridRef = useRef<HTMLDivElement>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
-  // Alternate arts are a Mythic+/The Creator cosmetic — only fetch (and show) them for them.
   const showVariants = TIER_RANK[tier] >= TIER_RANK.mythic;
   useEffect(() => {
     if (showVariants)
@@ -68,18 +49,13 @@ export default function AvatarGrid({ current, tier, onSelect }: Props) {
   const currentName = splitAvatar(current).name;
 
   const q = query.trim();
-  // A new search resets the scroll window back to the first page.
   useEffect(() => {
     setVisibleCount(INITIAL_LIMIT);
   }, [q]);
 
   const commanders = useMemo(() => {
-    // searchCommanders ranks by popularity; with no query, show the pool in rank
-    // order (COMMANDERS is already EDHREC-ranked), windowed to visibleCount.
     if (q) return searchCommanders(q, 500);
     const top = COMMANDERS.slice(0, visibleCount);
-    // Keep the current pick visible even if it ranks below the window, so the gallery
-    // always shows what's selected.
     if (currentName && !top.some((c) => c.name === currentName)) {
       const picked = COMMANDERS.find((c) => c.name === currentName);
       if (picked) return [picked, ...top];
@@ -89,7 +65,6 @@ export default function AvatarGrid({ current, tier, onSelect }: Props) {
 
   const hasMore = !q && visibleCount < COMMANDERS.length;
 
-  // Expand each commander into its default cell plus (for Mythic+) its alternate-art cells.
   const cells = useMemo<Cell[]>(() => {
     const out: Cell[] = [];
     for (const c of commanders) {
@@ -104,10 +79,8 @@ export default function AvatarGrid({ current, tier, onSelect }: Props) {
       }
     }
     return out;
-    // variantsReady is a dependency so the list re-expands once variants finish loading.
   }, [commanders, showVariants, variantsReady]);
 
-  // Grow the window when the sentinel at the bottom of the scroll area comes into view.
   useEffect(() => {
     if (!hasMore) return;
     const root = gridRef.current;

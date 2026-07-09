@@ -156,8 +156,6 @@ describe('compareCommander', () => {
   })
 
   it('inverts the popularity arrow relative to raw rank', () => {
-    // A guess with a WORSE (higher) rank number than the answer is MORE popular,
-    // so the popularity arrow should read "up" even though the raw rank is down.
     const guess = makeCommander({ ...answer, rank: answer.rank + POPULARITY_TOL + 50 })
     const pop = compareCommander(guess, answer).find((c) => c.label === 'Popularity')!
     expect(pop.direction).toBe('up')

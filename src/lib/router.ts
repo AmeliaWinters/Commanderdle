@@ -1,12 +1,6 @@
 import { useEffect, useState } from "react";
 import type { Mode } from "../types/commander";
 
-/**
- * Each game mode is its own page (its own URL + document title). Navigating between modes
- * is a client-side route change rather than a full reload, but we fire a virtual pageview on
- * every change so ad/analytics scripts re-count it - that's the point of splitting modes into
- * pages: each mode switch is a fresh impression opportunity.
- */
 export const MODE_PATHS: Record<Mode, string> = {
   classic: "/classic",
   silhouette: "/silhouette",
@@ -39,12 +33,10 @@ const MODE_DESCRIPTIONS: Record<Mode, string> = {
     "Name the daily MTG commander from its flavour text and quotes. A new quote to place every day.",
 };
 
-/** Canonical site origin (no trailing slash), configurable per deploy. */
 const SITE_URL = (
   import.meta.env.VITE_SITE_URL ?? "https://commandle.app"
 ).replace(/\/$/, "");
 
-/** Set (or create) a <meta name=...> or <meta property=...> tag's content. */
 function setMeta(attr: "name" | "property", key: string, content: string) {
   let el = document.head.querySelector<HTMLMetaElement>(
     `meta[${attr}="${key}"]`,
@@ -57,7 +49,6 @@ function setMeta(attr: "name" | "property", key: string, content: string) {
   el.setAttribute("content", content);
 }
 
-/** Point the canonical <link> at the given absolute URL. */
 function setCanonical(url: string) {
   let el = document.head.querySelector<HTMLLinkElement>(
     'link[rel="canonical"]',
@@ -70,7 +61,6 @@ function setCanonical(url: string) {
   el.href = url;
 }
 
-/** Keep the document's SEO/social meta in sync with the active mode. */
 function applyModeMeta(mode: Mode) {
   const url = SITE_URL + MODE_PATHS[mode];
   const title = MODE_TITLES[mode];
@@ -84,7 +74,6 @@ function applyModeMeta(mode: Mode) {
 }
 
 function normalize(pathname: string): string {
-  // Treat "/index.html" and trailing slashes as the root.
   if (pathname === "" || pathname === "/index.html") return "/";
   return pathname.length > 1 ? pathname.replace(/\/$/, "") : pathname;
 }
@@ -93,7 +82,6 @@ export function isPrivacyPath(pathname: string): boolean {
   return normalize(pathname) === "/privacy";
 }
 
-/** Static content pages (SEO landing pages, outside the mode system). */
 export const ABOUT_PATH = "/about";
 export const HOW_TO_PLAY_PATH = "/how-to-play";
 export const FAQ_PATH = "/faq";
@@ -140,56 +128,47 @@ export function isFriendsPath(pathname: string): boolean {
   return normalize(pathname) === FRIENDS_PATH;
 }
 
-/** Public profile: /u/{uuid}. */
 export function profilePath(uuid: string): string {
   return `/u/${uuid}`;
 }
 
-/** Parse a /u/{uuid} path into the uuid, or null if it isn't one. */
 export function parseProfilePath(pathname: string): string | null {
-  const parts = normalize(pathname).split("/"); // ['', 'u', uuid]
+  const parts = normalize(pathname).split("/");
   if (parts.length !== 3 || parts[1] !== "u") return null;
   const uuid = parts[2];
   return /^[0-9a-fA-F-]{36}$/.test(uuid) ? uuid : null;
 }
 
-/** A named player's public binder: /u/{uuid}/binder. */
 export function profileBinderPath(uuid: string): string {
   return `/u/${uuid}/binder`;
 }
 
-/** Parse a /u/{uuid}/binder path into the uuid, or null if it isn't one. */
 export function parseProfileBinderPath(pathname: string): string | null {
-  const parts = normalize(pathname).split("/"); // ['', 'u', uuid, 'binder']
+  const parts = normalize(pathname).split("/");
   if (parts.length !== 4 || parts[1] !== "u" || parts[3] !== "binder")
     return null;
   const uuid = parts[2];
   return /^[0-9a-fA-F-]{36}$/.test(uuid) ? uuid : null;
 }
 
-/** Bonus "Higher / Lower" game - its own page, deliberately outside the mode tabs. */
 export const HIGHER_LOWER_PATH = "/higher-lower";
 
 export function isHigherLowerPath(pathname: string): boolean {
   return normalize(pathname) === HIGHER_LOWER_PATH;
 }
 
-/** Bonus "Guess the cost" game - guess the card's market price. Also outside the mode tabs. */
 export const PRICE_IS_RIGHT_PATH = "/guess-the-cost";
 
 export function isPriceIsRightPath(pathname: string): boolean {
   return normalize(pathname) === PRICE_IS_RIGHT_PATH;
 }
 
-/** Bonus "Grid" game - fill a 3×3 of criteria with commanders. Outside the mode tabs. */
 export const GRID_PATH = "/grid";
 
 export function isGridPath(pathname: string): boolean {
   return normalize(pathname) === GRID_PATH;
 }
 
-/** Title screen: the five daily modes on one side, the bonus games on the other.
- * Lives at the site root; '/games' is kept as an alias for links already out there. */
 export const GAMES_PATH = "/";
 
 export function isGamesPath(pathname: string): boolean {
@@ -197,30 +176,26 @@ export function isGamesPath(pathname: string): boolean {
   return n === GAMES_PATH || n === "/games";
 }
 
-/** The Binder - the player's collection of every commander they've found. */
 export const BINDER_PATH = "/binder";
 
 export function isBinderPath(pathname: string): boolean {
   return normalize(pathname) === BINDER_PATH;
 }
 
-/** Puzzle archive - browse past days. */
 export const ARCHIVE_PATH = "/archive";
 
 export function isArchiveBrowsePath(pathname: string): boolean {
   return normalize(pathname) === ARCHIVE_PATH;
 }
 
-/** URL for playing one archived puzzle: /archive/{mode}/{YYYY-MM-DD}. */
 export function archivePlayPath(mode: Mode, date: string): string {
   return `${ARCHIVE_PATH}/${mode}/${date}`;
 }
 
-/** Parse an /archive/{mode}/{date} path into a target, or null if it isn't one. */
 export function parseArchivePlay(
   pathname: string,
 ): { mode: Mode; date: string } | null {
-  const parts = normalize(pathname).split("/"); // ['', 'archive', mode, date]
+  const parts = normalize(pathname).split("/");
   if (parts.length !== 4 || parts[1] !== "archive") return null;
   const mode = parts[2];
   const date = parts[3];
@@ -229,7 +204,6 @@ export function parseArchivePlay(
   return { mode: mode as Mode, date };
 }
 
-/** Client-side navigation to a bare path (used for pages outside the mode system). */
 export function navigateToPath(path: string): void {
   window.history.pushState(null, "", path);
   window.dispatchEvent(new PopStateEvent("popstate"));
@@ -239,29 +213,21 @@ export function modeFromPath(pathname: string): Mode {
   return PATH_TO_MODE[normalize(pathname)] ?? "classic";
 }
 
-/** Fire a virtual pageview so AdSense/analytics treat each mode as a distinct page. */
 function trackPageview(mode: Mode) {
   const w = window as unknown as {
     gtag?: (...a: unknown[]) => void;
     dataLayer?: unknown[];
   };
   const path = MODE_PATHS[mode];
-  // Google Analytics (gtag) virtual pageview, if present.
   w.gtag?.("event", "page_view", {
     page_path: path,
     page_title: MODE_TITLES[mode],
   });
-  // GPT / AdSense ad refresh, if a slot manager hooks into this. Apps can listen for it.
   window.dispatchEvent(
     new CustomEvent("commandle:pageview", { detail: { mode, path } }),
   );
 }
 
-/**
- * Router hook: returns the current mode (derived from the URL) and a navigate function that
- * pushes a new mode-page. Keeps mode and URL in sync across back/forward navigation.
- */
-/** True for pages outside the mode system (privacy, higher/lower, archive). */
 function isStandalonePath(path: string): boolean {
   return (
     isPrivacyPath(path) ||
@@ -290,24 +256,18 @@ export function useModeRoute(): [Mode, (mode: Mode) => void] {
   const [mode, setMode] = useState<Mode>(() =>
     modeFromPath(window.location.pathname),
   );
-  // Bumped on every route change so mode meta re-applies when returning from a
-  // standalone page (which sets its own title) even if the mode didn't change.
   const [routeTick, setRouteTick] = useState(0);
 
   useEffect(() => {
     const onPop = () => {
       const path = window.location.pathname;
       setRouteTick((t) => t + 1);
-      // Standalone pages aren't mode routes; deriving a mode from them would
-      // misreport 'classic' to meta/analytics.
       if (!isStandalonePath(path)) setMode(modeFromPath(path));
     };
     window.addEventListener("popstate", onPop);
     return () => window.removeEventListener("popstate", onPop);
   }, []);
 
-  // Keep the document title and pageview tracking in step with the active mode.
-  // Standalone pages own their meta, so leave theirs alone.
   useEffect(() => {
     if (isStandalonePath(window.location.pathname)) return;
     applyModeMeta(mode);

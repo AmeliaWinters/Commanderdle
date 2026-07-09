@@ -17,7 +17,6 @@ interface Props {
   archiveDate?: string;
 }
 
-/** Bottom bar: ad slot, puzzle number/countdown line, credits and privacy link. */
 export default function AppFooter({ isArchive }: Props) {
   const refreshed = formatRefreshed(meta.generatedAt);
 

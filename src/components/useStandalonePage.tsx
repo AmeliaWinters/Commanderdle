@@ -23,7 +23,6 @@ import {
   isArchiveBrowsePath,
 } from "../lib/router";
 
-// Each standalone page ships in its own lazy chunk, fetched only when its route matches.
 const PrivacyPolicy = lazy(() => import("./PrivacyPolicy"));
 const AboutPage = lazy(() => import("./pages/AboutPage"));
 const HowToPlayPage = lazy(() => import("./pages/HowToPlayPage"));
@@ -44,12 +43,6 @@ const GamesHub = lazy(() => import("./games/GamesHub"));
 const BinderPage = lazy(() => import("./binder/BinderPage"));
 const Archive = lazy(() => import("./Archive"));
 
-/**
- * Resolves the current URL to a standalone page (privacy, account, a sub-game, …),
- * or `null` when the URL is the daily game itself. Every path matcher runs on every
- * call so the hook order stays constant across client-side navigation, then the first
- * matching route wins.
- */
 export function useStandalonePage(): ReactNode | null {
   const isPrivacy = usePathMatch(isPrivacyPath);
   const isAbout = usePathMatch(isAboutPath);

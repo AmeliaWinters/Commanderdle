@@ -21,8 +21,6 @@ interface Props {
   maxGuesses: number;
   isDaily: boolean;
   skips: number;
-  /** True when the game was just won this session - plays the "casting the
-   * commander" reveal (card flip-in + ember burst) instead of a static mount. */
   celebrate?: boolean;
 }
 
@@ -41,17 +39,13 @@ export default function ResultBanner({
   const guessCount = guesses.length;
   const wrongGuesses =
     guesses.filter((g) => g.name !== answer.name).length + skips;
-  // Skips consume a turn just like guesses, so the winning turn number counts both.
   const attempts = guessCount + skips;
 
-  // Mirrors the in-play pip row so the result screen shows how the game went.
   const dots = buildDots(guesses, answer, skips, maxGuesses);
 
   const score =
     status === "won" ? `${attempts}/${maxGuesses}` : `X/${maxGuesses}`;
 
-  // XP earned for this game — more for solving in fewer guesses, a little even on
-  // a loss. Mirrors the server-side award so the chip matches the account total.
   const xp = gameXp(status === "won", attempts, maxGuesses);
 
   const shareOptions = useShareOptions({
@@ -75,8 +69,6 @@ export default function ResultBanner({
             image={answer.normalImage}
             className="result-art-zoom"
           >
-            {/* On a fresh win the art arrives as the face-down mystery card
-                (taking over from the DailyHero one) and flips to the answer. */}
             <div className="result-art-flip">
               {cast && (
                 <img

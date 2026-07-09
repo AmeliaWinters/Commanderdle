@@ -23,7 +23,6 @@ export function loadDaily(): Persisted {
       if (saved.date === todayKey()) return saved;
     }
   } catch {
-    /* ignore corrupt storage */
   }
   return { date: todayKey(), score: 0, status: "playing" };
 }
@@ -43,7 +42,6 @@ export function saveDaily(run: Run): void {
       JSON.stringify({ ...run, date: todayKey() } satisfies Persisted),
     );
   } catch {
-    /* ignore */
   }
 }
 
@@ -51,6 +49,5 @@ export function saveNumber(key: string, value: number): void {
   try {
     localStorage.setItem(key, String(value));
   } catch {
-    /* ignore */
   }
 }

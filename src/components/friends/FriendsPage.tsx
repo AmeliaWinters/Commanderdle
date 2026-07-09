@@ -33,7 +33,6 @@ import {
   profilePath,
 } from "../../lib/router";
 
-/** Human labels for the five daily modes, for the "today" strip tooltips. */
 const MODE_LABEL: Record<string, string> = {
   classic: "Classic",
   silhouette: "Silhouette",
@@ -42,7 +41,6 @@ const MODE_LABEL: Record<string, string> = {
   quote: "Quote",
 };
 
-/** Small name + tier gem, shared by cards and request rows. */
 function NameTag({ person }: { person: FriendPerson }) {
   const nameDisp = tierNameDisplay(person.tier, person.nameColor);
   return (
@@ -63,7 +61,6 @@ function NameTag({ person }: { person: FriendPerson }) {
   );
 }
 
-/** The five-dot "how they did today" strip for one friend. */
 function TodayStrip({ results }: { results?: Record<string, { won: boolean; guesses: number }> }) {
   return (
     <div className="friend-today" role="img" aria-label="Today's dailies">
@@ -83,7 +80,6 @@ function TodayStrip({ results }: { results?: Record<string, { won: boolean; gues
   );
 }
 
-/** One accepted friend: avatar, name, level, today strip, and a remove menu. */
 function FriendCard({
   person,
   today,
@@ -152,7 +148,6 @@ function FriendCard({
   );
 }
 
-/** A pending request row (incoming = accept/decline, outgoing = cancel). */
 function RequestRow({
   person,
   actions,
@@ -188,7 +183,6 @@ function RequestRow({
   );
 }
 
-/** The friends hub: add friends, answer requests, see how everyone's doing today. */
 export default function FriendsPage() {
   const { user, loading: authLoading, refresh } = useAuth();
   const [lists, setLists] = useState<FriendLists | null>(null);

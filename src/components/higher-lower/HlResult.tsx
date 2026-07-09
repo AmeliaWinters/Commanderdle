@@ -14,7 +14,6 @@ interface Props {
   onPlayAgain: () => void;
 }
 
-/** End-of-run banner: score recap plus share (daily) or replay (endless). */
 export default function HlResult({
   mode,
   score,

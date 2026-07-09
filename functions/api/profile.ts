@@ -1,15 +1,3 @@
-/**
- * Public profile endpoint (Phase 3, item 3).
- *
- *   GET /api/profile/:uuid   → { profile }  |  404
- *
- *   GET /api/profile/:uuid/binder → { binder }   |  404
- *
- * A shareable, read-only view of a named account: username, avatar, supporter tier +
- * flare, join date, leaderboard stats, bonus-game streaks and binder progress. Only
- * accounts that have set a username are visible (unnamed/first-login accounts 404).
- * Degradable: 503 without D1.
- */
 import type { PublicProfile } from "../../src/lib/leaderboard";
 import { EFFECTIVE_TIER_SQL } from "./webhooks/kofi";
 import { canChooseNameColor } from "../../src/lib/avatars";
@@ -70,8 +58,6 @@ export async function onProfile(
       : "common"
   ) as PublicProfile["tier"];
 
-  // Bonus streaks + binder size in one round of parallel reads; both are derived from
-  // the player's own recorded results, so there's nothing private here.
   const [bonusStats, binder] = await Promise.all([
     getBonusStats(env.STATS_DB, row.id),
     getBinder(env.STATS_DB, row.id),
@@ -82,7 +68,6 @@ export async function onProfile(
     username: row.username,
     avatar: row.avatar,
     tier,
-    // Only expose a custom colour while the tier still qualifies for it.
     nameColor: canChooseNameColor(tier) ? (row.name_color ?? null) : null,
     joinedAt: row.created_at,
     stats: {
@@ -100,11 +85,6 @@ export async function onProfile(
   return json({ profile }, 200, { "cache-control": "public, max-age=30" });
 }
 
-/**
- * A named player's public binder — the same server-derived collection their own
- * /binder page shows, keyed by commander name. Read-only and derived purely from
- * recorded daily wins, so it's safe to expose alongside the profile.
- */
 export async function onProfileBinder(
   _request: Request,
   env: Env,

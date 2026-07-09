@@ -10,13 +10,11 @@ interface Card {
   Icon: IconType;
 }
 
-/** The two "live" streaks get the large, glowing hero treatment. */
 const FEATURED: Card[] = [
   { key: "playStreak", label: "Day streak", Icon: FaFire },
   { key: "winStreak", label: "Win streak", Icon: FaCrown },
 ];
 
-/** Career totals + bests fill the smaller secondary row. */
 const SECONDARY: Card[] = [
   { key: "totalWins", label: "Total wins", Icon: FaTrophy },
   { key: "maxPlayStreak", label: "Best streak", Icon: FaBolt },
@@ -35,11 +33,9 @@ function FeaturedCard({
 }: {
   card: Card;
   value: number;
-  /** Optional small line under the label (e.g. the streak-freeze bank). */
   sub?: string;
 }) {
   const { Icon, label } = card;
-  // A live streak warms up as it climbs: 0 → no glow, saturating around a 14-day run.
   const glow = Math.min(1, value / 14);
   return (
     <div
@@ -70,8 +66,6 @@ function SecondaryCard({ card, value }: { card: Card; value: number }) {
   );
 }
 
-/** The six leaderboard stats: two featured streaks over four secondary totals.
- *  Shared by the account + public-profile pages. */
 export default function StatCards({ stats }: { stats: AccountStats }) {
   return (
     <div className="account-stats">
@@ -83,7 +77,7 @@ export default function StatCards({ stats }: { stats: AccountStats }) {
             value={stats[card.key]}
             sub={
               card.key === "playStreak"
-                ? // `?? 0` guards against stats from a not-yet-migrated server.
+                ?
                   `❄ ${(stats.streakFreezes ?? 0).toLocaleString()} freeze${(stats.streakFreezes ?? 0) === 1 ? "" : "s"} banked`
                 : undefined
             }

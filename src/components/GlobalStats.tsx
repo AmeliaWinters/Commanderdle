@@ -11,12 +11,9 @@ interface Props {
   mode: ShareMode;
   puzzle: number;
   maxGuesses: number;
-  /** The player's own winning guess count, to highlight in the community histogram. */
   highlight?: number;
-  /** The player's own finished result, so the panel can talk about the *other* players. */
   self?: { won: boolean; guesses: number };
 }
-
 
 export default function GlobalStats({
   mode,
@@ -25,16 +22,12 @@ export default function GlobalStats({
   highlight,
   self,
 }: Props) {
-  // Whether the aggregate we're holding already counts the player (came from their own
-  // submission echo) — drives whether we subtract them to get the "other players" view.
   const [raw, setRaw] = useState<{ stats: GlobalStats; selfIncluded: boolean } | null>(
     null,
   );
 
   useEffect(() => {
     const ctrl = new AbortController();
-    // Small delay lets this puzzle's own submission (fired on finish) land first, so we
-    // can prefer the self-inclusive echo and cleanly exclude the player from the count.
     const timer = setTimeout(() => {
       const echo = echoedGlobalStats(mode, puzzle);
       if (echo && echo.total > 0) {

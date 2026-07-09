@@ -3,25 +3,17 @@ import type { Commander } from "../../types/commander";
 import type { Collection } from "../../lib/collection";
 import BinderCard from "./BinderCard";
 
-/** Must match the grid layout in binder.css. */
 const MIN_COL = 170;
-const MIN_COL_NARROW = 96; // @media (max-width: 480px)
+const MIN_COL_NARROW = 96;
 const NARROW_BP = 480;
-const GAP = 12; // var(--s3)
-const OVERSCAN_ROWS = 3; // rows rendered above/below the viewport
+const GAP = 12;
+const OVERSCAN_ROWS = 3;
 
-/** Column count that CSS `repeat(auto-fill, minmax(min, 1fr))` would produce. */
 function columnCount(width: number): number {
   const min = window.innerWidth <= NARROW_BP ? MIN_COL_NARROW : MIN_COL;
   return Math.max(1, Math.floor((width + GAP) / (min + GAP)));
 }
 
-/**
- * Windowed version of the binder grid: only the rows near the viewport are
- * mounted, so the DOM node count stays small no matter how big the pool grows.
- * Column count and row height are measured at runtime, so it tracks the same
- * responsive CSS grid and self-corrects if card heights change.
- */
 export default function VirtualBinderGrid({
   cards,
   collection,
@@ -36,7 +28,6 @@ export default function VirtualBinderGrid({
   const [rowHeight, setRowHeight] = useState(320);
   const [range, setRange] = useState({ start: 0, end: 40 });
 
-  // Track the grid's own width so we can derive the column count.
   useLayoutEffect(() => {
     const el = spacerRef.current;
     if (!el) return;
@@ -44,8 +35,6 @@ export default function VirtualBinderGrid({
     const ro = new ResizeObserver(measure);
     ro.observe(el);
     measure();
-    // ResizeObserver covers most cases; the resize listener is a fallback for
-    // environments where the observer doesn't fire on viewport changes.
     window.addEventListener("resize", measure);
     return () => {
       ro.disconnect();
@@ -53,7 +42,6 @@ export default function VirtualBinderGrid({
     };
   }, []);
 
-  // Measure a real rendered card and keep the tallest as the row height.
   useLayoutEffect(() => {
     const el = probeRef.current;
     if (!el) return;
@@ -70,7 +58,6 @@ export default function VirtualBinderGrid({
   const totalRows = Math.ceil(cards.length / cols);
   const totalHeight = totalRows > 0 ? totalRows * rowStride - GAP : 0;
 
-  // Recompute which rows are visible on scroll / resize.
   useEffect(() => {
     function update() {
       const el = spacerRef.current;
@@ -79,8 +66,6 @@ export default function VirtualBinderGrid({
       const viewTop = window.scrollY - top;
       const firstVisible = Math.floor(viewTop / rowStride);
       const rowsPerView = Math.ceil(window.innerHeight / rowStride);
-      // Clamp to valid rows *before* converting to card indices, so a grid
-      // that sits far down the page doesn't produce a negative range.
       const startRow = Math.max(0, firstVisible - OVERSCAN_ROWS);
       const endRow = Math.min(totalRows, firstVisible + rowsPerView + OVERSCAN_ROWS);
       const start = startRow * cols;

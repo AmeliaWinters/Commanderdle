@@ -39,7 +39,6 @@ export default function AccountWidget() {
     return () => window.removeEventListener("popstate", onPop);
   }, []);
 
-  // Close on any outside click / Escape while the menu is open.
   useEffect(() => {
     if (!open) return;
     const close = () => setOpen(false);
@@ -52,8 +51,6 @@ export default function AccountWidget() {
     };
   }, [open]);
 
-  // Don't flash a state before the session resolves, and stay out of the way on the
-  // account page (which already shows all of this).
   if (loading || isAccountPath(window.location.pathname)) return null;
 
   const go = (path: string) => () => {
@@ -61,8 +58,6 @@ export default function AccountWidget() {
     navigateToPath(path);
   };
 
-  // Sign-in sends the player to their account page so they land on their profile
-  // and onboarding, rather than back wherever they happened to start.
   const level = user && stats ? levelFromXp(stats.xp) : null;
   const nameDisp = user ? tierNameDisplay(user.tier, user.nameColor) : null;
 

@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
 import { getConsent, setConsent, REOPEN_EVENT } from "../lib/consent";
 
-/**
- * First-visit cookie-consent banner. Shows until the visitor accepts or rejects non-essential
- * (ads/analytics) cookies; the choice is persisted and gates the AdSense loader.
- */
 export default function ConsentBanner() {
   const [visible, setVisible] = useState(() => getConsent() === null);
 

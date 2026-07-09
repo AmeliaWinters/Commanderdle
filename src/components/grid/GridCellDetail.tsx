@@ -14,9 +14,7 @@ import RarityGem from "./RarityGem";
 interface Props {
   puzzle: GridPuzzle;
   cell: number;
-  /** What the player put here (highlighted in the list), if anything. */
   pick: string | null;
-  /** Community pick rates, once loaded (post-game only). */
   community: GridPicks | null;
   onClose: () => void;
 }
@@ -24,20 +22,12 @@ interface Props {
 interface AnswerRow {
   name: string;
   artCrop: string | null;
-  /** Full-size card image for the hover/tap zoom. */
   image: string | null;
   rank: number;
-  /** % of all players who put this commander here (out of everyone who played). */
   pct: number | null;
-  /** MTG rarity this answer's pick rate maps to (null when there's no community data). */
   tier: GuessTier | null;
 }
 
-/**
- * Post-game "who else fit here" reveal: every valid answer for a cell, ranked by how
- * many players picked it, with the community pick rate for each (share of everyone who
- * played the puzzle, not just those who filled this cell).
- */
 export default function GridCellDetail({
   puzzle,
   cell,
@@ -59,7 +49,6 @@ export default function GridCellDetail({
         tier: pct == null ? null : tierForPct(pct),
       };
     });
-    // Most-picked first; ties (and the no-data case) fall back to popularity rank.
     rows.sort((a, b) => (b.pct ?? -1) - (a.pct ?? -1) || a.rank - b.rank);
     return rows;
   }, [puzzle, cell, community]);

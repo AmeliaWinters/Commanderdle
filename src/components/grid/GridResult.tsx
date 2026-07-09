@@ -18,12 +18,10 @@ interface Props {
   puzzle: GridPuzzle;
   puzzleNo: number;
   picks: ReadonlyArray<string | null>;
-  /** Rarity tier each pick earned at guess time (null = unrated or unfilled). */
   tiers: ReadonlyArray<GuessTier | null>;
   community: GridPicks | null;
 }
 
-/** Post-game summary: rarity score (when the community backend answers) + share menu. */
 export default function GridResult({
   puzzleNo,
   picks,
@@ -37,9 +35,6 @@ export default function GridResult({
   const score =
     community && community.total > 0 ? rarityScore(community, picks) : null;
 
-  // Prefer the final community pick-rate for the tier (so it matches the % shown on
-  // the board); fall back to the tier locked in at guess time. Every filled cell
-  // scores something — a card nobody else picked is a Mythic Rare.
   const finalTiers: Array<GuessTier | null> = picks.map((name, cell) =>
     name == null
       ? null

@@ -9,19 +9,6 @@ const FOCUSABLE = [
   '[tabindex]:not([tabindex="-1"])',
 ].join(",");
 
-/**
- * Accessible modal-dialog behaviour for a portaled `role="dialog"` element:
- *
- *  - moves keyboard focus into the dialog when it opens (first focusable element, or the
- *    dialog itself), so keyboard and screen-reader users land on the content;
- *  - traps Tab / Shift+Tab inside the dialog while it's open;
- *  - closes on Escape (via `onEscape`);
- *  - restores focus to whatever was focused before the dialog opened when it unmounts.
- *
- * `onEscape` is read through a ref so the effect can run exactly once (on mount/unmount):
- * that keeps the "focus before open" snapshot stable even if the callback's identity
- * changes between renders, which is what makes focus restoration reliable.
- */
 export function useModalFocus(
   ref: RefObject<HTMLElement | null>,
   onEscape: () => void,
@@ -40,11 +27,6 @@ export function useModalFocus(
         (el) => el.offsetParent !== null || el === document.activeElement,
       );
 
-    // Move focus into the dialog after the current commit settles. A macrotask (setTimeout 0)
-    // rather than requestAnimationFrame on purpose: it beats any competing mount-time focus
-    // from sibling components AND still fires when the document is hidden (a backgrounded tab
-    // pauses rAF but not timers), so focus reliably lands in the dialog. Falls back to the
-    // dialog container itself when it has no focusable children.
     const focusTimer = setTimeout(() => {
       const first = focusable()[0];
       if (first) {
@@ -64,7 +46,6 @@ export function useModalFocus(
 
       const els = focusable();
       if (els.length === 0) {
-        // Nothing tabbable inside: keep focus on the dialog rather than escaping to the page.
         e.preventDefault();
         node.focus();
         return;
@@ -89,11 +70,8 @@ export function useModalFocus(
     return () => {
       clearTimeout(focusTimer);
       document.removeEventListener("keydown", onKey);
-      // Return focus to where it was before the dialog opened (e.g. the button that
-      // triggered it), which is what keyboard users expect on close.
       previouslyFocused?.focus?.();
     };
-    // Intentionally run once: see the note above about a stable focus snapshot.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 }

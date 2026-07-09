@@ -99,8 +99,6 @@ function BinderSection() {
     return COMMANDERS.filter((c) => col[c.name]).length;
   };
   const [found, setFound] = useState(countFound);
-  // Re-count when the binder swaps (e.g. the server copy landing after login), so the
-  // tip doesn't stay stuck on whatever was counted at mount.
   useEffect(() => subscribeCollection(() => setFound(countFound())), []);
   return (
     <section className="hub-col hub-col-binder" aria-labelledby="hub-binder">
@@ -145,7 +143,6 @@ function BinderSection() {
   );
 }
 
-/** Title screen: every way to play - daily modes left, bonus games right. */
 export default function GamesHub() {
   useEffect(() => {
     document.title = "Commandle - Daily MTG Commander Guessing Games";

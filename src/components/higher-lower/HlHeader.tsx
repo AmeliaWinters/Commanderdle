@@ -11,7 +11,6 @@ interface Props {
   onSwitchMode: (mode: Mode) => void;
 }
 
-/** Higher/Lower masthead: back link, title, tagline and Daily/Endless toggle. */
 export default function HlHeader({ mode, onSwitchMode }: Props) {
   return (
     <header className="app-header hl-header">

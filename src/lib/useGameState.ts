@@ -13,44 +13,30 @@ import { playSound } from './sounds'
 
 const maxGuessesFor = (mode: Mode) => MAX_GUESSES[mode]
 
-/** One turn the player has spent: either a guess or a skip, in the order taken. */
 export type Turn = { kind: 'guess'; commander: Commander } | { kind: 'skip' }
 
 export interface GameState {
   answer: Commander
   guesses: Commander[]
   skips: number
-  /** Guesses and skips in the exact order they were taken (drives the guess list). */
   history: Turn[]
   status: 'playing' | 'won' | 'lost'
-  /** The date this game belongs to. Kept on the state itself so the persist/record
-   * effects can never pair a stale game with the date of the puzzle being switched to. */
   dateKey: string
-  /** The mode this game belongs to. When `mode` switches, the component re-renders with
-   * the new mode one frame *before* the reload effect swaps in that mode's state; the
-   * record/persist effects guard on this so they never act on a mismatched (mode, state)
-   * pair (which corrupted stats + community submissions across modes). */
   mode: Mode
-  /** The live daily puzzle (feeds streak stats). */
   isDaily: boolean
-  /** A past puzzle replayed from the archive (kept out of streak stats). */
   isArchive: boolean
 }
 
-/** Shape of a persisted game (live daily or archive play). Also read by dailyRecap. */
 export interface PersistedDaily {
   date: string
   answerName: string
   guessNames: string[]
   skips?: number
-  /** Ordered turn log: a commander name for a guess, null for a skip. */
   timeline?: (string | null)[]
 }
 
-/** localStorage slot for a mode's live daily game. */
 export const dailyStorageKey = (mode: Mode) => `commandle:${mode}:daily`
 
-/** Persistence key: the live daily uses a stable `:daily` slot; archives key by date. */
 const storageKey = (mode: Mode, dateKey: string, isArchive: boolean) =>
   isArchive ? `commandle:${mode}:${dateKey}` : dailyStorageKey(mode)
 
@@ -77,13 +63,10 @@ function loadGame(mode: Mode, dateKey: string, isArchive: boolean, answer: Comma
       }
     }
   } catch {
-    /* ignore corrupt storage */
   }
   return base
 }
 
-/** Rebuild the ordered turn log from a saved game, tolerating the pre-timeline
- * format (guess names + a skip count) by placing skips after the guesses. */
 function reconstructHistory(saved: PersistedDaily): Turn[] {
   const toGuess = (name: string): Turn | null => {
     const commander = commanderByName(name)
@@ -111,32 +94,20 @@ function deriveStatus(answer: Commander, guesses: Commander[], skips: number, mo
   return 'playing'
 }
 
-/** Record a finished game into the right ledger: daily streak stats, or the archive map. */
 function recordResult(state: GameState, mode: Mode, won: boolean, guessCount: number) {
   if (state.isArchive) recordArchiveResult(mode, state.dateKey, won, guessCount)
   else if (state.isDaily) recordDailyResult(mode, won, guessCount, state.dateKey)
 }
 
-/**
- * Game state for a mode. With no `archiveDate`, this drives the live daily puzzle.
- * Pass a past `archiveDate` (YYYY-MM-DD) to replay that day's puzzle from the archive -
- * such plays persist under a date-scoped key and never touch daily streak stats.
- */
 export function useGameState(mode: Mode, archiveDate?: string) {
   const today = todayKey()
   const isArchive = Boolean(archiveDate && archiveDate !== today)
   const dateKey = archiveDate ?? today
 
   const [state, setState] = useState<GameState>(() =>
-    // Initial synchronous best-effort: the live daily is exact; an archive date starts from the
-    // live-pool computation and is corrected below once the frozen answer + vault have loaded.
     loadGame(mode, dateKey, isArchive, dailyAnswer(mode, dateKey)),
   )
 
-  // Reload persisted state when switching modes or archive target. Live daily resolves
-  // synchronously; archive dates await the frozen answer + retired-commander vault so a past
-  // puzzle stays fixed to the commander that was actually the answer that day, even after it
-  // drops out of the top-500.
   useEffect(() => {
     if (!isArchive) {
       setState(loadGame(mode, dateKey, false, dailyAnswer(mode, dateKey)))
@@ -152,40 +123,23 @@ export function useGameState(mode: Mode, archiveDate?: string) {
     }
   }, [mode, dateKey, isArchive])
 
-  // Track the last status we saw per (mode, date) so we can tell a fresh finish
-  // (playing -> won/lost this session) from a game that simply loaded already
-  // finished from storage. Only a fresh finish should hit the network - otherwise
-  // every visit to an already-solved mode re-submits the same result.
   const lastStatusRef = useRef<Map<string, GameState['status']>>(new Map())
 
-  // Record a finished result (idempotent per date+mode / archive cell).
   useEffect(() => {
-    // Ignore the stale frame right after a mode switch, where `mode` has updated but
-    // `state` still belongs to the previous mode (would record it under the wrong mode).
     if (state.mode !== mode) return
     const statusKey = `${mode}:${state.dateKey}`
     const prevStatus = lastStatusRef.current.get(statusKey)
     lastStatusRef.current.set(statusKey, state.status)
     if (state.status === 'playing') return
-    // A finish counts as "fresh" only if we watched it transition out of `playing`
-    // in this session; a game loaded already-finished has no prior `playing` frame.
     const freshlyFinished = prevStatus === 'playing'
     const won = state.status === 'won'
-    // Skips consume a turn like guesses, so the turn count used for stats is both.
     const attempts = state.guesses.length + state.skips
     recordResult(state, mode, won, attempts)
-    // Only a live-daily win adds the commander to the binder - archive replays and
-    // practice/unlimited don't count toward the collection.
     if (won && state.isDaily && !state.isArchive) recordFound(state.answer.name, mode, state.dateKey)
-    // Contribute to the anonymous community aggregate (live daily only; best-effort,
-    // deduped server-side). A loss records the guess cap as guesses-used. Only on a
-    // fresh finish so navigating back to a solved mode doesn't re-submit.
     if (freshlyFinished && state.isDaily && !state.isArchive) {
       const guesses = won ? attempts : maxGuessesFor(mode)
       const puzzle = puzzleNumber(state.dateKey)
       void submitGlobalResult(mode as ShareMode, puzzle, won, guesses)
-      // Also record against the signed-in account (source of truth for leaderboards).
-      // No-op for anonymous players; best-effort like the community submit above.
       void submitAccountResult(
         mode,
         state.dateKey,
@@ -198,9 +152,7 @@ export function useGameState(mode: Mode, archiveDate?: string) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode, state.dateKey, state.isDaily, state.isArchive, state.status, state.guesses.length, state.skips])
 
-  // Persist progress (both live daily and archive plays; not practice).
   useEffect(() => {
-    // Same stale-frame guard as above: never persist a game under another mode's key.
     if (state.mode !== mode) return
     if (!state.isDaily && !state.isArchive) return
     const payload: PersistedDaily = {
@@ -213,7 +165,6 @@ export function useGameState(mode: Mode, archiveDate?: string) {
     try {
       localStorage.setItem(storageKey(mode, state.dateKey, state.isArchive), JSON.stringify(payload))
     } catch {
-      /* ignore */
     }
   }, [mode, state])
 
@@ -223,13 +174,7 @@ export function useGameState(mode: Mode, archiveDate?: string) {
       if (prev.guesses.some((g) => g.name === commander.name)) return prev
       const guesses = [...prev.guesses, commander]
       const history: Turn[] = [...prev.history, { kind: 'guess', commander }]
-      // Recording the finished result is handled by the status effect above
-      // (idempotently), keeping this updater free of storage side effects.
       const status = deriveStatus(prev.answer, guesses, prev.skips, mode)
-      // Classic wins still get the immediate flip sound like any other guess -
-      // otherwise the tell-tale silence gives the win away before the row even
-      // flips in. Only the win fanfare is deferred to useWinReveal, which fires
-      // it once the winning row has finished flipping in.
       if (mode === 'classic' && status === 'won') {
         playSound('guess')
       } else {
@@ -258,12 +203,10 @@ export function useGameState(mode: Mode, archiveDate?: string) {
     setState(loadGame(mode, today, false, dailyAnswer(mode, today)))
   }, [mode, today])
 
-  // Debugging helper: wipe persisted progress for this mode/date and start fresh.
   const reset = useCallback(() => {
     try {
       localStorage.removeItem(storageKey(mode, dateKey, isArchive))
     } catch {
-      /* ignore */
     }
     const answer = isArchive ? resolveArchiveAnswer(mode, dateKey) : dailyAnswer(mode, dateKey)
     setState(loadGame(mode, dateKey, isArchive, answer))

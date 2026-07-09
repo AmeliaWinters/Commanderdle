@@ -1,12 +1,3 @@
-/**
- * The signed-in player's per-mode play stats (server-side source of truth).
- *
- *   GET /api/account/mode-stats   → { modeStats: Record<mode, ModeStats> }
- *
- * Requires a session. Derived from the player's recorded daily results, so a logged-in
- * player's result screen shows their real account numbers instead of this browser's
- * localStorage (see src/components/StatsPanel.tsx).
- */
 import { currentUserRow, type AuthEnv } from '../auth/session'
 import { getModeStats } from './store'
 

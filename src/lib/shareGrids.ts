@@ -15,12 +15,6 @@ const DOT_SQUARE: Record<"correct" | "wrong" | "empty", string> = {
   empty: "⬛",
 };
 
-/**
- * Spoiler-free share grid. Classic mode renders each guess as a row of
- * per-column feedback squares; the visual modes get one horizontal row of
- * per-turn pips (green for the winning turn, red for a miss or skip, black for
- * a turn never spent) - matching the on-screen guess dots.
- */
 export function buildGrid(
   mode: Mode,
   guesses: Commander[],
@@ -55,11 +49,6 @@ const DOT_CODE: Record<"correct" | "wrong" | "empty", CellCode> = {
   empty: 0,
 };
 
-/**
- * The same feedback grid as {@link buildGrid}, but as numeric colour codes for the
- * share-image URL (see shareCode.ts): classic rows come from per-column feedback (five
- * columns); visual modes get a single row of per-turn pips padded to the guess cap.
- */
 export function buildGridCodes(
   mode: Mode,
   guesses: Commander[],

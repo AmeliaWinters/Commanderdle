@@ -12,8 +12,6 @@ import GuessDots from "./GuessDots";
 import GhostRace from "./GhostRace";
 import ClockAheadNotice from "./layout/ClockAheadNotice";
 
-// Shown only once a game is done, and it drags in the share/canvas code, so it
-// stays off the Classic first-paint path.
 const ResultBanner = lazy(() => import("./result/ResultBanner"));
 
 type ModeComponent = ComponentType<{
@@ -28,7 +26,6 @@ type ModeComponent = ComponentType<{
 
 type Props = {
   clockBlocked: boolean;
-  /** state.mode === mode — the persisted state matches the mode being rendered. */
   active: boolean;
   mode: Mode;
   done: boolean;
@@ -172,8 +169,6 @@ export default function PlayArea({
 
               {mode === "classic" && (!done || revealHeld) && (
                 <GuessDots
-                  // While the winning row is still flipping in, keep the final
-                  // pip un-lit - it turns green only once the reveal completes.
                   dots={buildDots(
                     revealHeld ? guesses.slice(0, -1) : guesses,
                     answer,

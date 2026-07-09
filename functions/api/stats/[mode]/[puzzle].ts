@@ -1,27 +1,10 @@
-/**
- * Global solve statistics endpoint (Phase 3, item 1). Anonymous + aggregated: no accounts,
- * no PII — just "how did everyone do on this puzzle".
- *
- *   GET  /api/stats/:mode/:puzzle           → aggregate { total, wins, dist }
- *   POST /api/stats/:mode/:puzzle           → ingest one result { clientId, won, guesses }
- *
- * Backed by a Cloudflare D1 database bound as `STATS_DB`. Deliberately degradable: if the
- * binding is missing the endpoint returns 503 and the client silently hides community stats,
- * so the game keeps working 100% offline/static.
- *
- * Runs only on a real Pages deploy or `wrangler pages dev`, not the plain Vite dev server.
- */
 import { isShareMode, type ShareMode } from '../../../../src/lib/shareCode'
 import { validateSubmission, type GlobalStats } from '../../../../src/lib/globalStats'
 import { rateLimitOk, clientIp } from '../../rateLimit'
 import { puzzleNumberForDate } from '../../../../src/lib/puzzleDate'
 
-// UTC date key (YYYY-MM-DD) for right now.
 const todayKey = () => new Date().toISOString().slice(0, 10)
 
-// Per-IP ingest cap. Dedupe already collapses repeat submissions of the same daily by
-// client id, but a script can mint fresh client ids to stuff the distribution — so also
-// bound how many results one IP can post per hour across all puzzles.
 const POST_LIMIT = 40
 const POST_WINDOW_SEC = 60 * 60
 
@@ -50,7 +33,6 @@ export const onRequest = async (ctx: Ctx): Promise<Response> => {
   if (!isShareMode(mode)) return json({ error: 'unknown mode' }, 404)
   if (!Number.isInteger(puzzle) || puzzle < 1) return json({ error: 'bad puzzle' }, 400)
 
-  // Degrade gracefully when the database isn't configured.
   if (!env.STATS_DB) return json({ error: 'stats unavailable' }, 503)
 
   if (method === 'GET') return getAggregate(env.STATS_DB, mode, puzzle)
@@ -79,7 +61,6 @@ async function getAggregate(
     }
   }
 
-  // Community aggregates change slowly; let the edge cache them briefly.
   return json(stats, 200, { 'cache-control': 'public, max-age=60' })
 }
 
@@ -97,17 +78,13 @@ async function postResult(
   }
 
   const clientId = typeof body.clientId === 'string' ? body.clientId.trim() : ''
-  // Anonymous client id: opaque, client-generated. Bound the length so it can't be abused.
   if (!/^[A-Za-z0-9_-]{8,64}$/.test(clientId)) return json({ error: 'bad clientId' }, 400)
 
   const valid = validateSubmission(mode, puzzle, Boolean(body.won), Number(body.guesses))
   if (!valid) return json({ error: 'invalid result' }, 400)
 
-  // Don't let anyone pre-poison community stats for puzzles that don't exist yet. Allow up
-  // to today+1 (one day of timezone slack, mirroring the account endpoint's ±1-day guard).
   if (puzzle > puzzleNumberForDate(todayKey()) + 1) return json({ error: 'puzzle not yet available' }, 400)
 
-  // Cap how fast one IP can inject results, so fresh-client-id churn can't stuff the stats.
   const allowed = await rateLimitOk(
     db,
     `stats:${clientIp(ctx.request)}`,
@@ -116,8 +93,6 @@ async function postResult(
   )
   if (!allowed) return json({ error: 'rate limited' }, 429)
 
-  // Dedupe by (mode, puzzle, client): a resubmit of the same daily is a silent no-op,
-  // so aggregates count distinct players rather than requests.
   await db
     .prepare(
       'INSERT OR IGNORE INTO results (mode, puzzle, client_id, won, guesses) VALUES (?, ?, ?, ?, ?)',

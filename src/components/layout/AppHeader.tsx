@@ -13,7 +13,6 @@ interface Props {
   onReset: () => void;
 }
 
-/** Site masthead: logo, daily/practice/archive badge, tagline and settings cog. */
 export default function AppHeader({
   isDaily,
   isArchive,

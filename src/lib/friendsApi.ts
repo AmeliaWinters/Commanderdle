@@ -1,33 +1,23 @@
-/**
- * Client for the friends endpoints (`functions/api/friends.ts`). All calls ride the
- * session cookie (same-origin), so they only work signed in with a username set.
- * Reads are best-effort (null on failure); writes surface the server's error message
- * so the UI can show why a request was refused.
- */
 import type { LeaderboardEntry, Tier } from './leaderboard'
 
 function apiBase(): string {
   return import.meta.env.VITE_API_URL?.replace(/\/$/, '') ?? ''
 }
 
-/** A person on a friends list — same identity fields as a leaderboard row. */
 export interface FriendPerson {
   uuid: string
   username: string
   avatar: string
   tier: Tier
   nameColor: string | null
-  /** Total XP — present only for accepted friends (drives their level badge). */
   xp?: number
 }
 
-/** One friend's result on a single mode today. */
 export interface TodayResult {
   won: boolean
   guesses: number
 }
 
-/** date → per-friend, per-mode results for today (see fetchFriendsToday). */
 export type FriendsToday = Record<string, Record<string, TodayResult>>
 
 export interface FriendLists {
@@ -36,7 +26,6 @@ export interface FriendLists {
   outgoing: FriendPerson[]
 }
 
-/** Everyone connected to the signed-in player. Null when signed out / backend down. */
 export async function fetchFriends(signal?: AbortSignal): Promise<FriendLists | null> {
   try {
     const res = await fetch(`${apiBase()}/api/friends`, { signal })
@@ -54,14 +43,11 @@ export async function fetchFriends(signal?: AbortSignal): Promise<FriendLists | 
 
 export interface SendResult {
   ok: boolean
-  /** 'pending' (request sent) or 'accepted' (they'd already asked us). */
   status?: 'pending' | 'accepted'
   person?: FriendPerson
-  /** Server's reason on failure ("player not found", "already friends", …). */
   error?: string
 }
 
-/** Send a friend request by exact username (case-insensitive). */
 export async function sendFriendRequest(username: string): Promise<SendResult> {
   try {
     const res = await fetch(`${apiBase()}/api/friends`, {
@@ -77,7 +63,6 @@ export async function sendFriendRequest(username: string): Promise<SendResult> {
   }
 }
 
-/** Accept an incoming request from `uuid`. True on success. */
 export async function acceptFriend(uuid: string): Promise<boolean> {
   try {
     const res = await fetch(`${apiBase()}/api/friends/${uuid}`, { method: 'PATCH' })
@@ -87,7 +72,6 @@ export async function acceptFriend(uuid: string): Promise<boolean> {
   }
 }
 
-/** Unfriend / cancel an outgoing request / decline an incoming one. True on success. */
 export async function removeFriend(uuid: string): Promise<boolean> {
   try {
     const res = await fetch(`${apiBase()}/api/friends/${uuid}`, { method: 'DELETE' })
@@ -97,11 +81,6 @@ export async function removeFriend(uuid: string): Promise<boolean> {
   }
 }
 
-/**
- * How each accepted friend did on `date`'s five dailies, keyed by friend uuid → mode.
- * `date` is the viewer's local day. Resolves to an empty map on any failure so the
- * page just shows blank strips.
- */
 export async function fetchFriendsToday(
   date: string,
   signal?: AbortSignal,
@@ -119,7 +98,6 @@ export async function fetchFriendsToday(
   }
 }
 
-/** You + your friends ranked by `metric`. Null when signed out / backend down. */
 export async function fetchFriendsLeaderboard(
   metric: string,
   signal?: AbortSignal,

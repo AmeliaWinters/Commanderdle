@@ -59,7 +59,6 @@ const GUIDES: Record<Mode, Guide> = {
   },
 };
 
-/** First-run, mode-specific explainer. Dismissing it records the mode as seen. */
 export default function HowToPlay({ mode, onClose }: Props) {
   const guide = GUIDES[mode];
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -68,7 +67,6 @@ export default function HowToPlay({ mode, onClose }: Props) {
     onClose();
   });
 
-  // Move focus into the dialog, trap Tab, close on Escape, restore focus on close.
   useModalFocus(dialogRef, beginClose);
 
   return createPortal(

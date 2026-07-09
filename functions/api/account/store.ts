@@ -1,8 +1,3 @@
-/**
- * Server-side store for signed-in players' daily results + derived leaderboard stats
- * (Phase B). `user_results` is the source of truth; `user_stats` is a cache recomputed
- * from it on every write, so the leaderboard is a cheap indexed read.
- */
 import {
   computeStats,
   computeModeStats,
@@ -20,18 +15,12 @@ import {
   type BonusStreaks,
 } from '../../../src/lib/bonusStreakMath'
 
-/** One binder entry: when a commander was first found and in which modes. */
 export interface BinderEntry {
   firstFound: string
   modes: string[]
 }
 export type Binder = Record<string, BinderEntry>
 
-/**
- * Derive the signed-in player's Binder from their recorded wins. This is the server-side
- * source of truth — the collection comes from `user_results`, never from editable
- * localStorage. Grouped by commander so a card found in several modes lists them all.
- */
 export async function getBinder(db: D1Database, userId: number): Promise<Binder> {
   const { results } = await db
     .prepare(
@@ -54,7 +43,6 @@ export async function getBinder(db: D1Database, userId: number): Promise<Binder>
   return binder
 }
 
-/** Read the cached leaderboard stats for a user (zeros if none recorded yet). */
 export async function getStats(db: D1Database, userId: number): Promise<AccountStats> {
   const row = await db
     .prepare(
@@ -83,11 +71,6 @@ export async function getStats(db: D1Database, userId: number): Promise<AccountS
   }
 }
 
-/**
- * Per-mode play stats (played / wins / streaks / distribution) for a signed-in player,
- * derived from `user_results` — the source of truth the result screen prefers over this
- * browser's localStorage once the player is logged in.
- */
 export async function getModeStats(
   db: D1Database,
   userId: number,
@@ -106,12 +89,6 @@ export async function getModeStats(
   return computeModeStats(history)
 }
 
-/**
- * Bonus-game streaks (Grid / Guess the cost / Higher-Lower) for a player, derived from
- * their mirrored `user_bonus_results` + `user_bonus_best` rows using the same math as
- * the client's localStorage version (`src/lib/bonusStreakMath.ts`). Shown on public
- * profiles. Modes with no recorded play still return zeroed tiles.
- */
 export async function getBonusStats(
   db: D1Database,
   userId: number,
@@ -138,14 +115,12 @@ export async function getBonusStats(
   const out = {} as Record<BonusMode, BonusStreaks>
   for (const mode of BONUS_MODES) {
     const history = histories.get(mode) ?? {}
-    // Grid has no endless record; its best is the longest run of daily wins.
     const highest = mode === 'grid' ? maxWinRun(history) : (bestByMode.get(mode) ?? 0)
     out[mode] = computeBonusStreaks(history, highest)
   }
   return out
 }
 
-/** Recompute a user's stats from user_results and persist to user_stats. */
 export async function recomputeStats(db: D1Database, userId: number): Promise<AccountStats> {
   const { results } = await db
     .prepare('SELECT mode, date, won, guesses FROM user_results WHERE user_id = ?')

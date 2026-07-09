@@ -1,12 +1,3 @@
-/**
- * Dynamic social-preview image for a shared result. Renders a branded 1200×630 PNG showing
- * the mode, puzzle number, score, and the spoiler-free colour grid — the Framed/Wordle-style
- * card that makes every shared link a rich preview.
- *
- * Runs as a Cloudflare Pages Function (edge, stateless). `workers-og` (satori + resvg wasm)
- * turns the HTML string below into a PNG. This can only be exercised on a real Pages deploy
- * or via `wrangler pages dev`, not the plain Vite dev server.
- */
 import { ImageResponse } from "workers-og";
 import {
   decodeGrid,
@@ -24,17 +15,12 @@ interface Params {
 }
 
 const CELL_COLOR: Record<CellCode, string> = {
-  0: "#2c2c34", // grey / none
-  1: "#e3ab26", // amber / partial
-  2: "#38b461", // green / exact
-  3: "#bd4150", // red / visual-wrong
+  0: "#2c2c34",
+  1: "#e3ab26",
+  2: "#38b461",
+  3: "#bd4150",
 };
 
-/**
- * Fetch the Cinzel display font once per isolate (legacy UA forces TTF over woff2). Resilient:
- * on any failure or a >4s stall it resolves null so the image still renders (satori's default
- * font) rather than hanging or erroring the request.
- */
 let cinzelPromise: Promise<ArrayBuffer | null> | null = null;
 function loadCinzel(): Promise<ArrayBuffer | null> {
   if (!cinzelPromise) {
@@ -67,7 +53,6 @@ function loadCinzel(): Promise<ArrayBuffer | null> {
 
 function gridMarkup(rows: CellCode[][], round: boolean): string {
   const size = rows.length > 4 || (rows[0]?.length ?? 0) > 3 ? 46 : 62;
-  // Visual modes are a single pip row - draw circles; classic keeps rounded squares.
   const radius = round ? size / 2 : 10;
   const cells = (row: CellCode[]) =>
     row
@@ -93,8 +78,6 @@ export const onRequest = async (context: {
   const label = MODE_LABEL[mode];
   const accent = won ? "#38b461" : "#ec5a1c";
 
-  // satori requires every element to declare display:flex, a single root, and no stray
-  // whitespace text siblings — so give every div display:flex and strip whitespace between tags.
   const html = `
     <div style="display:flex;flex-direction:column;width:1200px;height:630px;background:linear-gradient(160deg,#141419,#08080a);color:#f4f4f6;font-family:'Cinzel';">
       <div style="display:flex;width:1200px;height:10px;background:linear-gradient(90deg,#f6a01a,#ec5a1c,#c01f1f);"></div>

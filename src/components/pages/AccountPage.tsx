@@ -8,9 +8,6 @@ import { GAMES_PATH, navigateToPath } from "../../lib/router";
 export default function AccountPage() {
   const { user, stats, loading, setUser, logout } = useAuth();
 
-  // OAuth failures bounce back here as ?error=<message> (see functions/api/auth).
-  // Capture it once, then strip it from the URL/history so it doesn't linger on
-  // refresh or get shared.
   const [oauthError, setOauthError] = useState<string | null>(null);
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -26,15 +23,10 @@ export default function AccountPage() {
     );
   }, []);
 
-  // First-login onboarding (name + avatar) is handled globally by <UsernameGate>,
-  // so it follows the player onto any route until they've claimed a required name.
-
   let body: ReactNode;
   if (loading) {
     body = <p>Loading...</p>;
   } else if (!user) {
-    // A failed sign-in leaves the player logged out — show the error here rather
-    // than silently redirecting them away from it.
     if (oauthError) {
       body = <p className="account-error">{oauthError}</p>;
     } else {

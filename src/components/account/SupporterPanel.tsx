@@ -3,8 +3,6 @@ import { TIER_META, type AccountUser } from "../../lib/auth";
 import { TIER_RANK, TIER_THRESHOLDS_GBP } from "../../lib/avatars";
 import KofiButton from "../games/KofiButton";
 
-/** The purchasable supporter tiers and what each one unlocks. Player-facing copy —
- *  kept in step with the Ko-fi membership tiers. */
 const TIER_PERKS: Record<"uncommon" | "rare" | "mythic", string[]> = {
   uncommon: [
     "Access to top 100 standard printing avatars",
@@ -27,9 +25,6 @@ const TIER_PERKS: Record<"uncommon" | "rare" | "mythic", string[]> = {
   ],
 };
 
-/** The "Support commandle" panel on the account page: a Ko-fi pitch with a
- *  per-tier breakdown of perks for non-supporters, or a thank-you once a
- *  supporter tier is unlocked. */
 export default function SupporterPanel({
   user,
   tierColor,

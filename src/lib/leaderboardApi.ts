@@ -1,8 +1,3 @@
-/**
- * Client for the leaderboard + public-profile endpoints (`functions/api`). Best-effort
- * like the rest: any failure resolves to null so the UI simply hides the board / shows
- * a "not found" profile. No credentials needed — these reads are fully public.
- */
 import type { LeaderboardEntry, LeaderboardYou, PublicProfile } from './leaderboard'
 
 function apiBase(): string {
@@ -11,15 +6,9 @@ function apiBase(): string {
 
 export interface LeaderboardResult {
   entries: LeaderboardEntry[]
-  /** The requesting player's own rank, if they're ranked but weren't asked for by uuid. */
   you?: LeaderboardYou
 }
 
-/**
- * Top players for a metric. `limit` caps the rows (server clamps to 100). Pass `uuid`
- * (the signed-in player) to also get back their own rank even if they're off the
- * visible page — that lookup is never cached, so only pass it when you actually need it.
- */
 export async function fetchLeaderboard(
   metric: string,
   limit?: number,
@@ -42,10 +31,6 @@ export async function fetchLeaderboard(
   }
 }
 
-/**
- * A named player's public binder (commander name → first-found info). Resolves null
- * when the profile is missing or the backend is down.
- */
 export async function fetchProfileBinder(
   uuid: string,
   signal?: AbortSignal,
@@ -62,7 +47,6 @@ export async function fetchProfileBinder(
   }
 }
 
-/** A public profile by uuid. Resolves null when missing or the backend is down. */
 export async function fetchProfile(
   uuid: string,
   signal?: AbortSignal,

@@ -24,8 +24,6 @@ export default function SilhouetteMode({
   solved,
   onSkip,
 }: Props) {
-  // Blur starts heavy and clears as wrong guesses accumulate, reaching 0 in time
-  // for the final allowed guess (i.e. after maxGuesses - 1 wrong guesses).
   const guessesToClear = Math.max(1, maxGuesses);
   const blur = solved
     ? 0

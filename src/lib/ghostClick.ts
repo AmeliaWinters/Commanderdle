@@ -12,7 +12,6 @@ export function markGuessSubmitted() {
   lastGuessAt = Date.now()
 }
 
-/** True if a guess submitted recently enough that a click is likely its ghost. */
 export function isGhostClick(windowMs = 700) {
   return Date.now() - lastGuessAt < windowMs
 }

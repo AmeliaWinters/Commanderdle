@@ -9,7 +9,6 @@ interface Props {
   canonical: string;
   back?: { label: string; to?: string; onClick?: () => void };
   hideBack?: boolean;
-  /** Widen the shell for table-like pages (e.g. the leaderboard). */
   wide?: boolean;
   children: ReactNode;
 }
@@ -38,11 +37,6 @@ function setCanonical(url: string) {
   el.href = url;
 }
 
-/**
- * Shared shell for the static content/landing pages (About, How to Play, FAQ,
- * Privacy). Owns its own SEO/social meta because these routes sit outside the
- * mode system that router.ts manages.
- */
 export default function ContentPage({
   title,
   description,

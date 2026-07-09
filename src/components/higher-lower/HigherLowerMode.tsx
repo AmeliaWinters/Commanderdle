@@ -26,13 +26,10 @@ import {
 } from "./hlStorage";
 
 type Mode = "daily" | "endless";
-/** Guess → reveal (count-up) → slide → back to idle. Buttons live only in idle. */
 type Phase = "idle" | "revealing" | "sliding";
 type Guess = "higher" | "lower";
 
-/** How long the revealed number counts up + holds before the chain advances. */
 const REVEAL_MS = 1400;
-/** Duration of the card slide; must match the CSS transition on .hl-track. */
 const SLIDE_MS = 650;
 
 export default function HigherLowerMode() {
@@ -70,18 +67,15 @@ export default function HigherLowerMode() {
   const next = chain[score + 1];
   const done = status === "over" || wonDaily || !next;
 
-  // Clear any pending timeouts on unmount.
   useEffect(() => {
     const list = timers.current;
     return () => list.forEach(clearTimeout);
   }, []);
 
-  // Persist the daily run + lifetime bests.
   useEffect(() => {
     saveDaily(daily);
   }, [daily]);
 
-  // Log today's daily to local bonus-stat history once it finishes.
   useEffect(() => {
     if (mode === "daily" && done) recordBonusDaily("higher-lower", wonDaily);
   }, [mode, done, wonDaily]);
@@ -130,7 +124,6 @@ export default function HigherLowerMode() {
         track(() => setMilestone(null), 1400);
       }
       updateRun({ score: newScore });
-      // Let the CSS transform slide the chain, then re-enable the buttons.
       setPhase("sliding");
       track(() => setPhase("idle"), SLIDE_MS);
     }, REVEAL_MS);
@@ -157,7 +150,6 @@ export default function HigherLowerMode() {
     setEndless({ score: 0, status: "playing" });
   }
 
-  // Slide the track so the current base card sits at the left edge.
   const trackStyle = {
     ["--hl-pos" as string]: String(score),
   } as React.CSSProperties;

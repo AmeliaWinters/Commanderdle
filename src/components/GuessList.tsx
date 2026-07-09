@@ -7,10 +7,6 @@ interface Props {
   answer: Commander
 }
 
-/**
- * Wrong/right guesses for the image & quote modes: each turn shows as a row in
- * the order it was taken (newest first).
- */
 export default function GuessList({ history, answer }: Props) {
   if (history.length === 0) return null
   return (

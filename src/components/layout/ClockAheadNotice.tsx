@@ -1,4 +1,3 @@
-/** Shown in place of the live daily when the device clock is set ahead of real time. */
 export default function ClockAheadNotice() {
   return (
     <div className="clock-notice" role="alert">

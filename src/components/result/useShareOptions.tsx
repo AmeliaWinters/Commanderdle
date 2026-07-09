@@ -24,11 +24,6 @@ interface Args {
   countdown: string;
 }
 
-/**
- * All the ways a finished game can be shared - emoji-grid text, branded image
- * card, head-to-head challenge link, and the all-modes daily recap - bundled as
- * ready-to-render ShareMenu options with their copy/share feedback state.
- */
 export function useShareOptions({
   status,
   answer,
@@ -50,8 +45,6 @@ export function useShareOptions({
     setTimeout(() => set(false), 2000);
   };
 
-  // A shareable link that unfurls into a per-result preview card and drops the
-  // recipient onto today's exact puzzle. Daily only - practice/archive have no shared day.
   const resultUrl = isDaily
     ? buildShareUrl(
         shareOrigin(),
@@ -61,8 +54,6 @@ export function useShareOptions({
       )
     : null;
 
-  // Render the branded share card once per result. The object URL doubles as
-  // an inline preview so players can see what they'd be posting.
   useEffect(() => {
     let alive = true;
     renderShareCard({
@@ -105,7 +96,6 @@ export function useShareOptions({
 
   const share = () => {
     const grid = buildGrid(mode, guesses, answer, skips);
-    // Daily results nudge a return visit with the countdown + a playable link.
     const footer = resultUrl ? `\n${resultUrl}` : "";
     const text = `${heading}\n${grid}${footer}`;
     shareOrCopy(text).then(
@@ -114,7 +104,6 @@ export function useShareOptions({
     );
   };
 
-  // Head-to-head variant: same playable link, framed as a dare.
   const challenge = () => {
     if (!resultUrl) return;
     const verb = status === "won" ? `in ${score}` : "and it beat me";
@@ -125,7 +114,6 @@ export function useShareOptions({
     );
   };
 
-  // Aggregated recap of every mode finished today (daily only).
   const recap = isDaily ? buildDailyRecap() : null;
   const shareRecap = () => {
     if (!recap) return;

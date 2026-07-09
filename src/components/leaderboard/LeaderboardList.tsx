@@ -5,19 +5,12 @@ import type { LeaderboardEntry, LeaderboardYou } from "../../lib/leaderboard";
 
 interface Props {
   entries: LeaderboardEntry[];
-  /** Rank number of the first entry (for paged lists). Defaults to 1. */
   startRank?: number;
   unit?: string;
-  /** Highlight the signed-in player's own row. */
   meUuid?: string | null;
-  /**
-   * The signed-in player's own rank, when they're ranked but not among `entries`
-   * (e.g. outside the top 100). Rendered as a separated row below the list.
-   */
   you?: LeaderboardYou;
 }
 
-/** Rank badge: gold / silver / bronze for the podium, plain otherwise. */
 function rankClass(i: number): string {
   return i < 3 ? ` lb-rank-${i + 1}` : "";
 }
@@ -73,7 +66,6 @@ function Row({
   );
 }
 
-/** The ranked rows shared by the home widget and the full leaderboard page. */
 export default function LeaderboardList({
   entries,
   startRank = 1,

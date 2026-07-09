@@ -8,10 +8,8 @@ interface Props {
   disabledNames: Set<string> | ReadonlySet<string>
   disabled?: boolean
   blurQuote?: boolean
-  /** Search a custom commander pool (e.g. Grid's deeper top-1000) instead of the default. */
   pool?: readonly Commander[]
   placeholder?: string
-  /** Focus the input on mount (used inside the Grid cell-fill dialog). */
   autoFocus?: boolean
 }
 

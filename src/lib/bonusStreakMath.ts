@@ -1,10 +1,3 @@
-/**
- * Pure streak math for the bonus games (Grid, Guess the cost, Higher/Lower).
- *
- * Kept free of DOM/localStorage imports so both the browser (`bonusStats.ts`, which
- * feeds it this device's local history) and the Worker (`functions/api/account/store.ts`,
- * which feeds it a signed-in player's server-recorded history) derive identical numbers.
- */
 
 export type BonusMode = "grid" | "guess-the-cost" | "higher-lower";
 
@@ -18,24 +11,18 @@ export function isBonusMode(v: unknown): v is BonusMode {
   return (BONUS_MODES as readonly unknown[]).includes(v);
 }
 
-/** Map of YYYY-MM-DD → whether that day's daily was won. */
 export type BonusHistory = Record<string, boolean>;
 
 export interface BonusStreaks {
-  /** Consecutive days the daily was completed (a loss keeps it alive). */
   dayStreak: number;
-  /** Consecutive days the daily was won. */
   winStreak: number;
-  /** Best single run in the mode — endless/practice record where one exists. */
   highestStreak: number;
 }
 
-/** Integer day index (UTC) so date arithmetic is timezone-independent. */
 export function dayNumber(date: string): number {
   return Math.round(Date.parse(date + "T00:00:00Z") / 86_400_000);
 }
 
-/** Length of the run of consecutive days ending on the most recent qualifying day. */
 export function currentStreak(days: number[]): number {
   const sorted = [...new Set(days)].sort((a, b) => a - b);
   if (sorted.length === 0) return 0;
@@ -47,7 +34,6 @@ export function currentStreak(days: number[]): number {
   return run;
 }
 
-/** Longest run of consecutive won days anywhere in the history. */
 export function maxWinRun(history: BonusHistory): number {
   const winDays = Object.entries(history)
     .filter(([, won]) => won)
@@ -63,11 +49,6 @@ export function maxWinRun(history: BonusHistory): number {
   return max;
 }
 
-/**
- * Compute the three streak stats for one bonus mode. `highest` is the mode's best
- * single run where a separate endless/practice record exists (Higher/Lower, Guess the
- * cost); pass `maxWinRun(history)` for Grid, which has no endless run.
- */
 export function computeBonusStreaks(
   history: BonusHistory,
   highest: number,
@@ -77,7 +58,6 @@ export function computeBonusStreaks(
     .filter(([, won]) => won)
     .map(([date]) => dayNumber(date));
 
-  // The current win streak only counts if the most recently played day was a win.
   let winStreak = 0;
   if (playedDays.length > 0) {
     const latest = Math.max(...playedDays);

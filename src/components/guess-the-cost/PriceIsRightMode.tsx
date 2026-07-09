@@ -37,7 +37,6 @@ export default function PriceIsRightMode() {
   const [mode, setMode] = useState<Mode>("daily");
   const currency = useCurrency();
 
-  // Daily state persists across reloads; endless is per-session.
   const [daily, setDaily] = useState(loadPirDaily);
   const [endlessCard, setEndlessCard] = useState<Commander>(randomPriceCard);
   const [endlessGuesses, setEndlessGuesses] = useState<number[]>([]);
@@ -65,13 +64,11 @@ export default function PriceIsRightMode() {
     savePirDaily(daily);
   }, [daily]);
 
-  // Log today's daily to local bonus-stat history once it finishes.
   useEffect(() => {
     if (daily.status !== "playing")
       recordBonusDaily("guess-the-cost", daily.status === "won");
   }, [daily.status]);
 
-  // Lifetime endless best tracks the streak as it grows.
   useEffect(() => {
     if (streak > best) {
       setBest(streak);
@@ -112,7 +109,6 @@ export default function PriceIsRightMode() {
     }
   }
 
-  /** Endless: deal the next card - keeping the streak after a win, resetting it after a loss. */
   function nextEndlessRound() {
     if (endlessStatus === "lost") setStreak(0);
     setEndlessCard(randomPriceCard(new Set([endlessCard.name])));

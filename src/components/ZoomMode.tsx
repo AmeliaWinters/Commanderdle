@@ -35,12 +35,11 @@ export default function ZoomMode({
         MAX_SCALE - wrongGuesses * ((MAX_SCALE - 1) / guessesToClear),
       );
 
-  // Deterministic focal point per commander so each puzzle zooms from a different spot.
   const origin = useMemo(() => {
     let h = 0;
     for (let i = 0; i < answer.name.length; i++)
       h = (h * 31 + answer.name.charCodeAt(i)) >>> 0;
-    const x = 25 + (h % 50); // 25%-75%
+    const x = 25 + (h % 50);
     const y = 25 + ((h >>> 8) % 50);
     return `${x}% ${y}%`;
   }, [answer.name]);

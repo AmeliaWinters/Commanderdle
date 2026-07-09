@@ -51,7 +51,7 @@ describe('dailyGridPuzzle', () => {
 describe('cell validation', () => {
   it('accepts exactly the commanders matching both criteria', () => {
     const puzzle = dailyGridPuzzle(COMMANDERS, '2026-07-06')
-    const [row, col] = cellCriteria(puzzle, 4) // center cell
+    const [row, col] = cellCriteria(puzzle, 4)
     for (const c of COMMANDERS.slice(0, 50)) {
       expect(isValidForCell(puzzle, 4, c)).toBe(row.test(c) && col.test(c))
     }
@@ -96,7 +96,6 @@ describe('rarity scoring', () => {
 
   it('scores empty cells as 100 and sums pick rates', () => {
     const answers = ['Deep Cut', ...Array(GRID_CELLS - 1).fill(null)]
-    // 1 (deep cut) + 8 × 100 (empty cells)
     expect(rarityScore(picks, answers)).toBe(801)
   })
 })

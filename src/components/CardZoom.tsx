@@ -12,15 +12,12 @@ interface Props {
 const CARD_W = 300
 
 const NARROW_VW = 560
-/** Magic-card aspect ratio (h / w) used to size the popover vertically. */
 const CARD_ASPECT = 1.4
 
 export default function CardZoom({ name, image, children, className }: Props) {
   const [pos, setPos] = useState<
     { top: number; left: number; narrow: boolean; width?: number } | null
   >(null)
-  // Timestamp of the last document-pointerdown dismissal. Lets the anchor's own
-  // onClick tell "I just closed this popover" apart from "open me".
   const dismissedAt = useRef(0)
 
   const placeFrom = (el: HTMLElement) => {
@@ -28,9 +25,6 @@ export default function CardZoom({ name, image, children, className }: Props) {
     const vw = Math.max(window.innerWidth, document.documentElement.clientWidth, 320)
     const vh = Math.max(window.innerHeight, document.documentElement.clientHeight, 320)
 
-    // Narrow screens: a row spans most of the width, so side-placement would either
-    // overflow or overlap the anchor. Center horizontally and stack the card just
-    // above the row (or below it when there's no room above), fully on-screen.
     if (vw <= NARROW_VW) {
       const w = Math.min(CARD_W, vw - 24)
       const h = w * CARD_ASPECT
@@ -43,7 +37,6 @@ export default function CardZoom({ name, image, children, className }: Props) {
     }
 
     const w = Math.min(CARD_W, vw * 0.7)
-    // Prefer to the right of the element; flip to the left if it would overflow.
     let left = r.right + 12
     if (left + w > vw - 8) left = r.left - w - 12
     if (left < 8) left = 8
@@ -63,18 +56,11 @@ export default function CardZoom({ name, image, children, className }: Props) {
     if (pos) {
       setPos(null)
     } else if (isGhostClick()) {
-      // A guess just submitted; this is the touch's ghost click landing on the
-      // freshly-rendered result card, not a deliberate tap to open the zoom.
     } else if (Date.now() - dismissedAt.current > 300) {
-      // Ignore the click from the same tap that the document pointerdown
-      // listener already used to dismiss the popover - otherwise it reopens.
       placeFrom(e.currentTarget)
     }
   }
 
-  // While the popover is open, the next pointer down anywhere dismisses it - the
-  // anchor's own onClick can't fire for taps landing outside it. Attached after
-  // the opening tap has already resolved, so it only catches subsequent touches.
   useEffect(() => {
     if (!pos) return
     const dismiss = () => {

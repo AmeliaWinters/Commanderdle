@@ -11,8 +11,6 @@ interface Props {
   heading?: string;
 }
 
-// Module-level so the user's place (filter text + scroll offset) survives the modal
-// unmounting when closed, and is restored next time it opens.
 const persisted = { query: "", scrollTop: 0 };
 
 export default function PoolModal({
@@ -26,10 +24,8 @@ export default function PoolModal({
   const dialogRef = useRef<HTMLDivElement>(null);
   const { closing, beginClose } = useExitAnimation(onClose);
 
-  // Move focus into the dialog, trap Tab, close on Escape, restore focus on close.
   useModalFocus(dialogRef, beginClose);
 
-  // Restore the saved scroll offset once the list is rendered.
   useLayoutEffect(() => {
     if (gridRef.current) gridRef.current.scrollTop = persisted.scrollTop;
   }, []);

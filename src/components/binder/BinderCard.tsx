@@ -4,9 +4,6 @@ import type { FoundEntry } from "../../lib/collection";
 import { colorIdentityName } from "../../lib/colorNames";
 import { prefersReducedMotion } from "../../lib/reducedMotion";
 
-/* Foil tilt: pointer position drives CSS vars on the sleeve; binder-foil.css
-   turns them into a 3D tilt + holo glare. Mouse-only (touch scrolls the grid)
-   and off entirely for reduced-motion users. */
 function foilMove(e: React.PointerEvent<HTMLDivElement>) {
   if (e.pointerType !== "mouse" || prefersReducedMotion()) return;
   const el = e.currentTarget;
@@ -37,7 +34,6 @@ const MODE_LABEL: Record<string, string> = {
   quote: "Quote",
 };
 
-/** "2026-07-06" -> "Jul 6, 2026" (no Date parsing, avoids TZ drift). */
 const MONTHS = [
   "Jan", "Feb", "Mar", "Apr", "May", "Jun",
   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
@@ -51,11 +47,9 @@ function formatFound(iso: string): string {
 
 interface Props {
   commander: Commander;
-  /** Present when the player has found this commander; undefined = still face-down. */
   entry?: FoundEntry;
 }
 
-/** One sleeve of the binder: face-up card art when found, face-down card back when not. */
 function BinderCard({ commander: c, entry }: Props) {
   const identity = colorIdentityName(c.colorIdentity);
   if (!entry) {

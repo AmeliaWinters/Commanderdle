@@ -24,7 +24,7 @@ export default function ModeTabs({
   return (
     <nav className="mode-tabs">
       {MODE_LIST.map((m) => {
-        void completedSignal; // recompute when a game finishes
+        void completedSignal;
         const completed = isCompleted
           ? isCompleted(m.id)
           : isModeCompletedToday(m.id, today);
@@ -35,7 +35,6 @@ export default function ModeTabs({
             className={`mode-tab${mode === m.id ? " active" : ""}`}
             aria-current={mode === m.id ? "page" : undefined}
             onClick={(e) => {
-              // Let modified clicks (new tab/window) and non-primary buttons behave natively.
               if (
                 e.metaKey ||
                 e.ctrlKey ||

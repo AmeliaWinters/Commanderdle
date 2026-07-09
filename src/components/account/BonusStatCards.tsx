@@ -17,7 +17,6 @@ interface ModeMeta {
   Icon: IconType;
 }
 
-/** The three bonus games, in the order they appear on the toggle. */
 const MODES: ModeMeta[] = [
   { mode: "grid", label: "Grid", Icon: FaTableCells },
   { mode: "guess-the-cost", label: "Guess the cost", Icon: FaCoins },
@@ -52,16 +51,12 @@ function StreakCard({
   );
 }
 
-/** "Bonus game stats" — a mode toggle over three streak tiles for the selected game.
- *  With no `data`, values come from this device's local play history; a public profile
- *  passes the server-derived streaks for the player being viewed instead. */
 export default function BonusStatCards({
   data,
 }: {
   data?: Partial<Record<BonusMode, BonusStreaks>>;
 }) {
   const [mode, setMode] = useState<BonusMode>("grid");
-  // Recompute whenever the selected mode changes; the values are read from localStorage.
   const streaks = useMemo(
     () =>
       data

@@ -32,7 +32,6 @@ describe('deduce — colors', () => {
   })
 
   it('resolves a two-color partial once one color is proven absent', () => {
-    // {B,R} partial overlaps on B; a separate {R,W} none proves R absent ⇒ B present.
     const g1 = makeCommander({ colorIdentity: ['B', 'R'] })
     const g2 = makeCommander({ colorIdentity: ['R', 'W'] })
     const c = deduce([g1, g2], answer).colors!
@@ -61,7 +60,6 @@ describe('deduce — types', () => {
 
   it('is null when guesses share no subtype signal', () => {
     const guess = makeCommander({ typeLine: 'Legendary Creature — Human Wizard' })
-    // no overlap: all absent, but nothing present/maybe surfaced
     expect(deduce([guess], answer).types).toBeNull()
   })
 
@@ -78,7 +76,6 @@ describe('deduce — numerics', () => {
   it('reports a strict lower bound from a smaller guess', () => {
     const guess = makeCommander({ manaValue: 3, power: '1', toughness: '1', rank: 50, year: 2020 })
     const mv = deduce([guess], answer).numerics.find((n) => n.label === 'Mana value')!
-    // answer 5 > guess 3 ⇒ "3-" (the guess itself is the strict bound), and never leaks the ±2 tolerance
     expect(mv).toEqual({ label: 'Mana value', tone: 'partial', value: '3-' })
   })
 
@@ -89,8 +86,6 @@ describe('deduce — numerics', () => {
   })
 
   it('greys a bound built only from far guesses', () => {
-    // guess mv 1 is 4 below the answer (5), well outside the ±2 tolerance, so the
-    // lower bound is "far" — the clue should read match-none, not match-partial.
     const guess = makeCommander({ manaValue: 1, power: '1', toughness: '1', rank: 50, year: 2020 })
     const mv = deduce([guess], answer).numerics.find((n) => n.label === 'Mana value')!
     expect(mv.tone).toBe('none')
@@ -112,7 +107,6 @@ describe('deduce — numerics', () => {
   it('formats popularity bounds with a # prefix', () => {
     const guess = makeCommander({ manaValue: 5, power: '3', toughness: '3', rank: 10, year: 2020 })
     const pop = deduce([guess], answer).numerics.find((n) => n.label === 'Popularity')!
-    // answer rank 50 > guess rank 10 ⇒ "#10-" (the guess itself is the strict bound)
     expect(pop.value).toBe('#10-')
   })
 
@@ -126,7 +120,7 @@ describe('deduce — numerics', () => {
 
 describe('possiblePool', () => {
   const answer = makeCommander({ name: 'Ans', rank: 100 })
-  const near = makeCommander({ name: 'Near', rank: 110 }) // within POPULARITY_TOL
+  const near = makeCommander({ name: 'Near', rank: 110 })
   const far = makeCommander({ name: 'Far', rank: 400 })
   const pool = [answer, near, far]
 
@@ -135,8 +129,6 @@ describe('possiblePool', () => {
   })
 
   it('keeps only candidates whose rank clue reads the same as the answer', () => {
-    // Guessing `far`: against the answer that reads "up + none". A candidate
-    // survives only if guessing `far` against IT reads the same.
     const survivors = possiblePool(pool, [far], answer).map((c) => c.name)
     expect(survivors).toContain('Ans')
     expect(survivors).toContain('Near')

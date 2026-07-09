@@ -1,23 +1,3 @@
-/**
- * build-variants.ts
- *
- * Regenerates ONLY src/data/commanders.variants.json — the per-commander list of
- * meaningfully-different alternate-art printings that powers the Mythic+/The Creator avatar
- * gallery. Split out from build-data.ts so the variant art can be refreshed without re-running
- * the whole EDHREC crawl (build-data.ts also builds this file as part of the daily refresh; the
- * two share the same logic).
- *
- * For every commander currently in commanders.core.json it:
- *   1. Looks the card up on Scryfall to get its `prints_search_uri` + default illustration id.
- *   2. Walks every printing (including promos/variations/extras, where alternate arts live),
- *      dedupes by Scryfall illustration id (so foils and same-art reprints collapse to one),
- *      and drops the id already used as the commander's default art.
- *   3. Downloads each new art (art_crop + normal) into public/cards/ as WebP (skipping files
- *      already on disk) and records local "cards/<file>" paths, the set name and collector
- *      number (the gallery label).
- *
- * Run with: npm run build:variants
- */
 import { writeFile, mkdir, readFile, access } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
@@ -69,7 +49,6 @@ function localFileName(url: string): string {
   return name.replace(/\.[a-z0-9]+$/i, '') + '.webp'
 }
 
-/** GET with retry/backoff on Scryfall's 429 rate limit. */
 async function get(url: string): Promise<Response | null> {
   for (let attempt = 0; attempt < 6; attempt++) {
     const res = await fetch(url, { headers: HEADERS })
@@ -82,7 +61,6 @@ async function get(url: string): Promise<Response | null> {
   return null
 }
 
-/** Walk a card's printings, opting into extras/variations so alternate arts aren't missed. */
 async function fetchPrints(url: string): Promise<ScryfallCard[]> {
   const u = new URL(url)
   u.searchParams.set('include_extras', 'true')
@@ -105,8 +83,6 @@ async function fetchPrints(url: string): Promise<ScryfallCard[]> {
 
 const toWebp = (buf: Buffer) => sharp(buf).webp({ quality: WEBP_QUALITY }).toBuffer()
 
-/** Download a Scryfall image to public/cards/ as WebP (reusing an existing file), return its
- *  local "cards/<file>" path, or the remote URL if the download failed. */
 async function localize(url: string | null): Promise<string | null> {
   if (!url || !/^https?:\/\//.test(url)) return url
   const file = localFileName(url)
@@ -169,7 +145,6 @@ async function main() {
       result[name] = variants
       totalVariants += variants.length
     }
-    // Write incrementally so a long run can be resumed / inspected mid-flight.
     await writeFile(VARIANTS_FILE, JSON.stringify(result) + '\n', 'utf-8')
     if ((i + 1) % 25 === 0)
       console.log(`  ${i + 1}/${core.length} commanders, ${totalVariants} variants so far`)

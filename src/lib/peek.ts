@@ -8,11 +8,6 @@ export interface Peek {
   hint: string;
 }
 
-/**
- * "Possible commanders" peek. The deduction modes expose a pool filtered to the
- * commanders still consistent with the clues revealed so far, unlocked after a
- * few wrong guesses so it helps late-game without trivializing the start.
- */
 export function getPeek(
   mode: Mode,
   guesses: Commander[],

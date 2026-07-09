@@ -22,7 +22,6 @@ function Pip({ symbol, size }: { symbol: string; size?: string }) {
 
 interface ManaCostProps {
   colors: string[]
-  /** Optional match feedback to ring the pip cluster (exact/partial/none). */
   kind?: MatchKind
   size?: string
 }

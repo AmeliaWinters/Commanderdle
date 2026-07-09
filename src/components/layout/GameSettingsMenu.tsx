@@ -19,18 +19,12 @@ import {
   FiBellOff,
 } from "react-icons/fi";
 
-/**
- * Compact settings cog for the side-game headers (Higher/Lower, Guess the cost,
- * Binder, Grid). Unlike the main {@link SettingsMenu} it carries no navigation —
- * just the sound-effect and daily-reminder toggles those games share.
- */
 export default function GameSettingsMenu() {
   const [open, setOpen] = useState(false);
   const [closing, setClosing] = useState(false);
   const [muted, setMuted] = useState(isMuted);
   const [reminderOn, setReminderOn] = useState(isReminderEnabled);
 
-  // Play the collapse animation before unmounting; reduced-motion users skip it.
   const closeMenu = () => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setOpen(false);
@@ -43,7 +37,6 @@ export default function GameSettingsMenu() {
     }, 150);
   };
 
-  // Keep the mute button in sync and warm the audio cache on first gesture.
   useEffect(() => {
     const stopPreload = preloadSoundsOnFirstGesture();
     const stopMute = onMuteChange(setMuted);
@@ -53,12 +46,10 @@ export default function GameSettingsMenu() {
     };
   }, []);
 
-  // Arm the daily reminder timer on load if the player opted in.
   useEffect(() => {
     scheduleReminder();
   }, []);
 
-  // Close the menu on any outside click.
   useEffect(() => {
     if (!open || closing) return;
     const close = () => closeMenu();

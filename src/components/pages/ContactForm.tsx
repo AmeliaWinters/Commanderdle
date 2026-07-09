@@ -2,10 +2,6 @@ import { useState, type FormEvent } from "react";
 
 type Status = "idle" | "sending" | "ok" | "err";
 
-/**
- * Contact form that POSTs to /api/contact, which relays the message to the site
- * owner by email. The owner's address is never shipped to the browser.
- */
 export default function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
@@ -18,7 +14,6 @@ export default function ContactForm() {
       name: String(data.get("name") ?? ""),
       email: String(data.get("email") ?? ""),
       message: String(data.get("message") ?? ""),
-      // Honeypot: hidden from real users; only bots fill it. Server drops these silently.
       website: String(data.get("website") ?? ""),
     };
 
@@ -60,8 +55,6 @@ export default function ContactForm() {
 
   return (
     <form className="contact-form" onSubmit={onSubmit}>
-      {/* Honeypot. Hidden from humans and skipped by tab order; bots that autofill it
-          get silently dropped server-side. Not a real field — do not remove aria-hidden. */}
       <input
         type="text"
         name="website"

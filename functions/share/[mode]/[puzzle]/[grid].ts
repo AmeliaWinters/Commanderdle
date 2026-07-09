@@ -1,11 +1,3 @@
-/**
- * Landing page for a shared result. A crawler (Facebook, Discord, iMessage…) reads
- * the per-result Open Graph tags here — including og:image pointing at the dynamic PNG — so the
- * link unfurls into a rich card. A human is bounced straight to the live puzzle so a shared
- * result is always a one-tap entry point into the game.
- *
- * Cloudflare Pages Function. No data store — everything is derived from the URL.
- */
 import { deriveResult, isShareMode, isValidGridCode, MODE_LABEL, MODE_PATH } from '../../../../src/lib/shareCode'
 
 interface Params {
@@ -29,8 +21,6 @@ export const onRequest = (context: { params: Params; request: Request }): Respon
   const { won, score } = deriveResult(mode, grid)
   const label = MODE_LABEL[mode]
   const playPath = MODE_PATH[mode]
-  // The grid rides along so the app can replay the sender's run as a live
-  // "ghost race"; the puzzle number lets it reject stale (non-today) ghosts.
   const ghostParam = /^\d{1,6}$/.test(puzzle) ? `&ghost=${grid}&p=${puzzle}` : ''
   const playUrl = `${origin}${playPath}?from=share${ghostParam}`
 
@@ -67,7 +57,6 @@ export const onRequest = (context: { params: Params; request: Request }): Respon
   return new Response(html, {
     headers: {
       'content-type': 'text/html; charset=utf-8',
-      // Short cache: crawlers refetch, humans redirect instantly.
       'cache-control': 'public, max-age=300',
     },
   })

@@ -30,10 +30,6 @@ const SynergyMode = lazy(() => import("./SynergyMode"));
 const QuoteMode = lazy(() => import("./QuoteMode"));
 const PoolModal = lazy(() => import("./PoolModal"));
 const HowToPlay = lazy(() => import("./HowToPlay"));
-// Off the Classic first-paint path: the decorative backdrop (which only mounts its images
-// once the browser is idle anyway) and the result banner (shown only once a game is done,
-// and it drags in the share/canvas code). Splitting them keeps their parse/execute out of
-// the initial render task that Total Blocking Time measures.
 const CardBackdrop = lazy(() => import("./CardBackdrop"));
 
 const MODE_VIEWS = {
@@ -48,18 +44,15 @@ export default function App() {
   const archivePlay = useArchivePlay();
   const [routeMode, setMode] = useModeRoute();
   const mode = archivePlay ? archivePlay.mode : routeMode;
-  // First-visit-from-a-shared-link nudge (?from=share). Shown once, dismissible.
   const [fromShare, setFromShare] = useState(
     () => new URLSearchParams(window.location.search).get("from") === "share",
   );
   const [poolOpen, setPoolOpen] = useState(false);
   const [howToOpen, setHowToOpen] = useState(false);
-  // Anti-time-travel: 'ahead' means the device clock is set forward 'unknown' = not yet checked or offline (we trust the local clock in that case).
   const [clockState, setClockState] = useState<"unknown" | "ok" | "ahead">(
     "unknown",
   );
 
-  // Verify the device clock against server time once on mount.
   useEffect(() => {
     let alive = true;
     void syncServerTime().then(() => {
@@ -87,7 +80,6 @@ export default function App() {
   const { answer, guesses, skips, history, status, isDaily, isArchive } = state;
   const archiveDate = archivePlay?.date;
 
-  // The first real classic guess graduates the player past the teaching row.
   useEffect(() => {
     if (mode === "classic" && classicIntro && guesses.length > 0) {
       markHowToSeen("classic");
@@ -100,28 +92,20 @@ export default function App() {
     guesses.filter((g) => g.name !== answer.name).length + skips;
   const solved = status === "won";
   const done = status !== "playing";
-  // Block only the live daily when the clock is ahead; archive/practice are exempt.
   const clockBlocked = clockState === "ahead" && isDaily && !isArchive;
   const disabledNames = new Set(guesses.map((g) => g.name));
 
-  // Synergy mode's card data is split out of the initial bundle; kick off its lazy
-  // load whenever this mode is active (covers the peek pool and the result banner even
-  // when a completed puzzle is opened without ever mounting SynergyMode).
   const synergyReady = useSynergyData(mode === "synergy");
 
   const peek = useMemo(
     () => getPeek(mode, guesses, answer, wrongGuesses),
-    // synergyReady: recompute the synergy peek once the lazy data lands.
     [mode, guesses, answer, wrongGuesses, synergyReady],
   );
   const peekUnlocked = peek !== null && wrongGuesses >= peek.unlockAt;
   const ModeView = mode === "classic" ? null : MODE_VIEWS[mode];
 
-  // Ghost race: a challenge link opened today replays the sender's run beside
   const ghost = useGhost(mode, isDaily && !isArchive);
 
-  // Standalone pages: return only after every hook above has run, so the hook order
-  // stays constant across client-side navigation (React requires this).
   if (standalonePage) return standalonePage;
 
   return (
@@ -136,8 +120,6 @@ export default function App() {
         onHowTo={() => setHowToOpen(true)}
         onPractice={startPractice}
         onBackToDaily={() => {
-          // From an archive play the URL must change too, or the game
-          // would keep recording under the archived date.
           if (archivePlay) navigateToPath(MODE_PATHS[mode]);
           else backToDaily();
         }}
@@ -186,8 +168,7 @@ export default function App() {
         isCompleted={
           isArchive && archiveDate
             ? (m) => isArchiveCompleted(m, archiveDate)
-            : // Hold back the current mode's tick until its win reveal has finished
-              // playing out, even though the result is already persisted to storage.
+            :
               (m) =>
                 m === mode && revealHeld
                   ? false

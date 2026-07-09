@@ -3,7 +3,6 @@ import { syncServerTime, clockAheadPuzzles } from './serverTime'
 
 const DAY = 86_400_000
 
-/** Stub fetch so the HEAD request returns a `Date` header of our choosing. */
 function stubServerTime(ms: number) {
   vi.stubGlobal(
     'fetch',
@@ -27,7 +26,6 @@ describe('clockAheadPuzzles', () => {
   })
 
   it('reports how many days the device is set ahead of the server', async () => {
-    // Server believes it is 2 days earlier than this device ⇒ device is +2 days ahead.
     stubServerTime(Date.now() - 2 * DAY)
     await syncServerTime()
     expect(clockAheadPuzzles()).toBe(2)
@@ -46,7 +44,6 @@ describe('clockAheadPuzzles', () => {
         throw new Error('offline')
       }),
     )
-    // Re-sync failure must not throw; prior value may persist, so just assert no throw.
     await expect(syncServerTime()).resolves.toBeUndefined()
   })
 })

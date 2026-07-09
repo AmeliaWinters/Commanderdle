@@ -3,7 +3,6 @@ import { todayKey, puzzleNumber } from "./dailyAnswer";
 import { MAX_GUESSES } from "./shareCode";
 import { dailyStorageKey, type PersistedDaily } from "./useGameState";
 
-/** Mode order + labels for the aggregated daily-recap share. */
 const RECAP_MODES: { mode: Mode; label: string }[] = [
   { mode: "classic", label: "Classic" },
   { mode: "silhouette", label: "Silhouette" },
@@ -12,7 +11,6 @@ const RECAP_MODES: { mode: Mode; label: string }[] = [
   { mode: "quote", label: "Quote" },
 ];
 
-/** One finished mode's line for the recap, or null if today's daily isn't done yet. */
 function lineFor(mode: Mode, label: string): string | null {
   let saved: PersistedDaily | null = null;
   try {
@@ -34,11 +32,6 @@ function lineFor(mode: Mode, label: string): string | null {
   return `${won ? "🟩" : "🟥"} ${label} ${score}`;
 }
 
-/**
- * Aggregated spoiler-free recap of every mode the player has finished today,
- * LoLdle-style - one paste advertises all modes. Returns null if nothing is
- * finished yet.
- */
 export function buildDailyRecap(): string | null {
   const lines = RECAP_MODES.map(({ mode, label }) => lineFor(mode, label)).filter(
     (l): l is string => l !== null,

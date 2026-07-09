@@ -1,6 +1,5 @@
 import type { Commander } from '../types/commander'
 
-/** Build a Commander for tests, overriding only the fields a case cares about. */
 export function makeCommander(overrides: Partial<Commander> = {}): Commander {
   return {
     rank: 1,

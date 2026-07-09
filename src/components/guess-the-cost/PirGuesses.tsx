@@ -8,11 +8,6 @@ const HEAT_LABEL = {
   cold: "Cold",
 } as const;
 
-/**
- * The guess history: one row per guess with the direction of the real price
- * and how close the guess landed. Empty slots pad the list to the full guess
- * count so the remaining budget is always visible.
- */
 export default function PirGuesses({ feedback }: { feedback: PirFeedback[] }) {
   return (
     <ol className="pir-guesses" aria-label="Your price guesses">
