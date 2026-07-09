@@ -9,6 +9,14 @@ interface Release {
 
 export const RELEASES: Release[] = [
   {
+    version: "1.1.4",
+    date: "2026-07-09",
+    notes: [
+      "Tidied up wording across the info pages",
+      "Fixed the answer credit on the terms page",
+    ],
+  },
+  {
     version: "1.1.3",
     date: "2026-07-09",
     notes: [

@@ -46,7 +46,7 @@ const FAQS: QA[] = [
           EDHREC
         </a>
         , based on how many decks the community has registered with it at the
-        helm. Rank #1 = the most-built commander.
+        helm. Rank #1 = the most-built commander of the past 2 years.
       </>
     ),
   },
@@ -65,7 +65,7 @@ const FAQS: QA[] = [
     a: (
       <>
         You've got insurance. Every 10 days you play banks one streak freeze, and
-        each missed day quietly spends one to keep your streak alive — so a
+        each missed day quietly spends one to keep your streak alive, so a
         busy Tuesday won't torch a 40-day run. Freezes only cover days you
         didn't play at all; a finished loss still ends a win streak. Your
         banked total shows with your stats.

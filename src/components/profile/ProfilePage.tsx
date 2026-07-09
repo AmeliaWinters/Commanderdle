@@ -81,7 +81,7 @@ export default function ProfilePage({ uuid }: { uuid: string }) {
       title={
         profile ? `${profile.username} · Commandle` : "Commandle - Profile"
       }
-      description="A Commandle player's profile — streaks, win streak, XP and total wins."
+      description="A Commandle player's profile: streaks, win streak, XP and total wins."
       canonical={`https://commandle.app/u/${uuid}`}
       back={{ label: "Back", onClick: () => window.history.back() }}
     >

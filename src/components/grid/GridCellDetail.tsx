@@ -112,7 +112,7 @@ export default function GridCellDetail({
                 {a.tier && (
                   <span
                     className={`grid-detail-tier grid-detail-tier-${a.tier}`}
-                    title={`${TIER_LABELS[a.tier]} — ${a.pct}% of players picked this`}
+                    title={`${TIER_LABELS[a.tier]} - ${a.pct}% of players picked this`}
                   >
                     <RarityGem tier={a.tier} size={13} />
                     <span className="grid-detail-tier-label">

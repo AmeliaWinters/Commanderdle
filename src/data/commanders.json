@@ -16,6 +16,9 @@
     "toughness": "10",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "Commander Masters",
     "price": 42.93,
@@ -95,6 +98,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Innistrad Remastered",
     "price": 45.29,
@@ -169,6 +175,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Final Fantasy Commander",
     "price": 4.23,
@@ -244,6 +253,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2020,
     "setName": "Double Masters",
     "price": 33.16,
@@ -313,6 +325,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Foundations",
     "price": 1.61,
@@ -385,6 +400,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Modern Horizons 3",
     "price": 2.55,
@@ -460,6 +478,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Bloomburrow Commander",
     "price": 9.36,
@@ -531,6 +552,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Final Fantasy",
     "price": 37.71,
@@ -604,6 +628,9 @@
     "toughness": "6",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "The Lord of the Rings: Tales of Middle-earth",
     "price": 25.95,
@@ -678,6 +705,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Tarkir: Dragonstorm Commander",
     "price": 6.51,
@@ -751,6 +781,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "The Lost Caverns of Ixalan Commander",
     "price": 2.83,
@@ -828,6 +861,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2025,
     "setName": "Avatar: The Last Airbender",
     "price": 0.95,
@@ -899,6 +935,10 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare",
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Foundations",
     "price": 1.53,
@@ -969,6 +1009,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Foundations",
     "price": 0.6,
@@ -1039,6 +1082,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2026,
     "setName": "Secret Lair Drop",
     "price": 9.58,
@@ -1111,6 +1157,10 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare",
+      "mythic"
+    ],
     "year": 2023,
     "setName": "Commander Masters",
     "price": 3.9,
@@ -1186,6 +1236,10 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic",
+      "rare"
+    ],
     "year": 2022,
     "setName": "Dominaria United",
     "price": 2.88,
@@ -1265,6 +1319,10 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare",
+      "mythic"
+    ],
     "year": 2023,
     "setName": "Commander Masters",
     "price": 3.01,
@@ -1333,6 +1391,10 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic",
+      "rare"
+    ],
     "year": 2023,
     "setName": "The List",
     "price": 3.32,
@@ -1408,6 +1470,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Bloomburrow",
     "price": 0.84,
@@ -1483,6 +1548,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2022,
     "setName": "Kamigawa: Neon Dynasty",
     "price": 4,
@@ -1555,6 +1623,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Duskmourn: House of Horror Commander",
     "price": 19.47,
@@ -1628,6 +1699,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2025,
     "setName": "Avatar: The Last Airbender",
     "price": 1.37,
@@ -1700,6 +1774,9 @@
     "toughness": "6",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2022,
     "setName": "Commander Legends: Battle for Baldur's Gate",
     "price": 7.27,
@@ -1776,6 +1853,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Modern Horizons 3 Commander",
     "price": 0.52,
@@ -1836,6 +1916,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Final Fantasy",
     "price": 5.53,
@@ -1908,6 +1991,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Final Fantasy Commander",
     "price": 1.5,
@@ -1977,6 +2063,9 @@
     "toughness": "7",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Edge of Eternities Commander",
     "price": 2.17,
@@ -2050,6 +2139,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Final Fantasy",
     "price": 31.01,
@@ -2119,6 +2211,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2021,
     "setName": "Modern Horizons 2",
     "price": 10.32,
@@ -2189,6 +2284,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Bloomburrow Commander",
     "price": 1.47,
@@ -2264,6 +2362,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2021,
     "setName": "Kaldheim",
     "price": 20.16,
@@ -2342,6 +2443,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Aetherdrift Commander",
     "price": 0.84,
@@ -2416,6 +2520,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Bloomburrow Commander",
     "price": 2.51,
@@ -2488,6 +2595,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "The Lost Caverns of Ixalan Commander",
     "price": 0.46,
@@ -2561,6 +2671,9 @@
     "toughness": "6",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2026,
     "setName": "Lorwyn Eclipsed Commander",
     "price": 0.54,
@@ -2632,6 +2745,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "Tales of Middle-earth Commander",
     "price": 0.36,
@@ -2704,6 +2820,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "Tales of Middle-earth Commander",
     "price": 0.4,
@@ -2780,6 +2899,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Bloomburrow",
     "price": 3.65,
@@ -2853,6 +2975,9 @@
     "toughness": "6",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Bloomburrow",
     "price": 11.61,
@@ -2927,6 +3052,9 @@
     "toughness": "7",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Modern Horizons 3",
     "price": 0.3,
@@ -3001,6 +3129,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2026,
     "setName": "Secret Lair Drop",
     "price": 14.35,
@@ -3077,6 +3208,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2026,
     "setName": "Lorwyn Eclipsed Commander",
     "price": 0.44,
@@ -3154,6 +3288,9 @@
     "toughness": "1",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "Double Masters 2022",
     "price": 33.6,
@@ -3224,6 +3361,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2018,
     "setName": "Core Set 2019",
     "price": 3.9,
@@ -3298,6 +3438,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Fallout",
     "price": 7.91,
@@ -3368,6 +3511,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2021,
     "setName": "Midnight Hunt Commander",
     "price": 8.68,
@@ -3442,6 +3588,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "The Lord of the Rings: Tales of Middle-earth",
     "price": 6.17,
@@ -3521,6 +3670,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Fallout",
     "price": 0.83,
@@ -3594,6 +3746,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Modern Horizons 3",
     "price": 0.35,
@@ -3663,6 +3818,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Tarkir: Dragonstorm Commander",
     "price": 0.86,
@@ -3734,6 +3892,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "uncommon",
+    "rarities": [
+      "uncommon"
+    ],
     "year": 2024,
     "setName": "Duskmourn: House of Horror",
     "price": 0.49,
@@ -3806,6 +3967,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2013,
     "setName": "Commander 2013",
     "price": 21.12,
@@ -3877,6 +4041,9 @@
     "toughness": "6",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "The Lost Caverns of Ixalan",
     "price": 6.26,
@@ -3953,6 +4120,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2023,
     "setName": "Commander Masters",
     "price": 2.38,
@@ -4023,6 +4193,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "Commander Masters",
     "price": 47.67,
@@ -4082,6 +4255,9 @@
     "toughness": "8",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "Neon Dynasty Commander",
     "price": 2.44,
@@ -4151,6 +4327,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Edge of Eternities Commander",
     "price": 0.42,
@@ -4225,6 +4404,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "Neon Dynasty Commander",
     "price": 8.76,
@@ -4300,6 +4482,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2020,
     "setName": "Ikoria: Lair of Behemoths",
     "price": 15.19,
@@ -4375,6 +4560,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "The Lord of the Rings: Tales of Middle-earth",
     "price": 4.29,
@@ -4455,6 +4643,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "Dominaria United Commander",
     "price": 1.74,
@@ -4522,6 +4713,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Bloomburrow",
     "price": 3.79,
@@ -4596,6 +4790,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2022,
     "setName": "Warhammer 40,000 Commander",
     "price": 38.17,
@@ -4664,6 +4861,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Modern Horizons 3",
     "price": 0.7,
@@ -4736,6 +4936,9 @@
     "toughness": "7",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Tarkir: Dragonstorm Commander",
     "price": 13.57,
@@ -4810,6 +5013,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "Commander Masters",
     "price": 15.75,
@@ -4876,6 +5082,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2026,
     "setName": "Lorwyn Eclipsed",
     "price": 0.37,
@@ -4948,6 +5157,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2025,
     "setName": "Final Fantasy",
     "price": 1.82,
@@ -5021,6 +5233,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "Dominaria United Commander",
     "price": 1.34,
@@ -5089,6 +5304,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "Dominaria United Commander",
     "price": 2.57,
@@ -5164,6 +5382,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Assassin's Creed",
     "price": 3.03,
@@ -5242,6 +5463,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Tarkir: Dragonstorm Commander",
     "price": 4.12,
@@ -5314,6 +5538,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Bloomburrow Commander",
     "price": 0.65,
@@ -5387,6 +5614,9 @@
     "toughness": "7",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2019,
     "setName": "Modern Horizons",
     "price": 37.25,
@@ -5465,6 +5695,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Final Fantasy Commander",
     "price": 2.54,
@@ -5540,6 +5773,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Tarkir: Dragonstorm Commander",
     "price": 3.18,
@@ -5610,6 +5846,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Outlaws of Thunder Junction Commander",
     "price": 1.19,
@@ -5684,6 +5923,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2026,
     "setName": "Secrets of Strixhaven Commander",
     "price": 0.32,
@@ -5757,6 +5999,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "New Capenna Commander",
     "price": 0.76,
@@ -5827,6 +6072,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Murders at Karlov Manor",
     "price": 10.05,
@@ -5903,6 +6151,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2025,
     "setName": "Final Fantasy",
     "price": 0.34,
@@ -5975,6 +6226,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2025,
     "setName": "Final Fantasy",
     "price": 0.33,
@@ -6049,6 +6303,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2020,
     "setName": "Zendikar Rising",
     "price": 4.31,
@@ -6123,6 +6380,9 @@
     "toughness": "1",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2025,
     "setName": "Tarkir: Dragonstorm",
     "price": 0.34,
@@ -6198,6 +6458,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2019,
     "setName": "Modern Horizons",
     "price": 2.56,
@@ -6276,6 +6539,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "March of the Machine Commander",
     "price": 0.47,
@@ -6349,6 +6615,9 @@
     "toughness": "6",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "Commander Legends: Battle for Baldur's Gate",
     "price": 12.98,
@@ -6423,6 +6692,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Final Fantasy",
     "price": 1.9,
@@ -6496,6 +6768,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "Phyrexia: All Will Be One Commander",
     "price": 5.18,
@@ -6568,6 +6843,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Avatar: The Last Airbender",
     "price": 2.94,
@@ -6646,6 +6924,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Outlaws of Thunder Junction",
     "price": 0.32,
@@ -6716,6 +6997,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Tarkir: Dragonstorm Commander",
     "price": 4.22,
@@ -6790,6 +7074,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Final Fantasy Commander",
     "price": 1.21,
@@ -6866,6 +7153,9 @@
     "toughness": "7",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "Phyrexia: All Will Be One",
     "price": 16.27,
@@ -6936,6 +7226,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "Wilds of Eldraine Commander",
     "price": 14.02,
@@ -7008,6 +7301,9 @@
     "toughness": "1",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2021,
     "setName": "Kaldheim",
     "price": 2.44,
@@ -7075,6 +7371,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2025,
     "setName": "Edge of Eternities",
     "price": 0.35,
@@ -7137,6 +7436,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Duskmourn: House of Horror Commander",
     "price": 0.63,
@@ -7209,6 +7511,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Edge of Eternities Commander",
     "price": 1.48,
@@ -7281,6 +7586,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2026,
     "setName": "Lorwyn Eclipsed Commander",
     "price": 0.34,
@@ -7355,6 +7663,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "The Brothers' War Commander",
     "price": 4.33,
@@ -7425,6 +7736,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "Warhammer 40,000 Commander",
     "price": 45.26,
@@ -7493,6 +7807,9 @@
     "toughness": "7",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2023,
     "setName": "March of the Machine",
     "price": 33.72,
@@ -7564,6 +7881,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2025,
     "setName": "Final Fantasy",
     "price": 0.29,
@@ -7638,6 +7958,9 @@
     "toughness": "1",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Marvel's Spider-Man",
     "price": 16.91,
@@ -7711,6 +8034,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Secret Lair Drop",
     "price": 18.94,
@@ -7778,6 +8104,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2023,
     "setName": "Dominaria Remastered",
     "price": 1.61,
@@ -7850,6 +8179,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Duskmourn: House of Horror Commander",
     "price": 10.96,
@@ -7923,6 +8255,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "New Capenna Commander",
     "price": 1.59,
@@ -7996,6 +8331,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Outlaws of Thunder Junction Commander",
     "price": 6.78,
@@ -8068,6 +8406,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2026,
     "setName": "Lorwyn Eclipsed",
     "price": 0.87,
@@ -8139,6 +8480,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "uncommon",
+    "rarities": [
+      "uncommon"
+    ],
     "year": 2024,
     "setName": "Foundations",
     "price": 0.2,
@@ -8210,6 +8554,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2025,
     "setName": "Aetherdrift",
     "price": 0.95,
@@ -8279,6 +8626,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2026,
     "setName": "Marvel Universe",
     "price": 8.24,
@@ -8354,6 +8704,9 @@
     "toughness": "6",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "Commander Masters",
     "price": 7.72,
@@ -8424,6 +8777,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "Tales of Middle-earth Commander",
     "price": 23.91,
@@ -8495,6 +8851,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2021,
     "setName": "Innistrad: Midnight Hunt",
     "price": 0.39,
@@ -8569,6 +8928,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Modern Horizons 3 Commander",
     "price": 0.3,
@@ -8639,6 +9001,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "Warhammer 40,000 Commander",
     "price": 27.63,
@@ -8713,6 +9078,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Duskmourn: House of Horror Commander",
     "price": 0.42,
@@ -8782,6 +9150,9 @@
     "toughness": "*",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Bloomburrow",
     "price": 4.02,
@@ -8854,6 +9225,9 @@
     "toughness": "1",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "Warhammer 40,000 Commander",
     "price": 29.86,
@@ -8926,6 +9300,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "uncommon",
+    "rarities": [
+      "uncommon"
+    ],
     "year": 2023,
     "setName": "Commander Masters",
     "price": 0.18,
@@ -8998,6 +9375,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2026,
     "setName": "Marvel Universe",
     "price": 17.47,
@@ -9063,6 +9443,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2021,
     "setName": "Kaldheim Commander",
     "price": 3.91,
@@ -9135,6 +9518,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Secret Lair Drop",
     "price": 124.8,
@@ -9206,6 +9592,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Duskmourn: House of Horror",
     "price": 0.23,
@@ -9280,6 +9669,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2022,
     "setName": "Kamigawa: Neon Dynasty",
     "price": 0.59,
@@ -9353,6 +9745,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2023,
     "setName": "Tales of Middle-earth Commander",
     "price": 3.12,
@@ -9428,6 +9823,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2023,
     "setName": "March of the Machine",
     "price": 0.44,
@@ -9516,6 +9914,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Modern Horizons 3 Commander",
     "price": 0.33,
@@ -9586,6 +9987,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2026,
     "setName": "Secrets of Strixhaven",
     "price": 4.18,
@@ -9657,6 +10061,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "Jumpstart 2022",
     "price": 12.78,
@@ -9729,6 +10136,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Bloomburrow",
     "price": 0.27,
@@ -9800,6 +10210,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2004,
     "setName": "Champions of Kamigawa",
     "price": 27.86,
@@ -9869,6 +10282,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Modern Horizons 3 Commander",
     "price": 0.23,
@@ -9929,6 +10345,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "Tales of Middle-earth Commander",
     "price": 0.4,
@@ -10002,6 +10421,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "Commander Masters",
     "price": 5.21,
@@ -10077,6 +10499,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2018,
     "setName": "Battlebond",
     "price": 6.58,
@@ -10152,6 +10577,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2023,
     "setName": "Commander Masters",
     "price": 4.28,
@@ -10225,6 +10653,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2021,
     "setName": "Forgotten Realms Commander",
     "price": 6.19,
@@ -10297,6 +10728,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2023,
     "setName": "Commander Masters",
     "price": 0.38,
@@ -10367,6 +10801,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2025,
     "setName": "Final Fantasy",
     "price": 1.85,
@@ -10437,6 +10874,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2017,
     "setName": "Commander 2017",
     "price": 4.08,
@@ -10509,6 +10949,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Assassin's Creed",
     "price": 6.32,
@@ -10584,6 +11027,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Bloomburrow",
     "price": 0.38,
@@ -10653,6 +11099,9 @@
     "toughness": "8",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2023,
     "setName": "The Lord of the Rings: Tales of Middle-earth",
     "price": 1.86,
@@ -10727,6 +11176,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2022,
     "setName": "Double Masters 2022",
     "price": 3.78,
@@ -10796,6 +11248,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2020,
     "setName": "Ikoria: Lair of Behemoths",
     "price": 4.32,
@@ -10866,6 +11321,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2019,
     "setName": "War of the Spark",
     "price": 0.96,
@@ -10937,6 +11395,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2022,
     "setName": "Double Masters 2022",
     "price": 16.33,
@@ -11007,6 +11468,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Bloomburrow Commander",
     "price": 5.95,
@@ -11078,6 +11542,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "Commander Masters",
     "price": 6.91,
@@ -11151,6 +11618,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2025,
     "setName": "Avatar: The Last Airbender",
     "price": 0.39,
@@ -11224,6 +11694,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Tarkir: Dragonstorm Commander",
     "price": 3.12,
@@ -11299,6 +11772,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Final Fantasy",
     "price": 10.04,
@@ -11369,6 +11845,9 @@
     "toughness": "7",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2021,
     "setName": "Adventures in the Forgotten Realms",
     "price": 27.46,
@@ -11442,6 +11921,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Outlaws of Thunder Junction Commander",
     "price": 4.95,
@@ -11514,6 +11996,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Aetherdrift Commander",
     "price": 0.36,
@@ -11587,6 +12072,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2026,
     "setName": "Lorwyn Eclipsed Commander",
     "price": 0.34,
@@ -11660,6 +12148,9 @@
     "toughness": "6",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Modern Horizons 3 Commander",
     "price": 0.21,
@@ -11732,6 +12223,9 @@
     "toughness": "6",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "New Capenna Commander",
     "price": 4.26,
@@ -11803,6 +12297,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2023,
     "setName": "March of the Machine: The Aftermath",
     "price": 0.39,
@@ -11871,6 +12368,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Duskmourn: House of Horror Commander",
     "price": 1.03,
@@ -11938,6 +12438,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2020,
     "setName": "Commander Legends",
     "price": 1,
@@ -12012,6 +12515,9 @@
     "toughness": "8",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2016,
     "setName": "Commander 2016",
     "price": 9.65,
@@ -12084,6 +12590,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2021,
     "setName": "Forgotten Realms Commander",
     "price": 0.58,
@@ -12161,6 +12670,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Foundations",
     "price": 0.41,
@@ -12251,6 +12763,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2021,
     "setName": "Kaldheim",
     "price": 17.96,
@@ -12322,6 +12837,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "Wilds of Eldraine",
     "price": 3.1,
@@ -12392,6 +12910,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2022,
     "setName": "Commander Legends: Battle for Baldur's Gate",
     "price": 0.28,
@@ -12462,6 +12983,9 @@
     "toughness": "1",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Duskmourn: House of Horror",
     "price": 2.84,
@@ -12532,6 +13056,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2016,
     "setName": "Commander 2016",
     "price": 2.32,
@@ -12601,6 +13128,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2020,
     "setName": "Commander Legends",
     "price": 0.37,
@@ -12675,6 +13205,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Murders at Karlov Manor",
     "price": 0.42,
@@ -12746,6 +13279,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Bloomburrow",
     "price": 0.31,
@@ -12818,6 +13354,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2022,
     "setName": "Kamigawa: Neon Dynasty",
     "price": 4.32,
@@ -12890,6 +13429,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2017,
     "setName": "Commander Anthology",
     "price": 7.3,
@@ -12963,6 +13505,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Secret Lair Drop",
     "price": 4.32,
@@ -13034,6 +13579,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Secret Lair Drop",
     "price": 9.13,
@@ -13108,6 +13656,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "March of the Machine",
     "price": 5.76,
@@ -13183,6 +13734,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Edge of Eternities Commander",
     "price": 0.58,
@@ -13254,6 +13808,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Bloomburrow",
     "price": 0.31,
@@ -13329,6 +13886,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Marvel's Spider-Man",
     "price": 2.83,
@@ -13403,6 +13963,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2025,
     "setName": "Avatar: The Last Airbender",
     "price": 0.36,
@@ -13474,6 +14037,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "Dominaria United",
     "price": 98.38,
@@ -13541,6 +14107,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2026,
     "setName": "Marvel Universe",
     "price": 31.38,
@@ -13609,6 +14178,9 @@
     "toughness": "1",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Foundations Jumpstart",
     "price": 4.77,
@@ -13680,6 +14252,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2016,
     "setName": "Commander 2016",
     "price": 8.94,
@@ -13711,6 +14286,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2016,
     "setName": "Commander 2016",
     "price": 29.12,
@@ -13783,6 +14361,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Duskmourn: House of Horror",
     "price": 0.86,
@@ -13849,6 +14430,9 @@
     "toughness": "6",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Secret Lair Drop",
     "price": 1.79,
@@ -13918,6 +14502,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2022,
     "setName": "Double Masters 2022",
     "price": 3.33,
@@ -13992,6 +14579,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Outlaws of Thunder Junction Commander",
     "price": 1.43,
@@ -14068,6 +14658,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2026,
     "setName": "Lorwyn Eclipsed",
     "price": 0.6,
@@ -14145,6 +14738,9 @@
     "toughness": "1",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2023,
     "setName": "Jurassic World Collection",
     "price": 24.09,
@@ -14216,6 +14812,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2025,
     "setName": "Aetherdrift",
     "price": 0.33,
@@ -14283,6 +14882,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2016,
     "setName": "Commander 2016",
     "price": 31.69,
@@ -14356,6 +14958,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2025,
     "setName": "Final Fantasy",
     "price": 0.54,
@@ -14425,6 +15030,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2026,
     "setName": "Secrets of Strixhaven Commander",
     "price": 1.47,
@@ -14497,6 +15105,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2017,
     "setName": "Commander 2017",
     "price": 32.75,
@@ -14570,6 +15181,9 @@
     "toughness": "6",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Foundations",
     "price": 0.21,
@@ -14638,6 +15252,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Duskmourn: House of Horror",
     "price": 1.04,
@@ -14709,6 +15326,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Bloomburrow",
     "price": 1.04,
@@ -14774,6 +15394,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Secret Lair Drop",
     "price": 4.63,
@@ -14841,6 +15464,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Bloomburrow",
     "price": 38.44,
@@ -14916,6 +15542,9 @@
     "toughness": null,
     "loyalty": "5",
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "Dominaria United Commander",
     "price": 13.72,
@@ -14992,6 +15621,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Final Fantasy Commander",
     "price": 1.67,
@@ -15063,6 +15695,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Secret Lair Drop",
     "price": 2.92,
@@ -15135,6 +15770,9 @@
     "toughness": "6",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2022,
     "setName": "Double Masters 2022",
     "price": 1.32,
@@ -15199,6 +15837,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "March of the Machine: The Aftermath",
     "price": 7.56,
@@ -15277,6 +15918,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2021,
     "setName": "Kaldheim",
     "price": 3.29,
@@ -15348,6 +15992,9 @@
     "toughness": "1",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2021,
     "setName": "Crimson Vow Commander",
     "price": 11.94,
@@ -15421,6 +16068,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "The Lost Caverns of Ixalan",
     "price": 24.66,
@@ -15491,6 +16141,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Marvel's Spider-Man",
     "price": 6.21,
@@ -15563,6 +16216,9 @@
     "toughness": "7",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2003,
     "setName": "Scourge",
     "price": 43.21,
@@ -15642,6 +16298,9 @@
     "toughness": "6",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "Streets of New Capenna",
     "price": 0.47,
@@ -15719,6 +16378,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "March of the Machine: The Aftermath",
     "price": 18.32,
@@ -15791,6 +16453,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "The Lost Caverns of Ixalan Commander",
     "price": 0.69,
@@ -15863,6 +16528,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Bloomburrow",
     "price": 0.37,
@@ -15939,6 +16607,9 @@
     "toughness": null,
     "loyalty": "5",
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2018,
     "setName": "Commander 2018",
     "price": 11.57,
@@ -16011,6 +16682,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2021,
     "setName": "Adventures in the Forgotten Realms",
     "price": 0.4,
@@ -16078,6 +16752,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Wizards Play Network 2025",
     "price": 43.99,
@@ -16150,6 +16827,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2025,
     "setName": "Avatar: The Last Airbender",
     "price": 0.54,
@@ -16221,6 +16901,9 @@
     "toughness": "6",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Duskmourn: House of Horror Commander",
     "price": 1.01,
@@ -16291,6 +16974,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2026,
     "setName": "Secrets of Strixhaven",
     "price": 0.41,
@@ -16367,6 +17053,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "Tales of Middle-earth Commander",
     "price": 0.59,
@@ -16439,6 +17128,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Duskmourn: House of Horror",
     "price": 0.38,
@@ -16513,6 +17205,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2016,
     "setName": "Commander 2016",
     "price": 8.38,
@@ -16590,6 +17285,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Foundations",
     "price": 1.18,
@@ -16659,6 +17357,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Aetherdrift",
     "price": 4.17,
@@ -16727,6 +17428,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "Streets of New Capenna",
     "price": 9.74,
@@ -16800,6 +17504,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2018,
     "setName": "Battlebond",
     "price": 2.91,
@@ -16868,6 +17575,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2018,
     "setName": "Battlebond",
     "price": 3.44,
@@ -16936,6 +17646,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "Streets of New Capenna",
     "price": 2.8,
@@ -17007,6 +17720,9 @@
     "toughness": "6",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Modern Horizons 3",
     "price": 0.3,
@@ -17079,6 +17795,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "March of the Machine Commander",
     "price": 7.35,
@@ -17151,6 +17870,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Outlaws of Thunder Junction Commander",
     "price": 1.96,
@@ -17225,6 +17947,9 @@
     "toughness": "6",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Edge of Eternities Commander",
     "price": 0.54,
@@ -17297,6 +18022,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Aetherdrift Commander",
     "price": 0.31,
@@ -17364,6 +18092,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Murders at Karlov Manor Commander",
     "price": 6.08,
@@ -17437,6 +18168,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2018,
     "setName": "Core Set 2019",
     "price": 20.4,
@@ -17515,6 +18249,9 @@
     "toughness": "1",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "Commander Masters",
     "price": 3.82,
@@ -17584,6 +18321,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Murders at Karlov Manor Commander",
     "price": 0.36,
@@ -17654,6 +18394,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Edge of Eternities",
     "price": 1.49,
@@ -17721,6 +18464,9 @@
     "toughness": "1",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2022,
     "setName": "Double Masters 2022",
     "price": 2.45,
@@ -17793,6 +18539,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "uncommon",
+    "rarities": [
+      "uncommon"
+    ],
     "year": 2026,
     "setName": "Secrets of Strixhaven Commander",
     "price": 0.29,
@@ -17865,6 +18614,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Modern Horizons 3",
     "price": 0.25,
@@ -17939,6 +18691,9 @@
     "toughness": "15",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2025,
     "setName": "Edge of Eternities",
     "price": 0.3,
@@ -18020,6 +18775,9 @@
     "toughness": "1",
     "loyalty": null,
     "rarity": "uncommon",
+    "rarities": [
+      "uncommon"
+    ],
     "year": 2022,
     "setName": "Streets of New Capenna",
     "price": 0.23,
@@ -18092,6 +18850,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2026,
     "setName": "Secrets of Strixhaven",
     "price": 1.88,
@@ -18162,6 +18923,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "uncommon",
+    "rarities": [
+      "uncommon"
+    ],
     "year": 2024,
     "setName": "Assassin's Creed",
     "price": 0.51,
@@ -18229,6 +18993,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Outlaws of Thunder Junction",
     "price": 0.38,
@@ -18299,6 +19066,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2022,
     "setName": "Double Masters 2022",
     "price": 0.91,
@@ -18383,6 +19153,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Outlaws of Thunder Junction Commander",
     "price": 0.34,
@@ -18454,6 +19227,9 @@
     "toughness": "*",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "The Lost Caverns of Ixalan",
     "price": 1.24,
@@ -18527,6 +19303,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2026,
     "setName": "Secrets of Strixhaven",
     "price": 2.07,
@@ -18595,6 +19374,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Modern Horizons 3",
     "price": 0.37,
@@ -18663,6 +19445,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Modern Horizons 3 Commander",
     "price": 0.28,
@@ -18737,6 +19522,9 @@
     "toughness": "7",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Tarkir: Dragonstorm",
     "price": 6.66,
@@ -18813,6 +19601,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "uncommon",
+    "rarities": [
+      "uncommon"
+    ],
     "year": 2022,
     "setName": "Streets of New Capenna",
     "price": 0.26,
@@ -18883,6 +19674,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "uncommon",
+    "rarities": [
+      "uncommon"
+    ],
     "year": 2024,
     "setName": "Foundations",
     "price": 0.23,
@@ -18954,6 +19748,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "Wilds of Eldraine",
     "price": 0.46,
@@ -19026,6 +19823,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Tarkir: Dragonstorm Commander",
     "price": 0.97,
@@ -19099,6 +19899,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Secret Lair Drop",
     "price": 5.93,
@@ -19164,6 +19967,9 @@
     "toughness": "7",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2014,
     "setName": "Born of the Gods",
     "price": 16.18,
@@ -19237,6 +20043,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "The List",
     "price": 1.09,
@@ -19307,6 +20116,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2019,
     "setName": "Throne of Eldraine",
     "price": 2.72,
@@ -19377,6 +20189,9 @@
     "toughness": "6",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2008,
     "setName": "Shadowmoor",
     "price": 13.65,
@@ -19436,6 +20251,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2026,
     "setName": "Secrets of Strixhaven Commander",
     "price": 1.31,
@@ -19510,6 +20328,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Fallout",
     "price": 0.48,
@@ -19579,6 +20400,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2014,
     "setName": "Journey into Nyx",
     "price": 15.46,
@@ -19650,6 +20474,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2026,
     "setName": "Lorwyn Eclipsed Commander",
     "price": 0.39,
@@ -19722,6 +20549,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2022,
     "setName": "Commander Legends: Battle for Baldur's Gate",
     "price": 0.26,
@@ -19794,6 +20624,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Bloomburrow",
     "price": 0.34,
@@ -19866,6 +20699,9 @@
     "toughness": null,
     "loyalty": "3",
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "Commander Legends: Battle for Baldur's Gate",
     "price": 3.27,
@@ -19936,6 +20772,9 @@
     "toughness": "7",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2019,
     "setName": "Core Set 2020",
     "price": 1.12,
@@ -20007,6 +20846,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Bloomburrow",
     "price": 0.29,
@@ -20080,6 +20922,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2026,
     "setName": "Marvel Universe",
     "price": 13.28,
@@ -20146,6 +20991,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2025,
     "setName": "Avatar: The Last Airbender",
     "price": 0.6,
@@ -20220,6 +21068,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2026,
     "setName": "Secrets of Strixhaven Commander",
     "price": 4.79,
@@ -20292,6 +21143,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Marvel's Spider-Man",
     "price": 2.8,
@@ -20362,6 +21216,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "March of the Machine Commander",
     "price": 1.61,
@@ -20435,6 +21292,9 @@
     "toughness": "6",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2023,
     "setName": "Jurassic World Collection",
     "price": 25.64,
@@ -20506,6 +21366,9 @@
     "toughness": "7",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2021,
     "setName": "Innistrad: Crimson Vow",
     "price": 17.68,
@@ -20578,6 +21441,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2020,
     "setName": "Commander 2020",
     "price": 0.66,
@@ -20648,6 +21514,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2020,
     "setName": "Commander 2020",
     "price": 2.75,
@@ -20721,6 +21590,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "March of the Machine Commander",
     "price": 0.48,
@@ -20790,6 +21662,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Bloomburrow",
     "price": 0.33,
@@ -20863,6 +21738,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "March of the Machine Commander",
     "price": 3.41,
@@ -20938,6 +21816,10 @@
     "toughness": "1",
     "loyalty": null,
     "rarity": "uncommon",
+    "rarities": [
+      "uncommon",
+      "rare"
+    ],
     "year": 2020,
     "setName": "Commander Legends",
     "price": 2.39,
@@ -20997,6 +21879,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2016,
     "setName": "Commander 2016",
     "price": 10.4,
@@ -21067,6 +21952,10 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare",
+      "mythic"
+    ],
     "year": 2021,
     "setName": "Strixhaven: School of Mages",
     "price": 0.32,
@@ -21140,6 +22029,9 @@
     "toughness": "7",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2026,
     "setName": "Secrets of Strixhaven",
     "price": 3.8,
@@ -21211,6 +22103,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Murders at Karlov Manor Commander",
     "price": 8.53,
@@ -21281,6 +22176,9 @@
     "toughness": "8",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Murders at Karlov Manor Commander",
     "price": 0.43,
@@ -21351,6 +22249,9 @@
     "toughness": "12",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Foundations",
     "price": 1.22,
@@ -21423,6 +22324,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Duskmourn: House of Horror",
     "price": 0.21,
@@ -21491,6 +22395,9 @@
     "toughness": "1",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2006,
     "setName": "Time Spiral",
     "price": 22.17,
@@ -21555,6 +22462,10 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic",
+      "rare"
+    ],
     "year": 2022,
     "setName": "The Brothers' War",
     "price": 18.37,
@@ -21627,6 +22538,9 @@
     "toughness": "1",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Tarkir: Dragonstorm Commander",
     "price": 1.07,
@@ -21700,6 +22614,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2020,
     "setName": "Commander 2020",
     "price": 0.82,
@@ -21763,6 +22680,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2020,
     "setName": "Commander 2020",
     "price": 1.16,
@@ -21835,6 +22755,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Duskmourn: House of Horror Commander",
     "price": 2.67,
@@ -21906,6 +22829,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2025,
     "setName": "Edge of Eternities Commander",
     "price": 3.32,
@@ -21974,6 +22900,10 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare",
+      "mythic"
+    ],
     "year": 2020,
     "setName": "Commander Legends",
     "price": 0.43,
@@ -22044,6 +22974,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "New Capenna Commander",
     "price": 4.99,
@@ -22115,6 +23048,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "uncommon",
+    "rarities": [
+      "uncommon"
+    ],
     "year": 2025,
     "setName": "Edge of Eternities",
     "price": 0.43,
@@ -22187,6 +23123,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2025,
     "setName": "Final Fantasy",
     "price": 0.26,
@@ -22253,6 +23192,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "uncommon",
+    "rarities": [
+      "uncommon"
+    ],
     "year": 2022,
     "setName": "Dominaria United",
     "price": 2.92,
@@ -22325,6 +23267,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "uncommon",
+    "rarities": [
+      "uncommon"
+    ],
     "year": 2020,
     "setName": "Commander Legends",
     "price": 4.55,
@@ -22392,6 +23337,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "Wilds of Eldraine",
     "price": 7.82,
@@ -22462,6 +23410,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Secret Lair Drop",
     "price": 51.87,
@@ -22531,6 +23482,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "The Lost Caverns of Ixalan Commander",
     "price": 7.34,
@@ -22603,6 +23557,9 @@
     "toughness": "*",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Bloomburrow",
     "price": 19.51,
@@ -22669,6 +23626,9 @@
     "toughness": "1",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2021,
     "setName": "Kaldheim Commander",
     "price": 4.68,
@@ -22740,6 +23700,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2026,
     "setName": "Secrets of Strixhaven Commander",
     "price": 1.17,
@@ -22811,6 +23774,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "Warhammer 40,000 Commander",
     "price": 23.1,
@@ -22878,6 +23844,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "Wilds of Eldraine Commander",
     "price": 0.46,
@@ -22950,6 +23919,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Murders at Karlov Manor Commander",
     "price": 0.39,
@@ -23021,6 +23993,9 @@
     "toughness": "0",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "Double Masters 2022",
     "price": 1.06,
@@ -23093,6 +24068,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2026,
     "setName": "Teenage Mutant Ninja Turtles Eternal",
     "price": 2.5,
@@ -23167,6 +24145,9 @@
     "toughness": "1",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2026,
     "setName": "Teenage Mutant Ninja Turtles Eternal",
     "price": 3.59,
@@ -23237,6 +24218,9 @@
     "toughness": "6",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Outlaws of Thunder Junction Commander",
     "price": 0.44,
@@ -23308,6 +24292,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2021,
     "setName": "Crimson Vow Commander",
     "price": 0.67,
@@ -23383,6 +24370,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2016,
     "setName": "Commander 2016",
     "price": 8.36,
@@ -23461,6 +24451,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Outlaws of Thunder Junction",
     "price": 5.19,
@@ -23535,6 +24528,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2023,
     "setName": "The Lost Caverns of Ixalan Commander",
     "price": 1.97,
@@ -23608,6 +24604,10 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare",
+      "mythic"
+    ],
     "year": 2026,
     "setName": "Lorwyn Eclipsed Commander",
     "price": 0.66,
@@ -23684,6 +24684,9 @@
     "toughness": null,
     "loyalty": "3",
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Duskmourn: House of Horror Commander",
     "price": 0.39,
@@ -23759,6 +24762,10 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare",
+      "mythic"
+    ],
     "year": 2023,
     "setName": "Commander Masters",
     "price": 3.55,
@@ -23833,6 +24840,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "The Brothers' War Commander",
     "price": 0.45,
@@ -23904,6 +24914,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Outlaws of Thunder Junction",
     "price": 0.94,
@@ -23978,6 +24991,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2022,
     "setName": "Commander Legends: Battle for Baldur's Gate",
     "price": 0.26,
@@ -24051,6 +25067,9 @@
     "toughness": "1",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2018,
     "setName": "Commander 2018",
     "price": 4.4,
@@ -24125,6 +25144,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "The Lost Caverns of Ixalan Commander",
     "price": 0.26,
@@ -24198,6 +25220,9 @@
     "toughness": null,
     "loyalty": "5",
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2026,
     "setName": "Secrets of Strixhaven Commander",
     "price": 1.07,
@@ -24268,6 +25293,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Tarkir: Dragonstorm",
     "price": 2.55,
@@ -24339,6 +25367,9 @@
     "toughness": "7",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "Phyrexia: All Will Be One",
     "price": 23.17,
@@ -24409,6 +25440,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2020,
     "setName": "Double Masters",
     "price": 10.42,
@@ -24483,6 +25517,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Outlaws of Thunder Junction",
     "price": 42.29,
@@ -24554,6 +25591,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Bloomburrow",
     "price": 0.39,
@@ -24627,6 +25667,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2019,
     "setName": "Commander 2019",
     "price": 0.3,
@@ -24699,6 +25742,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Edge of Eternities Commander",
     "price": 0.53,
@@ -24776,6 +25822,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Foundations",
     "price": 6.34,
@@ -24848,6 +25897,9 @@
     "toughness": "6",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Murders at Karlov Manor Commander",
     "price": 6.59,
@@ -24921,6 +25973,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2022,
     "setName": "Commander Legends: Battle for Baldur's Gate",
     "price": 0.43,
@@ -24992,6 +26047,9 @@
     "toughness": "1",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Final Fantasy",
     "price": 22.26,
@@ -25058,6 +26116,10 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "uncommon",
+    "rarities": [
+      "uncommon",
+      "rare"
+    ],
     "year": 2023,
     "setName": "Commander Masters",
     "price": 0.2,
@@ -25129,6 +26191,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2023,
     "setName": "The Lord of the Rings: Tales of Middle-earth",
     "price": 0.38,
@@ -25200,6 +26265,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2026,
     "setName": "Secrets of Strixhaven Commander",
     "price": 0.49,
@@ -25273,6 +26341,10 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare",
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Innistrad Remastered",
     "price": 0.37,
@@ -25346,6 +26418,9 @@
     "toughness": null,
     "loyalty": "5",
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "Commander Masters",
     "price": 1.1,
@@ -25414,6 +26489,10 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic",
+      "rare"
+    ],
     "year": 2022,
     "setName": "Double Masters 2022",
     "price": 2.09,
@@ -25486,6 +26565,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Ravnica Remastered",
     "price": 45.47,
@@ -25558,6 +26640,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "Dominaria United Commander",
     "price": 2.86,
@@ -25632,6 +26717,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2021,
     "setName": "Strixhaven: School of Mages",
     "price": 0.52,
@@ -25703,6 +26791,10 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "uncommon",
+    "rarities": [
+      "uncommon",
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Duskmourn: House of Horror Commander",
     "price": 1.67,
@@ -25774,6 +26866,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2021,
     "setName": "Midnight Hunt Commander",
     "price": 1.24,
@@ -25844,6 +26939,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Bloomburrow",
     "price": 22.57,
@@ -25915,6 +27013,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2020,
     "setName": "Commander Legends",
     "price": 0.68,
@@ -25987,6 +27088,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2021,
     "setName": "Innistrad: Crimson Vow",
     "price": 0.59,
@@ -26058,6 +27162,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2023,
     "setName": "Commander Masters",
     "price": 11.97,
@@ -26127,6 +27234,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "Neon Dynasty Commander",
     "price": 0.99,
@@ -26199,6 +27309,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2021,
     "setName": "Crimson Vow Commander",
     "price": 0.45,
@@ -26272,6 +27385,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2018,
     "setName": "Commander 2018",
     "price": 2.6,
@@ -26345,6 +27461,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "March of the Machine: The Aftermath",
     "price": 1.69,
@@ -26417,6 +27536,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2020,
     "setName": "Zendikar Rising Commander",
     "price": 0.47,
@@ -26489,6 +27611,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2023,
     "setName": "March of the Machine: The Aftermath",
     "price": 4.48,
@@ -26561,6 +27686,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2022,
     "setName": "Commander Legends: Battle for Baldur's Gate",
     "price": 1.3,
@@ -26633,6 +27761,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2025,
     "setName": "Final Fantasy",
     "price": 0.6,
@@ -26699,6 +27830,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2023,
     "setName": "Universes Within",
     "price": 2.4,
@@ -26772,6 +27906,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2019,
     "setName": "Commander 2019",
     "price": 2.36,
@@ -26845,6 +27982,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2023,
     "setName": "Tales of Middle-earth Commander",
     "price": 0.32,
@@ -26916,6 +28056,9 @@
     "toughness": "7",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Avatar: The Last Airbender",
     "price": 3.68,
@@ -26988,6 +28131,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "New Capenna Commander",
     "price": 0.5,
@@ -27055,6 +28201,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Duskmourn: House of Horror Commander",
     "price": 8.42,
@@ -27127,6 +28276,10 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic",
+      "special"
+    ],
     "year": 2023,
     "setName": "Dominaria Remastered",
     "price": 32.14,
@@ -27197,6 +28350,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2019,
     "setName": "Throne of Eldraine",
     "price": 8.36,
@@ -27265,6 +28421,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2025,
     "setName": "Final Fantasy",
     "price": 1.3,
@@ -27324,6 +28483,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Outlaws of Thunder Junction",
     "price": 0.37,
@@ -27397,6 +28559,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Duskmourn: House of Horror Commander",
     "price": 0.38,
@@ -27470,6 +28635,10 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare",
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Edge of Eternities Commander",
     "price": 0.45,
@@ -27535,6 +28704,10 @@
     "toughness": "0",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare",
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Outlaws of Thunder Junction Commander",
     "price": 0.25,
@@ -27610,6 +28783,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2018,
     "setName": "Masters 25",
     "price": 0.4,
@@ -27678,6 +28854,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2025,
     "setName": "Aetherdrift",
     "price": 0.37,
@@ -27743,6 +28922,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "March of the Machine: The Aftermath",
     "price": 8.27,
@@ -27812,6 +28994,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Foundations Jumpstart",
     "price": 0.42,
@@ -27884,6 +29069,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Final Fantasy Commander",
     "price": 3.37,
@@ -27959,6 +29147,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2020,
     "setName": "Commander Legends",
     "price": 0.37,
@@ -28027,6 +29218,9 @@
     "toughness": null,
     "loyalty": "3",
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "Double Masters 2022",
     "price": 2.63,
@@ -28099,6 +29293,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2022,
     "setName": "Kamigawa: Neon Dynasty",
     "price": 0.31,
@@ -28170,6 +29367,10 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare",
+      "special"
+    ],
     "year": 2024,
     "setName": "Outlaws of Thunder Junction Commander",
     "price": 0.82,
@@ -28241,6 +29442,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Foundations Jumpstart",
     "price": 3.17,
@@ -28308,6 +29512,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "Phyrexia: All Will Be One Commander",
     "price": 3.56,
@@ -28381,6 +29588,9 @@
     "toughness": "1",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "The Lost Caverns of Ixalan Commander",
     "price": 5.04,
@@ -28451,6 +29661,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2023,
     "setName": "Wilds of Eldraine",
     "price": 0.41,
@@ -28523,6 +29736,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2025,
     "setName": "Tarkir: Dragonstorm",
     "price": 0.36,
@@ -28599,6 +29815,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "March of the Machine",
     "price": 0.52,
@@ -28672,6 +29891,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Fallout",
     "price": 0.38,
@@ -28742,6 +29964,10 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic",
+      "special"
+    ],
     "year": 2023,
     "setName": "March of the Machine Commander",
     "price": 8.75,
@@ -28809,6 +30035,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2019,
     "setName": "Modern Horizons",
     "price": 1.43,
@@ -28881,6 +30110,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2022,
     "setName": "Streets of New Capenna",
     "price": 0.36,
@@ -28953,6 +30185,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2023,
     "setName": "Universes Within",
     "price": 2.72,
@@ -29024,6 +30259,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2023,
     "setName": "Phyrexia: All Will Be One",
     "price": 1.18,
@@ -29095,6 +30333,9 @@
     "toughness": "1",
     "loyalty": null,
     "rarity": "uncommon",
+    "rarities": [
+      "uncommon"
+    ],
     "year": 2025,
     "setName": "Edge of Eternities Commander",
     "price": 0.21,
@@ -29170,6 +30411,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "The Lost Caverns of Ixalan Commander",
     "price": 0.49,
@@ -29246,6 +30490,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Murders at Karlov Manor Commander",
     "price": 0.36,
@@ -29320,6 +30567,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Bloomburrow Commander",
     "price": 0.32,
@@ -29393,6 +30643,9 @@
     "toughness": "1",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2022,
     "setName": "Dominaria United",
     "price": 0.48,
@@ -29464,6 +30717,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Final Fantasy",
     "price": 3.54,
@@ -29536,6 +30792,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2019,
     "setName": "Commander 2019",
     "price": 8.18,
@@ -29609,6 +30868,9 @@
     "toughness": "6",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2022,
     "setName": "Double Masters 2022",
     "price": 0.6,
@@ -29681,6 +30943,10 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic",
+      "rare"
+    ],
     "year": 2026,
     "setName": "Secrets of Strixhaven Commander",
     "price": 0.35,
@@ -29750,6 +31016,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Outlaws of Thunder Junction",
     "price": 0.22,
@@ -29821,6 +31090,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Modern Horizons 3",
     "price": 2.74,
@@ -29893,6 +31165,10 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare",
+      "mythic"
+    ],
     "year": 2023,
     "setName": "Commander Masters",
     "price": 0.35,
@@ -29965,6 +31241,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "Commander Masters",
     "price": 11.1,
@@ -30040,6 +31319,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "Warhammer 40,000 Commander",
     "price": 11.75,
@@ -30113,6 +31395,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2025,
     "setName": "Final Fantasy Commander",
     "price": 0.33,
@@ -30188,6 +31473,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "Unfinity",
     "price": 1.11,
@@ -30255,6 +31543,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "uncommon",
+    "rarities": [
+      "uncommon"
+    ],
     "year": 2022,
     "setName": "Dominaria United Commander",
     "price": 0.27,
@@ -30328,6 +31619,11 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare",
+      "special",
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Tarkir: Dragonstorm Commander",
     "price": 0.29,
@@ -30402,6 +31698,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2022,
     "setName": "Kamigawa: Neon Dynasty",
     "price": 0.34,
@@ -30467,6 +31766,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Outlaws of Thunder Junction",
     "price": 4.71,
@@ -30538,6 +31840,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Outlaws of Thunder Junction",
     "price": 0.23,
@@ -30613,6 +31918,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Murders at Karlov Manor Commander",
     "price": 0.48,
@@ -30686,6 +31994,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "The Lost Caverns of Ixalan Commander",
     "price": 0.36,
@@ -30756,6 +32067,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2025,
     "setName": "Edge of Eternities Commander",
     "price": 0.49,
@@ -30823,6 +32137,9 @@
     "toughness": "7",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2020,
     "setName": "Commander 2020",
     "price": 5.02,
@@ -30895,6 +32212,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "Dominaria United",
     "price": 3.41,
@@ -30967,6 +32287,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2025,
     "setName": "Final Fantasy",
     "price": 1.69,
@@ -31038,6 +32361,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Murders at Karlov Manor",
     "price": 34.39,
@@ -31109,6 +32435,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Bloomburrow",
     "price": 2.28,
@@ -31183,6 +32512,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "New Capenna Commander",
     "price": 0.47,
@@ -31255,6 +32587,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Modern Horizons 3",
     "price": 6.12,
@@ -31325,6 +32660,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2021,
     "setName": "Forgotten Realms Commander",
     "price": 7.52,
@@ -31394,6 +32732,11 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "uncommon",
+    "rarities": [
+      "uncommon",
+      "rare",
+      "special"
+    ],
     "year": 2023,
     "setName": "Commander Masters",
     "price": 0.18,
@@ -31467,6 +32810,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "Commander Masters",
     "price": 0.47,
@@ -31539,6 +32885,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2022,
     "setName": "Commander Legends: Battle for Baldur's Gate",
     "price": 0.29,
@@ -31602,6 +32951,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2023,
     "setName": "March of the Machine",
     "price": 2.62,
@@ -31670,6 +33022,9 @@
     "toughness": "*",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "March of the Machine: The Aftermath",
     "price": 19.08,
@@ -31728,6 +33083,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2026,
     "setName": "Lorwyn Eclipsed Commander",
     "price": 3.47,
@@ -31796,6 +33154,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "Tales of Middle-earth Commander",
     "price": 0.73,
@@ -31872,6 +33233,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2021,
     "setName": "Modern Horizons 2",
     "price": 0.29,
@@ -31944,6 +33308,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2025,
     "setName": "Tarkir: Dragonstorm",
     "price": 0.27,
@@ -32024,6 +33391,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Avatar: The Last Airbender Eternal",
     "price": 7.42,
@@ -32103,6 +33473,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2022,
     "setName": "Dominaria United",
     "price": 1.89,
@@ -32177,6 +33550,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Assassin's Creed",
     "price": 1.14,
@@ -32252,6 +33628,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Outlaws of Thunder Junction Commander",
     "price": 4.5,
@@ -32325,6 +33704,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2026,
     "setName": "Lorwyn Eclipsed Commander",
     "price": 0.67,
@@ -32397,6 +33779,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2020,
     "setName": "Commander 2020",
     "price": 2.52,
@@ -32466,6 +33851,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Murders at Karlov Manor",
     "price": 5.25,
@@ -32540,6 +33928,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Bloomburrow Commander",
     "price": 0.32,
@@ -32614,6 +34005,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2025,
     "setName": "Tarkir: Dragonstorm",
     "price": 0.3,
@@ -32687,6 +34081,9 @@
     "toughness": "6",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Tarkir: Dragonstorm",
     "price": 0.39,
@@ -32754,6 +34151,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2021,
     "setName": "Modern Horizons 2",
     "price": 0.25,
@@ -32824,6 +34224,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2026,
     "setName": "Lorwyn Eclipsed Commander",
     "price": 0.35,
@@ -32893,6 +34296,10 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "uncommon",
+    "rarities": [
+      "uncommon",
+      "rare"
+    ],
     "year": 2024,
     "setName": "Duskmourn: House of Horror Commander",
     "price": 1.11,
@@ -32958,6 +34365,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2019,
     "setName": "Commander 2019",
     "price": 5.62,
@@ -33032,6 +34442,10 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare",
+      "special"
+    ],
     "year": 2022,
     "setName": "Dominaria United Commander",
     "price": 0.18,
@@ -33102,6 +34516,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2025,
     "setName": "Avatar: The Last Airbender",
     "price": 0.56,
@@ -33175,6 +34592,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2023,
     "setName": "The Lost Caverns of Ixalan",
     "price": 4.52,
@@ -33248,6 +34668,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "Doctor Who",
     "price": 0.43,
@@ -33320,6 +34743,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2022,
     "setName": "Warhammer 40,000 Commander",
     "price": 17.74,
@@ -33393,6 +34819,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2021,
     "setName": "Kaldheim",
     "price": 0.34,
@@ -33466,6 +34895,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2020,
     "setName": "Commander Legends",
     "price": 0.36,
@@ -33542,6 +34974,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2022,
     "setName": "Kamigawa: Neon Dynasty",
     "price": 0.34,
@@ -33614,6 +35049,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Outlaws of Thunder Junction Commander",
     "price": 5.33,
@@ -33689,6 +35127,10 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare",
+      "mythic"
+    ],
     "year": 2023,
     "setName": "Commander Masters",
     "price": 0.7,
@@ -33761,6 +35203,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2026,
     "setName": "Lorwyn Eclipsed",
     "price": 0.41,
@@ -33837,6 +35282,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Aetherdrift",
     "price": 0.51,
@@ -33905,6 +35353,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Secret Lair Drop",
     "price": 167.02,
@@ -33977,6 +35428,9 @@
     "toughness": "7",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2025,
     "setName": "Final Fantasy",
     "price": 0.34,
@@ -34052,6 +35506,9 @@
     "toughness": "1",
     "loyalty": null,
     "rarity": "uncommon",
+    "rarities": [
+      "uncommon"
+    ],
     "year": 2020,
     "setName": "Commander Legends",
     "price": 0.31,
@@ -34123,6 +35580,9 @@
     "toughness": null,
     "loyalty": "4",
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "Commander Legends: Battle for Baldur's Gate",
     "price": 6.31,
@@ -34197,6 +35657,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Outlaws of Thunder Junction",
     "price": 5.63,
@@ -34268,6 +35731,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2020,
     "setName": "Commander Legends",
     "price": 0.24,
@@ -34341,6 +35807,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2022,
     "setName": "Streets of New Capenna",
     "price": 0.76,
@@ -34416,6 +35885,9 @@
     "toughness": null,
     "loyalty": "5",
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "Commander Legends: Battle for Baldur's Gate",
     "price": 1.21,
@@ -34488,6 +35960,10 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic",
+      "rare"
+    ],
     "year": 2024,
     "setName": "Ravnica Remastered",
     "price": 15.99,
@@ -34561,6 +36037,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "Double Masters 2022",
     "price": 1.28,
@@ -34636,6 +36115,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2014,
     "setName": "Khans of Tarkir",
     "price": 0.59,
@@ -34703,6 +36185,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Bloomburrow",
     "price": 0.32,
@@ -34778,6 +36263,9 @@
     "toughness": "10",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2024,
     "setName": "Foundations",
     "price": 0.9,
@@ -34866,6 +36354,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "uncommon",
+    "rarities": [
+      "uncommon"
+    ],
     "year": 2023,
     "setName": "Commander Masters",
     "price": 0.22,
@@ -34938,6 +36429,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2021,
     "setName": "Innistrad: Crimson Vow",
     "price": 0.36,
@@ -35010,6 +36504,9 @@
     "toughness": "12",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2024,
     "setName": "Duskmourn: House of Horror Commander",
     "price": 0.49,
@@ -35081,6 +36578,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2020,
     "setName": "Commander Legends",
     "price": 1.74,
@@ -35149,6 +36649,9 @@
     "toughness": "1",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2020,
     "setName": "Commander Legends",
     "price": 34.52,
@@ -35220,6 +36723,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "Commander Legends: Battle for Baldur's Gate",
     "price": 4.27,
@@ -35292,6 +36798,9 @@
     "toughness": "7",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2026,
     "setName": "Teenage Mutant Ninja Turtles",
     "price": 2.15,
@@ -35361,6 +36870,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "uncommon",
+    "rarities": [
+      "uncommon"
+    ],
     "year": 2025,
     "setName": "Final Fantasy",
     "price": 0.28,
@@ -35432,6 +36944,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2023,
     "setName": "The Lost Caverns of Ixalan",
     "price": 0.39,
@@ -35503,6 +37018,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2026,
     "setName": "Marvel Universe",
     "price": 5.23,
@@ -35571,6 +37089,9 @@
     "toughness": "1",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Marvel's Spider-Man",
     "price": 2.81,
@@ -35645,6 +37166,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2019,
     "setName": "Commander 2019",
     "price": 1.55,
@@ -35717,6 +37241,9 @@
     "toughness": "5",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2023,
     "setName": "Doctor Who",
     "price": 0.41,
@@ -35786,6 +37313,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2023,
     "setName": "Doctor Who",
     "price": 0.34,
@@ -35853,6 +37383,10 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic",
+      "rare"
+    ],
     "year": 2021,
     "setName": "Midnight Hunt Commander",
     "price": 0.61,
@@ -35924,6 +37458,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2022,
     "setName": "Commander Legends: Battle for Baldur's Gate",
     "price": 0.32,
@@ -35989,6 +37526,10 @@
     "toughness": "1",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare",
+      "mythic"
+    ],
     "year": 2020,
     "setName": "Double Masters",
     "price": 5.75,
@@ -36057,6 +37598,9 @@
     "toughness": "4",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2022,
     "setName": "Transformers",
     "price": 9.06,
@@ -36120,6 +37664,9 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2022,
     "setName": "Jumpstart 2022",
     "price": 7.5,
@@ -36191,6 +37738,9 @@
     "toughness": "2",
     "loyalty": null,
     "rarity": "mythic",
+    "rarities": [
+      "mythic"
+    ],
     "year": 2025,
     "setName": "Tarkir: Dragonstorm Commander",
     "price": 1.12,
@@ -36265,6 +37815,9 @@
     "toughness": "1",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare"
+    ],
     "year": 2021,
     "setName": "Modern Horizons 2",
     "price": 1.33,
@@ -36341,6 +37894,10 @@
     "toughness": "3",
     "loyalty": null,
     "rarity": "rare",
+    "rarities": [
+      "rare",
+      "special"
+    ],
     "year": 2017,
     "setName": "Aether Revolt",
     "price": 2.67,

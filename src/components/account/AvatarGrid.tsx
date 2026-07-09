@@ -135,7 +135,7 @@ export default function AvatarGrid({ current, tier, onSelect }: Props) {
               onClick={() =>
                 locked ? setLockedPick(cell.name) : onSelect(cell.avatar)
               }
-              title={locked ? `${cell.label} — supporters only` : cell.label}
+              title={locked ? `${cell.label} - supporters only` : cell.label}
             >
               <AvatarImage avatar={cell.avatar} size={60} />
               {locked && (

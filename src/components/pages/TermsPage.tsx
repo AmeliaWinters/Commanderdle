@@ -38,7 +38,7 @@ export default function TermsPage() {
           in with Google or Discord to unlock streaks, a profile and the
           leaderboards. Please keep your sign-in secure and don't impersonate
           others or pick a nickname that's offensive, misleading or infringes
-          someone's rights — I may change or remove such names, and may suspend
+          someone's rights. I may change or remove such names, and may suspend
           or delete accounts that break these terms. You can ask me to delete
           your account at any time via the <a href="/contact">contact page</a>.
         </p>
@@ -53,7 +53,7 @@ export default function TermsPage() {
           </a>
           . Payments are processed by Ko-fi under their own terms; I never
           handle your card details. Support is a voluntary tip, not a purchase
-          of <em>Magic: The Gathering</em> content — as a thank-you, supporters
+          of <em>Magic: The Gathering</em> content. As a thank-you, supporters
           get optional cosmetic extras (such as avatars and badges) that have no
           effect on gameplay or puzzle answers. Because these are digital
           thank-you perks, contributions are generally non-refundable except
@@ -102,7 +102,7 @@ export default function TermsPage() {
             EDHREC
           </a>
           , subject to their respective terms. The game's own code, layout and
-          original text remain the property of its theCreator.
+          original text remain the property of its creator.
         </p>
       </section>
 
@@ -131,7 +131,7 @@ export default function TermsPage() {
       <section>
         <h3>Limitation of liability</h3>
         <p>
-          To the fullest extent permitted by law, Commandle and its theCreator
+          To the fullest extent permitted by law, Commandle and its creator
           shall not be liable for any indirect, incidental or consequential
           damages arising out of your use of, or inability to use, the site.
         </p>

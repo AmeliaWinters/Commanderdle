@@ -54,7 +54,7 @@ export default function PrivacyPolicy() {
           </li>
           <li>
             <strong>Supporter payments.</strong> If you support the game on Ko-fi,
-            the payment itself is handled by Ko-fi, not me — I never see your card
+            the payment itself is handled by Ko-fi, not me. I never see your card
             details. Ko-fi tells me the payment amount and the email you used, so I
             can unlock the matching supporter cosmetics on any account with that
             email.
@@ -211,7 +211,7 @@ export default function PrivacyPolicy() {
           Game progress stored in your browser remains until you clear it.
           Anonymous, aggregate puzzle statistics may be retained indefinitely
           because they cannot be linked back to an individual. If you have an
-          account, your account data is kept until you ask me to delete it — get
+          account, your account data is kept until you ask me to delete it. Get
           in touch through my <a href="/contact">contact page</a> and I'll remove
           it. Records of Ko-fi payments may be kept as long as needed for
           accounting.
