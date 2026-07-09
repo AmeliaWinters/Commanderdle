@@ -122,20 +122,24 @@
       }
     </style>
     <link rel="manifest" href="/manifest.webmanifest" />
-    <title>Commandle MTG Commander Guessing Game</title>
+    <title>Commandle - Commander Guessing Game</title>
     <meta
       name="description"
-      content="Guess the daily Magic: The Gathering commander from the top 500 EDH Rank. Five modes: Classic, Silhouette, Zoom, Synergy, and Quote. 5 fresh puzzles every day."
+      content="Commandle is a free daily Magic: The Gathering commander (EDH) dle game. Guess the day's commander from colour, type, and stat clues in Classic, name it from blurred art (Silhouette), a zooming crop (Zoom), its synergy cards (Synergy), or flavour text (Quote) - plus Higher / Lower, Guess the Cost, and Grid bonus rounds. Everyone gets the same puzzle each day. Card data from Scryfall and EDHREC. Unofficial fan project."
     />
+    <meta name="author" content="ame@commandle.app" />
     <link rel="canonical" href="https://commandle.app/" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Commandle" />
-    <meta property="og:title" content="Commandle MTG Commander Guessing Game" />
     <meta
-      property="og:description"
-      content="Guess the daily Magic: The Gathering commander. Five modes, a fresh puzzle every day."
+      property="og:title"
+      content="Commandle - Commander Guessing Game"
+    />
+    <meta
+      name="description"
+      content="Commandle is a free daily Magic: The Gathering commander (EDH) dle game. Guess the day's commander from colour, type, and stat clues in Classic, name it from blurred art (Silhouette), a zooming crop (Zoom), its synergy cards (Synergy), or flavour text (Quote) - plus Higher / Lower, Guess the Cost, and Grid bonus rounds. Everyone gets the same puzzle each day. Card data from Scryfall and EDHREC. Unofficial fan project."
     />
     <meta property="og:url" content="https://commandle.app/" />
     <meta property="og:image" content="https://commandle.app/og-image.png" />
@@ -170,14 +174,36 @@
         "@context": "https://schema.org",
         "@type": "WebApplication",
         "name": "Commandle",
+        "alternateName": "Commander Guessing Game",
         "url": "https://commandle.app/",
-        "description": "A daily Magic: The Gathering commander guessing game with five modes: Classic, Silhouette, Zoom, Synergy, and Quote, plus Higher / Lower and Guess the cost side games. Everyone gets the same puzzle each day.",
-        "applicationCategory": "GameApplication",
+        "description": "Commandle is a free daily Magic: The Gathering commander (EDH) dle game. Guess the day's commander from colour, type, and stat clues in Classic, name it from blurred art (Silhouette), a zooming crop (Zoom), its synergy cards (Synergy), or flavour text (Quote) - plus Higher / Lower, Guess the Cost, and Grid bonus rounds. Everyone gets the same puzzle each day. Card data from Scryfall and EDHREC. Unofficial fan project."
+      "applicationCategory": "GameApplication",
         "genre": "Puzzle game",
         "operatingSystem": "Any (web browser)",
         "browserRequirements": "Requires JavaScript",
         "inLanguage": "en",
         "isAccessibleForFree": true,
+        "author": {
+          "@type": "Organization",
+          "name": "Commandle",
+          "description": "A Magic The Gathering fan project, not affiliated with Wizards of the Coast.",
+          "url": "https://commandle.app/about"
+        },
+        "creator": {
+          "@type": "Organization",
+          "name": "Commandle",
+          "url": "https://commandle.app/about"
+        },
+        "featureList": [
+          "Classic - guess the commander from colour, type and stat clues",
+          "Silhouette - guess the commander  from blurred card art",
+          "Zoom - guess the commander  from a crop that widens each guess",
+          "Synergy - guess the commander  from its top synergy cards",
+          "Quote - guess the commander  from its flavour text",
+          "Higher / Lower - which commander has more decls",
+          "Guess the Cost - guess the commander's market price",
+          "Grid - find the commander that fits both criteria"
+        ],
         "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
       }
     </script>

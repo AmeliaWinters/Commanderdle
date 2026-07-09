@@ -6,7 +6,7 @@
   justify-content: center;
   flex-wrap: wrap;
   margin: 0 auto var(--s4);
-  font-family: "Inter", system-ui, sans-serif;
+  font-family: "roboto", system-ui, sans-serif;
   font-size: 0.85rem;
   color: var(--text-dim);
 }
@@ -140,7 +140,7 @@
   text-align: left;
 }
 .archive-month-count {
-  font-family: "Inter", system-ui, sans-serif;
+  font-family: "roboto", system-ui, sans-serif;
   font-weight: 500;
   font-size: 0.78rem;
   color: var(--text-dim);
@@ -168,7 +168,7 @@
   color: var(--flame-1);
 }
 .archive-date {
-  font-family: "Inter", system-ui, sans-serif;
+  font-family: "roboto", system-ui, sans-serif;
   font-size: 0.82rem;
   color: var(--text-dim);
 }
