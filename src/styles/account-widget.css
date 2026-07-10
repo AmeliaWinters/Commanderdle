@@ -21,10 +21,9 @@
   padding: 6px 12px 6px 6px;
   color: var(--text);
   font: inherit;
-  background: rgba(22, 22, 25, 0.72);
+  background: var(--panel);
   border: 1px solid var(--line);
   border-radius: 999px;
-  backdrop-filter: blur(7px);
   cursor: pointer;
   transition:
     border-color 0.15s ease,
@@ -132,11 +131,10 @@
   width: max-content;
   max-width: min(19rem, calc(100vw - 16px));
   padding: 8px;
-  background: rgba(22, 22, 25, 0.94);
+  background: var(--panel);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   box-shadow: 0 14px 34px rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(9px);
   animation: account-pop-in 0.14s ease;
   /* On short viewports (landscape phones) the signed-in menu can run past the fold;
      cap it to what's below the widget and let it scroll rather than clip. */

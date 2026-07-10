@@ -1,0 +1,53 @@
+/* ── Light theme ─────────────────────────────────────────────────────────
+   Token overrides only: components style themselves against the variables
+   in base.css, so flipping the tokens here re-skins the whole app. The
+   resolved theme is set as data-theme on <html> by src/lib/theme.ts (and by
+   the inline pre-paint script in index.html before the bundle loads).
+
+   The palette is warm parchment rather than plain white — it keeps the
+   MTG-card feel and pairs better with Cinzel/EB Garamond and the flame
+   accents. All text/background combos pass WCAG AA (text-dim #655b46 is
+   5.8:1 on --bg, 6.3:1 on --panel). */
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f4eee1;
+  --panel: #fbf7ec;
+  --panel-2: #ece4d2;
+  --line: #cfc4ab;
+  --text: #211c15;
+  --text-dim: #655b46;
+
+  /* Contrast lifts flip to dark-on-light. */
+  --surface-1: rgba(35, 25, 10, 0.05);
+  --surface-2: rgba(35, 25, 10, 0.08);
+  --surface-3: rgba(35, 25, 10, 0.12);
+  --border: rgba(35, 25, 10, 0.14);
+  --border-strong: rgba(35, 25, 10, 0.26);
+  --ring: rgba(35, 25, 10, 0.28);
+  --ring-strong: rgba(35, 25, 10, 0.65);
+  --ring-track: rgba(35, 25, 10, 0.1);
+  --danger-text: #8f2a39;
+
+  /* Ambient flame glows: gentler still on parchment. */
+  --orb-opacity: 0.4;
+  --orb1-alpha: 0.22;
+  --orb2-alpha: 0.16;
+  --orb3-alpha: 0.14;
+
+  /* Guess feedback: same hues, tuned so white text stays readable while the
+     fills don't look like heavy ink blocks on the light page. */
+  --exact-bg: #247942;
+  --exact-bd: #1e6b39;
+  --partial-bg: #a87c12;
+  --partial-bd: #8f690e;
+  --far-bg: #8f2a39;
+  --far-bd: #7c2330;
+
+  --rarity-common: #5c5c5c;
+  --rarity-uncommon: #767676;
+  --rarity-rare: #a3821f;
+  --rarity-mythic: #c76800;
+
+  --gold: #a3821f;
+}

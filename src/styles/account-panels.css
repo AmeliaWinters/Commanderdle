@@ -3,8 +3,7 @@
   padding: var(--s3);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: rgba(22, 22, 25, 0.66);
-  backdrop-filter: blur(7px);
+  background: var(--panel);
   margin-bottom: var(--s3);
 }
 .account-panel h3 {
@@ -50,7 +49,7 @@
   width: 100%;
   font: inherit;
   color: var(--text);
-  background: rgba(31, 31, 37, 0.55);
+  background: var(--panel-2);
   border: 1px solid var(--line);
   border-radius: 9px;
   padding: 0.55rem 0.7rem;
@@ -75,7 +74,7 @@
       rgba(240, 126, 1, 0.1),
       transparent 60%
     ),
-    rgba(22, 22, 25, 0.66);
+    var(--panel);
 }
 
 /* The three purchasable tiers, each a card listing its perks. Every card themes
@@ -198,7 +197,7 @@
 
 .account-btn-ghost {
   color: var(--text);
-  background: rgba(31, 31, 37, 0.55);
+  background: var(--panel-2);
   border-color: var(--line);
 }
 .account-btn-ghost:hover {

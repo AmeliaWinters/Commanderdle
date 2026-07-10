@@ -9,50 +9,17 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
-    <meta
-      name="impact-site-verification"
-      value="d588c5bc-bf97-400d-82f3-b15a1c46ab15"
-    />
-    <!-- AdSense is NOT loaded here. The loader is injected at runtime by AdBanner.tsx,
-         and only after (a) VITE_ADSENSE_PUB_ID / VITE_ADSENSE_SLOT_ID are configured and
-         (b) the visitor has granted consent via the cookie banner. Hardcoding the tag here
-         would load it for everyone before consent — a GDPR problem and dead weight when ads
-         aren't configured. -->
     <meta name="theme-color" content="#0b0b0d" />
-    <!-- Paint the app's dark background from the very first frame so there's no white
-         flash before the stylesheet/JS load. Must be set on BODY, not HTML: the animated
-         orbs (body::before) and card backdrop sit at negative z-index and rely on the
-         body background propagating to the canvas. An html background would break that
-         propagation and paint the body's own background over them, hiding both. -->
     <style>
       body {
         background: #0b0b0d;
       }
-
-      /* ------------------------------------------------------------------ *
-       * Inline app-shell skeleton.
-       *
-       * The app is a client-rendered SPA: without this, #root stays empty
-       * until ~110KB (gzip) of React + app JS downloads, parses and executes,
-       * so on a mid-tier phone the first meaningful paint (and LCP) lands
-       * around 5-6s. This static shell arrives with the HTML and paints as
-       * soon as the (small, ~9KB gzip) stylesheet is in — giving a real
-       * contentful paint (the <h1>) seconds before the JS is ready. React's
-       * createRoot().render() clears #root on mount, swapping the skeleton
-       * for the live app. The <h1> here is byte-for-byte the same element the
-       * app renders, so the title never moves (no layout shift, stable LCP).
-       *
-       * Everything is scoped under #boot so it can't leak into the loaded
-       * stylesheet, and it's aria-hidden so it's invisible to assistive tech.
-       * ------------------------------------------------------------------ */
-      /* ------------------------------------------------------------------ *
-       * Loading state.
-       *
-       * A bare flame-coloured ring centred over the page background (the
-       * floating backdrop card in #boot-backdrop still paints from the HTML,
-       * so the loader sits on the same scene the app loads into). No title or
-       * chrome — React clears #boot on mount and renders the real app.
-       * ------------------------------------------------------------------ */
+      html[data-theme="light"] body {
+        background: #f4eee1;
+      }
+      html[data-theme="light"] #boot-orbs {
+        opacity: 0.35;
+      }
       #boot {
         --line: #2c2c34;
         --flame-1: #f6a01a;
@@ -61,30 +28,27 @@
         justify-content: center;
         min-height: 100dvh;
       }
-      /* Static copy of the app's drifting flame glows (body::before in base.css)
-         so the loader sits on the same background the app loads into. Painted
-         from the HTML; no animation — it just needs to be there. */
       #boot-orbs {
         position: fixed;
         inset: -20%;
         z-index: -3;
         pointer-events: none;
-        opacity: 0.9;
-        filter: blur(60px);
+        opacity: 0.55;
+        filter: blur(70px);
         background:
           radial-gradient(
-            42% 42% at 25% 30%,
-            rgba(236, 90, 28, 0.5),
+            38% 38% at 25% 30%,
+            rgba(236, 90, 28, 0.34),
             transparent 70%
           ),
           radial-gradient(
-            46% 46% at 78% 70%,
-            rgba(192, 31, 31, 0.45),
+            40% 40% at 78% 70%,
+            rgba(192, 31, 31, 0.3),
             transparent 70%
           ),
           radial-gradient(
-            38% 38% at 60% 15%,
-            rgba(246, 160, 26, 0.32),
+            32% 32% at 60% 15%,
+            rgba(246, 160, 26, 0.2),
             transparent 70%
           );
       }
@@ -121,6 +85,24 @@
         }
       }
     </style>
+    <script>
+      (function () {
+        try {
+          var pref = localStorage.getItem("commandle:theme");
+          var theme =
+            pref === "light" || pref === "dark"
+              ? pref
+              : matchMedia("(prefers-color-scheme: light)").matches
+                ? "light"
+                : "dark";
+          document.documentElement.dataset.theme = theme;
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta && theme === "light") meta.content = "#f4eee1";
+        } catch (e) {
+          /* default dark */
+        }
+      })();
+    </script>
     <link rel="manifest" href="/manifest.webmanifest" />
     <title>Commandle - MTG Commander Guessing Game</title>
     <meta
@@ -130,7 +112,6 @@
     <meta name="author" content="ame@commandle.app" />
     <link rel="canonical" href="https://commandle.app/" />
 
-    <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Commandle" />
     <meta
@@ -150,8 +131,6 @@
       content="Commandle - MTG Commander Guessing Game"
     />
 
-    <!-- Self-hosted fonts (see @font-face in base.css). Preload the two faces used in
-         the first paint so text swaps to the real font as early as possible. -->
     <link
       rel="preload"
       href="/fonts/cinzel-latin.woff2"
@@ -166,9 +145,7 @@
       type="font/woff2"
       crossorigin
     />
-    <!-- AdSense and analytics are loaded at runtime from Vite env vars (see AdBanner.tsx / analytics.ts). -->
 
-    <!-- Structured data: helps search engines classify the site as a free browser game. -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -176,8 +153,8 @@
         "name": "Commandle",
         "alternateName": "Commander Guessing Game",
         "url": "https://commandle.app/",
-        "description": "Commandle is a free daily Magic: The Gathering commander (EDH) dle game. Guess the day's commander from colour, type, and stat clues in Classic, name it from blurred art (Silhouette), a zooming crop (Zoom), its synergy cards (Synergy), or flavour text (Quote) - plus Higher / Lower, Guess the Cost, and Grid bonus rounds. Everyone gets the same puzzle each day. Card data from Scryfall and EDHREC. Unofficial fan project."
-      "applicationCategory": "GameApplication",
+        "description": "Commandle is a free daily Magic: The Gathering commander (EDH) dle game. Guess the day's commander from colour, type, and stat clues in Classic, name it from blurred art (Silhouette), a zooming crop (Zoom), its synergy cards (Synergy), or flavour text (Quote) - plus Higher / Lower, Guess the Cost, and Grid bonus rounds. Everyone gets the same puzzle each day. Card data from Scryfall and EDHREC. Unofficial fan project.",
+        "applicationCategory": "GameApplication",
         "genre": "Puzzle game",
         "operatingSystem": "Any (web browser)",
         "browserRequirements": "Requires JavaScript",
@@ -210,15 +187,12 @@
   </head>
   <body>
     <div id="root">
-      <!-- Loading state (styles in <head>): the app's ambient orbs plus a
-           spinner, painted with the HTML so there's something on screen before
-           the JS bundle is ready. React clears it on mount. -->
+
       <div id="boot" aria-hidden="true">
         <div id="boot-orbs" aria-hidden="true"></div>
         <div class="boot-spinner"></div>
       </div>
-      <!-- Crawler-visible fallback. React replaces this on mount; search engines and
-           no-JS clients index the real copy below instead of an empty shell. -->
+
       <noscript>
         <h1>Commandle MTG Commander Guessing Game</h1>
         <p>

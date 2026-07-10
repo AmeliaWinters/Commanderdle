@@ -118,9 +118,8 @@
 .friends-subtle {
   font-size: 0.85rem;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  opacity: 0.55;
+  letter-spacing: 0.02em;
+  opacity: 0.65;
 }
 
 /* Requests inbox — a highlighted panel so a waiting request is impossible to miss. */
@@ -215,9 +214,8 @@
 .friends-today-legend {
   font-size: 0.85rem;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  opacity: 0.55;
+  letter-spacing: 0.02em;
+  opacity: 0.65;
 }
 
 .friend-list {

@@ -2,16 +2,15 @@
 .result-synergy {
   margin-top: 20px;
   padding-top: 18px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--border);
   position: relative;
   z-index: 1;
 }
 
 .result-synergy-label {
   font-family: "Cinzel", serif;
-  font-size: 0.85rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
   color: var(--text-dim);
   margin: 0 0 12px;
   text-align: center;

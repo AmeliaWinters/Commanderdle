@@ -4,12 +4,7 @@
   padding: var(--s4);
   border: 1px solid var(--line);
   border-radius: 16px;
-  background: linear-gradient(
-    180deg,
-    rgba(31, 31, 37, 0.72),
-    rgba(22, 22, 25, 0.72)
-  );
-  backdrop-filter: blur(7px);
+  background: linear-gradient(180deg, var(--panel-2), var(--panel));
 }
 
 .account-signin-title {

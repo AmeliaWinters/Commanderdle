@@ -18,6 +18,7 @@ import {
   FiBell,
   FiBellOff,
 } from "react-icons/fi";
+import { ThemeButton } from "./SettingsMenu";
 
 export default function GameSettingsMenu() {
   const [open, setOpen] = useState(false);
@@ -91,6 +92,7 @@ export default function GameSettingsMenu() {
             )}
             Sound effects: {muted ? "Off" : "On"}
           </button>
+          <ThemeButton />
           {notificationsSupported() && (
             <button
               aria-pressed={reminderOn}

@@ -6,6 +6,9 @@ import { AuthProvider } from './lib/useAuth'
 import 'keyrune/css/keyrune.css'
 import './styles/index.css'
 import { loadCommanders } from './lib/commanders'
+import { initTheme } from './lib/theme'
+
+initTheme()
 
 loadCommanders()
   .catch(() => {})

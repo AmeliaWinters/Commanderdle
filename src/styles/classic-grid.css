@@ -41,11 +41,10 @@
 
 .head-cell {
   background: var(--panel-2) !important;
-  color: white;
+  color: var(--text);
   font-family: "Cinzel", serif;
-  font-size: 0.8rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.03em;
   text-align: center;
   padding: 4px 2px;
   display: flex;
@@ -73,7 +72,6 @@ button.head-help {
   align-items: center;
   justify-content: center;
   gap: 3px;
-  text-transform: uppercase;
   letter-spacing: inherit;
 }
 

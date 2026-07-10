@@ -1,4 +1,5 @@
 import { rateLimitOk, clientIp } from '../rateLimit'
+import { isSubmittablePuzzle } from '../../../src/lib/puzzleDate'
 
 const POST_LIMIT = 40
 const POST_WINDOW_SEC = 60 * 60
@@ -64,6 +65,8 @@ async function postPicks(ctx: Ctx, db: D1Database, puzzle: number): Promise<Resp
 
   const clientId = typeof body.clientId === 'string' ? body.clientId.trim() : ''
   if (!/^[A-Za-z0-9_-]{8,64}$/.test(clientId)) return json({ error: 'bad clientId' }, 400)
+
+  if (!isSubmittablePuzzle(puzzle)) return json({ error: 'puzzle not yet available' }, 400)
 
   if (!Array.isArray(body.picks) || body.picks.length > CELLS)
     return json({ error: 'bad picks' }, 400)

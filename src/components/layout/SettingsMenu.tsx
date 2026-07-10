@@ -13,12 +13,43 @@ import {
   onMuteChange,
 } from "../../lib/sounds";
 import {
+  getThemePref,
+  cycleThemePref,
+  onThemeChange,
+  type ThemePref,
+} from "../../lib/theme";
+import {
   FiSettings,
   FiVolume2,
   FiVolumeX,
   FiBell,
   FiBellOff,
+  FiSun,
+  FiMoon,
+  FiMonitor,
 } from "react-icons/fi";
+
+const THEME_LABEL: Record<ThemePref, string> = {
+  system: "System",
+  light: "Light",
+  dark: "Dark",
+};
+
+export function ThemeButton() {
+  const [theme, setTheme] = useState<ThemePref>(getThemePref);
+  useEffect(() => onThemeChange(setTheme), []);
+  const Icon =
+    theme === "light" ? FiSun : theme === "dark" ? FiMoon : FiMonitor;
+  return (
+    <button
+      onClick={() => cycleThemePref()}
+      title="Switch between the system, light and dark theme"
+    >
+      <Icon className="menu-icon" aria-hidden="true" />
+      Theme: {THEME_LABEL[theme]}
+    </button>
+  );
+}
 
 function clearAllCommandleStorage() {
   try {
@@ -133,6 +164,7 @@ export default function SettingsMenu({
             )}
             Sound effects: {muted ? "Off" : "On"}
           </button>
+          <ThemeButton />
           {notificationsSupported() && (
             <button
               aria-pressed={reminderOn}

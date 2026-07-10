@@ -1,9 +1,7 @@
 import { isShareMode, type ShareMode } from '../../../../src/lib/shareCode'
 import { validateSubmission, type GlobalStats } from '../../../../src/lib/globalStats'
 import { rateLimitOk, clientIp } from '../../rateLimit'
-import { puzzleNumberForDate } from '../../../../src/lib/puzzleDate'
-
-const todayKey = () => new Date().toISOString().slice(0, 10)
+import { isSubmittablePuzzle } from '../../../../src/lib/puzzleDate'
 
 const POST_LIMIT = 40
 const POST_WINDOW_SEC = 60 * 60
@@ -83,7 +81,7 @@ async function postResult(
   const valid = validateSubmission(mode, puzzle, Boolean(body.won), Number(body.guesses))
   if (!valid) return json({ error: 'invalid result' }, 400)
 
-  if (puzzle > puzzleNumberForDate(todayKey()) + 1) return json({ error: 'puzzle not yet available' }, 400)
+  if (!isSubmittablePuzzle(puzzle)) return json({ error: 'puzzle not yet available' }, 400)
 
   const allowed = await rateLimitOk(
     db,

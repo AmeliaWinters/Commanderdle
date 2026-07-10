@@ -3,7 +3,7 @@
   margin: 20px auto 0;
   max-width: 420px;
   padding-top: 18px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--border);
 }
 
 .stats-numbers {
@@ -37,9 +37,8 @@
 
 .stats-dist h3 {
   font-family: "Cinzel", serif;
-  font-size: 0.85rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
   color: var(--text-dim);
   margin: 0 0 10px;
   text-align: center;
@@ -80,7 +79,7 @@
 }
 
 .dist-bar {
-  background: rgba(255, 255, 255, 0.16);
+  background: var(--surface-3);
   min-width: 22px;
   border-radius: 3px;
   padding: 2px 6px;
@@ -109,14 +108,13 @@
 .global-stats {
   margin-top: 18px;
   padding-top: 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--border);
 }
 
 .global-stats-title {
   font-family: "Cinzel", serif;
-  font-size: 0.85rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
   color: var(--text-dim);
   margin: 0 0 8px;
 }

@@ -25,12 +25,26 @@
 }
 
 :root {
+  color-scheme: dark;
   --bg: #0b0b0d;
   --panel: #161619;
   --panel-2: #1f1f25;
   --line: #2c2c34;
   --text: #f4f4f6;
   --text-dim: #9b9ba6;
+
+  /* Subtle contrast lifts and hairlines. Light-on-dark here; theme-light.css
+     flips them to dark-on-light. Use these instead of raw white/black rgba()
+     for any surface that must survive both themes. */
+  --surface-1: rgba(255, 255, 255, 0.05);
+  --surface-2: rgba(255, 255, 255, 0.09);
+  --surface-3: rgba(255, 255, 255, 0.14);
+  --border: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.18);
+  --ring: rgba(255, 255, 255, 0.22);
+  --ring-strong: rgba(255, 255, 255, 0.7);
+  --ring-track: rgba(255, 255, 255, 0.08);
+  --danger-text: #e0a0a0;
 
   /* MTG flame: orange -> red */
   --flame-1: #f6a01a;
@@ -80,23 +94,24 @@
   font-family: "EB Garamond", Georgia, "Times New Roman", serif;
 
 
-  --orb-blur: 60px;
-
+  --orb-blur: 70px;
+  /* Deliberately subtle: a faint warm ambiance, not a glowing backdrop. */
+  --orb-opacity: 0.55;
 
   --orb-drift: 6%;
   --orb-speed: 14s;
   --orb1-color: 236, 90, 28; /* ember orange */
-  --orb1-alpha: 0.5;
+  --orb1-alpha: 0.34;
   --orb1-pos: 25% 30%;
-  --orb1-size: 42%;
+  --orb1-size: 38%;
   --orb2-color: 192, 31, 31; /* deep red */
-  --orb2-alpha: 0.45;
+  --orb2-alpha: 0.3;
   --orb2-pos: 78% 70%;
-  --orb2-size: 46%;
+  --orb2-size: 40%;
   --orb3-color: 246, 160, 26; /* gold */
-  --orb3-alpha: 0.32;
+  --orb3-alpha: 0.2;
   --orb3-pos: 60% 15%;
-  --orb3-size: 38%;
+  --orb3-size: 32%;
 
   /* ---------- Background floating cards (tweak these) ---------- */
   --card-border: rgba(246, 160, 26, 0.12);

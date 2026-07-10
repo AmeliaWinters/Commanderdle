@@ -44,8 +44,8 @@
   border-radius: 999px;
   font-size: 0.8rem;
   font-weight: 600;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--surface-1);
+  border: 1px solid var(--border);
 }
 
 .grid-result-tier-rare {
@@ -78,7 +78,7 @@
   flex-direction: column;
   border-radius: var(--radius);
   background: var(--panel, #1d1a24);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid var(--border-strong);
   padding: 0.75rem;
 }
 
@@ -106,7 +106,7 @@
 }
 
 .grid-detail-item + .grid-detail-item {
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid var(--border);
 }
 
 .grid-detail-item-mine {
@@ -120,10 +120,9 @@
 }
 
 .grid-detail-you {
-  font-size: 0.65rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
   color: var(--gold);
 }
 
@@ -133,9 +132,8 @@
   align-items: center;
   gap: 0.25rem;
   flex-shrink: 0;
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   font-weight: 700;
-  text-transform: uppercase;
   letter-spacing: 0.02em;
   color: var(--text-dim);
 }
@@ -160,7 +158,7 @@
   border-radius: 999px;
   font-size: 0.72rem;
   font-weight: 700;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--surface-3);
   white-space: nowrap;
 }
 
@@ -185,5 +183,5 @@
 }
 
 .grid-detail-thumb-blank {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--surface-2);
 }
