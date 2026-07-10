@@ -56,8 +56,7 @@ function clearAllCommandleStorage() {
     Object.keys(localStorage)
       .filter((k) => k.toLowerCase().startsWith("commandle"))
       .forEach((k) => localStorage.removeItem(k));
-  } catch {
-  }
+  } catch {}
   window.location.reload();
 }
 
@@ -164,7 +163,7 @@ export default function SettingsMenu({
             )}
             Sound effects: {muted ? "Off" : "On"}
           </button>
-          <ThemeButton />
+          {/*<ThemeButton /> */}
           {notificationsSupported() && (
             <button
               aria-pressed={reminderOn}

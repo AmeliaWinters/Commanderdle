@@ -29,7 +29,7 @@ export default function AppFooter({ isArchive }: Props) {
 
   return (
     <div className="bottom-bar">
-      <AdBanner />
+      {/*<AdBanner /> */}
       <footer className="app-footer">
         <p className="footer-meta">
           {isArchive ? (
