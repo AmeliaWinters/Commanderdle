@@ -11,7 +11,7 @@
 # and the client treats any failure as "no community data", so the game still works 100%
 # static if the database is unconfigured or down.
 
-name = "commandle"
+name = "commanderdle"
 main = "worker/index.ts"
 compatibility_date = "2024-11-01"
 
