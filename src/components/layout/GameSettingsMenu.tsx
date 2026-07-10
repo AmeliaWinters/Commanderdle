@@ -92,7 +92,7 @@ export default function GameSettingsMenu() {
             )}
             Sound effects: {muted ? "Off" : "On"}
           </button>
-          <ThemeButton />
+          {/*<ThemeButton /> */}
           {notificationsSupported() && (
             <button
               aria-pressed={reminderOn}
