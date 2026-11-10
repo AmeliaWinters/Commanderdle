@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-11-09T14:28:20.152Z",
+  "fetchedAt": "2026-11-10T13:51:00.436Z",
   "commanders": [
     {
       "id": "c7f2c2d5-e052-49e8-b5de-712858c2ea78",
@@ -13348,27 +13348,27 @@
     "Frodo, Adventurous Hobbit": [
       {
         "name": "Call of the Ring",
-        "synergy": 0.7758289043690982
+        "synergy": 0.7758204128031256
       },
       {
         "name": "Frodo, Sauron's Bane",
-        "synergy": 0.5241126358859034
+        "synergy": 0.5241128265835715
       },
       {
         "name": "Gollum, Patient Plotter",
-        "synergy": 0.4807702738653945
+        "synergy": 0.4807667490850527
       },
       {
         "name": "Samwise the Stouthearted",
-        "synergy": 0.4485111562832459
+        "synergy": 0.4485110203763257
       },
       {
         "name": "Soul Warden",
-        "synergy": 0.4350448234426735
+        "synergy": 0.43502311098722546
       },
       {
         "name": "Sam's Desperate Rescue",
-        "synergy": 0.43150409146467633
+        "synergy": 0.4314983914936425
       }
     ],
     "Sam, Loyal Attendant": [
@@ -13504,27 +13504,27 @@
     "Rin and Seri, Inseparable": [
       {
         "name": "Regal Caracal",
-        "synergy": 0.8018539984863106
+        "synergy": 0.8018450767805888
       },
       {
         "name": "Feline Sovereign",
-        "synergy": 0.7773423273223021
+        "synergy": 0.7772252999681483
       },
       {
         "name": "Pack Leader",
-        "synergy": 0.7648804393021078
+        "synergy": 0.7649657767022855
       },
       {
         "name": "Arahbo, the First Fang",
-        "synergy": 0.6794006003129481
+        "synergy": 0.6793974977085251
       },
       {
         "name": "Jinnie Fay, Jetmir's Second",
-        "synergy": 0.6678174197528081
+        "synergy": 0.6676629839495802
       },
       {
         "name": "King of the Pride",
-        "synergy": 0.6527460411477233
+        "synergy": 0.6526157682594613
       }
     ],
     "Glarb, Calamity's Augur": [
@@ -14596,27 +14596,27 @@
     "Zaxara, the Exemplary": [
       {
         "name": "Hydroid Krasis",
-        "synergy": 0.8136558585133754
+        "synergy": 0.8137495159585757
       },
       {
         "name": "Unbound Flourishing",
-        "synergy": 0.7610313169908622
+        "synergy": 0.7610824409593523
       },
       {
         "name": "Primordial Hydra",
-        "synergy": 0.6512597162800167
+        "synergy": 0.6511376080689932
       },
       {
         "name": "Hungering Hydra",
-        "synergy": 0.624374420064415
+        "synergy": 0.6243368460614673
       },
       {
         "name": "Voracious Hydra",
-        "synergy": 0.6198756656315971
+        "synergy": 0.6198489141884302
       },
       {
         "name": "Steelbane Hydra",
-        "synergy": 0.6080818298764331
+        "synergy": 0.6083339392208262
       }
     ],
     "Kilo, Apogee Mind": [
@@ -14856,27 +14856,27 @@
     "Henzie \"Toolbox\" Torre": [
       {
         "name": "Junji, the Midnight Sky",
-        "synergy": 0.6735293668114237
+        "synergy": 0.6734811036712341
       },
       {
         "name": "Solemn Simulacrum",
-        "synergy": 0.6151387817790022
+        "synergy": 0.6150929635099059
       },
       {
         "name": "Seedguide Ash",
-        "synergy": 0.5936626338356679
+        "synergy": 0.5935673658205826
       },
       {
         "name": "Etali, Primal Storm",
-        "synergy": 0.583658175623773
+        "synergy": 0.5834135196394885
       },
       {
         "name": "Primeval Herald",
-        "synergy": 0.5740091646928588
+        "synergy": 0.5738121079034252
       },
       {
         "name": "Ojer Kaslem, Deepest Growth",
-        "synergy": 0.5374931376300599
+        "synergy": 0.537342855306418
       }
     ],
     "Captain N'ghathrod": [
@@ -14908,27 +14908,27 @@
     "Urtet, Remnant of Memnarch": [
       {
         "name": "Gold Myr",
-        "synergy": 0.9210916177985701
+        "synergy": 0.9209621694694751
       },
       {
         "name": "Silver Myr",
-        "synergy": 0.9199217781908121
+        "synergy": 0.9198948577967115
       },
       {
         "name": "Copper Myr",
-        "synergy": 0.9144062485236408
+        "synergy": 0.9143295740025605
       },
       {
         "name": "Iron Myr",
-        "synergy": 0.9123456428393047
+        "synergy": 0.9122187522653621
       },
       {
         "name": "Leaden Myr",
-        "synergy": 0.9099904980249047
+        "synergy": 0.9099143987165068
       },
       {
         "name": "Myr Galvanizer",
-        "synergy": 0.9093203698156065
+        "synergy": 0.9094513180327928
       }
     ],
     "Omnath, Locus of Creation": [
@@ -15090,27 +15090,27 @@
     "Obeka, Splitter of Seconds": [
       {
         "name": "As Foretold",
-        "synergy": 0.7875353186976646
+        "synergy": 0.7878069759587045
       },
       {
         "name": "Dragonmaster Outcast",
-        "synergy": 0.7455210629864664
+        "synergy": 0.7454667086396191
       },
       {
         "name": "Court of Ire",
-        "synergy": 0.7400901237938045
+        "synergy": 0.7400416360676164
       },
       {
         "name": "Twilight Prophet",
-        "synergy": 0.7244232422794296
+        "synergy": 0.7243752545640837
       },
       {
         "name": "Replicating Ring",
-        "synergy": 0.7222481989207168
+        "synergy": 0.7219548272649392
       },
       {
         "name": "Ring of Valkas",
-        "synergy": 0.6873919299924992
+        "synergy": 0.6873515627950365
       }
     ],
     "Marneus Calgar": [
@@ -15142,27 +15142,27 @@
     "Zinnia, Valley's Voice": [
       {
         "name": "Agate Instigator",
-        "synergy": 0.6902449661607193
+        "synergy": 0.6902443566893274
       },
       {
         "name": "Selfless Spirit",
-        "synergy": 0.5705832117297078
+        "synergy": 0.5709818933272006
       },
       {
         "name": "Curiosity Crafter",
-        "synergy": 0.542334241970877
+        "synergy": 0.5423041534816758
       },
       {
         "name": "Ornithopter of Paradise",
-        "synergy": 0.5125160637541962
+        "synergy": 0.5128490361225753
       },
       {
         "name": "Rapid Augmenter",
-        "synergy": 0.4980822271428614
+        "synergy": 0.4981388863145284
       },
       {
         "name": "Aether Channeler",
-        "synergy": 0.4922991299832594
+        "synergy": 0.4925355408906052
       }
     ],
     "Jin Sakai, Ghost of Tsushima": [
@@ -15220,27 +15220,27 @@
     "Sidar Jabari of Zhalfir": [
       {
         "name": "Knight Exemplar",
-        "synergy": 0.8906851163747715
+        "synergy": 0.8906476487793927
       },
       {
         "name": "Herald of Hoofbeats",
-        "synergy": 0.8615551616911501
+        "synergy": 0.8614284991701193
       },
       {
         "name": "Vodalian Wave-Knight",
-        "synergy": 0.8240077455327577
+        "synergy": 0.8237981469632119
       },
       {
         "name": "Haakon, Stromgald Scourge",
-        "synergy": 0.7914033928215569
+        "synergy": 0.7914283194385565
       },
       {
         "name": "Knights' Charge",
-        "synergy": 0.7895200568828543
+        "synergy": 0.7893878725628729
       },
       {
         "name": "Exsanguinator Cavalry",
-        "synergy": 0.7432212149453529
+        "synergy": 0.7430670814862452
       }
     ],
     "Atraxa, Grand Unifier": [
@@ -15272,27 +15272,27 @@
     "Ezio Auditore da Firenze": [
       {
         "name": "Ezio, Blade of Vengeance",
-        "synergy": 0.8009879003016941
+        "synergy": 0.8012559720289293
       },
       {
         "name": "Basim Ibn Ishaq",
-        "synergy": 0.789925022029139
+        "synergy": 0.790037538301121
       },
       {
         "name": "Brotherhood Headquarters",
-        "synergy": 0.7693661592374645
+        "synergy": 0.7693536866681474
       },
       {
         "name": "Bayek of Siwa",
-        "synergy": 0.7676843005477246
+        "synergy": 0.7678390747180981
       },
       {
         "name": "Arno Dorian",
-        "synergy": 0.7639314975231274
+        "synergy": 0.7639175393214509
       },
       {
         "name": "Ramses, Assassin Lord",
-        "synergy": 0.7573211464348335
+        "synergy": 0.7574131979665663
       }
     ],
     "Mendicant Core, Guidelight": [
@@ -15480,27 +15480,27 @@
     "Kynaios and Tiro of Meletis": [
       {
         "name": "Rites of Flourishing",
-        "synergy": 0.5366430978341774
+        "synergy": 0.5367958936778063
       },
       {
         "name": "Howling Mine",
-        "synergy": 0.4248710137470904
+        "synergy": 0.42470762560780606
       },
       {
         "name": "Tempt with Discovery",
-        "synergy": 0.4170618950177767
+        "synergy": 0.4170367986675555
       },
       {
         "name": "Selvala, Explorer Returned",
-        "synergy": 0.41057234143686094
+        "synergy": 0.4104082120762786
       },
       {
         "name": "Kwain, Itinerant Meddler",
-        "synergy": 0.38579717395809815
+        "synergy": 0.38539120895950096
       },
       {
-        "name": "Propaganda",
-        "synergy": 0.3820860294965741
+        "name": "Gluntch, the Bestower",
+        "synergy": 0.38191375179992637
       }
     ],
     "Morophon, the Boundless": [
@@ -15610,27 +15610,27 @@
     "Tovolar, Dire Overlord": [
       {
         "name": "Kessig Naturalist",
-        "synergy": 0.8732889116785667
+        "synergy": 0.8734104467846994
       },
       {
         "name": "Tovolar's Huntmaster",
-        "synergy": 0.819531459405331
+        "synergy": 0.8198698490136598
       },
       {
         "name": "Immerwolf",
-        "synergy": 0.8147184601805226
+        "synergy": 0.8147721202731508
       },
       {
         "name": "Outland Liberator",
-        "synergy": 0.8055450516245907
+        "synergy": 0.8057796798558932
       },
       {
         "name": "Mayor of Avabruck",
-        "synergy": 0.8018838882207958
+        "synergy": 0.8017716206908817
       },
       {
         "name": "Howlpack Piper",
-        "synergy": 0.7816716951785252
+        "synergy": 0.781514107718864
       }
     ],
     "Iroh, Grand Lotus": [
@@ -15662,79 +15662,79 @@
     "Captain America, First Avenger": [
       {
         "name": "Puresteel Paladin",
-        "synergy": 0.811319050591323
+        "synergy": 0.811290114450111
       },
       {
         "name": "Sigarda's Aid",
-        "synergy": 0.8048445477026096
+        "synergy": 0.8047978783176698
       },
       {
         "name": "Excalibur, Sword of Eden",
-        "synergy": 0.7968114623907683
+        "synergy": 0.7966873424932472
       },
       {
         "name": "Sram, Senior Edificer",
-        "synergy": 0.6933909744126853
+        "synergy": 0.693436361123155
       },
       {
         "name": "Steelshaper's Gift",
-        "synergy": 0.6581457953852106
+        "synergy": 0.6580369541485749
       },
       {
         "name": "Colossus Hammer",
-        "synergy": 0.6508061014836679
+        "synergy": 0.65050750144325
       }
     ],
     "Be'lakor, the Dark Master": [
       {
         "name": "Herald of Slaanesh",
-        "synergy": 0.8783248589877701
+        "synergy": 0.8783591929765358
       },
       {
         "name": "Bloodthirster",
-        "synergy": 0.6605477001972859
+        "synergy": 0.6606404702883738
       },
       {
         "name": "Kardur, Doomscourge",
-        "synergy": 0.6590414562824578
+        "synergy": 0.6593798108554675
       },
       {
         "name": "Rakdos, Lord of Riots",
-        "synergy": 0.6547666336846693
+        "synergy": 0.6547970950298618
       },
       {
         "name": "Rakdos, the Showstopper",
-        "synergy": 0.6495230665796554
+        "synergy": 0.6493662599247496
       },
       {
         "name": "Archfiend of Depravity",
-        "synergy": 0.6270204657396719
+        "synergy": 0.6272908242287087
       }
     ],
     "Éowyn, Shieldmaiden": [
       {
         "name": "Lossarnach Captain",
-        "synergy": 0.810302280995679
+        "synergy": 0.8102945321125715
       },
       {
         "name": "Beregond of the Guard",
-        "synergy": 0.8066757971384052
+        "synergy": 0.8066731356468794
       },
       {
         "name": "Shared Animosity",
-        "synergy": 0.7883770166011833
+        "synergy": 0.7883177320370338
       },
       {
         "name": "Théoden, King of Rohan",
-        "synergy": 0.7663960735629727
+        "synergy": 0.7665039281465081
       },
       {
         "name": "Forth Eorlingas!",
-        "synergy": 0.7416412776640802
+        "synergy": 0.7415770681495296
       },
       {
         "name": "Combat Celebrant",
-        "synergy": 0.7199314314038217
+        "synergy": 0.720017574458949
       }
     ],
     "Lightning, Army of One": [
@@ -15844,183 +15844,183 @@
     "Lord of the Nazgûl": [
       {
         "name": "Nazgûl",
-        "synergy": 0.7929747004274693
+        "synergy": 0.7931898801380688
       },
       {
         "name": "Birthday Escape",
-        "synergy": 0.6706838855723859
+        "synergy": 0.6711538369769295
       },
       {
         "name": "Call of the Ring",
-        "synergy": 0.6487079464027131
+        "synergy": 0.6490002847861622
       },
       {
         "name": "Witch-king of Angmar",
-        "synergy": 0.6082738775981427
+        "synergy": 0.6085243585889929
       },
       {
         "name": "Ringsight",
-        "synergy": 0.6068895472325733
+        "synergy": 0.6067192915257906
       },
       {
         "name": "Opt",
-        "synergy": 0.5992447620586488
+        "synergy": 0.5993514893730791
       }
     ],
     "Storm, Force of Nature": [
       {
         "name": "Manamorphose",
-        "synergy": 0.786469687877233
+        "synergy": 0.7863546859041306
       },
       {
         "name": "Lightning Bolt",
-        "synergy": 0.6725534013421595
+        "synergy": 0.6723125401982812
       },
       {
         "name": "Storm-Kiln Artist",
-        "synergy": 0.6694858985416883
+        "synergy": 0.6695800608731409
       },
       {
         "name": "Jeska's Will",
-        "synergy": 0.6089612392293542
+        "synergy": 0.608414594518337
       },
       {
         "name": "Archmage Emeritus",
-        "synergy": 0.5929846178939264
+        "synergy": 0.5930650646642588
       },
       {
         "name": "Ponder",
-        "synergy": 0.5766346729521452
+        "synergy": 0.5765030869171737
       }
     ],
     "Jace, Multiverse Architect": [
       {
         "name": "Skrelv's Hive",
-        "synergy": 0.5426441446848144
+        "synergy": 0.5417587470557887
       },
       {
         "name": "Reflecting Pool",
-        "synergy": 0.537046204782853
+        "synergy": 0.5365977009770957
       },
       {
         "name": "Brainstorm",
-        "synergy": 0.5117132936711986
+        "synergy": 0.5105089972788417
       },
       {
         "name": "Proteus Staff",
-        "synergy": 0.5053462330199419
+        "synergy": 0.5046709716608235
       },
       {
         "name": "Grand Crescendo",
-        "synergy": 0.5041106772089072
+        "synergy": 0.503285602940578
       },
       {
         "name": "Dreadhorde Invasion",
-        "synergy": 0.4900420192903544
+        "synergy": 0.48954708244028855
       }
     ],
     "Magus Lucea Kane": [
       {
         "name": "Zoanthrope",
-        "synergy": 0.7755210236657806
+        "synergy": 0.7756146118882542
       },
       {
         "name": "Unbound Flourishing",
-        "synergy": 0.7108100492373246
+        "synergy": 0.7109468658926463
       },
       {
         "name": "Mawloc",
-        "synergy": 0.6908490652037415
+        "synergy": 0.6907466807442924
       },
       {
         "name": "Sporocyst",
-        "synergy": 0.6779081129813265
+        "synergy": 0.6780013241017051
       },
       {
         "name": "Tyrant Guard",
-        "synergy": 0.6601302558387376
+        "synergy": 0.6601556723594265
       },
       {
         "name": "Nexos",
-        "synergy": 0.6599789144873667
+        "synergy": 0.6598673590510173
       }
     ],
     "Kibo, Uktabi Prince": [
       {
         "name": "Viridian Revel",
-        "synergy": 0.8234062830583142
+        "synergy": 0.8232423717244842
       },
       {
         "name": "Gorilla Shaman",
-        "synergy": 0.7881685905401121
+        "synergy": 0.7881968280956971
       },
       {
         "name": "Silverback Elder",
-        "synergy": 0.7757576207512336
+        "synergy": 0.775718930540473
       },
       {
         "name": "Uktabi Orangutan",
-        "synergy": 0.7660836800393724
+        "synergy": 0.7659924417600581
       },
       {
         "name": "Kogla, the Titan Ape",
-        "synergy": 0.7509535347484294
+        "synergy": 0.7508958630635664
       },
       {
         "name": "Gearbane Orangutan",
-        "synergy": 0.7298567569663161
+        "synergy": 0.7297190321348707
       }
     ],
     "Aminatou, Veil Piercer": [
       {
         "name": "One with the Multiverse",
-        "synergy": 0.8021429462060963
+        "synergy": 0.80240781101556
       },
       {
         "name": "Sphere of Safety",
-        "synergy": 0.7721519534088528
+        "synergy": 0.772285071714936
       },
       {
         "name": "Hall of Heliod's Generosity",
-        "synergy": 0.7699975501362318
+        "synergy": 0.77026136620213
       },
       {
         "name": "Extravagant Replication",
-        "synergy": 0.7525648815702014
+        "synergy": 0.7525789830964806
       },
       {
         "name": "Redress Fate",
-        "synergy": 0.7500646676220957
+        "synergy": 0.7503378025866005
       },
       {
         "name": "Sigil of the Empty Throne",
-        "synergy": 0.728932431757765
+        "synergy": 0.7289446498765844
       }
     ],
     "Inalla, Archmage Ritualist": [
       {
         "name": "Bloodline Necromancer",
-        "synergy": 0.7118961991863972
+        "synergy": 0.7116174468922853
       },
       {
         "name": "Step Through",
-        "synergy": 0.6306887317352303
+        "synergy": 0.630648727570924
       },
       {
         "name": "Naban, Dean of Iteration",
-        "synergy": 0.6141544084398847
+        "synergy": 0.6139117613606364
       },
       {
         "name": "Archaeomancer",
-        "synergy": 0.5801774939385379
+        "synergy": 0.579886357130767
       },
       {
         "name": "Riptide Laboratory",
-        "synergy": 0.5526141715778476
+        "synergy": 0.5525748382016403
       },
       {
         "name": "Harmonic Prodigy",
-        "synergy": 0.5211751143013156
+        "synergy": 0.5212487807250049
       }
     ],
     "Cosmic Spider-Man": [
@@ -16052,27 +16052,27 @@
     "Satya, Aetherflux Genius": [
       {
         "name": "Aether Hub",
-        "synergy": 0.7884129884774471
+        "synergy": 0.78849647343372
       },
       {
         "name": "Izzet Generatorium",
-        "synergy": 0.770818847766361
+        "synergy": 0.7709716234832662
       },
       {
         "name": "Lightning Runner",
-        "synergy": 0.7627193298351767
+        "synergy": 0.762909758993773
       },
       {
         "name": "Aetherworks Marvel",
-        "synergy": 0.7367319844538349
+        "synergy": 0.7366770316531086
       },
       {
         "name": "Decoction Module",
-        "synergy": 0.6985603845693792
+        "synergy": 0.6987454823792512
       },
       {
         "name": "Solar Transformer",
-        "synergy": 0.6920590694889976
+        "synergy": 0.6919197450489231
       }
     ],
     "Winota, Joiner of Forces": [
@@ -16104,27 +16104,27 @@
     "Zimone, Mystery Unraveler": [
       {
         "name": "They Came from the Pipes",
-        "synergy": 0.8240194014337809
+        "synergy": 0.8241314353231548
       },
       {
         "name": "Yedora, Grave Gardener",
-        "synergy": 0.8143895435876217
+        "synergy": 0.8143119196232225
       },
       {
         "name": "Scroll of Fate",
-        "synergy": 0.7669981303353973
+        "synergy": 0.7674146089922496
       },
       {
         "name": "Ashaya, Soul of the Wild",
-        "synergy": 0.7605941540014879
+        "synergy": 0.7605994297905859
       },
       {
         "name": "Aesi, Tyrant of Gyre Strait",
-        "synergy": 0.7138290462523569
+        "synergy": 0.7136838137535775
       },
       {
         "name": "Threats Around Every Corner",
-        "synergy": 0.6938326937514484
+        "synergy": 0.694219106224145
       }
     ],
     "Satoru Umezawa": [
@@ -16416,27 +16416,27 @@
     "Sythis, Harvest's Hand": [
       {
         "name": "Sanctum Weaver",
-        "synergy": 0.7586124255151281
+        "synergy": 0.7588548455338925
       },
       {
         "name": "Enchantress's Presence",
-        "synergy": 0.755395359951655
+        "synergy": 0.7555485133447525
       },
       {
         "name": "Sterling Grove",
-        "synergy": 0.6848256355419406
+        "synergy": 0.6849521153360585
       },
       {
         "name": "Destiny Spinner",
-        "synergy": 0.6814102938689978
+        "synergy": 0.6816256303868647
       },
       {
         "name": "Jukai Naturalist",
-        "synergy": 0.6618437892019716
+        "synergy": 0.6621205309921726
       },
       {
         "name": "Setessan Champion",
-        "synergy": 0.6153875529914844
+        "synergy": 0.6155685082948333
       }
     ],
     "Blech, Loafing Pest": [
@@ -16468,27 +16468,27 @@
     "Doran, Besieged by Time": [
       {
         "name": "Great Forest Druid",
-        "synergy": 0.6071536917816336
+        "synergy": 0.6073343968055593
       },
       {
         "name": "Felothar the Steadfast",
-        "synergy": 0.5437801833149903
+        "synergy": 0.543754444732591
       },
       {
         "name": "Doran, the Siege Tower",
-        "synergy": 0.5371967709186869
+        "synergy": 0.5373533844233684
       },
       {
         "name": "Assault Formation",
-        "synergy": 0.4942584040757817
+        "synergy": 0.494344387356878
       },
       {
         "name": "Ancient Lumberknot",
-        "synergy": 0.49046546060430796
+        "synergy": 0.4904705936943381
       },
       {
         "name": "Bedrock Tortoise",
-        "synergy": 0.4846353849604559
+        "synergy": 0.4849637636826094
       }
     ],
     "Fire Lord Zuko": [
@@ -16572,53 +16572,53 @@
     "Kratos, Stoic Father": [
       {
         "name": "Iroas, God of Victory",
-        "synergy": 0.7276485165792912
+        "synergy": 0.7276567757577441
       },
       {
         "name": "Heliod, God of the Sun",
-        "synergy": 0.6531184735096237
+        "synergy": 0.6531273662585111
       },
       {
         "name": "Otharri, Suns' Glory",
-        "synergy": 0.618917240669755
+        "synergy": 0.6189311590160431
       },
       {
         "name": "Reidane, God of the Worthy",
-        "synergy": 0.5787267469614861
+        "synergy": 0.5787240745671952
       },
       {
         "name": "Surtr, Fiery Jötun",
-        "synergy": 0.5752011478187111
+        "synergy": 0.5752062307155872
       },
       {
         "name": "God-Eternal Oketra",
-        "synergy": 0.566277598380562
+        "synergy": 0.5662826106683765
       }
     ],
     "Najeela, the Blade-Blossom": [
       {
         "name": "Samut, Vizier of Naktamun",
-        "synergy": 0.5527930041309548
+        "synergy": 0.5524662091543762
       },
       {
         "name": "Professional Face-Breaker",
-        "synergy": 0.5097337094255108
+        "synergy": 0.5096932240945419
       },
       {
         "name": "Derevi, Empyrial Tactician",
-        "synergy": 0.4798447315140482
+        "synergy": 0.47953978127448277
       },
       {
         "name": "Champion of Lambholt",
-        "synergy": 0.4709364174182995
+        "synergy": 0.4706308767569216
       },
       {
         "name": "Kutzil, Malamet Exemplar",
-        "synergy": 0.46278446792691247
+        "synergy": 0.4627555320303043
       },
       {
         "name": "Druids' Repository",
-        "synergy": 0.4519828151658897
+        "synergy": 0.4518951015991967
       }
     ],
     "Dr. Eggman": [
@@ -16702,27 +16702,27 @@
     "Azlask, the Swelling Scourge": [
       {
         "name": "Glaring Fleshraker",
-        "synergy": 0.76340115031774
+        "synergy": 0.7632489002277876
       },
       {
         "name": "Awakening Zone",
-        "synergy": 0.7528116059830009
+        "synergy": 0.7529523034770346
       },
       {
         "name": "Path of Annihilation",
-        "synergy": 0.7254951696710688
+        "synergy": 0.7255000017436662
       },
       {
         "name": "From Beyond",
-        "synergy": 0.6728353003816514
+        "synergy": 0.6728699579512943
       },
       {
         "name": "Chittering Dispatcher",
-        "synergy": 0.6623478259464244
+        "synergy": 0.6622447643591688
       },
       {
         "name": "Writhing Chrysalis",
-        "synergy": 0.6466215319092905
+        "synergy": 0.6468030916315157
       }
     ],
     "Golbez, Crystal Collector": [
@@ -16754,27 +16754,27 @@
     "Marina Vendrell": [
       {
         "name": "Central Elevator // Promising Stairs",
-        "synergy": 0.8083894473634058
+        "synergy": 0.8082747789173506
       },
       {
         "name": "Greenhouse // Rickety Gazebo",
-        "synergy": 0.7865618674440821
+        "synergy": 0.7865491429142532
       },
       {
         "name": "Roaring Furnace // Steaming Sauna",
-        "synergy": 0.7726854607228484
+        "synergy": 0.7726832295755388
       },
       {
         "name": "Inquisitive Glimmer",
-        "synergy": 0.7709131416530961
+        "synergy": 0.7709044120997146
       },
       {
         "name": "Restricted Office // Lecture Hall",
-        "synergy": 0.7591589788358235
+        "synergy": 0.7591693928215497
       },
       {
         "name": "Mirror Room // Fractured Realm",
-        "synergy": 0.732931542653707
+        "synergy": 0.732894909103347
       }
     ],
     "Yarok, the Desecrated": [
@@ -16806,27 +16806,27 @@
     "Feather, the Redeemed": [
       {
         "name": "Defiant Strike",
-        "synergy": 0.8219156364108671
+        "synergy": 0.8219687641868684
       },
       {
         "name": "Shelter",
-        "synergy": 0.786463009643987
+        "synergy": 0.7864501913796483
       },
       {
         "name": "Expedite",
-        "synergy": 0.7688856432053415
+        "synergy": 0.7688800375233016
       },
       {
         "name": "Zada, Hedron Grinder",
-        "synergy": 0.7163283558132338
+        "synergy": 0.7162607691034438
       },
       {
         "name": "Fists of Flame",
-        "synergy": 0.6871274619787895
+        "synergy": 0.6871948244322228
       },
       {
         "name": "Gods Willing",
-        "synergy": 0.6793497961307287
+        "synergy": 0.6793471975041583
       }
     ],
     "Liesa, Shroud of Dusk": [
@@ -16858,27 +16858,27 @@
     "Anikthea, Hand of Erebos": [
       {
         "name": "Sanctum Weaver",
-        "synergy": 0.8277168596345765
+        "synergy": 0.8279512903832879
       },
       {
         "name": "Eidolon of Blossoms",
-        "synergy": 0.8052945015231874
+        "synergy": 0.8055136244016791
       },
       {
         "name": "Sythis, Harvest's Hand",
-        "synergy": 0.8017045125189257
+        "synergy": 0.8016252821046367
       },
       {
         "name": "Setessan Champion",
-        "synergy": 0.7247113085881549
+        "synergy": 0.7247168317778722
       },
       {
         "name": "Doomwake Giant",
-        "synergy": 0.7219011209399905
+        "synergy": 0.7217242076795545
       },
       {
         "name": "Enchantress's Presence",
-        "synergy": 0.6955260676234369
+        "synergy": 0.6955101200779074
       }
     ],
     "Ramos, Dragon Engine": [
@@ -16988,53 +16988,53 @@
     "Jon Irenicus, Shattered One": [
       {
         "name": "Flesh Reaver",
-        "synergy": 0.7108225825469047
+        "synergy": 0.7109252225996521
       },
       {
         "name": "Abyssal Persecutor",
-        "synergy": 0.6745879766786744
+        "synergy": 0.6747041555857397
       },
       {
         "name": "Demonic Taskmaster",
-        "synergy": 0.6569275371373283
+        "synergy": 0.6570501008451742
       },
       {
         "name": "Archfiend of the Dross",
-        "synergy": 0.6455388026388337
+        "synergy": 0.6457413668897007
       },
       {
         "name": "Rotting Regisaur",
-        "synergy": 0.6118729015311906
+        "synergy": 0.6120151083813244
       },
       {
         "name": "Ebon Drake",
-        "synergy": 0.5985401365815239
+        "synergy": 0.5985380192558696
       }
     ],
     "Sefris of the Hidden Ways": [
       {
         "name": "Radiant Solar",
-        "synergy": 0.8750508396438321
+        "synergy": 0.8750168728905422
       },
       {
         "name": "Nadaar, Selfless Paladin",
-        "synergy": 0.7325921094513803
+        "synergy": 0.7327219586123186
       },
       {
         "name": "Hama Pashar, Ruin Seeker",
-        "synergy": 0.6896037741578507
+        "synergy": 0.6896518975062982
       },
       {
         "name": "Midnight Pathlighter",
-        "synergy": 0.68669339960205
+        "synergy": 0.6868949769044019
       },
       {
         "name": "White Plume Adventurer",
-        "synergy": 0.6742448195764433
+        "synergy": 0.674293687793554
       },
       {
         "name": "Triumphant Adventurer",
-        "synergy": 0.612815118416706
+        "synergy": 0.6128701663644177
       }
     ],
     "Tergrid, God of Fright": [
@@ -17066,53 +17066,53 @@
     "Edward Kenway": [
       {
         "name": "Adéwalé, Breaker of Chains",
-        "synergy": 0.8526714888116292
+        "synergy": 0.8526351441099412
       },
       {
         "name": "Jackdaw",
-        "synergy": 0.813226612160192
+        "synergy": 0.8129748378431575
       },
       {
         "name": "The Indomitable",
-        "synergy": 0.8055577055033232
+        "synergy": 0.8057604096136283
       },
       {
         "name": "The Belligerent",
-        "synergy": 0.7517131464879274
+        "synergy": 0.7517043335902689
       },
       {
         "name": "Mary Read and Anne Bonny",
-        "synergy": 0.7407603114873179
+        "synergy": 0.7408361873537634
       },
       {
         "name": "Malcolm, Keen-Eyed Navigator",
-        "synergy": 0.7208616688548156
+        "synergy": 0.7210849687769487
       }
     ],
     "Yurlok of Scorch Thrash": [
       {
         "name": "Mana Flare",
-        "synergy": 0.7382560283552214
+        "synergy": 0.7382650059115206
       },
       {
         "name": "Citadel of Pain",
-        "synergy": 0.7345748906205403
+        "synergy": 0.7344364252041305
       },
       {
         "name": "Heartbeat of Spring",
-        "synergy": 0.7059615640305471
+        "synergy": 0.7060687967242587
       },
       {
         "name": "Overabundance",
-        "synergy": 0.6927522930338518
+        "synergy": 0.6926491470997815
       },
       {
         "name": "Zhur-Taa Ancient",
-        "synergy": 0.6523316359729923
+        "synergy": 0.6524719295192065
       },
       {
         "name": "Belbe, Corrupted Observer",
-        "synergy": 0.6466656338671082
+        "synergy": 0.6465208733112731
       }
     ],
     "Tivit, Seller of Secrets": [
@@ -17144,27 +17144,27 @@
     "Vren, the Relentless": [
       {
         "name": "Piper of the Swarm",
-        "synergy": 0.7002329612211892
+        "synergy": 0.700123967273751
       },
       {
         "name": "Marrow-Gnawer",
-        "synergy": 0.6512901559674691
+        "synergy": 0.6515834552058107
       },
       {
         "name": "Lord Skitter, Sewer King",
-        "synergy": 0.6168870777927202
+        "synergy": 0.6172758685430547
       },
       {
         "name": "Ogre Slumlord",
-        "synergy": 0.5875261435832816
+        "synergy": 0.587714962943976
       },
       {
         "name": "Swarmyard",
-        "synergy": 0.5785551283904796
+        "synergy": 0.5787552550792585
       },
       {
         "name": "Sheoldred's Edict",
-        "synergy": 0.5359147969468063
+        "synergy": 0.5362224235929871
       }
     ],
     "Celes, Rune Knight": [
@@ -17196,131 +17196,131 @@
     "Varina, Lich Queen": [
       {
         "name": "Wayward Servant",
-        "synergy": 0.7618978585428058
+        "synergy": 0.7617595229073145
       },
       {
         "name": "Gravecrawler",
-        "synergy": 0.7507336117088033
+        "synergy": 0.7510359187476193
       },
       {
         "name": "Diregraf Captain",
-        "synergy": 0.7282671021489957
+        "synergy": 0.7283450374958693
       },
       {
         "name": "Death Baron",
-        "synergy": 0.7228226909027193
+        "synergy": 0.7227355745594023
       },
       {
         "name": "Rooftop Storm",
-        "synergy": 0.7120914870644165
+        "synergy": 0.7121648808509474
       },
       {
         "name": "Diregraf Colossus",
-        "synergy": 0.7047947628518767
+        "synergy": 0.7047212000979752
       }
     ],
     "Zedruu the Greathearted": [
       {
         "name": "Humble Defector",
-        "synergy": 0.7379478498956101
+        "synergy": 0.7379660765197267
       },
       {
         "name": "Nine Lives",
-        "synergy": 0.7017045667637535
+        "synergy": 0.7018603867407066
       },
       {
         "name": "Role Reversal",
-        "synergy": 0.6592457197530986
+        "synergy": 0.6592540971441554
       },
       {
         "name": "Pendant of Prosperity",
-        "synergy": 0.6489140927475024
+        "synergy": 0.6493782285867542
       },
       {
         "name": "Bazaar Trader",
-        "synergy": 0.646008657170006
+        "synergy": 0.64587560769749
       },
       {
         "name": "Akroan Horse",
-        "synergy": 0.6170970672110412
+        "synergy": 0.6173456203287057
       }
     ],
     "Sonic the Hedgehog": [
       {
         "name": "Knuckles the Echidna",
-        "synergy": 0.7904576573199876
+        "synergy": 0.7905147568670773
       },
       {
         "name": "Super State",
-        "synergy": 0.6521173625506539
+        "synergy": 0.6523252704954744
       },
       {
         "name": "Enduring Curiosity",
-        "synergy": 0.6033261408856497
+        "synergy": 0.6034079436874449
       },
       {
         "name": "Captain Lannery Storm",
-        "synergy": 0.5741597336844547
+        "synergy": 0.5742300166271493
       },
       {
         "name": "Goldspan Dragon",
-        "synergy": 0.5513753762388215
+        "synergy": 0.5512764136215573
       },
       {
         "name": "Thundering Raiju",
-        "synergy": 0.522939154870084
+        "synergy": 0.5230421244510227
       }
     ],
     "Hylda of the Icy Crown": [
       {
         "name": "Hylda's Crown of Winter",
-        "synergy": 0.8889978430482659
+        "synergy": 0.8889824004745731
       },
       {
         "name": "Sharae of Numbing Depths",
-        "synergy": 0.8254455459308796
+        "synergy": 0.8252009814784772
       },
       {
         "name": "Verity Circle",
-        "synergy": 0.7940452535345033
+        "synergy": 0.7941120563134894
       },
       {
         "name": "Blustersquall",
-        "synergy": 0.73713577747912
+        "synergy": 0.7371374796573446
       },
       {
         "name": "Court Street Denizen",
-        "synergy": 0.7201011577782319
+        "synergy": 0.7202101888844218
       },
       {
         "name": "Opposition",
-        "synergy": 0.7022168496912806
+        "synergy": 0.7024172751664597
       }
     ],
     "Wolverine, Best There Is": [
       {
         "name": "Berserk",
-        "synergy": 0.7448240366942259
+        "synergy": 0.744586977422463
       },
       {
         "name": "The Ozolith",
-        "synergy": 0.6875192663269853
+        "synergy": 0.687299004565556
       },
       {
         "name": "Rite of Passage",
-        "synergy": 0.6773577074122661
+        "synergy": 0.6767626329208355
       },
       {
         "name": "Kediss, Emberclaw Familiar",
-        "synergy": 0.6016717766643493
+        "synergy": 0.6021056845416057
       },
       {
         "name": "Chandra's Ignition",
-        "synergy": 0.5735222386520158
+        "synergy": 0.57364099606414
       },
       {
         "name": "Hardened Scales",
-        "synergy": 0.5407976244010194
+        "synergy": 0.5404788398715835
       }
     ],
     "Light-Paws, Emperor's Voice": [
@@ -17378,53 +17378,53 @@
     "Disa the Restless": [
       {
         "name": "Pyrogoyf",
-        "synergy": 0.9314814008366038
+        "synergy": 0.9315309394426635
       },
       {
         "name": "Polygoyf",
-        "synergy": 0.921082474881498
+        "synergy": 0.9211347001979842
       },
       {
         "name": "Barrowgoyf",
-        "synergy": 0.901080334380603
+        "synergy": 0.9011185179940318
       },
       {
         "name": "Necrogoyf",
-        "synergy": 0.8483758720548085
+        "synergy": 0.848486976610111
       },
       {
         "name": "Mortivore",
-        "synergy": 0.8162367642883287
+        "synergy": 0.8161705862802238
       },
       {
         "name": "Lhurgoyf",
-        "synergy": 0.8117456045248752
+        "synergy": 0.8117467201239792
       }
     ],
     "Shadow the Hedgehog": [
       {
         "name": "Great Furnace",
-        "synergy": 0.722147275690762
+        "synergy": 0.7221248830717701
       },
       {
         "name": "Vault of Whispers",
-        "synergy": 0.712735630825767
+        "synergy": 0.712647951378091
       },
       {
         "name": "Knuckles the Echidna",
-        "synergy": 0.6850696063939533
+        "synergy": 0.6851158715043003
       },
       {
         "name": "Darksteel Citadel",
-        "synergy": 0.6093133533118454
+        "synergy": 0.6091516617681705
       },
       {
         "name": "Treasure Vault",
-        "synergy": 0.5228537510809736
+        "synergy": 0.5227050014047016
       },
       {
         "name": "Drossforge Bridge",
-        "synergy": 0.5110304004339721
+        "synergy": 0.5110099494782404
       }
     ],
     "Captain Howler, Sea Scourge": [
@@ -17482,27 +17482,27 @@
     "Kraum, Ludevic's Opus": [
       {
         "name": "Wizard's Staff",
-        "synergy": 0.5259820286677628
+        "synergy": 0.526180696458323
       },
       {
         "name": "Uneasy Partings",
-        "synergy": 0.3326528718567319
+        "synergy": 0.332657712991019
       },
       {
         "name": "Hobbit Hole",
-        "synergy": 0.32991693869413297
+        "synergy": 0.3299105030553794
       },
       {
         "name": "Plunder the Trollshaws",
-        "synergy": 0.32536512506505005
+        "synergy": 0.32536015221527587
       },
       {
         "name": "Gandalf, Goblins' Bane",
-        "synergy": 0.28567834279164683
+        "synergy": 0.285757497191254
       },
       {
         "name": "Swiftwater Cliffs",
-        "synergy": 0.2529139473218467
+        "synergy": 0.2529075431788357
       }
     ],
     "Tymna the Weaver": [
@@ -17586,27 +17586,27 @@
     "Hazel of the Rootbloom": [
       {
         "name": "Chatterfang, Squirrel General",
-        "synergy": 0.8404054443261102
+        "synergy": 0.8404997486005447
       },
       {
         "name": "Chitterspitter",
-        "synergy": 0.810856332807359
+        "synergy": 0.8106468813287584
       },
       {
         "name": "Swarmyard Massacre",
-        "synergy": 0.7861060544979268
+        "synergy": 0.7858902678073805
       },
       {
         "name": "Swarmyard",
-        "synergy": 0.7621526697937921
+        "synergy": 0.7620719686414432
       },
       {
         "name": "The Odd Acorn Gang",
-        "synergy": 0.7514297111413847
+        "synergy": 0.7515306359038543
       },
       {
         "name": "Toski, Bearer of Secrets",
-        "synergy": 0.7478286765241768
+        "synergy": 0.7479514091017747
       }
     ],
     "Yuna, Grand Summoner": [
@@ -17638,53 +17638,53 @@
     "Zimone, Infinite Analyst": [
       {
         "name": "Unbound Flourishing",
-        "synergy": 0.9140255010636882
+        "synergy": 0.913894745076024
       },
       {
         "name": "Goldvein Hydra",
-        "synergy": 0.846443969682552
+        "synergy": 0.8463643088324213
       },
       {
         "name": "Hydroid Krasis",
-        "synergy": 0.8341731871917548
+        "synergy": 0.8342462445785206
       },
       {
         "name": "Owlin Spiralmancer",
-        "synergy": 0.8184141454032859
+        "synergy": 0.8185865458755551
       },
       {
         "name": "Benevolent Hydra",
-        "synergy": 0.7992180813740491
+        "synergy": 0.7990144125083127
       },
       {
         "name": "Animist's Awakening",
-        "synergy": 0.7970282179388456
+        "synergy": 0.7968929452102341
       }
     ],
     "Rendmaw, Creaking Nest": [
       {
         "name": "Tree of Tales",
-        "synergy": 0.8728878169359312
+        "synergy": 0.8729796305241861
       },
       {
         "name": "Vault of Whispers",
-        "synergy": 0.8546304266436586
+        "synergy": 0.8546267299757975
       },
       {
         "name": "Darkmoss Bridge",
-        "synergy": 0.8106619424824684
+        "synergy": 0.8108170644000969
       },
       {
         "name": "Darksteel Citadel",
-        "synergy": 0.8044264881923994
+        "synergy": 0.804617562914371
       },
       {
         "name": "Ornithopter of Paradise",
-        "synergy": 0.7691983194652765
+        "synergy": 0.7691266170508002
       },
       {
         "name": "Valgavoth's Lair",
-        "synergy": 0.7543608732559964
+        "synergy": 0.7544446580517082
       }
     ],
     "Sokka, Tenacious Tactician": [
@@ -17716,27 +17716,27 @@
     "Indoraptor, the Perfect Hybrid": [
       {
         "name": "Boltwave",
-        "synergy": 0.6603577778313541
+        "synergy": 0.6603919943168793
       },
       {
         "name": "Pyrohemia",
-        "synergy": 0.6598308339059065
+        "synergy": 0.6599474184264869
       },
       {
         "name": "Pestilence",
-        "synergy": 0.6447027853100088
+        "synergy": 0.6450706554163189
       },
       {
         "name": "Ripjaw Raptor",
-        "synergy": 0.6240205732069568
+        "synergy": 0.6241102374317802
       },
       {
         "name": "Flame Rift",
-        "synergy": 0.6124700105081614
+        "synergy": 0.6126496366202822
       },
       {
         "name": "Fiery Confluence",
-        "synergy": 0.5996654180776478
+        "synergy": 0.5998606136905656
       }
     ],
     "Trostani, Selesnya's Voice": [
@@ -17794,53 +17794,53 @@
     "Umbris, Fear Manifest": [
       {
         "name": "Tasha's Hideous Laughter",
-        "synergy": 0.7252669845247278
+        "synergy": 0.7254478178389545
       },
       {
         "name": "Leyline of the Void",
-        "synergy": 0.7222463388152155
+        "synergy": 0.722203012539334
       },
       {
         "name": "Ashiok, Nightmare Muse",
-        "synergy": 0.6334795005334201
+        "synergy": 0.6334321646978487
       },
       {
         "name": "Captain N'ghathrod",
-        "synergy": 0.6025210733354783
+        "synergy": 0.6028993802937282
       },
       {
         "name": "Spellskite",
-        "synergy": 0.5974894254185805
+        "synergy": 0.5975363391602961
       },
       {
         "name": "Ashiok, Dream Render",
-        "synergy": 0.5836454821193239
+        "synergy": 0.5838743172143
       }
     ],
     "Thalia and The Gitrog Monster": [
       {
         "name": "Ramunap Excavator",
-        "synergy": 0.5415997810523904
+        "synergy": 0.5415205641803094
       },
       {
         "name": "The Gitrog Monster",
-        "synergy": 0.4945821458085197
+        "synergy": 0.4945480074367673
       },
       {
         "name": "Scute Swarm",
-        "synergy": 0.4665609258085236
+        "synergy": 0.46689659318447585
       },
       {
         "name": "Conduit of Worlds",
-        "synergy": 0.459131051468314
+        "synergy": 0.45923480104538095
       },
       {
         "name": "The Necrobloom",
-        "synergy": 0.4471565966397407
+        "synergy": 0.44728155945951314
       },
       {
         "name": "Titania, Protector of Argoth",
-        "synergy": 0.44042171754446746
+        "synergy": 0.4404010759493607
       }
     ],
     "Ovika, Enigma Goliath": [
@@ -17976,27 +17976,27 @@
     "Arahbo, Roar of the World": [
       {
         "name": "Regal Caracal",
-        "synergy": 0.8456764468650219
+        "synergy": 0.845647698398885
       },
       {
         "name": "Feline Sovereign",
-        "synergy": 0.7925799123781869
+        "synergy": 0.7925938006422666
       },
       {
         "name": "Mirri, Weatherlight Duelist",
-        "synergy": 0.7812423521542923
+        "synergy": 0.781358342782501
       },
       {
         "name": "Arahbo, the First Fang",
-        "synergy": 0.7489808569364166
+        "synergy": 0.7496046933188063
       },
       {
         "name": "King of the Pride",
-        "synergy": 0.7404031474469872
+        "synergy": 0.7404533244156665
       },
       {
         "name": "Pride Sovereign",
-        "synergy": 0.7120676999541897
+        "synergy": 0.7122514279669981
       }
     ],
     "Orvar, the All-Form": [
@@ -18054,27 +18054,27 @@
     "Silverquill, the Disputant": [
       {
         "name": "Sedgemoor Witch",
-        "synergy": 0.6920824951751454
+        "synergy": 0.6920923942292078
       },
       {
         "name": "Monastery Mentor",
-        "synergy": 0.6208435854703865
+        "synergy": 0.6209072657388713
       },
       {
         "name": "Will of the Mardu",
-        "synergy": 0.5775406024201382
+        "synergy": 0.577490921844301
       },
       {
         "name": "Secure the Wastes",
-        "synergy": 0.5093246992579541
+        "synergy": 0.5093167941711569
       },
       {
         "name": "Grand Crescendo",
-        "synergy": 0.5073213754539061
+        "synergy": 0.5073766288863181
       },
       {
         "name": "Ophiomancer",
-        "synergy": 0.4982817085831885
+        "synergy": 0.49821347788760795
       }
     ],
     "The Mindskinner": [
@@ -18262,53 +18262,53 @@
     "Gonti, Canny Acquisitor": [
       {
         "name": "Thief of Sanity",
-        "synergy": 0.8027431171216294
+        "synergy": 0.8026356610020701
       },
       {
         "name": "Slither Blade",
-        "synergy": 0.7569545777647726
+        "synergy": 0.7567875710240448
       },
       {
         "name": "Doc Aurlock, Grizzled Genius",
-        "synergy": 0.7388930799528923
+        "synergy": 0.7389038593864163
       },
       {
         "name": "Felix Five-Boots",
-        "synergy": 0.7057542429804112
+        "synergy": 0.7059302935634667
       },
       {
         "name": "Triton Shorestalker",
-        "synergy": 0.6847988699035786
+        "synergy": 0.6850834713796903
       },
       {
         "name": "Brainstealer Dragon",
-        "synergy": 0.6699528346371197
+        "synergy": 0.6698151107488897
       }
     ],
     "Child of Alara": [
       {
         "name": "Thespian's Stage",
-        "synergy": 0.33357855073139964
+        "synergy": 0.33353781988588843
       },
       {
         "name": "Azusa, Lost but Seeking",
-        "synergy": 0.33074210782330876
+        "synergy": 0.33086973529392233
       },
       {
         "name": "Golgari Guildgate",
-        "synergy": 0.29522751406067677
+        "synergy": 0.29528594364713356
       },
       {
         "name": "Selesnya Guildgate",
-        "synergy": 0.29241126842628035
+        "synergy": 0.29247084853585525
       },
       {
         "name": "Simic Guildgate",
-        "synergy": 0.29210843082388627
+        "synergy": 0.29208336369583965
       },
       {
         "name": "Gruul Guildgate",
-        "synergy": 0.2904733577200312
+        "synergy": 0.29044516574783713
       }
     ],
     "Sliver Overlord": [
@@ -18366,79 +18366,79 @@
     "Dihada, Binder of Wills": [
       {
         "name": "Shanid, Sleepers' Scourge",
-        "synergy": 0.6121592165869025
+        "synergy": 0.6120724029688926
       },
       {
         "name": "Primevals' Glorious Rebirth",
-        "synergy": 0.5991688158888396
+        "synergy": 0.5990134168302397
       },
       {
         "name": "Urza's Ruinous Blast",
-        "synergy": 0.5559558322482441
+        "synergy": 0.5557664154455939
       },
       {
         "name": "Odric, Lunarch Marshal",
-        "synergy": 0.535477627324067
+        "synergy": 0.5352656139078652
       },
       {
         "name": "Shizo, Death's Storehouse",
-        "synergy": 0.47263283103703035
+        "synergy": 0.4726818149783114
       },
       {
         "name": "Cadric, Soul Kindler",
-        "synergy": 0.44442442014362615
+        "synergy": 0.4442083326276513
       }
     ],
     "Kona, Rescue Beastie": [
       {
         "name": "Springleaf Drum",
-        "synergy": 0.7130597529514033
+        "synergy": 0.7132297305515632
       },
       {
         "name": "Jaspera Sentinel",
-        "synergy": 0.6104143354451402
+        "synergy": 0.6104027678923973
       },
       {
         "name": "Holdout Settlement",
-        "synergy": 0.6032390040869403
+        "synergy": 0.6032274843707248
       },
       {
         "name": "Worldspine Wurm",
-        "synergy": 0.5888180529871317
+        "synergy": 0.5888237175851949
       },
       {
         "name": "Survivors' Encampment",
-        "synergy": 0.5870211916270992
+        "synergy": 0.5869214327383848
       },
       {
         "name": "Relic of Legends",
-        "synergy": 0.5481199717474428
+        "synergy": 0.5480174511013493
       }
     ],
     "Ziatora, the Incinerator": [
       {
         "name": "Riveteers Ascendancy",
-        "synergy": 0.5040499513917496
+        "synergy": 0.504013807515006
       },
       {
         "name": "Yargle and Multani",
-        "synergy": 0.4699067349958357
+        "synergy": 0.46996020521809057
       },
       {
         "name": "Phytotitan",
-        "synergy": 0.45508911817293163
+        "synergy": 0.45515215875013604
       },
       {
         "name": "Mr. Orfeo, the Boulder",
-        "synergy": 0.42935848926232
+        "synergy": 0.42914976154033396
       },
       {
         "name": "Daemogoth Titan",
-        "synergy": 0.4227463092120146
+        "synergy": 0.4227397289633009
       },
       {
         "name": "Ghalta, Primal Hunger",
-        "synergy": 0.4191874355220835
+        "synergy": 0.4193271005048073
       }
     ],
     "Ghalta, Primal Hunger": [
@@ -18548,27 +18548,27 @@
     "Ob Nixilis, Captive Kingpin": [
       {
         "name": "Kederekt Parasite",
-        "synergy": 0.7276344162949802
+        "synergy": 0.7277181992651992
       },
       {
         "name": "Unstable Amulet",
-        "synergy": 0.7235109575825839
+        "synergy": 0.7235637899071307
       },
       {
         "name": "Razorkin Needlehead",
-        "synergy": 0.6881181529801528
+        "synergy": 0.6880921726312419
       },
       {
         "name": "Prosper, Tome-Bound",
-        "synergy": 0.6741494193916565
+        "synergy": 0.6740204414559929
       },
       {
         "name": "Kessig Flamebreather",
-        "synergy": 0.6667526894905415
+        "synergy": 0.6670995368966414
       },
       {
         "name": "Grapeshot",
-        "synergy": 0.6312911409181381
+        "synergy": 0.6315270502386341
       }
     ],
     "Clavileño, First of the Blessed": [
@@ -18808,27 +18808,27 @@
     "Raffine, Scheming Seer": [
       {
         "name": "Archfiend of Ifnir",
-        "synergy": 0.5551663942512823
+        "synergy": 0.5551010694483622
       },
       {
         "name": "Reanimate",
-        "synergy": 0.5035761912263531
+        "synergy": 0.5031288059342681
       },
       {
         "name": "Animate Dead",
-        "synergy": 0.47717387195277605
+        "synergy": 0.4770641768747079
       },
       {
         "name": "Ledger Shredder",
-        "synergy": 0.4767869499501674
+        "synergy": 0.47688999271534316
       },
       {
         "name": "Victimize",
-        "synergy": 0.42841053216541114
+        "synergy": 0.4286400466610263
       },
       {
         "name": "Adeline, Resplendent Cathar",
-        "synergy": 0.41602265257738397
+        "synergy": 0.41621794441250753
       }
     ],
     "Aloy, Savior of Meridian": [
@@ -18860,27 +18860,27 @@
     "Narset, Enlightened Exile": [
       {
         "name": "Monastery Mentor",
-        "synergy": 0.6930842414570291
+        "synergy": 0.6932375715119331
       },
       {
         "name": "Jeskai Ascendancy",
-        "synergy": 0.602112930066911
+        "synergy": 0.60228435930033
       },
       {
         "name": "Third Path Iconoclast",
-        "synergy": 0.5640958946150645
+        "synergy": 0.5640861635276434
       },
       {
         "name": "Balmor, Battlemage Captain",
-        "synergy": 0.5520963830559291
+        "synergy": 0.5518581569871339
       },
       {
         "name": "Kykar, Wind's Fury",
-        "synergy": 0.510760679484552
+        "synergy": 0.5107505731079722
       },
       {
         "name": "Whirlwind of Thought",
-        "synergy": 0.49624750135965146
+        "synergy": 0.4960714761249393
       }
     ],
     "Eddie Brock": [
@@ -18938,53 +18938,53 @@
     "Vihaan, Goldwaker": [
       {
         "name": "Mahadi, Emporium Master",
-        "synergy": 0.7149302502778889
+        "synergy": 0.7150502573518479
       },
       {
         "name": "Xorn",
-        "synergy": 0.7073116349539337
+        "synergy": 0.7074452270811377
       },
       {
         "name": "Olivia, Opulent Outlaw",
-        "synergy": 0.7051885296316268
+        "synergy": 0.7050590840211836
       },
       {
         "name": "Pitiless Plunderer",
-        "synergy": 0.6659522871375476
+        "synergy": 0.6657532829656438
       },
       {
         "name": "Mari, the Killing Quill",
-        "synergy": 0.6595412736795427
+        "synergy": 0.6592342582841929
       },
       {
         "name": "Blood Money",
-        "synergy": 0.6543663741154605
+        "synergy": 0.6543633828800266
       }
     ],
     "Yidris, Maelstrom Wielder": [
       {
         "name": "Averna, the Chaos Bloom",
-        "synergy": 0.2804489703395763
+        "synergy": 0.28054386730919595
       },
       {
         "name": "Maelstrom Wanderer",
-        "synergy": 0.24278039176305066
+        "synergy": 0.2428227233904775
       },
       {
         "name": "Apex Devastator",
-        "synergy": 0.2126179034078018
+        "synergy": 0.21264414300826118
       },
       {
         "name": "Imoti, Celebrant of Bounty",
-        "synergy": 0.20759883578813454
+        "synergy": 0.2075870372274865
       },
       {
         "name": "Wild-Magic Sorcerer",
-        "synergy": 0.18679484378560657
+        "synergy": 0.18680154925331655
       },
       {
         "name": "Abaddon the Despoiler",
-        "synergy": 0.17642764570268776
+        "synergy": 0.17644337592096407
       }
     ],
     "The Gitrog Monster": [
@@ -19094,53 +19094,53 @@
     "Okaun, Eye of Chaos": [
       {
         "name": "Krark's Thumb",
-        "synergy": 0.8397770995781669
+        "synergy": 0.8397606043347006
       },
       {
         "name": "Tavern Scoundrel",
-        "synergy": 0.7768680493416847
+        "synergy": 0.7768519594522115
       },
       {
         "name": "Fiery Gambit",
-        "synergy": 0.6196337722101496
+        "synergy": 0.6196084415816601
       },
       {
         "name": "Goblin Traprunner",
-        "synergy": 0.6126492394222165
+        "synergy": 0.6126461543962527
       },
       {
         "name": "Krark, the Thumbless",
-        "synergy": 0.5764574012527164
+        "synergy": 0.5764668755012284
       },
       {
         "name": "Chance Encounter",
-        "synergy": 0.5600993864246453
+        "synergy": 0.5600838871322834
       }
     ],
     "Zndrsplt, Eye of Wisdom": [
       {
         "name": "Mindseeker Oculus",
-        "synergy": 0.9915198261351288
+        "synergy": 0.9915703174269498
       },
       {
         "name": "Homunculus Horde",
-        "synergy": 0.6944657917132748
+        "synergy": 0.6944140570855858
       },
       {
         "name": "Krark's Thumb",
-        "synergy": 0.6665193705117367
+        "synergy": 0.6665195278764033
       },
       {
         "name": "Sorcerer's Strongbox",
-        "synergy": 0.6109189856916373
+        "synergy": 0.6109191909498982
       },
       {
         "name": "Fblthp, the Lost",
-        "synergy": 0.600899645066077
+        "synergy": 0.6008945611958759
       },
       {
         "name": "Hazy Homunculus",
-        "synergy": 0.5545020678387741
+        "synergy": 0.5544967959995308
       }
     ],
     "Gev, Scaled Scorch": [
@@ -19198,27 +19198,27 @@
     "Nicol Bolas, the Ravager": [
       {
         "name": "Nicol Bolas, Dragon-God",
-        "synergy": 0.804689348984229
+        "synergy": 0.8048960836466541
       },
       {
         "name": "Nicol Bolas, God-Pharaoh",
-        "synergy": 0.7428453096270087
+        "synergy": 0.7428656096204026
       },
       {
         "name": "Nicol Bolas, Planeswalker",
-        "synergy": 0.6703998410488143
+        "synergy": 0.67051453351251
       },
       {
         "name": "The Eldest Reborn",
-        "synergy": 0.4979064639794159
+        "synergy": 0.49811090712875056
       },
       {
         "name": "Deliver Unto Evil",
-        "synergy": 0.48777681714322113
+        "synergy": 0.48797846488507235
       },
       {
         "name": "Nicol Bolas, the Deceiver",
-        "synergy": 0.48771218871291455
+        "synergy": 0.48781731859124133
       }
     ],
     "Shilgengar, Sire of Famine": [
@@ -19250,53 +19250,53 @@
     "Kratos, God of War": [
       {
         "name": "World at War",
-        "synergy": 0.7055978622494039
+        "synergy": 0.7057105465014019
       },
       {
         "name": "Urabrask the Hidden",
-        "synergy": 0.6324826775411069
+        "synergy": 0.6322875136442035
       },
       {
         "name": "Crawlspace",
-        "synergy": 0.5989584160160364
+        "synergy": 0.5985942373772882
       },
       {
         "name": "Kazuul, Tyrant of the Cliffs",
-        "synergy": 0.5848705557066103
+        "synergy": 0.5848407613742717
       },
       {
         "name": "Alexios, Deimos of Kosmos",
-        "synergy": 0.57895535800464
+        "synergy": 0.5792933180923209
       },
       {
         "name": "Sulfuric Vortex",
-        "synergy": 0.5501526770653452
+        "synergy": 0.5504401966588706
       }
     ],
     "Jetmir, Nexus of Revels": [
       {
         "name": "Adeline, Resplendent Cathar",
-        "synergy": 0.5199401413037708
+        "synergy": 0.5200307129136515
       },
       {
         "name": "Artifact Mutation",
-        "synergy": 0.39931015394901404
+        "synergy": 0.39931824983729614
       },
       {
         "name": "Aura Mutation",
-        "synergy": 0.3926641843942029
+        "synergy": 0.39267097042549043
       },
       {
         "name": "Grand Crescendo",
-        "synergy": 0.3858177598406315
+        "synergy": 0.38601109079322615
       },
       {
         "name": "Krenko, Tin Street Kingpin",
-        "synergy": 0.3793767129217187
+        "synergy": 0.379308122271658
       },
       {
         "name": "March of the Multitudes",
-        "synergy": 0.37262813110730353
+        "synergy": 0.37275293711003393
       }
     ],
     "Bria, Riptide Rogue": [
@@ -19328,27 +19328,27 @@
     "Omnath, Locus of Mana": [
       {
         "name": "Mana Reflection",
-        "synergy": 0.5462838339544607
+        "synergy": 0.5462267247462389
       },
       {
         "name": "Doubling Cube",
-        "synergy": 0.5405096027148827
+        "synergy": 0.5404685129797929
       },
       {
         "name": "Wilderness Reclamation",
-        "synergy": 0.5249392583274732
+        "synergy": 0.5247875180053948
       },
       {
         "name": "Seedborn Muse",
-        "synergy": 0.488391952184748
+        "synergy": 0.48812980296160663
       },
       {
         "name": "Nyxbloom Ancient",
-        "synergy": 0.471198308500677
+        "synergy": 0.47079238890516
       },
       {
         "name": "Selvala, Heart of the Wilds",
-        "synergy": 0.41248463124643575
+        "synergy": 0.412668952204232
       }
     ],
     "Tannuk, Memorial Ensign": [
@@ -19380,27 +19380,27 @@
     "Roxanne, Starfall Savant": [
       {
         "name": "Second Harvest",
-        "synergy": 0.6776269787785617
+        "synergy": 0.6779524916852113
       },
       {
         "name": "Panharmonicon",
-        "synergy": 0.6482637665425048
+        "synergy": 0.6486384535788745
       },
       {
         "name": "Reckless Fireweaver",
-        "synergy": 0.5583697390791004
+        "synergy": 0.5579856433154873
       },
       {
         "name": "For the Common Good",
-        "synergy": 0.5468004727574083
+        "synergy": 0.5466469639499159
       },
       {
         "name": "Parallel Lives",
-        "synergy": 0.5083671733663979
+        "synergy": 0.5081894584328832
       },
       {
         "name": "Aerid Konstrari",
-        "synergy": 0.4954898648648649
+        "synergy": 0.49589011775431
       }
     ],
     "Niko, Light of Hope": [
@@ -19458,27 +19458,27 @@
     "Queza, Augur of Agonies": [
       {
         "name": "Psychosis Crawler",
-        "synergy": 0.5825780940469069
+        "synergy": 0.5821941482133757
       },
       {
         "name": "Marauding Blight-Priest",
-        "synergy": 0.5040189398941913
+        "synergy": 0.5043441698175962
       },
       {
         "name": "Peer into the Abyss",
-        "synergy": 0.47969232382713267
+        "synergy": 0.4795927464794165
       },
       {
         "name": "Teferi's Ageless Insight",
-        "synergy": 0.4692025900577208
+        "synergy": 0.4689650962161447
       },
       {
         "name": "Drogskol Reaver",
-        "synergy": 0.4483603163381835
+        "synergy": 0.44860566414512504
       },
       {
         "name": "Laboratory Maniac",
-        "synergy": 0.427440589482843
+        "synergy": 0.427171422772471
       }
     ],
     "Tatyova, Benthic Druid": [
@@ -19510,27 +19510,27 @@
     "Kudo, King Among Bears": [
       {
         "name": "Ayula, Queen Among Bears",
-        "synergy": 0.8284956813358128
+        "synergy": 0.8283760757865534
       },
       {
         "name": "Beorn the Fierce",
-        "synergy": 0.593312897287486
+        "synergy": 0.5931501760364845
       },
       {
         "name": "Elesh Norn, Grand Cenobite",
-        "synergy": 0.5912713837931648
+        "synergy": 0.591033910089706
       },
       {
         "name": "Reverence",
-        "synergy": 0.45071414714713787
+        "synergy": 0.45088435661139964
       },
       {
         "name": "Toski, Bearer of Secrets",
-        "synergy": 0.37598580225790923
+        "synergy": 0.37576144435081565
       },
       {
         "name": "Champion of Lambholt",
-        "synergy": 0.3686970499748172
+        "synergy": 0.36871177410875944
       }
     ],
     "Shalai and Hallar": [
@@ -19666,131 +19666,131 @@
     "Skullbriar, the Walking Grave": [
       {
         "name": "Slippery Bogbonder",
-        "synergy": 0.7205956815339719
+        "synergy": 0.720530790383753
       },
       {
         "name": "Hardened Scales",
-        "synergy": 0.7142743420428621
+        "synergy": 0.7141712524523287
       },
       {
         "name": "Unexpected Fangs",
-        "synergy": 0.7118207153392772
+        "synergy": 0.7114428946656111
       },
       {
         "name": "Forgotten Ancient",
-        "synergy": 0.6789061987458808
+        "synergy": 0.6789137740392733
       },
       {
         "name": "Corpsejack Menace",
-        "synergy": 0.6709052410670527
+        "synergy": 0.670699012799163
       },
       {
         "name": "Gift of the Viper",
-        "synergy": 0.6527283558057635
+        "synergy": 0.6526641967082534
       }
     ],
     "Jodah, Archmage Eternal": [
       {
         "name": "Omniscience",
-        "synergy": 0.5381658862688354
+        "synergy": 0.5382386778103084
       },
       {
         "name": "Fist of Suns",
-        "synergy": 0.502500290298444
+        "synergy": 0.5021932206227041
       },
       {
         "name": "Ruinous Ultimatum",
-        "synergy": 0.43118079309629254
+        "synergy": 0.4309870435780144
       },
       {
         "name": "Apex Devastator",
-        "synergy": 0.41209265249684407
+        "synergy": 0.41235574604605013
       },
       {
         "name": "Conflux",
-        "synergy": 0.3862980316302919
+        "synergy": 0.3864620999157299
       },
       {
         "name": "Genesis Ultimatum",
-        "synergy": 0.38445359029490356
+        "synergy": 0.3845189484904271
       }
     ],
     "Brenard, Ginger Sculptor": [
       {
         "name": "Wing Splicer",
-        "synergy": 0.7022084902807592
+        "synergy": 0.7024152223368908
       },
       {
         "name": "Blade Splicer",
-        "synergy": 0.6979406636970701
+        "synergy": 0.6981522493089896
       },
       {
         "name": "Darksteel Splicer",
-        "synergy": 0.6424586681306969
+        "synergy": 0.6428363795808925
       },
       {
         "name": "Solemn Simulacrum",
-        "synergy": 0.6311758175023556
+        "synergy": 0.631583860428296
       },
       {
         "name": "Ich-Tekik, Salvage Splicer",
-        "synergy": 0.5986796037150619
+        "synergy": 0.5990061168580342
       },
       {
         "name": "Master Splicer",
-        "synergy": 0.586422849170342
+        "synergy": 0.5866645866984611
       }
     ],
     "Tayam, Luminous Enigma": [
       {
         "name": "Devoted Druid",
-        "synergy": 0.7358200519827066
+        "synergy": 0.7354595943490293
       },
       {
         "name": "Rishkar, Peema Renegade",
-        "synergy": 0.6755959350878302
+        "synergy": 0.675348789558631
       },
       {
         "name": "Wall of Roots",
-        "synergy": 0.629818915963188
+        "synergy": 0.6296591861824155
       },
       {
         "name": "Carrion Feeder",
-        "synergy": 0.6140284053657367
+        "synergy": 0.6139850959579853
       },
       {
         "name": "Tyvar, Jubilant Brawler",
-        "synergy": 0.6085920050379252
+        "synergy": 0.6085956081759387
       },
       {
         "name": "Bartolomé del Presidio",
-        "synergy": 0.5653195035886307
+        "synergy": 0.5649389382740939
       }
     ],
     "Norin the Wary": [
       {
         "name": "Genesis Chamber",
-        "synergy": 0.8519289584213576
+        "synergy": 0.8518516575455465
       },
       {
         "name": "Tome of Legends",
-        "synergy": 0.8143999908059107
+        "synergy": 0.8145582056757631
       },
       {
         "name": "Witty Roastmaster",
-        "synergy": 0.788833126412114
+        "synergy": 0.7889988636211356
       },
       {
         "name": "Rose Room Treasurer",
-        "synergy": 0.7739299494964772
+        "synergy": 0.7735260147470896
       },
       {
         "name": "Molten Gatekeeper",
-        "synergy": 0.7521800351218547
+        "synergy": 0.7522914547845286
       },
       {
         "name": "Panharmonicon",
-        "synergy": 0.7478618695421615
+        "synergy": 0.7477580260068161
       }
     ],
     "Mirko, Obsessive Theorist": [
@@ -19822,105 +19822,105 @@
     "Indominus Rex, Alpha": [
       {
         "name": "Scavenged Brawler",
-        "synergy": 0.781838427140105
+        "synergy": 0.7815984006227812
       },
       {
         "name": "Venomthrope",
-        "synergy": 0.7590321232645202
+        "synergy": 0.7590036479664075
       },
       {
         "name": "Nightveil Predator",
-        "synergy": 0.7357683866720935
+        "synergy": 0.735960603483034
       },
       {
         "name": "Questing Beast",
-        "synergy": 0.7262767429336204
+        "synergy": 0.7260493534851733
       },
       {
         "name": "Nighthawk Scavenger",
-        "synergy": 0.7008246952040612
+        "synergy": 0.7005093990926992
       },
       {
         "name": "End-Raze Forerunners",
-        "synergy": 0.6964339332239855
+        "synergy": 0.6967333350180394
       }
     ],
     "Rowan, Scion of War": [
       {
         "name": "K'rrik, Son of Yawgmoth",
-        "synergy": 0.7068243974842068
+        "synergy": 0.707082791058012
       },
       {
         "name": "Exsanguinate",
-        "synergy": 0.6738446957146379
+        "synergy": 0.6736233055440329
       },
       {
         "name": "Treasonous Ogre",
-        "synergy": 0.6108916094388259
+        "synergy": 0.6109419393755431
       },
       {
         "name": "Blood Celebrant",
-        "synergy": 0.5539042998150545
+        "synergy": 0.5537527745593991
       },
       {
         "name": "Wall of Blood",
-        "synergy": 0.5515923956288327
+        "synergy": 0.5514396568144757
       },
       {
         "name": "Crackle with Power",
-        "synergy": 0.5494521966680662
+        "synergy": 0.5493848678116133
       }
     ],
     "Reaper King": [
       {
         "name": "Scuttlemutt",
-        "synergy": 0.7006493045966794
+        "synergy": 0.7005771218500466
       },
       {
         "name": "Scarecrone",
-        "synergy": 0.6816127178224374
+        "synergy": 0.6816634352610973
       },
       {
         "name": "Oasis Gardener",
-        "synergy": 0.5966193122930097
+        "synergy": 0.5967425412285328
       },
       {
         "name": "Scaretiller",
-        "synergy": 0.5543223332412331
+        "synergy": 0.5540603378788601
       },
       {
         "name": "Panharmonicon",
-        "synergy": 0.5423959617680473
+        "synergy": 0.5425257609118301
       },
       {
         "name": "Heap Doll",
-        "synergy": 0.5191819831070668
+        "synergy": 0.5193711959685293
       }
     ],
     "Marvo, Deep Operative": [
       {
         "name": "Research the Deep",
-        "synergy": 0.8199114016867645
+        "synergy": 0.8199660215903606
       },
       {
         "name": "One with the Multiverse",
-        "synergy": 0.8173355546053078
+        "synergy": 0.8174950214070682
       },
       {
         "name": "Revive the Fallen",
-        "synergy": 0.7716769377580813
+        "synergy": 0.7718903887764041
       },
       {
         "name": "Whirlpool Whelm",
-        "synergy": 0.7416139383674455
+        "synergy": 0.7419617324558511
       },
       {
         "name": "Hoarder's Greed",
-        "synergy": 0.7227552392832741
+        "synergy": 0.7230190484541194
       },
       {
         "name": "Scattering Stroke",
-        "synergy": 0.6951382146853592
+        "synergy": 0.6953274446528215
       }
     ],
     "Phenax, God of Deception": [
@@ -19978,27 +19978,27 @@
     "Hazezon, Shaper of Sand": [
       {
         "name": "Hashep Oasis",
-        "synergy": 0.9193326912303219
+        "synergy": 0.9193509709897487
       },
       {
         "name": "Desert of the Indomitable",
-        "synergy": 0.918071544223012
+        "synergy": 0.9180906202117471
       },
       {
         "name": "Desert of the True",
-        "synergy": 0.9136332574114193
+        "synergy": 0.9136527437413959
       },
       {
         "name": "Ramunap Ruins",
-        "synergy": 0.9125244773261866
+        "synergy": 0.9125443360682901
       },
       {
         "name": "Shefet Dunes",
-        "synergy": 0.9117240064776008
+        "synergy": 0.9117411891373987
       },
       {
         "name": "Desert of the Fervent",
-        "synergy": 0.9068154493761692
+        "synergy": 0.9068324284041857
       }
     ],
     "Toxrill, the Corrosive": [
@@ -20056,79 +20056,79 @@
     "Iron Man, Titan of Innovation": [
       {
         "name": "Inventors' Fair",
-        "synergy": 0.7396801617819929
+        "synergy": 0.7394286820655533
       },
       {
         "name": "Sculpting Steel",
-        "synergy": 0.7054036681569935
+        "synergy": 0.7060806003485218
       },
       {
         "name": "Commander's Plate",
-        "synergy": 0.6566547251471104
+        "synergy": 0.655750517655583
       },
       {
         "name": "Etherium Sculptor",
-        "synergy": 0.6248169634825645
+        "synergy": 0.6244413841608394
       },
       {
         "name": "Emry, Lurker of the Loch",
-        "synergy": 0.603482808231298
+        "synergy": 0.6032705357635889
       },
       {
         "name": "Esoteric Duplicator",
-        "synergy": 0.6014925358730906
+        "synergy": 0.601586297812747
       }
     ],
     "Syr Gwyn, Hero of Ashvale": [
       {
         "name": "Puresteel Paladin",
-        "synergy": 0.796823563902573
+        "synergy": 0.796884775649099
       },
       {
         "name": "Danitha Capashen, Paragon",
-        "synergy": 0.7799359531049586
+        "synergy": 0.7798943422680643
       },
       {
         "name": "Colossus Hammer",
-        "synergy": 0.7726715030899203
+        "synergy": 0.7729427503784135
       },
       {
         "name": "Tournament Grounds",
-        "synergy": 0.7270917065239979
+        "synergy": 0.7268641890334848
       },
       {
         "name": "Knight Exemplar",
-        "synergy": 0.709826262766255
+        "synergy": 0.7096035178266231
       },
       {
         "name": "Armored Skyhunter",
-        "synergy": 0.5920364470836073
+        "synergy": 0.592594424001604
       }
     ],
     "Silas Renn, Seeker Adept": [
       {
         "name": "Etherium Sculptor",
-        "synergy": 0.6606966103836991
+        "synergy": 0.6606670084583286
       },
       {
         "name": "Foundry Inspector",
-        "synergy": 0.6232902082398991
+        "synergy": 0.6232625318133066
       },
       {
         "name": "Vault of Whispers",
-        "synergy": 0.5623179593413222
+        "synergy": 0.5622895004278244
       },
       {
         "name": "Seat of the Synod",
-        "synergy": 0.5437114300507193
+        "synergy": 0.5436759614111915
       },
       {
         "name": "Emry, Lurker of the Loch",
-        "synergy": 0.516018820563644
+        "synergy": 0.5160282019752696
       },
       {
         "name": "Darksteel Citadel",
-        "synergy": 0.49550546792877503
+        "synergy": 0.49547353129105415
       }
     ],
     "Finneas, Ace Archer": [
@@ -20186,27 +20186,27 @@
     "Raggadragga, Goreguts Boss": [
       {
         "name": "Viridian Joiner",
-        "synergy": 0.648496886272133
+        "synergy": 0.6487283417792151
       },
       {
         "name": "Marwyn, the Nurturer",
-        "synergy": 0.6016998267042739
+        "synergy": 0.6016029805061445
       },
       {
         "name": "Ruby, Daring Tracker",
-        "synergy": 0.5642396316749452
+        "synergy": 0.5641137357328876
       },
       {
         "name": "Leyline of Abundance",
-        "synergy": 0.5600387951414002
+        "synergy": 0.5601472610394659
       },
       {
         "name": "Elvish Mystic",
-        "synergy": 0.559018625436257
+        "synergy": 0.5588775773852234
       },
       {
         "name": "Llanowar Elves",
-        "synergy": 0.5364254001341187
+        "synergy": 0.536440695307009
       }
     ],
     "Lumra, Bellow of the Woods": [
@@ -20316,53 +20316,53 @@
     "Coram, the Undertaker": [
       {
         "name": "Brawn",
-        "synergy": 0.6340410915904477
+        "synergy": 0.6339095595149071
       },
       {
         "name": "Lord of Extinction",
-        "synergy": 0.6336592020602438
+        "synergy": 0.6334155830261498
       },
       {
         "name": "Yargle and Multani",
-        "synergy": 0.5995073563654691
+        "synergy": 0.5996071189347285
       },
       {
         "name": "Anger",
-        "synergy": 0.5967263514840069
+        "synergy": 0.5965783409246193
       },
       {
         "name": "Buried Alive",
-        "synergy": 0.5509448586896124
+        "synergy": 0.5509272020898874
       },
       {
         "name": "Titanoth Rex",
-        "synergy": 0.5345670803009154
+        "synergy": 0.5349213337099399
       }
     ],
     "Codie, Vociferous Codex": [
       {
         "name": "Mizzix's Mastery",
-        "synergy": 0.38639338546103974
+        "synergy": 0.38637917055571025
       },
       {
         "name": "Profane Tutor",
-        "synergy": 0.3856370414033611
+        "synergy": 0.3857358009957306
       },
       {
         "name": "Bring to Light",
-        "synergy": 0.3817377857330416
+        "synergy": 0.3816219148978724
       },
       {
         "name": "Brainstorm",
-        "synergy": 0.3724807249624171
+        "synergy": 0.3724286549571273
       },
       {
         "name": "Growth Spiral",
-        "synergy": 0.3542778008411662
+        "synergy": 0.3541754137262971
       },
       {
         "name": "Approach of the Second Sun",
-        "synergy": 0.35082458317915377
+        "synergy": 0.35092799449871465
       }
     ],
     "Cloud, Midgar Mercenary": [
@@ -20420,79 +20420,79 @@
     "Arna Kennerüd, Skycaptain": [
       {
         "name": "Sram, Senior Edificer",
-        "synergy": 0.6305451930804044
+        "synergy": 0.6302640736808631
       },
       {
         "name": "Puresteel Paladin",
-        "synergy": 0.6298463090857457
+        "synergy": 0.6298688811521695
       },
       {
         "name": "Danitha Capashen, Paragon",
-        "synergy": 0.5914684140881323
+        "synergy": 0.5915368363695256
       },
       {
         "name": "All That Glitters",
-        "synergy": 0.5707457175485344
+        "synergy": 0.5705441509545678
       },
       {
         "name": "Nettlecyst",
-        "synergy": 0.5479500244711512
+        "synergy": 0.5477074730785818
       },
       {
         "name": "Thran Power Suit",
-        "synergy": 0.5313810913529223
+        "synergy": 0.5309292303067532
       }
     ],
     "Goro-Goro and Satoru": [
       {
         "name": "Loyal Apprentice",
-        "synergy": 0.7610714552121872
+        "synergy": 0.760879458429819
       },
       {
         "name": "Thousand-Faced Shadow",
-        "synergy": 0.6714214085121056
+        "synergy": 0.6715737935073737
       },
       {
         "name": "Phoenix Chick",
-        "synergy": 0.6636026603583942
+        "synergy": 0.663425447560705
       },
       {
         "name": "Prosperous Thief",
-        "synergy": 0.6374177858076276
+        "synergy": 0.6375738011280484
       },
       {
         "name": "Ingenious Infiltrator",
-        "synergy": 0.6068984713905794
+        "synergy": 0.6071647354105584
       },
       {
-        "name": "Moon-Circuit Hacker",
-        "synergy": 0.6005545970610521
+        "name": "Gingerbrute",
+        "synergy": 0.6009333769772823
       }
     ],
     "Obeka, Brute Chronologist": [
       {
         "name": "Sundial of the Infinite",
-        "synergy": 0.7392814018058552
+        "synergy": 0.7389817719898688
       },
       {
         "name": "Ideas Unbound",
-        "synergy": 0.7039067442494736
+        "synergy": 0.7039505908018293
       },
       {
         "name": "Sneak Attack",
-        "synergy": 0.6930712719368176
+        "synergy": 0.6930166449389894
       },
       {
         "name": "Feldon of the Third Path",
-        "synergy": 0.6697480161099592
+        "synergy": 0.6693753193648558
       },
       {
         "name": "Last Chance",
-        "synergy": 0.6535095308717028
+        "synergy": 0.653150285590299
       },
       {
         "name": "Glorious End",
-        "synergy": 0.6270212949138844
+        "synergy": 0.6267816199503485
       }
     ],
     "Tam, the Possibility": [
@@ -20628,105 +20628,105 @@
     "Slimefoot and Squee": [
       {
         "name": "Golgari Germination",
-        "synergy": 0.5614060456810226
+        "synergy": 0.5614603080555585
       },
       {
         "name": "Artifact Mutation",
-        "synergy": 0.5488694420368779
+        "synergy": 0.5489400208838576
       },
       {
         "name": "Sprouting Thrinax",
-        "synergy": 0.5183156649556071
+        "synergy": 0.5184140196214856
       },
       {
         "name": "Nemata, Primeval Warden",
-        "synergy": 0.5020322604783081
+        "synergy": 0.5017984702111004
       },
       {
         "name": "Tendershoot Dryad",
-        "synergy": 0.4961440480053855
+        "synergy": 0.4960129709425769
       },
       {
         "name": "Goblin Bombardment",
-        "synergy": 0.4742965321752699
+        "synergy": 0.4742813529143307
       }
     ],
     "Xenagos, God of Revels": [
       {
         "name": "Goreclaw, Terror of Qal Sisma",
-        "synergy": 0.5310276020183728
+        "synergy": 0.5308190280096999
       },
       {
         "name": "Anzrag, the Quake-Mole",
-        "synergy": 0.4893643325997904
+        "synergy": 0.48909378843640955
       },
       {
         "name": "Ghalta, Primal Hunger",
-        "synergy": 0.4867296078462111
+        "synergy": 0.4862994838332572
       },
       {
         "name": "Quartzwood Crasher",
-        "synergy": 0.4797241514218818
+        "synergy": 0.4793003206944619
       },
       {
         "name": "Ilharg, the Raze-Boar",
-        "synergy": 0.41856512431165604
+        "synergy": 0.4181517408713663
       },
       {
         "name": "Ojer Kaslem, Deepest Growth",
-        "synergy": 0.4090439217370323
+        "synergy": 0.40885952172316375
       }
     ],
     "Kalamax, the Stormsire": [
       {
         "name": "Wilderness Reclamation",
-        "synergy": 0.6274896981330955
+        "synergy": 0.6275140119276056
       },
       {
         "name": "Harrow",
-        "synergy": 0.6084544938499796
+        "synergy": 0.608522809022209
       },
       {
         "name": "Archmage Emeritus",
-        "synergy": 0.5885561426274049
+        "synergy": 0.5888039100128327
       },
       {
         "name": "Twinning Staff",
-        "synergy": 0.5874435522497159
+        "synergy": 0.5874750916041191
       },
       {
         "name": "Storm-Kiln Artist",
-        "synergy": 0.557461676189688
+        "synergy": 0.5573637016608277
       },
       {
         "name": "Frantic Search",
-        "synergy": 0.5348103035689583
+        "synergy": 0.5349060882671154
       }
     ],
     "Thorin, King of Durin's Folk": [
       {
         "name": "Fíli the Pathfinder",
-        "synergy": 0.7870870708923816
+        "synergy": 0.7872570083273602
       },
       {
         "name": "Bifur, Melodic Rider",
-        "synergy": 0.7755914902605062
+        "synergy": 0.7758363644436945
       },
       {
         "name": "Thorin Oakenshield",
-        "synergy": 0.7730897928611682
+        "synergy": 0.7733516878788311
       },
       {
         "name": "Fíli and Kíli, Joyous",
-        "synergy": 0.7543206882607224
+        "synergy": 0.7547357860398557
       },
       {
         "name": "Dáin's Company",
-        "synergy": 0.7371179863584927
+        "synergy": 0.737459136445004
       },
       {
         "name": "Kíli the Resourceful",
-        "synergy": 0.7212515096970981
+        "synergy": 0.721747237948001
       }
     ],
     "The Infamous Cruelclaw": [
@@ -20888,27 +20888,27 @@
     "Brimaz, Blight of Oreskos": [
       {
         "name": "Progenitor Exarch",
-        "synergy": 0.7648119605229808
+        "synergy": 0.7645557943904463
       },
       {
         "name": "Filigree Vector",
-        "synergy": 0.7358583490473493
+        "synergy": 0.7360394499266667
       },
       {
         "name": "Karn's Bastion",
-        "synergy": 0.7345096788774299
+        "synergy": 0.734499421363855
       },
       {
         "name": "Essence of Orthodoxy",
-        "synergy": 0.7190915604072424
+        "synergy": 0.719164512215854
       },
       {
         "name": "Grafted Butcher",
-        "synergy": 0.713046480283629
+        "synergy": 0.7131243972076549
       },
       {
         "name": "Norn's Inquisitor",
-        "synergy": 0.7048673854385838
+        "synergy": 0.7048211070822274
       }
     ],
     "Ardenn, Intrepid Archaeologist": [
@@ -21122,27 +21122,27 @@
     "Clement, the Worrywort": [
       {
         "name": "Pond Prophet",
-        "synergy": 0.913993687191403
+        "synergy": 0.9140055092749662
       },
       {
         "name": "Dour Port-Mage",
-        "synergy": 0.8960595698340584
+        "synergy": 0.8960797940033721
       },
       {
         "name": "Clifftop Lookout",
-        "synergy": 0.856902570293383
+        "synergy": 0.8569134558519781
       },
       {
         "name": "Long River Lurker",
-        "synergy": 0.8565604190259154
+        "synergy": 0.8566879870592369
       },
       {
         "name": "Sunshower Druid",
-        "synergy": 0.8483874848418658
+        "synergy": 0.8485155916992365
       },
       {
         "name": "Three Tree Scribe",
-        "synergy": 0.8429497183896985
+        "synergy": 0.8429592362234024
       }
     ],
     "Saskia the Unyielding": [
@@ -21200,53 +21200,53 @@
     "Haldan, Avid Arcanist": [
       {
         "name": "Muse Vessel",
-        "synergy": 0.9999199477418859
+        "synergy": 0.9999200332661613
       },
       {
         "name": "Echo Chamber",
-        "synergy": 0.9998943310192894
+        "synergy": 0.9998944439113329
       },
       {
         "name": "Psychic Theft",
-        "synergy": 0.9998879268386403
+        "synergy": 0.9998880465726258
       },
       {
         "name": "Rhystic Cave",
-        "synergy": 0.9998815226579911
+        "synergy": 0.9998816492339186
       },
       {
         "name": "Implements of Sacrifice",
-        "synergy": 0.9998783205676666
+        "synergy": 0.9998784505645651
       },
       {
         "name": "Misthollow Griffin",
-        "synergy": 0.9998687142966929
+        "synergy": 0.9998688545565045
       }
     ],
     "Pako, Arcane Retriever": [
       {
         "name": "Loki, God of Lies",
-        "synergy": 0.9989946937312598
+        "synergy": 0.9989824936731978
       },
       {
         "name": "Loki's Scepter",
-        "synergy": 0.9981797575299654
+        "synergy": 0.9981804047531586
       },
       {
         "name": "Hobbit Hole",
-        "synergy": 0.989996574169236
+        "synergy": 0.9900435453143427
       },
       {
         "name": "Desert Were-Worm",
-        "synergy": 0.9734087170604704
+        "synergy": 0.9733572850835426
       },
       {
         "name": "Branching Evolution",
-        "synergy": 0.4459001845272926
+        "synergy": 0.44597922609699286
       },
       {
         "name": "Enduring Courage",
-        "synergy": 0.4186872665337951
+        "synergy": 0.418738147091609
       }
     ],
     "Raph & Mikey, Troublemakers": [
@@ -21356,53 +21356,53 @@
     "Kellan, the Kid": [
       {
         "name": "Vega, the Watcher",
-        "synergy": 0.823578356714035
+        "synergy": 0.8237262285732795
       },
       {
         "name": "Doc Aurlock, Grizzled Genius",
-        "synergy": 0.7617611808563908
+        "synergy": 0.7621189018076712
       },
       {
         "name": "Fblthp, Lost on the Range",
-        "synergy": 0.7398990487160377
+        "synergy": 0.7400631733182806
       },
       {
         "name": "The Key to the Vault",
-        "synergy": 0.6766247388838107
+        "synergy": 0.6769893593829556
       },
       {
         "name": "Saw It Coming",
-        "synergy": 0.6500026883845532
+        "synergy": 0.6499240500800858
       },
       {
         "name": "Sage of the Beyond",
-        "synergy": 0.6414695570105468
+        "synergy": 0.6412833129342983
       }
     ],
     "Bristly Bill, Spine Sower": [
       {
         "name": "Hardened Scales",
-        "synergy": 0.56526014201498
+        "synergy": 0.565272896512022
       },
       {
         "name": "Branching Evolution",
-        "synergy": 0.5583007358246062
+        "synergy": 0.5579745654575903
       },
       {
         "name": "Mossborn Hydra",
-        "synergy": 0.5471615404583473
+        "synergy": 0.5473050771334038
       },
       {
         "name": "Kami of Whispered Hopes",
-        "synergy": 0.5388528702213696
+        "synergy": 0.5387318487862328
       },
       {
         "name": "Evolution Sage",
-        "synergy": 0.45360266113074577
+        "synergy": 0.4536346390630624
       },
       {
         "name": "Evolving Wilds",
-        "synergy": 0.44409241840142255
+        "synergy": 0.44399032522565185
       }
     ],
     "Imotekh the Stormlord": [
@@ -21434,27 +21434,27 @@
     "Tifa, Martial Artist": [
       {
         "name": "Adriana, Captain of the Guard",
-        "synergy": 0.49190181918120035
+        "synergy": 0.49196238233697037
       },
       {
         "name": "Anzrag, the Quake-Mole",
-        "synergy": 0.46825126899135877
+        "synergy": 0.4682042277753658
       },
       {
         "name": "Goreclaw, Terror of Qal Sisma",
-        "synergy": 0.43972405050112784
+        "synergy": 0.4396974997209928
       },
       {
         "name": "Lightning, Army of One",
-        "synergy": 0.4264138011864126
+        "synergy": 0.4262570574609307
       },
       {
         "name": "Sephiroth, Fallen Hero",
-        "synergy": 0.41870254793977946
+        "synergy": 0.4186490527235401
       },
       {
         "name": "Iroas, God of Victory",
-        "synergy": 0.4056440136968056
+        "synergy": 0.40539923579971276
       }
     ],
     "Maelstrom Wanderer": [
@@ -21486,27 +21486,27 @@
     "Tuvasa the Sunlit": [
       {
         "name": "Sythis, Harvest's Hand",
-        "synergy": 0.7549706981954146
+        "synergy": 0.7548361188117808
       },
       {
         "name": "Enchantress's Presence",
-        "synergy": 0.7334889688655105
+        "synergy": 0.7336066989831064
       },
       {
         "name": "Sanctum Weaver",
-        "synergy": 0.69022941104893
+        "synergy": 0.6903699316262984
       },
       {
         "name": "Eidolon of Blossoms",
-        "synergy": 0.6482138409554321
+        "synergy": 0.6482440388285661
       },
       {
         "name": "Sterling Grove",
-        "synergy": 0.6214255974949398
+        "synergy": 0.6214743611952406
       },
       {
         "name": "Setessan Champion",
-        "synergy": 0.5944822458376033
+        "synergy": 0.5941669307244117
       }
     ],
     "Grist, the Hunger Tide": [
@@ -21564,79 +21564,79 @@
     "Gisa and Geralf": [
       {
         "name": "Diregraf Captain",
-        "synergy": 0.7809430482792153
+        "synergy": 0.7808306700889026
       },
       {
         "name": "Lord of the Accursed",
-        "synergy": 0.6756603466031339
+        "synergy": 0.6757953941875732
       },
       {
         "name": "Gray Merchant of Asphodel",
-        "synergy": 0.6443437878601848
+        "synergy": 0.6443003959473601
       },
       {
         "name": "Champion of the Perished",
-        "synergy": 0.6301004675639387
+        "synergy": 0.6298675752541449
       },
       {
         "name": "Rooftop Storm",
-        "synergy": 0.6219565402261613
+        "synergy": 0.6218235869324406
       },
       {
         "name": "Zombie Apocalypse",
-        "synergy": 0.6088548742229126
+        "synergy": 0.6088490154682734
       }
     ],
     "Xavier Sal, Infested Captain": [
       {
         "name": "Kiora's Follower",
-        "synergy": 0.4976887178962695
+        "synergy": 0.49791669190616594
       },
       {
         "name": "Ezuri, Stalker of Spheres",
-        "synergy": 0.47631344015434757
+        "synergy": 0.4763996996049026
       },
       {
         "name": "Tekuthal, Inquiry Dominus",
-        "synergy": 0.4637833692715679
+        "synergy": 0.46386179929885185
       },
       {
         "name": "Karn's Bastion",
-        "synergy": 0.40366642651617696
+        "synergy": 0.40348802816093393
       },
       {
         "name": "Everflowing Chalice",
-        "synergy": 0.38988172672058724
+        "synergy": 0.38967977620880384
       },
       {
         "name": "Evolution Sage",
-        "synergy": 0.386903773792413
+        "synergy": 0.3872142633596082
       }
     ],
     "Myrkul, Lord of Bones": [
       {
         "name": "Eidolon of Blossoms",
-        "synergy": 0.5887488270787554
+        "synergy": 0.5887424236611141
       },
       {
         "name": "Sanctum Weaver",
-        "synergy": 0.5707476456679865
+        "synergy": 0.5706321110627008
       },
       {
         "name": "Devoted Druid",
-        "synergy": 0.5686513213690374
+        "synergy": 0.5687585145908957
       },
       {
         "name": "Sterling Grove",
-        "synergy": 0.5051714066485051
+        "synergy": 0.5055266986844069
       },
       {
         "name": "Archon of Sun's Grace",
-        "synergy": 0.5038874463108403
+        "synergy": 0.5038729030735793
       },
       {
         "name": "Setessan Champion",
-        "synergy": 0.480379044983108
+        "synergy": 0.4805278912298603
       }
     ],
     "Breena, the Demagogue": [
@@ -21668,131 +21668,131 @@
     "Morska, Undersea Sleuth": [
       {
         "name": "Academy Manufactor",
-        "synergy": 0.7586956581046684
+        "synergy": 0.7588112378776116
       },
       {
         "name": "Tireless Tracker",
-        "synergy": 0.7189453870517268
+        "synergy": 0.718732184018978
       },
       {
         "name": "Erdwal Illuminator",
-        "synergy": 0.7146314344868863
+        "synergy": 0.7149056169211985
       },
       {
         "name": "Tangletrove Kelp",
-        "synergy": 0.689478747699965
+        "synergy": 0.6896153987165963
       },
       {
         "name": "Detective of the Month",
-        "synergy": 0.682712148036779
+        "synergy": 0.6824637489070596
       },
       {
         "name": "Adrix and Nev, Twincasters",
-        "synergy": 0.6556059550701157
+        "synergy": 0.6553588718938427
       }
     ],
     "Shirei, Shizo's Caretaker": [
       {
         "name": "Serrated Scorpion",
-        "synergy": 0.6449152982592143
+        "synergy": 0.6447812250357248
       },
       {
         "name": "Dusk Legion Zealot",
-        "synergy": 0.6323908173805205
+        "synergy": 0.6324008741047529
       },
       {
         "name": "Bone Shredder",
-        "synergy": 0.6097535179907951
+        "synergy": 0.6100218649249323
       },
       {
         "name": "Greedy Freebooter",
-        "synergy": 0.581995314291352
+        "synergy": 0.5821435989987214
       },
       {
         "name": "Viscera Seer",
-        "synergy": 0.5799151118696706
+        "synergy": 0.5797923251200447
       },
       {
         "name": "Zulaport Cutthroat",
-        "synergy": 0.563294494929643
+        "synergy": 0.5630639487516536
       }
     ],
     "Mishra, Eminent One": [
       {
         "name": "Ichor Wellspring",
-        "synergy": 0.8185051638014784
+        "synergy": 0.8184374007854771
       },
       {
         "name": "Seat of the Synod",
-        "synergy": 0.7652108886665605
+        "synergy": 0.7652661101182978
       },
       {
         "name": "Great Furnace",
-        "synergy": 0.7505393798750605
-      },
-      {
-        "name": "Vault of Whispers",
-        "synergy": 0.7473226272549031
+        "synergy": 0.7507008708787235
       },
       {
         "name": "Emry, Lurker of the Loch",
-        "synergy": 0.7473009461386889
+        "synergy": 0.7474504984930993
+      },
+      {
+        "name": "Vault of Whispers",
+        "synergy": 0.7473604267006729
       },
       {
         "name": "Cursed Mirror",
-        "synergy": 0.6714301169038349
+        "synergy": 0.6712883951016262
       }
     ],
     "The Master of Keys": [
       {
         "name": "Ripples of Undeath",
-        "synergy": 0.5998846566950387
+        "synergy": 0.6002564077235487
       },
       {
         "name": "Animate Dead",
-        "synergy": 0.5587165670762448
+        "synergy": 0.559080687469327
       },
       {
         "name": "Inquisitive Glimmer",
-        "synergy": 0.5533153696164952
+        "synergy": 0.5536373739010247
       },
       {
         "name": "Dress Down",
-        "synergy": 0.5255455594418631
+        "synergy": 0.5254958310087031
       },
       {
         "name": "Entity Tracker",
-        "synergy": 0.4768533400331174
+        "synergy": 0.4772200315989484
       },
       {
         "name": "Necromancy",
-        "synergy": 0.47337773840018754
+        "synergy": 0.47315957040997053
       }
     ],
     "Gluntch, the Bestower": [
       {
         "name": "Flumph",
-        "synergy": 0.6623661453178064
+        "synergy": 0.6625189477333268
       },
       {
         "name": "Selvala, Explorer Returned",
-        "synergy": 0.6281905963327366
+        "synergy": 0.6285414256079828
       },
       {
         "name": "Rites of Flourishing",
-        "synergy": 0.5830910210732384
+        "synergy": 0.583242524051792
       },
       {
         "name": "Cut a Deal",
-        "synergy": 0.5713368275836228
+        "synergy": 0.5715083828500677
       },
       {
         "name": "Orzhov Advokist",
-        "synergy": 0.5643684738857957
+        "synergy": 0.5646605951629808
       },
       {
         "name": "Nils, Discipline Enforcer",
-        "synergy": 0.5490453823522161
+        "synergy": 0.5493697649746718
       }
     ],
     "Talion, the Kindly Lord": [
@@ -21824,53 +21824,53 @@
     "Winter, Misanthropic Guide": [
       {
         "name": "Waste Not",
-        "synergy": 0.607943738535113
+        "synergy": 0.6078481141575155
       },
       {
         "name": "Razorkin Needlehead",
-        "synergy": 0.596621240220687
+        "synergy": 0.5965284495613563
       },
       {
         "name": "Scrawling Crawler",
-        "synergy": 0.5581393986049364
+        "synergy": 0.557793905472785
       },
       {
         "name": "Fate Unraveler",
-        "synergy": 0.5446207826585303
+        "synergy": 0.5449067449026296
       },
       {
         "name": "Underworld Dreams",
-        "synergy": 0.5018505572866228
+        "synergy": 0.5020301569251591
       },
       {
         "name": "Megrim",
-        "synergy": 0.4857677091200143
+        "synergy": 0.4861999018144272
       }
     ],
     "Admiral Brass, Unsinkable": [
       {
         "name": "Malcolm, Keen-Eyed Navigator",
-        "synergy": 0.8777067005672831
+        "synergy": 0.8777178750512805
       },
       {
         "name": "Skeleton Crew",
-        "synergy": 0.8500490697583007
-      },
-      {
-        "name": "Port Razer",
-        "synergy": 0.8426462461275152
+        "synergy": 0.8499239622204058
       },
       {
         "name": "Coercive Recruiter",
-        "synergy": 0.8422855332120242
+        "synergy": 0.8425356456043886
+      },
+      {
+        "name": "Port Razer",
+        "synergy": 0.8425162623477023
       },
       {
         "name": "Corsair Captain",
-        "synergy": 0.8280589015682398
+        "synergy": 0.8283099366163766
       },
       {
         "name": "Admiral Beckett Brass",
-        "synergy": 0.8086221546927566
+        "synergy": 0.8087598808665027
       }
     ],
     "Niv-Mizzet, Visionary": [
@@ -21954,27 +21954,27 @@
     "Extus, Oriq Overlord": [
       {
         "name": "Sedgemoor Witch",
-        "synergy": 0.4913566662081271
+        "synergy": 0.49085307786976573
       },
       {
         "name": "Young Pyromancer",
-        "synergy": 0.45007783965150466
+        "synergy": 0.44987054867515536
       },
       {
         "name": "Monastery Mentor",
-        "synergy": 0.3926511422827934
-      },
-      {
-        "name": "Silverquill, the Disputant",
-        "synergy": 0.3681040232858532
+        "synergy": 0.39264346845262077
       },
       {
         "name": "Plumb the Forbidden",
-        "synergy": 0.3678931043325267
+        "synergy": 0.36764191522176876
+      },
+      {
+        "name": "Silverquill, the Disputant",
+        "synergy": 0.3675678000655439
       },
       {
         "name": "Fury Storm",
-        "synergy": 0.3657248729777736
+        "synergy": 0.36550586311685296
       }
     ],
     "Sidisi, Brood Tyrant": [
@@ -22006,53 +22006,53 @@
     "Sméagol, Helpful Guide": [
       {
         "name": "Call of the Ring",
-        "synergy": 0.9034904153332037
+        "synergy": 0.9035163270029688
       },
       {
         "name": "Gollum, Patient Plotter",
-        "synergy": 0.8759266893333504
+        "synergy": 0.8759612118377551
       },
       {
         "name": "Sam's Desperate Rescue",
-        "synergy": 0.7990795543059755
+        "synergy": 0.7992503248955773
       },
       {
         "name": "Claim the Precious",
-        "synergy": 0.7723189073017965
+        "synergy": 0.7721285045795687
       },
       {
         "name": "Bombadil's Song",
-        "synergy": 0.7193569144157186
+        "synergy": 0.7194224136242423
       },
       {
         "name": "Dúnedain Rangers",
-        "synergy": 0.6886337079760152
+        "synergy": 0.6888383218628839
       }
     ],
     "Hei Bai, Forest Guardian": [
       {
         "name": "Sanctum of All",
-        "synergy": 0.9080709606844487
+        "synergy": 0.9083026603947044
       },
       {
         "name": "The Spirit Oasis",
-        "synergy": 0.8896568319684784
+        "synergy": 0.8898080613284238
       },
       {
         "name": "Go-Shintai of Life's Origin",
-        "synergy": 0.8890552868009541
+        "synergy": 0.8892315419822387
       },
       {
         "name": "Sanctum of Calm Waters",
-        "synergy": 0.8876673964483073
+        "synergy": 0.8876884887341607
       },
       {
         "name": "Sanctum of Fruitful Harvest",
-        "synergy": 0.8705168704114808
+        "synergy": 0.8705688586538396
       },
       {
         "name": "Sanctum of Stone Fangs",
-        "synergy": 0.855648484327601
+        "synergy": 0.855601804185998
       }
     ],
     "Clive, Ifrit's Dominant": [
@@ -22084,105 +22084,105 @@
     "Commodore Guff": [
       {
         "name": "Oath of Teferi",
-        "synergy": 0.9032508853739444
+        "synergy": 0.9034167481224219
       },
       {
         "name": "Chandra, Legacy of Fire",
-        "synergy": 0.8606621236656091
+        "synergy": 0.8604763430483994
       },
       {
         "name": "Interplanar Beacon",
-        "synergy": 0.8364975944833879
+        "synergy": 0.8364491242636302
       },
       {
         "name": "Chandra, Torch of Defiance",
-        "synergy": 0.829037237236113
+        "synergy": 0.8288510276193183
       },
       {
         "name": "The Chain Veil",
-        "synergy": 0.8270931562614611
+        "synergy": 0.8269247508186016
       },
       {
         "name": "Vronos, Masked Inquisitor",
-        "synergy": 0.758267571602983
+        "synergy": 0.758134615836985
       }
     ],
     "Nethroi, Apex of Death": [
       {
         "name": "Gemrazer",
-        "synergy": 0.5089854218193689
+        "synergy": 0.5090642492705237
       },
       {
         "name": "Necropanther",
-        "synergy": 0.4707246685290924
+        "synergy": 0.4709173021561962
       },
       {
         "name": "Boneyard Lurker",
-        "synergy": 0.46909154915748463
+        "synergy": 0.4692878758406327
       },
       {
         "name": "Migratory Greathorn",
-        "synergy": 0.45077884642378296
+        "synergy": 0.45109250839979953
       },
       {
         "name": "Buried Alive",
-        "synergy": 0.4355336713580756
+        "synergy": 0.4361296495345851
       },
       {
         "name": "Stitcher's Supplier",
-        "synergy": 0.43264253585203855
+        "synergy": 0.43317629907730393
       }
     ],
     "Sigarda, Font of Blessings": [
       {
         "name": "Giada, Font of Hope",
-        "synergy": 0.7369893239474632
+        "synergy": 0.7371461747034508
       },
       {
         "name": "Lyra Dawnbringer",
-        "synergy": 0.6708169603723466
+        "synergy": 0.6709713425133214
       },
       {
         "name": "Herald of War",
-        "synergy": 0.5839727828304332
+        "synergy": 0.5841521446712684
       },
       {
         "name": "Avacyn, Angel of Hope",
-        "synergy": 0.5736601956450733
+        "synergy": 0.5736047447264634
       },
       {
         "name": "Starnheim Aspirant",
-        "synergy": 0.5676777629198682
+        "synergy": 0.5678563849061573
       },
       {
         "name": "Righteous Valkyrie",
-        "synergy": 0.544479218826243
+        "synergy": 0.5452828148959101
       }
     ],
     "Zoraline, Cosmos Caller": [
       {
         "name": "Lifecreed Duo",
-        "synergy": 0.8633963222247645
+        "synergy": 0.8635648377902637
       },
       {
         "name": "Essence Channeler",
-        "synergy": 0.8518368015555506
+        "synergy": 0.8517916011645696
       },
       {
         "name": "Moonstone Harbinger",
-        "synergy": 0.8494822984017453
+        "synergy": 0.8496651933258325
       },
       {
         "name": "Starscape Cleric",
-        "synergy": 0.8270771051344283
+        "synergy": 0.8269458906898344
       },
       {
         "name": "Darkstar Augur",
-        "synergy": 0.8130635392925399
+        "synergy": 0.8128796510883279
       },
       {
         "name": "Moonrise Cleric",
-        "synergy": 0.8107596442866521
+        "synergy": 0.8108302347340539
       }
     ],
     "Kardur, Doomscourge": [
@@ -22214,105 +22214,105 @@
     "Bilbo, Birthday Celebrant": [
       {
         "name": "Soul Warden",
-        "synergy": 0.7179992088025188
+        "synergy": 0.717781170530778
       },
       {
         "name": "Essence Warden",
-        "synergy": 0.6886795062095913
+        "synergy": 0.6885670377225835
       },
       {
         "name": "Soul's Attendant",
-        "synergy": 0.6642408546400085
+        "synergy": 0.6637453162413888
       },
       {
         "name": "Cleric Class",
-        "synergy": 0.5908628817404827
+        "synergy": 0.5905934424022702
       },
       {
         "name": "Prosperous Innkeeper",
-        "synergy": 0.5464022389398655
+        "synergy": 0.5463931330489374
       },
       {
         "name": "Rhox Faithmender",
-        "synergy": 0.5394071023278646
+        "synergy": 0.539215439274216
       }
     ],
     "Thantis, the Warweaver": [
       {
         "name": "Kazuul, Tyrant of the Cliffs",
-        "synergy": 0.5999007773694414
+        "synergy": 0.6001715676956573
       },
       {
         "name": "Arachnogenesis",
-        "synergy": 0.5977070999889361
+        "synergy": 0.5980951944600361
       },
       {
         "name": "Kardur, Doomscourge",
-        "synergy": 0.5677293558622447
+        "synergy": 0.567893298219208
       },
       {
         "name": "Deathreap Ritual",
-        "synergy": 0.4988241656997305
+        "synergy": 0.49874426725451165
       },
       {
         "name": "Arasta of the Endless Web",
-        "synergy": 0.4695621551216399
+        "synergy": 0.46945308402422653
       },
       {
         "name": "Rite of the Raging Storm",
-        "synergy": 0.46355001561576403
+        "synergy": 0.4640629764670089
       }
     ],
     "Evereth, Viceroy of Plunder": [
       {
         "name": "Pitiless Plunderer",
-        "synergy": 0.7103065977364511
+        "synergy": 0.7105651484583326
       },
       {
         "name": "Tarrian's Soulcleaver",
-        "synergy": 0.7019893443672869
+        "synergy": 0.7021730998391409
       },
       {
         "name": "Blade of the Bloodchief",
-        "synergy": 0.6392145033317811
+        "synergy": 0.6393078046171768
       },
       {
         "name": "Academy Manufactor",
-        "synergy": 0.6372655318925504
+        "synergy": 0.637792041417867
       },
       {
         "name": "Juri, Master of the Revue",
-        "synergy": 0.591405629582539
+        "synergy": 0.5916408092916619
       },
       {
         "name": "Ruthless Technomancer",
-        "synergy": 0.5836709914481242
+        "synergy": 0.5837471062955569
       }
     ],
     "Ellivere of the Wild Court": [
       {
         "name": "Sanctum Weaver",
-        "synergy": 0.7594431811342353
+        "synergy": 0.759494903691978
       },
       {
         "name": "Setessan Champion",
-        "synergy": 0.6530253554457481
+        "synergy": 0.6533355958074125
       },
       {
         "name": "Winds of Rath",
-        "synergy": 0.645734286626599
+        "synergy": 0.6461333155468423
       },
       {
         "name": "Utopia Sprawl",
-        "synergy": 0.6053909099588459
+        "synergy": 0.6057582383580449
       },
       {
         "name": "Umbra Mystic",
-        "synergy": 0.6031975713130812
+        "synergy": 0.6032185585809507
       },
       {
         "name": "Destiny Spinner",
-        "synergy": 0.6005746624074327
+        "synergy": 0.6007525397823624
       }
     ],
     "Ayara, First of Locthwain": [
@@ -22370,79 +22370,79 @@
     "Ayula, Queen Among Bears": [
       {
         "name": "Werebear",
-        "synergy": 0.8964751429085601
+        "synergy": 0.8966078379095253
       },
       {
         "name": "Mother Bear",
-        "synergy": 0.8948495347153804
+        "synergy": 0.8947475064410505
       },
       {
         "name": "Wilson, Refined Grizzly",
-        "synergy": 0.8630054775806897
+        "synergy": 0.8630272711478191
       },
       {
         "name": "Ashcoat Bear",
-        "synergy": 0.8352061021525812
+        "synergy": 0.8351422703754711
       },
       {
         "name": "Grizzly Bears",
-        "synergy": 0.7949089523857098
+        "synergy": 0.7948788159020866
       },
       {
         "name": "Owlbear Cub",
-        "synergy": 0.7856267831849865
+        "synergy": 0.7856999048214132
       }
     ],
     "Slinza, the Spiked Stampede": [
       {
         "name": "Krosan Warchief",
-        "synergy": 0.8719318235863395
+        "synergy": 0.8721210186055048
       },
       {
         "name": "Thunderfoot Baloth",
-        "synergy": 0.8051162443750658
+        "synergy": 0.8048297485805217
       },
       {
         "name": "Rampaging Baloths",
-        "synergy": 0.7586643327561969
+        "synergy": 0.7586471275638345
       },
       {
         "name": "Elder Gargaroth",
-        "synergy": 0.7535191276167884
+        "synergy": 0.7538912943201469
       },
       {
         "name": "Garruk's Packleader",
-        "synergy": 0.748037326133753
+        "synergy": 0.74818876960701
       },
       {
         "name": "Woodland Liege",
-        "synergy": 0.7444163552530516
+        "synergy": 0.7439130042002866
       }
     ],
     "Rootha, Mastering the Moment": [
       {
         "name": "Surge to Victory",
-        "synergy": 0.8071766841658323
+        "synergy": 0.8071579857544542
       },
       {
         "name": "Dirgur Focusmage",
-        "synergy": 0.7389421225629726
+        "synergy": 0.7388940607066096
       },
       {
         "name": "Volcanic Salvo",
-        "synergy": 0.726493521804518
+        "synergy": 0.726524275795797
       },
       {
         "name": "Thunderclap Drake",
-        "synergy": 0.7198574684371186
+        "synergy": 0.7197643940005396
       },
       {
         "name": "Dig Through Time",
-        "synergy": 0.6886974868875105
+        "synergy": 0.6884089175745365
       },
       {
         "name": "Turbulent Springs",
-        "synergy": 0.6796708347948193
+        "synergy": 0.6794481277927088
       }
     ],
     "Ardbert, Warrior of Darkness": [
@@ -22474,79 +22474,79 @@
     "Smaug the Impenetrable": [
       {
         "name": "Smaug the Magnificent",
-        "synergy": 0.6786554350643401
+        "synergy": 0.6785128194810978
       },
       {
         "name": "Self-Destruct",
-        "synergy": 0.6711020834517251
+        "synergy": 0.6708186530742485
       },
       {
         "name": "Cut Propulsion",
-        "synergy": 0.6681479943258029
+        "synergy": 0.6680174469044502
       },
       {
         "name": "Goldspan Dragon",
-        "synergy": 0.6552421098077158
+        "synergy": 0.6552369233647095
       },
       {
         "name": "Pain for All",
-        "synergy": 0.6404154454962616
+        "synergy": 0.6395752594768219
       },
       {
         "name": "Pyrohemia",
-        "synergy": 0.6142599565992716
+        "synergy": 0.6145254312216527
       }
     ],
     "Kiora, Sovereign of the Deep": [
       {
         "name": "Slinn Voda, the Rising Deep",
-        "synergy": 0.8039044130217514
+        "synergy": 0.80410019212805
       },
       {
         "name": "Arixmethes, Slumbering Isle",
-        "synergy": 0.7973935328583168
+        "synergy": 0.7975763354046177
       },
       {
         "name": "Whelming Wave",
-        "synergy": 0.7944569613159803
+        "synergy": 0.7944268977405992
       },
       {
         "name": "Serpent of Yawning Depths",
-        "synergy": 0.770531353972325
+        "synergy": 0.7703685990981781
       },
       {
         "name": "Scourge of Fleets",
-        "synergy": 0.7468703724847707
+        "synergy": 0.7469263138522071
       },
       {
         "name": "Spawning Kraken",
-        "synergy": 0.7166055042567422
+        "synergy": 0.716606054310778
       }
     ],
     "Pramikon, Sky Rampart": [
       {
         "name": "Propaganda",
-        "synergy": 0.5042929680659742
+        "synergy": 0.5045222920031375
       },
       {
         "name": "Ghostly Prison",
-        "synergy": 0.4957461589423989
+        "synergy": 0.49596360414739327
       },
       {
         "name": "Fog Bank",
-        "synergy": 0.46890576651671784
+        "synergy": 0.4689341948857142
       },
       {
         "name": "Wall of Denial",
-        "synergy": 0.45178280850338043
+        "synergy": 0.452194495668899
       },
       {
         "name": "Crystal Barricade",
-        "synergy": 0.4476854754792718
+        "synergy": 0.4480968177964802
       },
       {
         "name": "Wall of Omens",
-        "synergy": 0.38775350622000776
+        "synergy": 0.3876855161196741
       }
     ],
     "Yennett, Cryptic Sovereign": [
@@ -22578,27 +22578,27 @@
     "Yuma, Proud Protector": [
       {
         "name": "Dune Chanter",
-        "synergy": 0.917530159062757
+        "synergy": 0.9175527649835347
       },
       {
         "name": "Cactus Preserve",
-        "synergy": 0.9138179487753142
+        "synergy": 0.9138357654140091
       },
       {
         "name": "Desert of the Indomitable",
-        "synergy": 0.9122438026223035
+        "synergy": 0.9122755532683415
       },
       {
         "name": "Hashep Oasis",
-        "synergy": 0.9052285439543638
+        "synergy": 0.9052594983710934
       },
       {
         "name": "Desert of the True",
-        "synergy": 0.9029213276515048
+        "synergy": 0.9028237277119415
       },
       {
         "name": "Desert of the Fervent",
-        "synergy": 0.8998168296710884
+        "synergy": 0.8997190332786865
       }
     ],
     "Zurgo, Thunder's Decree": [
@@ -22656,79 +22656,79 @@
     "Kadena, Slinking Sorcerer": [
       {
         "name": "Stratus Dancer",
-        "synergy": 0.9117465886265284
+        "synergy": 0.9116222407107885
       },
       {
         "name": "Ainok Survivalist",
-        "synergy": 0.9106273810139746
+        "synergy": 0.9105027291517221
       },
       {
         "name": "Willbender",
-        "synergy": 0.9000109651122692
+        "synergy": 0.8997549198269303
       },
       {
         "name": "Den Protector",
-        "synergy": 0.879147564479319
+        "synergy": 0.8790185877068241
       },
       {
         "name": "Vesuvan Shapeshifter",
-        "synergy": 0.8708974183559727
+        "synergy": 0.8708981662031623
       },
       {
         "name": "Kadena's Silencer",
-        "synergy": 0.8610014205183658
+        "synergy": 0.8608694278968496
       }
     ],
     "Bruvac the Grandiloquent": [
       {
         "name": "Maddening Cacophony",
-        "synergy": 0.7819092148957705
+        "synergy": 0.7817590720080364
       },
       {
         "name": "Traumatize",
-        "synergy": 0.7076848783997216
+        "synergy": 0.7075357303264773
       },
       {
         "name": "Fractured Sanity",
-        "synergy": 0.6903205490936843
+        "synergy": 0.6901854779876894
       },
       {
         "name": "Ruin Crab",
-        "synergy": 0.6259118681684556
+        "synergy": 0.625944342652727
       },
       {
         "name": "Cut Your Losses",
-        "synergy": 0.5845742807364389
+        "synergy": 0.584460572875361
       },
       {
         "name": "The Water Crystal",
-        "synergy": 0.5693337062316959
+        "synergy": 0.569722268245391
       }
     ],
     "Jasmine Boreal of the Seven": [
       {
         "name": "Muraganda Petroglyphs",
-        "synergy": 0.8123203701703373
+        "synergy": 0.812296223820605
       },
       {
         "name": "Quakestrider Ceratops",
-        "synergy": 0.8097241010518208
+        "synergy": 0.8096935494675975
       },
       {
         "name": "Watchwolf",
-        "synergy": 0.7975204671372084
+        "synergy": 0.7973773746562302
       },
       {
         "name": "Gigantosaurus",
-        "synergy": 0.7879403250851764
+        "synergy": 0.7876472727593259
       },
       {
         "name": "Terrian, World Tyrant",
-        "synergy": 0.7687574587210826
+        "synergy": 0.7686662195069712
       },
       {
         "name": "Ruxa, Patient Professor",
-        "synergy": 0.7655591497569768
+        "synergy": 0.7651371148014949
       }
     ],
     "Brigid, Clachan's Heart": [
@@ -22864,27 +22864,27 @@
     "Grolnok, the Omnivore": [
       {
         "name": "Spore Frog",
-        "synergy": 0.8036716030564792
+        "synergy": 0.8034744216452122
       },
       {
         "name": "Poison Dart Frog",
-        "synergy": 0.7436784881239558
+        "synergy": 0.7436331138207812
       },
       {
         "name": "Long River Lurker",
-        "synergy": 0.7121908443661032
+        "synergy": 0.7118734941418757
       },
       {
         "name": "Doc Aurlock, Grizzled Genius",
-        "synergy": 0.6822642028219853
+        "synergy": 0.6823463968846992
       },
       {
         "name": "Rampant Frogantua",
-        "synergy": 0.6804166030515991
+        "synergy": 0.6803747290992044
       },
       {
         "name": "Froghemoth",
-        "synergy": 0.6648025444075001
+        "synergy": 0.6643656984281113
       }
     ],
     "Whtz, the Bibliophile": [
@@ -22916,27 +22916,27 @@
     "The Beamtown Bullies": [
       {
         "name": "Leveler",
-        "synergy": 0.7936963489581985
+        "synergy": 0.7938186666490691
       },
       {
         "name": "Eater of Days",
-        "synergy": 0.7655396660172359
+        "synergy": 0.7655491259130828
       },
       {
         "name": "Inverter of Truth",
-        "synergy": 0.7582824489866778
+        "synergy": 0.7582967838478524
       },
       {
         "name": "Buried Alive",
-        "synergy": 0.7283675827263786
+        "synergy": 0.7284932545020204
       },
       {
         "name": "Faithless Looting",
-        "synergy": 0.7021965005509299
+        "synergy": 0.7019394689461763
       },
       {
         "name": "Unmarked Grave",
-        "synergy": 0.6683981102159513
+        "synergy": 0.6683474787481154
       }
     ],
     "The Great Goblin": [
@@ -23098,27 +23098,27 @@
     "Millicent, Restless Revenant": [
       {
         "name": "Drogskol Captain",
-        "synergy": 0.9413821246625051
+        "synergy": 0.9412655030651509
       },
       {
         "name": "Supreme Phantom",
-        "synergy": 0.9123250737119031
+        "synergy": 0.9123650585830584
       },
       {
         "name": "Rattlechains",
-        "synergy": 0.8889174099355941
+        "synergy": 0.8889665023410458
       },
       {
         "name": "Drogskol Reinforcements",
-        "synergy": 0.8417337203547719
+        "synergy": 0.8418112811875283
       },
       {
         "name": "Nebelgast Herald",
-        "synergy": 0.7459618269515746
+        "synergy": 0.7459599605742742
       },
       {
-        "name": "Ghostly Pilferer",
-        "synergy": 0.7091845349717304
+        "name": "Shacklegeist",
+        "synergy": 0.709323038505959
       }
     ],
     "Kwain, Itinerant Meddler": [
@@ -23176,27 +23176,27 @@
     "Maarika, Brutal Gladiator": [
       {
         "name": "Infiltration Lens",
-        "synergy": 0.6625192252389903
+        "synergy": 0.661968815329459
       },
       {
         "name": "Neyith of the Dire Hunt",
-        "synergy": 0.643932439140391
+        "synergy": 0.6435359396763859
       },
       {
         "name": "Bushwhack",
-        "synergy": 0.616213242265733
+        "synergy": 0.6159613479558106
       },
       {
         "name": "Prizefight",
-        "synergy": 0.5986006955653824
+        "synergy": 0.5979514118225924
       },
       {
         "name": "Ulvenwald Tracker",
-        "synergy": 0.5913352129436855
+        "synergy": 0.5907088589422251
       },
       {
         "name": "Mr. Orfeo, the Boulder",
-        "synergy": 0.5781722922817305
+        "synergy": 0.5782120434890379
       }
     ],
     "Jhoira, Weatherlight Captain": [
@@ -23254,53 +23254,53 @@
     "Duskana, the Rage Mother": [
       {
         "name": "Kudo, King Among Bears",
-        "synergy": 0.7487587153764854
+        "synergy": 0.7486059890516731
       },
       {
         "name": "Wilson, Refined Grizzly",
-        "synergy": 0.5800052501708797
+        "synergy": 0.5794894925281107
       },
       {
         "name": "Ayula, Queen Among Bears",
-        "synergy": 0.5165472843924612
+        "synergy": 0.5163777122565275
       },
       {
         "name": "Mentor of the Meek",
-        "synergy": 0.4718454561496088
+        "synergy": 0.4720972727081721
       },
       {
         "name": "Goblin Anarchomancer",
-        "synergy": 0.4538670279943403
+        "synergy": 0.4538805500112708
       },
       {
         "name": "Rampaging Yao Guai",
-        "synergy": 0.432178556836625
+        "synergy": 0.43182678544514996
       }
     ],
     "Ognis, the Dragon's Lash": [
       {
         "name": "Captain Lannery Storm",
-        "synergy": 0.6365870652986575
+        "synergy": 0.6368514270434106
       },
       {
         "name": "Loyal Apprentice",
-        "synergy": 0.5987338634599795
+        "synergy": 0.5988006803262674
       },
       {
         "name": "Samut, Vizier of Naktamun",
-        "synergy": 0.5984112654920741
+        "synergy": 0.598755789739677
       },
       {
         "name": "Goldspan Dragon",
-        "synergy": 0.5656243700723351
+        "synergy": 0.565645974148299
       },
       {
         "name": "Xorn",
-        "synergy": 0.5312227756627845
+        "synergy": 0.5310698495385038
       },
       {
         "name": "Reckless Fireweaver",
-        "synergy": 0.5240754211315605
+        "synergy": 0.5237096126447641
       }
     ],
     "The Lord of Pain": [
@@ -23332,105 +23332,105 @@
     "Yusri, Fortune's Flame": [
       {
         "name": "Tavern Scoundrel",
-        "synergy": 0.8711905125767494
+        "synergy": 0.8713770737992923
       },
       {
         "name": "Krark's Thumb",
-        "synergy": 0.8511662402633949
+        "synergy": 0.8512588465111045
       },
       {
         "name": "Zndrsplt, Eye of Wisdom",
-        "synergy": 0.7929863784173573
+        "synergy": 0.7930258220647275
       },
       {
         "name": "Chance Encounter",
-        "synergy": 0.7910674457150307
+        "synergy": 0.7910841289015098
       },
       {
         "name": "Stitch in Time",
-        "synergy": 0.7356069814735106
+        "synergy": 0.7355298350416379
       },
       {
         "name": "Okaun, Eye of Chaos",
-        "synergy": 0.7280094197785474
+        "synergy": 0.7278344266585527
       }
     ],
     "Elenda, the Dusk Rose": [
       {
         "name": "Blade of the Bloodchief",
-        "synergy": 0.6451711166359636
+        "synergy": 0.6450506947242209
       },
       {
         "name": "Cordial Vampire",
-        "synergy": 0.6113131916768215
+        "synergy": 0.6110338155805697
       },
       {
         "name": "Teysa Karlov",
-        "synergy": 0.5102192835320774
+        "synergy": 0.5103077033428983
       },
       {
         "name": "Cruel Celebrant",
-        "synergy": 0.49246402590027594
+        "synergy": 0.492362147482709
       },
       {
         "name": "Blood Artist",
-        "synergy": 0.48410124658194703
+        "synergy": 0.4838800316200732
       },
       {
         "name": "Viscera Seer",
-        "synergy": 0.47972146112007125
+        "synergy": 0.479558858303796
       }
     ],
     "Karumonix, the Rat King": [
       {
         "name": "Blightbelly Rat",
-        "synergy": 0.7424623541726979
+        "synergy": 0.7420327881705249
       },
       {
         "name": "Piper of the Swarm",
-        "synergy": 0.739500913594837
+        "synergy": 0.7389652837608868
       },
       {
         "name": "Marrow-Gnawer",
-        "synergy": 0.7084435151796715
+        "synergy": 0.7085498685222572
       },
       {
         "name": "Pack Rat",
-        "synergy": 0.6713980238768011
+        "synergy": 0.6709867189313449
       },
       {
         "name": "Ogre Slumlord",
-        "synergy": 0.6506013251608187
+        "synergy": 0.650478166996739
       },
       {
         "name": "Ichor Rats",
-        "synergy": 0.6486541866486265
+        "synergy": 0.648358677275451
       }
     ],
     "Jaws, Relentless Predator": [
       {
         "name": "Reckless Fireweaver",
-        "synergy": 0.7644210578332221
+        "synergy": 0.7644413223719619
       },
       {
         "name": "Descent into Avernus",
-        "synergy": 0.7551886558051204
+        "synergy": 0.7551952232578796
       },
       {
         "name": "Crime Novelist",
-        "synergy": 0.714674914039456
+        "synergy": 0.7147697023489671
       },
       {
         "name": "Reckless Endeavor",
-        "synergy": 0.6848675222823941
+        "synergy": 0.684999207531095
       },
       {
         "name": "Weftstalker Ardent",
-        "synergy": 0.6800775346392902
+        "synergy": 0.6800436952350396
       },
       {
         "name": "Ingenious Artillerist",
-        "synergy": 0.6618291842212678
+        "synergy": 0.6618376760365532
       }
     ],
     "Talrand, Sky Summoner": [
@@ -23540,27 +23540,27 @@
     "Prossh, Skyraider of Kher": [
       {
         "name": "Impact Tremors",
-        "synergy": 0.6090763084914456
+        "synergy": 0.609409113429779
       },
       {
         "name": "Zulaport Cutthroat",
-        "synergy": 0.5741310255099146
+        "synergy": 0.5740695454876736
       },
       {
         "name": "Skullclamp",
-        "synergy": 0.5600735874435019
+        "synergy": 0.5602698478313914
       },
       {
         "name": "Goblin Bombardment",
-        "synergy": 0.544127567357172
+        "synergy": 0.5440803940399691
       },
       {
         "name": "Fecundity",
-        "synergy": 0.4974792836099488
+        "synergy": 0.49803389884543714
       },
       {
         "name": "Blood Artist",
-        "synergy": 0.48406069712724037
+        "synergy": 0.484167803517497
       }
     ],
     "Peter Parker": [
@@ -23592,105 +23592,105 @@
     "Ghoulcaller Gisa": [
       {
         "name": "Lord of the Accursed",
-        "synergy": 0.7776897500985887
+        "synergy": 0.7775349308310004
       },
       {
         "name": "Death Baron",
-        "synergy": 0.7749457524084565
+        "synergy": 0.7754488073813911
       },
       {
         "name": "Champion of the Perished",
-        "synergy": 0.7519262733367433
+        "synergy": 0.7514410228631594
       },
       {
         "name": "Cemetery Reaper",
-        "synergy": 0.7039205636794588
+        "synergy": 0.7044274756212592
       },
       {
         "name": "Undead Augur",
-        "synergy": 0.6915703387728881
+        "synergy": 0.6919425730234722
       },
       {
         "name": "Undead Warchief",
-        "synergy": 0.6824542602535654
+        "synergy": 0.683034004247561
       }
     ],
     "Chishiro, the Shattered Blade": [
       {
         "name": "Bear Umbra",
-        "synergy": 0.68796994185403
+        "synergy": 0.6878702250491472
       },
       {
         "name": "Grumgully, the Generous",
-        "synergy": 0.6802500611653869
+        "synergy": 0.6802639348592102
       },
       {
         "name": "Champion of Lambholt",
-        "synergy": 0.6732532105970506
+        "synergy": 0.6734356954900247
       },
       {
         "name": "Akki Battle Squad",
-        "synergy": 0.6582328958239051
+        "synergy": 0.6579992939406183
       },
       {
         "name": "Silkguard",
-        "synergy": 0.6246983529282563
+        "synergy": 0.6246171177171754
       },
       {
         "name": "Snake Umbra",
-        "synergy": 0.6188088288533335
+        "synergy": 0.6187048468170383
       }
     ],
     "Astarion, the Decadent": [
       {
         "name": "Sanguine Bond",
-        "synergy": 0.6230757673959092
+        "synergy": 0.6226681889888981
       },
       {
         "name": "Exquisite Blood",
-        "synergy": 0.5129478903521534
+        "synergy": 0.5127205325053106
       },
       {
         "name": "Marauding Blight-Priest",
-        "synergy": 0.5037710253263307
+        "synergy": 0.5037329724686087
       },
       {
         "name": "Exsanguinate",
-        "synergy": 0.49833041075144724
+        "synergy": 0.498027482097253
       },
       {
         "name": "Astarion's Thirst",
-        "synergy": 0.4918305122466337
+        "synergy": 0.4919824726869873
       },
       {
         "name": "Indulging Patrician",
-        "synergy": 0.48903013159420083
+        "synergy": 0.48861808027825415
       }
     ],
     "Ixhel, Scion of Atraxa": [
       {
         "name": "Infectious Inquiry",
-        "synergy": 0.8136983555260349
+        "synergy": 0.8138760644749174
       },
       {
         "name": "Vraska's Fall",
-        "synergy": 0.7987490940853041
+        "synergy": 0.798797773007295
       },
       {
         "name": "Contaminant Grafter",
-        "synergy": 0.735265934429048
+        "synergy": 0.7351106198780014
       },
       {
         "name": "Vishgraz, the Doomhive",
-        "synergy": 0.7323003379274018
+        "synergy": 0.7322947367630198
       },
       {
         "name": "Phyresis Outbreak",
-        "synergy": 0.7315129203061432
+        "synergy": 0.7313579783509668
       },
       {
         "name": "Blightbelly Rat",
-        "synergy": 0.7277987337218965
+        "synergy": 0.7277869598649049
       }
     ],
     "Juri, Master of the Revue": [
@@ -23748,27 +23748,27 @@
     "The Mimeoplasm": [
       {
         "name": "Yargle and Multani",
-        "synergy": 0.47936960912546017
+        "synergy": 0.4791035882754451
       },
       {
         "name": "Buried Alive",
-        "synergy": 0.4729609010734205
+        "synergy": 0.4730561886970641
       },
       {
         "name": "Lord of Extinction",
-        "synergy": 0.44294278220048566
+        "synergy": 0.44296038314472835
       },
       {
         "name": "Titanoth Rex",
-        "synergy": 0.42692479015626456
+        "synergy": 0.4267934055779555
       },
       {
         "name": "Consuming Aberration",
-        "synergy": 0.42008223856980276
+        "synergy": 0.4200856688314505
       },
       {
         "name": "Windfall",
-        "synergy": 0.3900511707609525
+        "synergy": 0.39006722367348773
       }
     ],
     "Aang, at the Crossroads": [
@@ -23852,27 +23852,27 @@
     "The Locust God": [
       {
         "name": "Impact Tremors",
-        "synergy": 0.726048562221127
+        "synergy": 0.7256843208086908
       },
       {
         "name": "Skullclamp",
-        "synergy": 0.7217940014727035
+        "synergy": 0.7216902609973223
       },
       {
         "name": "Psychosis Crawler",
-        "synergy": 0.5275179750842753
+        "synergy": 0.5274327628553799
       },
       {
         "name": "Whirlpool Warrior",
-        "synergy": 0.5054566501996914
+        "synergy": 0.5054814522251466
       },
       {
         "name": "Teferi's Ageless Insight",
-        "synergy": 0.5006726753962458
+        "synergy": 0.5008624616717459
       },
       {
         "name": "Windfall",
-        "synergy": 0.4823949525648943
+        "synergy": 0.48254088941830886
       }
     ],
     "Felothar, Dawn of the Abzan": [
@@ -23904,105 +23904,105 @@
     "Zimone and Dina": [
       {
         "name": "Retreat to Coralhelm",
-        "synergy": 0.6540342939303113
+        "synergy": 0.6539460153727007
       },
       {
         "name": "Bloodghast",
-        "synergy": 0.5975217172211058
+        "synergy": 0.597714032681205
       },
       {
         "name": "Jolrael, Mwonvuli Recluse",
-        "synergy": 0.5501567211716221
+        "synergy": 0.5506533030658513
       },
       {
         "name": "Scute Swarm",
-        "synergy": 0.5331514291390941
+        "synergy": 0.5332349952407321
       },
       {
         "name": "Tatyova, Benthic Druid",
-        "synergy": 0.519107265082982
+        "synergy": 0.5192898672980366
       },
       {
         "name": "Simic Growth Chamber",
-        "synergy": 0.5141435607549604
+        "synergy": 0.5140952898395577
       }
     ],
     "Nahiri, Forged in Fury": [
       {
         "name": "Bladehold War-Whip",
-        "synergy": 0.7292356759074796
+        "synergy": 0.7291172231755068
       },
       {
         "name": "Puresteel Paladin",
-        "synergy": 0.703809348600282
+        "synergy": 0.7039636602243936
       },
       {
         "name": "Nettlecyst",
-        "synergy": 0.6817918222314621
+        "synergy": 0.6816742521298228
       },
       {
         "name": "Sram, Senior Edificer",
-        "synergy": 0.6378487809288051
+        "synergy": 0.6378628906601187
       },
       {
         "name": "Kaldra Compleat",
-        "synergy": 0.6328724558823037
+        "synergy": 0.6327575772179019
       },
       {
         "name": "Akiri, Fearless Voyager",
-        "synergy": 0.621899623829729
+        "synergy": 0.6218082529661542
       }
     ],
     "Narci, Fable Singer": [
       {
         "name": "Binding the Old Gods",
-        "synergy": 0.8177946333488837
+        "synergy": 0.8179637384783407
       },
       {
         "name": "Sythis, Harvest's Hand",
-        "synergy": 0.8055240526998951
+        "synergy": 0.8054407600057255
       },
       {
         "name": "The Eldest Reborn",
-        "synergy": 0.7844393741254992
+        "synergy": 0.784176528426154
       },
       {
         "name": "Satsuki, the Living Lore",
-        "synergy": 0.7809703520978938
+        "synergy": 0.7809578603646858
       },
       {
         "name": "Elspeth Conquers Death",
-        "synergy": 0.7307166649055384
+        "synergy": 0.7308569003413408
       },
       {
         "name": "Sanctum Weaver",
-        "synergy": 0.7204617833998139
+        "synergy": 0.7205257472608899
       }
     ],
     "Zethi, Arcane Blademaster": [
       {
         "name": "Vega, the Watcher",
-        "synergy": 0.7330070837513225
+        "synergy": 0.7326665114777132
       },
       {
         "name": "Snap",
-        "synergy": 0.7122422603303243
+        "synergy": 0.7120299341752487
       },
       {
         "name": "Archmage Emeritus",
-        "synergy": 0.6704224869258174
+        "synergy": 0.6702512716217505
       },
       {
         "name": "Frantic Search",
-        "synergy": 0.6659171474427897
+        "synergy": 0.665486219014374
       },
       {
         "name": "Monastery Mentor",
-        "synergy": 0.6565288991104011
+        "synergy": 0.6562482192958796
       },
       {
         "name": "Shadow Rift",
-        "synergy": 0.6483352057697226
+        "synergy": 0.6485096536292203
       }
     ],
     "Sin, Spira's Punishment": [
@@ -24034,53 +24034,53 @@
     "Don Andres, the Renegade": [
       {
         "name": "Ramirez DePietro, Pillager",
-        "synergy": 0.7266543778119147
+        "synergy": 0.726933104904252
       },
       {
         "name": "Hostage Taker",
-        "synergy": 0.7082782177752182
+        "synergy": 0.7084493221279573
       },
       {
         "name": "Laughing Jasper Flint",
-        "synergy": 0.6583655033880232
+        "synergy": 0.6585920857445454
       },
       {
         "name": "Thief of Sanity",
-        "synergy": 0.6352293507242338
+        "synergy": 0.6350232800167372
       },
       {
         "name": "Breeches, Brazen Plunderer",
-        "synergy": 0.6329076399256828
+        "synergy": 0.6333139852304323
       },
       {
         "name": "Malcolm, Keen-Eyed Navigator",
-        "synergy": 0.6097174968417909
+        "synergy": 0.6101258738416826
       }
     ],
     "Marchesa, Dealer of Death": [
       {
         "name": "Magda, the Hoardmaster",
-        "synergy": 0.6363099019000953
+        "synergy": 0.636128436988084
       },
       {
         "name": "Gisa, the Hellraiser",
-        "synergy": 0.47100414612857927
+        "synergy": 0.4712190229537123
       },
       {
         "name": "Soured Springs",
-        "synergy": 0.38361966667829267
+        "synergy": 0.383678260154802
       },
       {
         "name": "Lazav, Familiar Stranger",
-        "synergy": 0.3821117850296551
+        "synergy": 0.3821723519724133
       },
       {
         "name": "Eroded Canyon",
-        "synergy": 0.3796899370013622
+        "synergy": 0.3796131120874373
       },
       {
         "name": "Jagged Barrens",
-        "synergy": 0.37327140369806167
+        "synergy": 0.37333193795263186
       }
     ],
     "Emry, Lurker of the Loch": [
@@ -24216,53 +24216,53 @@
     "Abaddon the Despoiler": [
       {
         "name": "Keeper of Secrets",
-        "synergy": 0.6194280277627214
+        "synergy": 0.619698224098097
       },
       {
         "name": "Loyal Subordinate",
-        "synergy": 0.5191808876328595
+        "synergy": 0.5195679252921122
       },
       {
         "name": "Brainstorm",
-        "synergy": 0.4918964074885118
+        "synergy": 0.4920065317637817
       },
       {
         "name": "Ancestral Vision",
-        "synergy": 0.4695156716651849
+        "synergy": 0.4698797344700398
       },
       {
         "name": "Noise Marine",
-        "synergy": 0.46947362849375573
+        "synergy": 0.4695453729721068
       },
       {
         "name": "Blood for the Blood God!",
-        "synergy": 0.4684402916429033
+        "synergy": 0.4686756217884189
       }
     ],
     "Karametra, God of Harvests": [
       {
         "name": "Lotus Cobra",
-        "synergy": 0.5269709867024264
+        "synergy": 0.5276817259729941
       },
       {
         "name": "Rampaging Baloths",
-        "synergy": 0.5139831561902175
+        "synergy": 0.5141568568399103
       },
       {
         "name": "Beast Whisperer",
-        "synergy": 0.48585630432160154
+        "synergy": 0.4857726604288889
       },
       {
         "name": "Scute Swarm",
-        "synergy": 0.48443034069652025
+        "synergy": 0.4848956319987153
       },
       {
         "name": "Tireless Provisioner",
-        "synergy": 0.47884274819343525
+        "synergy": 0.4789707836006573
       },
       {
         "name": "Avenger of Zendikar",
-        "synergy": 0.47738527614267207
+        "synergy": 0.47755889311813254
       }
     ],
     "Aragorn, King of Gondor": [
@@ -24320,79 +24320,79 @@
     "Dr. Madison Li": [
       {
         "name": "Electrosiphon",
-        "synergy": 0.7619295373498773
+        "synergy": 0.7617500623475151
       },
       {
         "name": "Liberty Prime, Recharged",
-        "synergy": 0.7489812359286349
+        "synergy": 0.748778987673091
       },
       {
         "name": "Automated Assembly Line",
-        "synergy": 0.7442755085070839
+        "synergy": 0.7443738720303976
       },
       {
         "name": "HELIOS One",
-        "synergy": 0.7388299472785734
+        "synergy": 0.7387931762274763
       },
       {
         "name": "Assaultron Dominator",
-        "synergy": 0.6974266585974973
+        "synergy": 0.6973924056559235
       },
       {
         "name": "Izzet Generatorium",
-        "synergy": 0.6437781594081867
+        "synergy": 0.6434838880874166
       }
     ],
     "Greasefang, Okiba Boss": [
       {
         "name": "Parhelion II",
-        "synergy": 0.9116195985804657
+        "synergy": 0.9114993628962204
       },
       {
         "name": "Mech Hangar",
-        "synergy": 0.7921375321501685
+        "synergy": 0.7923478645957392
       },
       {
         "name": "Skysovereign, Consul Flagship",
-        "synergy": 0.75193969573421
+        "synergy": 0.7523086785204515
       },
       {
         "name": "Smuggler's Copter",
-        "synergy": 0.7404717746161594
+        "synergy": 0.7405482944138045
       },
       {
         "name": "Valor's Flagship",
-        "synergy": 0.6878715108125686
+        "synergy": 0.6881604054559115
       },
       {
         "name": "Demonic Junker",
-        "synergy": 0.6612433735458126
+        "synergy": 0.6613972728710275
       }
     ],
     "Imodane, the Pyrohammer": [
       {
         "name": "Shivan Meteor",
-        "synergy": 0.762232752961658
+        "synergy": 0.7625156045014179
       },
       {
         "name": "Flame Slash",
-        "synergy": 0.6913774329834774
+        "synergy": 0.6915661877000461
       },
       {
         "name": "Spitting Earth",
-        "synergy": 0.6319101685369908
+        "synergy": 0.6318226671372689
       },
       {
         "name": "Lightning Axe",
-        "synergy": 0.5936065412046072
+        "synergy": 0.5937010608655259
       },
       {
         "name": "Stonesplitter Bolt",
-        "synergy": 0.5913223433755654
+        "synergy": 0.590973465607755
       },
       {
         "name": "Electrodominance",
-        "synergy": 0.557386312496469
+        "synergy": 0.5572991734439324
       }
     ],
     "Teval, Arbiter of Virtue": [
@@ -24450,27 +24450,27 @@
     "Riku of Many Paths": [
       {
         "name": "Prismari Command",
-        "synergy": 0.7737643631711406
+        "synergy": 0.773427487342375
       },
       {
         "name": "Quandrix Command",
-        "synergy": 0.7609491446064182
+        "synergy": 0.7606330253481105
       },
       {
         "name": "Flame of Anor",
-        "synergy": 0.7301538018721696
+        "synergy": 0.730168721378574
       },
       {
         "name": "Return the Favor",
-        "synergy": 0.70279587564226
+        "synergy": 0.7029345696764692
       },
       {
         "name": "Mystic Confluence",
-        "synergy": 0.6990099306155926
+        "synergy": 0.698727289234675
       },
       {
         "name": "Atarka's Command",
-        "synergy": 0.6605162551321982
+        "synergy": 0.6602667541400689
       }
     ],
     "Heliod, the Radiant Dawn": [
@@ -24502,53 +24502,53 @@
     "Zur, Eternal Schemer": [
       {
         "name": "Inquisitive Glimmer",
-        "synergy": 0.7299025966129995
+        "synergy": 0.7301323593384801
       },
       {
         "name": "Mesa Enchantress",
-        "synergy": 0.6471788890229575
+        "synergy": 0.6474240132262072
       },
       {
         "name": "Enduring Curiosity",
-        "synergy": 0.6177165336319628
+        "synergy": 0.6178792643652005
       },
       {
         "name": "Soaring Lightbringer",
-        "synergy": 0.6052479650925058
+        "synergy": 0.6054276402945102
       },
       {
         "name": "Enduring Tenacity",
-        "synergy": 0.6027805460060065
+        "synergy": 0.6030990378191985
       },
       {
         "name": "Starfield Mystic",
-        "synergy": 0.5615220554232788
+        "synergy": 0.56156501364584
       }
     ],
     "The Reaper, King No More": [
       {
         "name": "Blowfly Infestation",
-        "synergy": 0.7715163325439863
+        "synergy": 0.7713989760202477
       },
       {
         "name": "The Scorpion God",
-        "synergy": 0.7695328782063541
+        "synergy": 0.7694338778091716
       },
       {
         "name": "Necroskitter",
-        "synergy": 0.7623193805011023
+        "synergy": 0.7623743548306489
       },
       {
         "name": "Hapatra, Vizier of Poisons",
-        "synergy": 0.7557876780717329
+        "synergy": 0.7556965446000062
       },
       {
         "name": "Black Sun's Zenith",
-        "synergy": 0.7474373001908752
+        "synergy": 0.7475134534531913
       },
       {
         "name": "Massacre Girl, Known Killer",
-        "synergy": 0.7412630087830141
+        "synergy": 0.7413524645061846
       }
     ],
     "Slimefoot, the Stowaway": [
@@ -24580,27 +24580,27 @@
     "Mr. Foxglove": [
       {
         "name": "Reconnaissance",
-        "synergy": 0.44750209357717574
+        "synergy": 0.4476255634492835
       },
       {
         "name": "Kodama of the East Tree",
-        "synergy": 0.4357092090875918
+        "synergy": 0.43566424790709746
       },
       {
         "name": "Nezahal, Primal Tide",
-        "synergy": 0.4037430314445872
+        "synergy": 0.403777440512465
       },
       {
         "name": "Storvald, Frost Giant Jarl",
-        "synergy": 0.40286894854333055
+        "synergy": 0.4029222459095815
       },
       {
         "name": "Ghalta, Stampede Tyrant",
-        "synergy": 0.3748546194331103
+        "synergy": 0.37478770638837633
       },
       {
         "name": "Finest Hour",
-        "synergy": 0.3468751951196616
+        "synergy": 0.347319982286155
       }
     ],
     "Loot, the Pathfinder": [
@@ -24710,27 +24710,27 @@
     "Tasigur, the Golden Fang": [
       {
         "name": "Neoform",
-        "synergy": 0.5392159123853257
+        "synergy": 0.5390625828893036
       },
       {
         "name": "Eldritch Evolution",
-        "synergy": 0.5183048681468464
+        "synergy": 0.518285937226416
       },
       {
         "name": "Nezahal, Primal Tide",
-        "synergy": 0.37873844202812207
+        "synergy": 0.37844766993486323
       },
       {
         "name": "Deathrite Shaman",
-        "synergy": 0.3622316370616763
+        "synergy": 0.36215146950524246
       },
       {
         "name": "Birthing Pod",
-        "synergy": 0.3232811448230937
+        "synergy": 0.32278798251456037
       },
       {
         "name": "Culling Ritual",
-        "synergy": 0.32266499230433143
+        "synergy": 0.3223190097262727
       }
     ],
     "Maha, Its Feathers Night": [
@@ -24762,27 +24762,27 @@
     "Nelly Borca, Impulsive Accuser": [
       {
         "name": "Disrupt Decorum",
-        "synergy": 0.8500637981157817
+        "synergy": 0.8500584466041526
       },
       {
         "name": "Hot Pursuit",
-        "synergy": 0.8476481221982842
+        "synergy": 0.8475059062342654
       },
       {
         "name": "Vengeful Ancestor",
-        "synergy": 0.8095940654473217
+        "synergy": 0.8093030110445458
       },
       {
         "name": "Take the Bait",
-        "synergy": 0.7686233337891849
+        "synergy": 0.7686148762978963
       },
       {
         "name": "Spectacular Showdown",
-        "synergy": 0.7515198295839535
+        "synergy": 0.7513783843473621
       },
       {
         "name": "Duelist's Heritage",
-        "synergy": 0.751345159990595
+        "synergy": 0.7510404742166877
       }
     ],
     "The Ur-Sphinx": [
@@ -24814,27 +24814,27 @@
     "Ingris Stingerquill": [
       {
         "name": "Tomik, Izzet Sparkmage",
-        "synergy": 0.5311109832611226
+        "synergy": 0.5313546608998
       },
       {
         "name": "Hawkeye, Young Avenger",
-        "synergy": 0.5021068743484218
+        "synergy": 0.5016655169186496
       },
       {
         "name": "Master of Barbs",
-        "synergy": 0.4749466372850108
+        "synergy": 0.4763639955834621
       },
       {
         "name": "Loyal Apprentice",
-        "synergy": 0.4554743041196121
+        "synergy": 0.4556910309248808
       },
       {
         "name": "Samut, Hazoret's Champion",
-        "synergy": 0.44169587692199797
+        "synergy": 0.44265667452605095
       },
       {
         "name": "Garna, Bloodfist of Keld",
-        "synergy": 0.4039827680910848
+        "synergy": 0.40396757855074034
       }
     ],
     "Mister Negative": [
@@ -24866,27 +24866,27 @@
     "Ratadrabik of Urborg": [
       {
         "name": "Teysa Karlov",
-        "synergy": 0.6381022141143691
+        "synergy": 0.638271564900094
       },
       {
         "name": "Boromir, Warden of the Tower",
-        "synergy": 0.5578230338733939
+        "synergy": 0.5579680896286848
       },
       {
         "name": "Relic of Legends",
-        "synergy": 0.5557209546984028
+        "synergy": 0.5557264641370802
       },
       {
         "name": "Gandalf the White",
-        "synergy": 0.5323075161413836
+        "synergy": 0.5325048320678848
       },
       {
         "name": "Nasty End",
-        "synergy": 0.5259120876219199
+        "synergy": 0.5257861617413552
       },
       {
         "name": "Samwise the Stouthearted",
-        "synergy": 0.5256823482724622
+        "synergy": 0.5255646167939019
       }
     ],
     "Syr Konrad, the Grim": [
@@ -24970,27 +24970,27 @@
     "Anhelo, the Painter": [
       {
         "name": "Talrand, Sky Summoner",
-        "synergy": 0.6349164527948515
+        "synergy": 0.6346552497763964
       },
       {
         "name": "Jadar, Ghoulcaller of Nephalia",
-        "synergy": 0.6176543480774461
+        "synergy": 0.6175363513422768
       },
       {
         "name": "Cormela, Glamour Thief",
-        "synergy": 0.6115036441542407
+        "synergy": 0.6118990194127614
       },
       {
         "name": "Twinning Staff",
-        "synergy": 0.6060225575095505
+        "synergy": 0.6063873571078175
       },
       {
         "name": "Goblin Electromancer",
-        "synergy": 0.5302230578707675
+        "synergy": 0.529969959154101
       },
       {
         "name": "Poppet Stitcher",
-        "synergy": 0.521178696097068
+        "synergy": 0.5211927143075186
       }
     ],
     "Ashling, Rekindled": [
@@ -25022,183 +25022,183 @@
     "Kelsien, the Plague": [
       {
         "name": "Basilisk Collar",
-        "synergy": 0.8504508021639863
+        "synergy": 0.850278577222328
       },
       {
         "name": "Rune of Mortality",
-        "synergy": 0.7176905174882958
+        "synergy": 0.7177465783189136
       },
       {
         "name": "Minthara, Merciless Soul",
-        "synergy": 0.7053706445718362
+        "synergy": 0.7052938501722829
       },
       {
         "name": "Otharri, Suns' Glory",
-        "synergy": 0.6615671918581858
+        "synergy": 0.6613379384497716
       },
       {
         "name": "Vorpal Sword",
-        "synergy": 0.6613941247316912
+        "synergy": 0.661210523385344
       },
       {
         "name": "Gorgon's Head",
-        "synergy": 0.6415962513771652
+        "synergy": 0.6417670640528951
       }
     ],
     "Narset, Enlightened Master": [
       {
         "name": "Omniscience",
-        "synergy": 0.5142351894659853
+        "synergy": 0.5146185010100068
       },
       {
         "name": "Time Stretch",
-        "synergy": 0.48884288820438004
+        "synergy": 0.4890792852700351
       },
       {
         "name": "Beacon of Tomorrows",
-        "synergy": 0.4387748578106476
+        "synergy": 0.43888627194557456
       },
       {
         "name": "Nexus of Fate",
-        "synergy": 0.4338263952914696
+        "synergy": 0.4340942546329063
       },
       {
         "name": "Temporal Mastery",
-        "synergy": 0.4192114531684785
+        "synergy": 0.4191685444796229
       },
       {
         "name": "Brainstorm",
-        "synergy": 0.41644273273346377
+        "synergy": 0.4160429010185257
       }
     ],
     "Nick Fury, Agent of S.H.I.E.L.D.": [
       {
         "name": "Jennifer Walters",
-        "synergy": 0.555244145677012
+        "synergy": 0.5545059844924269
       },
       {
         "name": "Avengers Tower",
-        "synergy": 0.5266904567443735
+        "synergy": 0.5264975724963759
       },
       {
         "name": "Bruce Banner",
-        "synergy": 0.4909489246104729
+        "synergy": 0.49070913746981576
       },
       {
         "name": "King T'Challa",
-        "synergy": 0.44407404053987315
+        "synergy": 0.44381915337883354
       },
       {
         "name": "Agent Phil Coulson",
-        "synergy": 0.44343442400205013
+        "synergy": 0.4433449767676906
       },
       {
         "name": "Captain America, Team Leader",
-        "synergy": 0.4376927935722109
+        "synergy": 0.4377728997613337
       }
     ],
     "Aeve, Progenitor Ooze": [
       {
         "name": "Biowaste Blob",
-        "synergy": 0.6634449929087338
+        "synergy": 0.6629740633369543
       },
       {
         "name": "Biogenic Ooze",
-        "synergy": 0.6354671312290768
+        "synergy": 0.6348434529817565
       },
       {
         "name": "Slime Against Humanity",
-        "synergy": 0.6224506016565257
+        "synergy": 0.6224705250524554
       },
       {
         "name": "Predator Ooze",
-        "synergy": 0.5400874872750115
+        "synergy": 0.5398174725676594
       },
       {
         "name": "Oran-Rief Ooze",
-        "synergy": 0.5192419475269254
+        "synergy": 0.5191549695004872
       },
       {
         "name": "Green Slime",
-        "synergy": 0.5035585075800009
+        "synergy": 0.5033140901987805
       }
     ],
     "Nine-Fingers Keene": [
       {
         "name": "Gond Gate",
-        "synergy": 0.9621067194541805
+        "synergy": 0.9621204514613639
       },
       {
         "name": "Manor Gate",
-        "synergy": 0.9591222677622157
+        "synergy": 0.9591372457034198
       },
       {
         "name": "Black Dragon Gate",
-        "synergy": 0.9585812399411163
+        "synergy": 0.9585936730421205
       },
       {
         "name": "Basilisk Gate",
-        "synergy": 0.9585563689942481
+        "synergy": 0.9585666283187362
       },
       {
         "name": "Sea Gate",
-        "synergy": 0.9583823760166204
+        "synergy": 0.9583961912083526
       },
       {
         "name": "Baldur's Gate",
-        "synergy": 0.9582931355600869
+        "synergy": 0.9583093204481244
       }
     ],
     "Blim, Comedic Genius": [
       {
         "name": "Harmless Offering",
-        "synergy": 0.8501837993885106
+        "synergy": 0.8506318736975071
       },
       {
         "name": "Demonic Pact",
-        "synergy": 0.8175045222185812
+        "synergy": 0.8174628913772262
       },
       {
         "name": "Demonic Lore",
-        "synergy": 0.7983404547181181
+        "synergy": 0.7984503876232448
       },
       {
         "name": "Bazaar Trader",
-        "synergy": 0.7887028895710139
+        "synergy": 0.7886495516927257
       },
       {
         "name": "Fateful Handoff",
-        "synergy": 0.7407136958722659
+        "synergy": 0.7404871316496229
       },
       {
         "name": "Xantcha, Sleeper Agent",
-        "synergy": 0.7386044099157846
+        "synergy": 0.7385470171692754
       }
     ],
     "Elminster": [
       {
         "name": "Serum Visions",
-        "synergy": 0.6723806764266399
+        "synergy": 0.6723502703338177
       },
       {
         "name": "Preordain",
-        "synergy": 0.6711334187686644
+        "synergy": 0.6711797932782662
       },
       {
         "name": "Mystic Speculation",
-        "synergy": 0.6442663467674926
+        "synergy": 0.6442363431708416
       },
       {
         "name": "Foresee",
-        "synergy": 0.6325788489623414
+        "synergy": 0.632421620098227
       },
       {
         "name": "Oath of Teferi",
-        "synergy": 0.6193032499860965
+        "synergy": 0.6193085278011666
       },
       {
         "name": "Storm Herd",
-        "synergy": 0.608614807022885
+        "synergy": 0.6084799926338573
       }
     ],
     "Anzrag, the Quake-Mole": [
@@ -25334,79 +25334,79 @@
     "Magnus the Red": [
       {
         "name": "Young Pyromancer",
-        "synergy": 0.6896413283685064
+        "synergy": 0.689524312434366
       },
       {
         "name": "Third Path Iconoclast",
-        "synergy": 0.6517895557708893
+        "synergy": 0.6518471362760139
       },
       {
         "name": "Song of Totentanz",
-        "synergy": 0.6148647536422873
+        "synergy": 0.6149174929841174
       },
       {
         "name": "Empty the Warrens",
-        "synergy": 0.5778484801954344
+        "synergy": 0.5777556490988648
       },
       {
         "name": "Finale of Revelation",
-        "synergy": 0.5734724967608387
+        "synergy": 0.5732080335419734
       },
       {
         "name": "Talrand, Sky Summoner",
-        "synergy": 0.5530207398535565
+        "synergy": 0.5532485673033428
       }
     ],
     "Jorn, God of Winter": [
       {
         "name": "Snow-Covered Forest",
-        "synergy": 0.9235284007218515
+        "synergy": 0.9236693474308916
       },
       {
         "name": "Snow-Covered Island",
-        "synergy": 0.9204682192458313
+        "synergy": 0.920616580414677
       },
       {
         "name": "Snow-Covered Swamp",
-        "synergy": 0.916728756165752
+        "synergy": 0.916708892097663
       },
       {
         "name": "Ice Tunnel",
-        "synergy": 0.8808459865221292
+        "synergy": 0.8810746144853537
       },
       {
         "name": "Rimewood Falls",
-        "synergy": 0.879226469618276
+        "synergy": 0.8794613510559314
       },
       {
         "name": "Woodland Chasm",
-        "synergy": 0.8668689428678674
+        "synergy": 0.867111877568978
       }
     ],
     "Gisa, the Hellraiser": [
       {
         "name": "Death Baron",
-        "synergy": 0.6746289777424078
+        "synergy": 0.6752097114297889
       },
       {
         "name": "Cemetery Reaper",
-        "synergy": 0.6244780677795728
+        "synergy": 0.6247654774478648
       },
       {
         "name": "Undead Augur",
-        "synergy": 0.601674037491751
+        "synergy": 0.6021295590304796
       },
       {
         "name": "Withered Wretch",
-        "synergy": 0.5409667849043883
+        "synergy": 0.5410254632740613
       },
       {
         "name": "Endless Ranks of the Dead",
-        "synergy": 0.49258430996660296
+        "synergy": 0.49278267280464283
       },
       {
         "name": "Champion of the Perished",
-        "synergy": 0.4605638655893104
+        "synergy": 0.4602991584558507
       }
     ],
     "Imoti, Celebrant of Bounty": [
@@ -25516,27 +25516,27 @@
     "Arthur, Marigold Knight": [
       {
         "name": "Brago, King Eternal",
-        "synergy": 0.5260489798952327
+        "synergy": 0.5264202978419091
       },
       {
         "name": "Dour Port-Mage",
-        "synergy": 0.5015464486835227
+        "synergy": 0.5012869710923492
       },
       {
         "name": "Angel of the Ruins",
-        "synergy": 0.43450291834213817
+        "synergy": 0.43495549963899577
       },
       {
         "name": "Ephemerate",
-        "synergy": 0.4249942097515729
+        "synergy": 0.4251199382121864
       },
       {
         "name": "Éowyn, Fearless Knight",
-        "synergy": 0.39580599255625415
+        "synergy": 0.39613166299107166
       },
       {
         "name": "Sun Titan",
-        "synergy": 0.39302158665504977
+        "synergy": 0.39303258010733777
       }
     ],
     "Baral, Chief of Compliance": [
@@ -25568,53 +25568,53 @@
     "Davros, Dalek Creator": [
       {
         "name": "Exterminate!",
-        "synergy": 0.8516663404394235
+        "synergy": 0.8516096211586532
       },
       {
         "name": "The Dalek Emperor",
-        "synergy": 0.8368447016538471
+        "synergy": 0.8367887628208884
       },
       {
         "name": "Dalek Squadron",
-        "synergy": 0.810129038860305
+        "synergy": 0.810256374157275
       },
       {
         "name": "Dalek Drone",
-        "synergy": 0.8005098828078169
+        "synergy": 0.8003301558332945
       },
       {
         "name": "Cult of Skaro",
-        "synergy": 0.7720255367625383
+        "synergy": 0.7720283460665862
       },
       {
         "name": "Cyberman Patrol",
-        "synergy": 0.7501220789412086
+        "synergy": 0.7498223957773879
       }
     ],
     "Felix Five-Boots": [
       {
         "name": "Trygon Predator",
-        "synergy": 0.6290143561310167
+        "synergy": 0.6284872999598993
       },
       {
         "name": "Ohran Frostfang",
-        "synergy": 0.6152871614532868
+        "synergy": 0.614939895497805
       },
       {
         "name": "Bident of Thassa",
-        "synergy": 0.5797330714534867
+        "synergy": 0.5795234702488883
       },
       {
         "name": "Toski, Bearer of Secrets",
-        "synergy": 0.5436390299628547
+        "synergy": 0.5431072402993686
       },
       {
         "name": "Glissa Sunslayer",
-        "synergy": 0.5154343146767126
+        "synergy": 0.5149051504465179
       },
       {
         "name": "Drana, Liberator of Malakir",
-        "synergy": 0.5129710081875998
+        "synergy": 0.5124228276034177
       }
     ],
     "Tasha, the Witch Queen": [
@@ -25646,27 +25646,27 @@
     "Karlov of the Ghost Council": [
       {
         "name": "Soul Warden",
-        "synergy": 0.7188534541816368
+        "synergy": 0.7187184835016518
       },
       {
         "name": "Soul's Attendant",
-        "synergy": 0.7031450492013507
+        "synergy": 0.7031904049609621
       },
       {
         "name": "Authority of the Consuls",
-        "synergy": 0.6373918454408172
+        "synergy": 0.6374140121585716
       },
       {
         "name": "Kambal, Consul of Allocation",
-        "synergy": 0.5685412541460586
+        "synergy": 0.5688043637892031
       },
       {
         "name": "Auriok Champion",
-        "synergy": 0.5473408639823691
+        "synergy": 0.5476831002883782
       },
       {
         "name": "Suture Priest",
-        "synergy": 0.5182550963131706
+        "synergy": 0.5182922349570357
       }
     ]
   }
